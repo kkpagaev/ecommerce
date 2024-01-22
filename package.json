@@ -1,0 +1,27 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "husky install"
+  },
+  "workspaces": [
+    "./server",
+    "./admin",
+    "./web",
+    "./trpc-prisma-starter"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "yarn@3.5.0",
+  "dependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix",
+    "*.{ts,json,yml,md}": "prettier --write"
+  }
+}
