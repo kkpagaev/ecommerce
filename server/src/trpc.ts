@@ -1,9 +1,12 @@
 import { initTRPC } from "@trpc/server";
 
+type PublicProcedure = typeof publicProcedure;
+
 declare module "fastify" {
   interface FastifyInstance {
     trpc: typeof router;
     mergeRouters: typeof t.mergeRouters;
+    publicProcedure: PublicProcedure;
   }
 }
 

@@ -1,11 +1,11 @@
 import { api } from "../utils/trpc";
 
 export default async function Home() {
-  const bar = await api.admin.account.foo.query();
+  const categories = await api.admin.catalog.category.listCategories.query();
 
   return (
     <div>
-      {bar}
+      {categories.map((c) => <div key={c.id}>{c.name}</div>)}
       Hello world!
     </div>
   );

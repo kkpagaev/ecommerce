@@ -7,13 +7,14 @@ import {
 import { Pool } from "pg";
 import { createContext } from "./context";
 import { AppRouter, createAppRouter } from "./app.router";
-import { router, t } from "./trpc";
+import { publicProcedure, router, t } from "./trpc";
 import { updateRoutes } from "./router.gen";
 
 declare module "fastify" {
   interface FastifyInstance {
     trpc: typeof router;
     mergeRouters: typeof t.mergeRouters;
+    pool: Pool;
   }
 }
 
@@ -28,8 +29,15 @@ async function main() {
   const f = Fastify({
     logger: true,
   });
+  const pool = new Pool({
+    connectionString: "postgresql://user:user@localhost:1252/user",
+  });
+
+  f.decorate("pool", pool);
   f.decorate("trpc", router);
   f.decorate("mergeRouters", t.mergeRouters);
+  f.decorate("publicProcedure", publicProcedure);
+
   const appRouter = await createAppRouter(f);
 
   await f.register(fastifyTRPCPlugin, {
@@ -41,9 +49,6 @@ async function main() {
         console.error(`Error in tRPC handler on path '${path}':`, error);
       },
     } satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
-  });
-  const pool = new Pool({
-    connectionString: "postgresql://user:user@localhost:1252/user",
   });
 
   await pool.connect();

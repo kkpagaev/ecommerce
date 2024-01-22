@@ -1,36 +1,37 @@
 import { z } from "zod";
-import { publicProcedure } from "../../trpc";
 import { FastifyInstance } from "fastify";
-
-type User = {
-  id: number;
-  name: string;
-  bio?: string;
-};
-
-const users: Record<string, User> = {};
+import {
+  listCategories,
+  createCategory,
+  findCategoryById,
+} from "./category.queries";
 
 export default async function (f: FastifyInstance) {
-  return f.trpc({
-    getUserById: publicProcedure
-      .input(z.number()) // input type is string
-      .query((opts) => {
-        return users[opts.input]; // input type is string
+  const { publicProcedure, trpc, pool } = f;
+
+  return trpc({
+    listCategories: publicProcedure.query(async () => {
+      const res = await listCategories.run(undefined, pool);
+      console.log(res);
+      return res;
+    }),
+    findCategoryById: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return await findCategoryById.run({ id: input.id }, pool);
       }),
-    createUser: publicProcedure
-      .input(
-        z.object({
-          name: z.string().min(3),
-          bio: z.string().max(142).optional(),
-        }),
-      )
-      .mutation((opts) => {
-        const id = +Date.now().toString();
-        const user: User = { id, ...opts.input };
+    createCategory: publicProcedure
+      .input(z.object({ name: z.string(), description: z.string().optional() }))
+      .mutation(async ({ input }) => {
+        const category = await createCategory.run(
+          {
+            name: input.name,
+            description: input.description,
+          },
+          pool,
+        );
 
-        users[user.id] = user;
-
-        return user;
+        return category;
       }),
   });
 }
