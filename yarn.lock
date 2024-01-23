@@ -603,12 +603,63 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.17.19":
+  version: 5.17.19
+  resolution: "@tanstack/query-core@npm:5.17.19"
+  checksum: ad09f1d64a169f8427225020b8b68328d64d1e671af28d47c33df31302106a05af4ed61587642704f70e1fe3861a8f00ea1722685a128dc6ee60fdf34b8dcc57
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:latest":
+  version: 5.17.19
+  resolution: "@tanstack/react-query@npm:5.17.19"
+  dependencies:
+    "@tanstack/query-core": 5.17.19
+  peerDependencies:
+    react: ^18.0.0
+  checksum: ceb98f42cb45c4e2086dbcf608c9488adc26dceebbf933c6ab59b896c3c8ae658622b213495140a19ac038458dbf3a484f033ffab9e1dcde7a77341d1b02bf23
+  languageName: node
+  linkType: hard
+
 "@trpc/client@npm:next":
   version: 11.0.0-next-beta.228
   resolution: "@trpc/client@npm:11.0.0-next-beta.228"
   peerDependencies:
     "@trpc/server": 11.0.0-next-beta.228+38f3240e9
   checksum: 750aa4eb2f2374e1dbb1a99338cf7f9c84f6656ff0a0bb2be8974367b3110983184ecca5db1cfaa96e2f83e90e498216530d06df96dad955f2d8d489ddc697c8
+  languageName: node
+  linkType: hard
+
+"@trpc/next@npm:next":
+  version: 11.0.0-next-beta.228
+  resolution: "@trpc/next@npm:11.0.0-next-beta.228"
+  peerDependencies:
+    "@tanstack/react-query": ^5.0.0
+    "@trpc/client": 11.0.0-next-beta.228+38f3240e9
+    "@trpc/react-query": 11.0.0-next-beta.228+38f3240e9
+    "@trpc/server": 11.0.0-next-beta.228+38f3240e9
+    next: "*"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  peerDependenciesMeta:
+    "@tanstack/react-query":
+      optional: true
+    "@trpc/react-query":
+      optional: true
+  checksum: 4a74fc19176318b7c5d120c8377d1bcb788d9cb32306c59ccb8466ce66d8f4c2fccc3aa39b89d118c067674a852642ff7c686bac3e06f5e7b8efdc74305e6b05
+  languageName: node
+  linkType: hard
+
+"@trpc/react-query@npm:next":
+  version: 11.0.0-next-beta.228
+  resolution: "@trpc/react-query@npm:11.0.0-next-beta.228"
+  peerDependencies:
+    "@tanstack/react-query": ^5.0.0
+    "@trpc/client": 11.0.0-next-beta.228+38f3240e9
+    "@trpc/server": 11.0.0-next-beta.228+38f3240e9
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: ed63572b90c3a257330d323384c64051720580de55fd88eb10539ebf5b2f285483e5ca0429dcdeecd7bb770167acfee3b36f34a0da5455481a160846a42c1533
   languageName: node
   linkType: hard
 
@@ -892,7 +943,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "admin@workspace:admin"
   dependencies:
+    "@tanstack/react-query": latest
     "@trpc/client": next
+    "@trpc/next": next
+    "@trpc/react-query": next
     "@trpc/server": next
     "@types/node": ^20
     "@types/react": ^18
@@ -907,6 +961,7 @@ __metadata:
     server: "workspace:*"
     tailwindcss: ^3.3.0
     typescript: ^5
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 

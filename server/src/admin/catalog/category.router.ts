@@ -9,7 +9,10 @@ import {
 export default async function (f: FastifyInstance) {
   const { publicProcedure, trpc, pool } = f;
 
-  return trpc({
+  const router = trpc({
+    foo: publicProcedure
+      // .input(z.object({ foo: z.string() }))
+      .query(() => "bar"),
     listCategories: publicProcedure.query(async () => {
       const res = await listCategories.run(undefined, pool);
       console.log(res);
@@ -21,7 +24,13 @@ export default async function (f: FastifyInstance) {
         return await findCategoryById.run({ id: input.id }, pool);
       }),
     createCategory: publicProcedure
-      .input(z.object({ name: z.string(), description: z.string().optional() }))
+      .input(
+        z.object({
+          name: z.string(),
+          description: z.string().optional(),
+          email: z.string().email(),
+        }),
+      )
       .mutation(async ({ input }) => {
         const category = await createCategory.run(
           {
@@ -47,6 +56,7 @@ export default async function (f: FastifyInstance) {
           {
             name: input.name,
             description: input.description,
+            slug: input.name,
           },
           pool,
         );
@@ -54,4 +64,5 @@ export default async function (f: FastifyInstance) {
         return foo;
       }),
   });
+  return router;
 }
