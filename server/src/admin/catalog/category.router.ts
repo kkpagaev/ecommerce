@@ -33,5 +33,25 @@ export default async function (f: FastifyInstance) {
 
         return category;
       }),
+    updateCategory: publicProcedure
+      .input(
+        z
+          .object({
+            name: z.string(),
+            description: z.string(),
+          })
+          .partial(),
+      )
+      .mutation(async ({ input }) => {
+        const foo = await createCategory.run(
+          {
+            name: input.name,
+            description: input.description,
+          },
+          pool,
+        );
+
+        return foo;
+      }),
   });
 }

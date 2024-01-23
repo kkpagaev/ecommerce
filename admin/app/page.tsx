@@ -5,7 +5,7 @@ export default async function Home() {
 
   return (
     <div>
-      {categories.map((c) => <div key={c.id}>{c.name}</div>)}
+      {categories && categories.map((c) => <div key={c.id}>{c.slug}</div>)}
       Hello world!
     </div>
   );
