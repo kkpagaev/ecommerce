@@ -79,12 +79,12 @@ function compileCreateAppRouterArgs(n: Node): string {
       delete newNode.router;
 
       return `fastify.mergeRouters(
-       await ${routerName}(fastify),
+       withValidation(await ${routerName}(fastify)),
        ${compileCreateAppRouterArgs(newNode)}
     )
     `;
     } else {
-      return `await ${n.router}(fastify)`;
+      return `withValidation(await ${n.router}(fastify))`;
     }
   }
   let code = "fastify.trpc({";
@@ -103,6 +103,7 @@ function compile(tree: RouteTree, json: string) {
   return `// this file is generated
 \`${json}\`
 import { FastifyInstance } from "fastify";
+import { withValidation } from "./utils";
 ${imps.map(([name, path]) => `import ${name} from "${path}";`).join("\n")}
 
 export async function createAppRouter(fastify: FastifyInstance) {

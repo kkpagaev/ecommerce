@@ -9,7 +9,7 @@ import {
 export default async function (f: FastifyInstance) {
   const { publicProcedure, trpc, pool } = f;
 
-  const router = trpc({
+  return trpc({
     foo: publicProcedure
       // .input(z.object({ foo: z.string() }))
       .query(() => "bar"),
@@ -64,5 +64,4 @@ export default async function (f: FastifyInstance) {
         return foo;
       }),
   });
-  return router;
 }
