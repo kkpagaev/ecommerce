@@ -9,6 +9,7 @@ import { createContext } from "./context";
 import { AppRouter, createAppRouter } from "./app.router";
 import { publicProcedure, router, t } from "./trpc";
 import { updateRoutes } from "./router.gen";
+import fastifyCors from "@fastify/cors";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -52,6 +53,12 @@ async function main() {
   });
 
   await pool.connect();
+
+  await f.register(fastifyCors, {
+    origin: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+    credentials: true,
+  });
 
   f.get("/", async () => {
     return {
