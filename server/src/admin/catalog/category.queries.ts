@@ -1,8 +1,42 @@
 /** Types generated for queries found in "src/admin/catalog/category.sql" */
 import { PreparedQuery } from "@pgtyped/runtime";
 
+/** 'ListCategoriesCount' parameters type */
+export type IListCategoriesCountParams = void;
+
+/** 'ListCategoriesCount' return type */
+export interface IListCategoriesCountResult {
+  count: string | null;
+}
+
+/** 'ListCategoriesCount' query type */
+export interface IListCategoriesCountQuery {
+  params: IListCategoriesCountParams;
+  result: IListCategoriesCountResult;
+}
+
+const listCategoriesCountIR: any = {
+  usedParamSet: {},
+  params: [],
+  statement: "SELECT COUNT(*) FROM categories",
+};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT COUNT(*) FROM categories
+ * ```
+ */
+export const listCategoriesCount = new PreparedQuery<
+  IListCategoriesCountParams,
+  IListCategoriesCountResult
+>(listCategoriesCountIR);
+
 /** 'ListCategories' parameters type */
-export type IListCategoriesParams = void;
+export interface IListCategoriesParams {
+  limit?: number | null | void;
+  page?: number | null | void;
+}
 
 /** 'ListCategories' return type */
 export interface IListCategoriesResult {
@@ -19,16 +53,36 @@ export interface IListCategoriesQuery {
 }
 
 const listCategoriesIR: any = {
-  usedParamSet: {},
-  params: [],
-  statement: "SELECT id, name, slug, description FROM categories\nORDER BY id",
+  usedParamSet: { limit: true, page: true },
+  params: [
+    {
+      name: "limit",
+      required: false,
+      transform: { type: "scalar" },
+      locs: [
+        { a: 78, b: 83 },
+        { a: 133, b: 138 },
+      ],
+    },
+    {
+      name: "page",
+      required: false,
+      transform: { type: "scalar" },
+      locs: [{ a: 107, b: 111 }],
+    },
+  ],
+  statement:
+    "SELECT id, name, slug, description\nFROM categories\nORDER BY id\nLIMIT COALESCE(:limit, 10)\nOFFSET (COALESCE(:page, 1) - 1) * COALESCE(:limit, 10)",
 };
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT id, name, slug, description FROM categories
+ * SELECT id, name, slug, description
+ * FROM categories
  * ORDER BY id
+ * LIMIT COALESCE(:limit, 10)
+ * OFFSET (COALESCE(:page, 1) - 1) * COALESCE(:limit, 10)
  * ```
  */
 export const listCategories = new PreparedQuery<

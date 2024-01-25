@@ -32,3 +32,5 @@ export const trpc = createTRPCNext<AppRouter>({
   },
   ssr: false,
 });
+
+export const adminApi = api.admin;
