@@ -74,11 +74,11 @@ export type CreateCategory = Parameters<
   typeof adminApi.catalog.category.createCategory.mutate
 >[0];
 
-export async function validateCategory(props: CreateCategory) {
-  const validateRes =
-    (await adminApi.catalog.category.validator.createCategory.mutate(
-      props,
-    )) as any;
+export async function validateCategory(
+  validationRoute: { mutate: (props: any) => Promise<any> },
+  props: CreateCategory,
+) {
+  const validateRes = await validationRoute.mutate(props);
 
   if (validateRes[0].success) {
     return true;
@@ -94,10 +94,10 @@ export async function validateCategory(props: CreateCategory) {
 }
 
 export const apiResolver: Resolver =
-  (route, schemaOptions, resolverOptions = {}) =>
+  (validationRoute, schemaOptions, resolverOptions = {}) =>
   async (values, _, options) => {
     try {
-      const res = await validateCategory(values as any);
+      const res = await validateCategory(validationRoute, values as any);
       if (res !== true) {
         throw new ZodError(res);
       }
