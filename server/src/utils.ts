@@ -14,9 +14,13 @@ export function withValidation<T extends AnyTRPCRouter>(router: T) {
 
       const resolver = (req: any) => {
         const body = req.ctx.req.body;
-        const json = JSON.parse(body);
+        console.log(body);
 
-        return inputs.map((i: ZodSchema) => i.safeParse(json));
+        let json = JSON.parse(body);
+        json = 0 in json ? json[0] : json;
+
+        const res = inputs.map((i: ZodSchema) => i.safeParse(json));
+        return res;
       };
       resolver._def = method._def;
 

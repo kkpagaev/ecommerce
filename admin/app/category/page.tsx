@@ -1,6 +1,7 @@
 import { DataTable } from "../../components/data-table/data-table";
 import { adminApi } from "../../utils/trpc";
 import { columns } from "./columns";
+import { CategoryCreateForm } from "./category-create-form";
 
 export default async function DemoPage({
   searchParams,
@@ -16,10 +17,10 @@ export default async function DemoPage({
     page: page,
     limit: limit,
   });
-  console.log({ page, data });
 
   return (
     <div className="container mx-auto py-10">
+      <CategoryCreateForm />
       <DataTable
         data={data}
         columns={columns}
