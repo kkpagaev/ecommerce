@@ -6910,6 +6910,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"web@workspace:web":
+  version: 0.0.0-use.local
+  resolution: "web@workspace:web"
+  dependencies:
+    "@trpc/client": next
+    "@types/node": ^20
+    "@types/react": ^18
+    "@types/react-dom": ^18
+    autoprefixer: ^10.0.1
+    eslint: ^8
+    eslint-config-next: 14.1.0
+    next: 14.1.0
+    postcss: ^8
+    react: ^18
+    react-dom: ^18
+    server: "workspace:*"
+    tailwindcss: ^3.3.0
+    typescript: ^5
+  languageName: unknown
+  linkType: soft
+
 "webidl-conversions@npm:^3.0.0":
   version: 3.0.1
   resolution: "webidl-conversions@npm:3.0.1"
