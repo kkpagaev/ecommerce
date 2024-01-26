@@ -1,9 +1,8 @@
 import Fastify from "fastify";
 
-import {
-  fastifyTRPCPlugin,
-  FastifyTRPCPluginOptions,
-} from "@trpc/server/adapters/fastify";
+import { fastifyTRPCPlugin } from "./trpc";
+
+import { FastifyTRPCPluginOptions } from "@trpc/server/adapters/fastify";
 import { Pool } from "pg";
 import { createContext } from "./context";
 import { AppRouter, createAppRouter } from "./app.router";

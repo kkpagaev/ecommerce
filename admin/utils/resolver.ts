@@ -75,10 +75,10 @@ export type CreateCategory = Parameters<
 >[0];
 
 export async function validateCategory(
-  validationRoute: { mutate: (props: any) => Promise<any> },
+  validationRoute: any,
   props: CreateCategory,
 ) {
-  const validateRes = await validationRoute.mutate(props);
+  const validateRes = await validationRoute.serverValidate.mutate(props);
 
   if (validateRes[0].success) {
     return true;

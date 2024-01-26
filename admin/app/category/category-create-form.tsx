@@ -24,7 +24,7 @@ import { adminApi } from "@/utils/trpc";
 
 export function CategoryCreateForm() {
   const form = useForm<CreateCategory>({
-    resolver: apiResolver(adminApi.catalog.category.validator.createCategory),
+    resolver: apiResolver(adminApi.catalog.category.createCategory),
     defaultValues: {
       name: "",
       description: "",
