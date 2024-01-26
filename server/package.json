@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^8.5.0",
+    "@fastify/websocket": "^8.3.1",
     "@pgtyped/runtime": "^2.3.0",
     "@trpc/server": "next",
     "bcrypt": "^5.1.1",

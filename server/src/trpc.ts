@@ -3,6 +3,7 @@ import {
   FastifyTRPCPluginOptions,
   fastifyRequestHandler,
 } from "@trpc/server/adapters/fastify";
+import { WSSHandlerOptions, applyWSSHandler } from "@trpc/server/adapters/ws";
 import { FastifyInstance } from "fastify";
 
 type PublicProcedure = typeof publicProcedure;
@@ -66,14 +67,13 @@ export function fastifyTRPCPlugin<TRouter extends AnyTRPCRouter>(
     await fastifyRequestHandler({ ...opts.trpcOptions, req, res, path });
   });
 
-  // if (opts.useWSS) {
-  //   applyWSSHandler<TRouter>({
-  //     ...(opts.trpcOptions as unknown as WSSHandlerOptions<TRouter>),
-  //     wss: fastify.websocketServer,
-  //   });
-  //   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  //   fastify.get(prefix ?? "/", { websocket: true }, () => {});
-  // }
+  if (opts.useWSS) {
+    applyWSSHandler<TRouter>({
+      ...(opts.trpcOptions as unknown as WSSHandlerOptions<TRouter>),
+      wss: fastify.websocketServer,
+    });
+    fastify.get(prefix ?? "/", { websocket: true }, () => {});
+  }
 
   done();
 }

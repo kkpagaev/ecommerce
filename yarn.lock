@@ -275,6 +275,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/websocket@npm:^8.3.1":
+  version: 8.3.1
+  resolution: "@fastify/websocket@npm:8.3.1"
+  dependencies:
+    fastify-plugin: ^4.0.0
+    ws: ^8.0.0
+  checksum: 400efbda00f2c9570041004c68bf1549fca26dc1d11dadc5a27ea70d4d39b96b06fd3f65552ae9ccbcdf193a02066f9b52b6a7750470569e865cbb471db50b29
+  languageName: node
+  linkType: hard
+
 "@floating-ui/core@npm:^1.5.3":
   version: 1.5.3
   resolution: "@floating-ui/core@npm:1.5.3"
@@ -6115,6 +6125,7 @@ __metadata:
   resolution: "server@workspace:server"
   dependencies:
     "@fastify/cors": ^8.5.0
+    "@fastify/websocket": ^8.3.1
     "@pgtyped/cli": ^2.3.0
     "@pgtyped/runtime": ^2.3.0
     "@trpc/server": next
@@ -7074,6 +7085,21 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 159da4805f7e84a3d003d8841557196034155008f817172d4e986bd591f74aa82aa7db55929a54222309e01079a65a92a9e6414da5a6aa4b01ee44a511ac3ee5
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.0.0":
+  version: 8.16.0
+  resolution: "ws@npm:8.16.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: feb3eecd2bae82fa8a8beef800290ce437d8b8063bdc69712725f21aef77c49cb2ff45c6e5e7fce622248f9c7abaee506bae0a9064067ffd6935460c7357321b
   languageName: node
   linkType: hard
 

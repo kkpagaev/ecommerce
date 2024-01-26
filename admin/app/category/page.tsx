@@ -2,6 +2,7 @@ import { DataTable } from "../../components/data-table/data-table";
 import { adminApi } from "../../utils/trpc";
 import { columns } from "./columns";
 import { CategoryCreateForm } from "./category-create-form";
+import WS from "./ws";
 
 export default async function DemoPage({
   searchParams,
@@ -20,6 +21,7 @@ export default async function DemoPage({
 
   return (
     <div className="container mx-auto py-10">
+      <WS />
       <CategoryCreateForm />
       <DataTable
         data={data}

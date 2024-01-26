@@ -1,8 +1,22 @@
 import { Button } from "../components/ui/button";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../components/ui/pagination";
-import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
-import { api } from "../utils/trpc";
-import { Popover, PopoverTrigger, PopoverContent } from "../components/ui/popover";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../components/ui/pagination";
+import {
+  Table,
+  TableCaption,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../components/ui/table";
 
 export default async function Home() {
   return (
@@ -27,7 +41,6 @@ export default async function Home() {
             </TableRow>
           </TableBody>
         </Table>
-
       </div>
       <Button>Button</Button>
       <Pagination>

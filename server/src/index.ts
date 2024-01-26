@@ -9,6 +9,7 @@ import { AppRouter, createAppRouter } from "./app.router";
 import { publicProcedure, router, t } from "./trpc";
 import { updateRoutes } from "./router.gen";
 import fastifyCors from "@fastify/cors";
+import fastifyWebsocket from "@fastify/websocket";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -33,6 +34,7 @@ async function main() {
     connectionString: "postgresql://user:user@localhost:1252/user",
   });
 
+  await f.register(fastifyWebsocket);
   f.decorate("pool", pool);
   f.decorate("trpc", router);
   f.decorate("mergeRouters", t.mergeRouters);
@@ -42,6 +44,7 @@ async function main() {
 
   await f.register(fastifyTRPCPlugin, {
     prefix: "/trpc",
+    useWSS: true,
     trpcOptions: {
       router: appRouter,
       createContext,
