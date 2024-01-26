@@ -7,7 +7,7 @@ import { adminApi } from "./trpc";
 // TConfig extends AnyRootConfig,
 // TProcedure extends AnyProcedure,
 export type Resolver = (
-  route: { mutate: (props: any) => Promise<any> },
+  route: { mutate: CallableFunction },
   factoryOptions?: {
     mode?: "async" | "sync";
     raw?: boolean;
@@ -70,14 +70,7 @@ const parseErrorSchema = (
   return errors;
 };
 
-export type CreateCategory = Parameters<
-  typeof adminApi.catalog.category.createCategory.mutate
->[0];
-
-export async function validateCategory(
-  validationRoute: any,
-  props: CreateCategory,
-) {
+export async function validateCategory(validationRoute: any, props: any) {
   const validateRes = await validationRoute.serverValidate.mutate(props);
 
   if (validateRes[0].success) {

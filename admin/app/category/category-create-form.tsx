@@ -16,25 +16,13 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CreateCategory, apiResolver } from "@/utils/resolver";
 import { adminApi } from "@/utils/trpc";
+import { useApiForm } from "../../utils/use-api-form";
 
 export function CategoryCreateForm() {
-  const form = useForm<CreateCategory>({
-    resolver: apiResolver(adminApi.catalog.category.createCategory),
-    defaultValues: {
-      name: "",
-      description: "",
-      email: "",
-    },
-  });
-  function onSubmit(values: CreateCategory) {
-    // validateCategory(values);
-    console.log(values);
-  }
+  const form = useApiForm(adminApi.catalog.category.createCategory);
 
   return (
     <Dialog>
@@ -44,7 +32,7 @@ export function CategoryCreateForm() {
           <DialogTitle>Are you absolutely sure?</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit((s) => {})} className="space-y-8">
             <FormField
               control={form.control}
               name="name"
