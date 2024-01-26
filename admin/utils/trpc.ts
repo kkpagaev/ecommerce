@@ -1,16 +1,16 @@
 import type { AppRouter } from "server/src/app.router";
 import {
   createTRPCClient,
-  httpBatchLink,
   createWSClient,
   wsLink,
+  httpLink,
 } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { NextPageContext } from "next";
 
 function getEndingLink(ctx: NextPageContext | undefined) {
   if (typeof window === "undefined") {
-    return httpBatchLink({
+    return httpLink({
       url: "http://localhost:3000/trpc",
       headers() {
         if (!ctx?.req?.headers) {
@@ -34,8 +34,7 @@ function getEndingLink(ctx: NextPageContext | undefined) {
 
 export const api = createTRPCClient<AppRouter>({
   links: [
-    // getEndingLink(undefined),
-    httpBatchLink({
+    httpLink({
       url: "http://localhost:3000/trpc",
     }),
   ],

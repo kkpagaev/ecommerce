@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FastifyInstance } from "fastify";
+import slugify from "slugify";
 import {
   listCategories,
   createCategory,
@@ -11,9 +12,6 @@ export default async function (f: FastifyInstance) {
   const { publicProcedure, trpc, pool } = f;
 
   return trpc({
-    foo: publicProcedure
-      // .input(z.object({ foo: z.string() }))
-      .query(() => "bar"),
     listCategories: publicProcedure
       .input(
         z.object({
@@ -45,15 +43,16 @@ export default async function (f: FastifyInstance) {
     createCategory: publicProcedure
       .input(
         z.object({
-          name: z.string(),
+          name: z.string().min(2),
           description: z.string().optional(),
-          email: z.string().email(),
         }),
       )
       .mutation(async ({ input }) => {
+        const slug = slugify(input.name);
         const category = await createCategory.run(
           {
             name: input.name,
+            slug: slug,
             description: input.description,
           },
           pool,

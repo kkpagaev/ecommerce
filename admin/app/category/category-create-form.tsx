@@ -12,51 +12,56 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
   Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { adminApi } from "@/utils/trpc";
-import { useApiForm } from "../../utils/use-api-form";
+import { useApiForm } from "@/utils/use-api-form";
+import { Textarea } from "@/components/ui/textarea";
 
 export function CategoryCreateForm() {
-  const form = useApiForm(adminApi.catalog.category.createCategory);
+  const form = useApiForm(adminApi.catalog.category.createCategory, {
+    name: "",
+    description: "",
+  });
+  const onSubmit = form.handleSubmit(async (data) => {
+    const res = await adminApi.catalog.category.createCategory.mutate(data);
+
+    console.log(res);
+  });
 
   return (
     <Dialog>
       <DialogTrigger>Create Category</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>Create Category</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit((s) => {})} className="space-y-8">
+          <form onSubmit={onSubmit} className="space-y-8">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="username" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="email"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" {...field} />
+                    <Textarea placeholder="description" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
