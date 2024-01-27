@@ -147,7 +147,7 @@ export function DataTable<T>({ data, columns, count, page, limit }: Props<T>) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center mt-10 justify-end space-x-2">
         <DataTablePagination page={page} count={count} limit={limit} />
       </div>
     </div>

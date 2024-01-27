@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { adminApi } from "@/utils/trpc";
+import { adminApi, trpc } from "@/utils/trpc";
 import { useApiForm } from "@/utils/use-api-form";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -27,8 +27,11 @@ export function CategoryCreateForm() {
     name: "",
     description: "",
   });
+  const utils = trpc.useUtils();
+
   const onSubmit = form.handleSubmit(async (data) => {
-    const res = await adminApi.catalog.category.createCategory.mutate(data);
+    await adminApi.catalog.category.createCategory.mutate(data);
+    utils.admin.catalog.category.listCategories.invalidate();
 
     toast.success("Category created", {
       action: {
@@ -36,8 +39,6 @@ export function CategoryCreateForm() {
         onClick: () => console.log("Undo"),
       },
     });
-
-    console.log(res);
   });
 
   return (
