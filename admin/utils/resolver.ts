@@ -2,7 +2,6 @@ import { appendErrors, FieldError, FieldErrors } from "react-hook-form";
 import { z, ZodError } from "zod";
 import { toNestErrors, validateFieldsNatively } from "@hookform/resolvers";
 import { FieldValues, ResolverResult, ResolverOptions } from "react-hook-form";
-import { adminApi } from "./trpc";
 
 // TConfig extends AnyRootConfig,
 // TProcedure extends AnyProcedure,

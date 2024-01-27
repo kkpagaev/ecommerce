@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { adminApi } from "@/utils/trpc";
 import { useApiForm } from "@/utils/use-api-form";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 export function CategoryCreateForm() {
   const form = useApiForm(adminApi.catalog.category.createCategory, {
@@ -29,11 +30,25 @@ export function CategoryCreateForm() {
   const onSubmit = form.handleSubmit(async (data) => {
     const res = await adminApi.catalog.category.createCategory.mutate(data);
 
+    toast.success("Category created", {
+      action: {
+        label: "Undo",
+        onClick: () => console.log("Undo"),
+      },
+    });
+
     console.log(res);
   });
 
   return (
     <Dialog>
+      <Button
+        onClick={() => {
+          toast.success("Create Category");
+        }}
+      >
+        Create Category
+      </Button>
       <DialogTrigger>Create Category</DialogTrigger>
       <DialogContent>
         <DialogHeader>
