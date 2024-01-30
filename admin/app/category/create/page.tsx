@@ -1,5 +1,12 @@
 import { Table } from "lucide-react";
-import { TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../../components/ui/table";
+import {
+  TableCaption,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../../../components/ui/table";
 import { adminApi } from "../../../utils/trpc";
 
 export default async function CreateCategory() {
