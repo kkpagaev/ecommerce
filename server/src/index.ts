@@ -36,6 +36,7 @@ async function main() {
 
   await f.register(fastifyWebsocket);
   f.decorate("pool", pool);
+  f.decorate("t", t);
   f.decorate("trpc", router);
   f.decorate("mergeRouters", t.mergeRouters);
   f.decorate("publicProcedure", publicProcedure);

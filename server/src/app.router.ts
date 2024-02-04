@@ -8,21 +8,25 @@ import AdminCatalogCategoryRouter from "./admin/catalog/category.router";
 import WebCatalogPostRouter from "./web/catalog/post/router";
 
 export async function createAppRouter(fastify: FastifyInstance) {
-  return fastify.trpc({
-    admin: fastify.trpc({
-      account: fastify.mergeRouters(
-        withValidation(await AdminAccountRouter(fastify)),
-        fastify.trpc({
-          discord: withValidation(await AdminAccountDiscordRouter(fastify)),
+  const { t } = fastify;
+
+  return t.router({
+    admin: t.router({
+      account: t.mergeRouters(
+        withValidation(t.router(await AdminAccountRouter(fastify))),
+        t.router({
+          discord: withValidation(t.router(AdminAccountDiscordRouter(fastify))),
         }),
       ),
-      catalog: fastify.trpc({
-        category: withValidation(await AdminCatalogCategoryRouter(fastify)),
+      catalog: t.router({
+        category: withValidation(
+          t.router(await AdminCatalogCategoryRouter(fastify)),
+        ),
       }),
     }),
-    web: fastify.trpc({
-      catalog: fastify.trpc({
-        post: withValidation(await WebCatalogPostRouter(fastify)),
+    web: t.router({
+      catalog: t.router({
+        post: withValidation(t.router(await WebCatalogPostRouter(fastify))),
       }),
     }),
   });

@@ -1,10 +1,7 @@
 import { FastifyInstance } from "fastify";
-import { publicProcedure } from "../../trpc";
 
-export default async function (f: FastifyInstance) {
-  return f.trpc({
-    foo: publicProcedure.query(() => {
-      return "foo";
-    }),
-  });
-}
+export default async ({ t }: FastifyInstance) => ({
+  foo: t.procedure.query(() => {
+    return "foo";
+  }),
+});

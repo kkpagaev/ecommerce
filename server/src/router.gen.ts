@@ -70,7 +70,7 @@ export async function gen(dirname: string, prefix = "./"): Promise<RouteTree> {
 function compileCreateAppRouterArgs(n: Node): string {
   const keys = Object.keys(n);
   if (keys.length == 0) {
-    return "fastify.trpc({})";
+    return "t.router({})";
   }
   if (keys.includes("router")) {
     if (keys.length > 1) {
@@ -78,16 +78,16 @@ function compileCreateAppRouterArgs(n: Node): string {
       const newNode = n;
       delete newNode.router;
 
-      return `fastify.mergeRouters(
-       withValidation(await ${routerName}(fastify)),
+      return `t.mergeRouters(
+       withValidation(t.router(await ${routerName}(fastify))),
        ${compileCreateAppRouterArgs(newNode)}
     )
     `;
     } else {
-      return `withValidation(await ${n.router}(fastify))`;
+      return `withValidation(t.router(await ${n.router}(fastify)))`;
     }
   }
-  let code = "fastify.trpc({";
+  let code = "t.router({";
   for (const key of keys) {
     code += `  ${key}: ${compileCreateAppRouterArgs(n[key] as Node)},`;
   }
@@ -107,6 +107,8 @@ import { withValidation } from "./utils";
 ${imps.map(([name, path]) => `import ${name} from "${path}";`).join("\n")}
 
 export async function createAppRouter(fastify: FastifyInstance) {
+  const { t } = fastify;
+
   return  ${compileCreateAppRouterArgs(n)}
 }
 

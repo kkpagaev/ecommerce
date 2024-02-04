@@ -10,7 +10,7 @@ type PublicProcedure = typeof publicProcedure;
 
 declare module "fastify" {
   interface FastifyInstance {
-    trpc: typeof router;
+    t: typeof t;
     mergeRouters: typeof t.mergeRouters;
     publicProcedure: PublicProcedure;
   }
