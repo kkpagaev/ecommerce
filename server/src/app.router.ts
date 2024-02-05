@@ -15,7 +15,9 @@ export async function createAppRouter(fastify: FastifyInstance) {
       account: t.mergeRouters(
         withValidation(t.router(await AdminAccountRouter(fastify))),
         t.router({
-          discord: withValidation(t.router(AdminAccountDiscordRouter(fastify))),
+          discord: withValidation(
+            t.router(await AdminAccountDiscordRouter(fastify)),
+          ),
         }),
       ),
       catalog: t.router({

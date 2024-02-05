@@ -1,4 +1,4 @@
-import { t } from "./core/trpc";
+import { t } from "./trpc";
 import { AnyTRPCRouter } from "@trpc/server";
 import { ZodSchema } from "zod";
 
