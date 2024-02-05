@@ -4224,7 +4224,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fp-ts@npm:^2.5.3":
+"fp-ts@npm:^2.16.2, fp-ts@npm:^2.5.3":
   version: 2.16.2
   resolution: "fp-ts@npm:2.16.2"
   checksum: 5c2e3f096ba4be5646bda38a43e3e8ca3bd7693fefb26e6c4d4c451efbc9a227f7f7cad562b087cb134d4e41f4ae615602f0b17890e9e40a9e83f2f8822da666
@@ -6999,6 +6999,7 @@ __metadata:
     eslint-config-prettier: ^9.0.0
     eslint-plugin-prettier: ^5.0.1
     fastify: ^4.25.2
+    fp-ts: ^2.16.2
     pg: ^8.11.3
     prettier: ^3.2.0
     slugify: ^1.6.6

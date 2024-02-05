@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "../components/data-table";
 import { columns } from "../components/collumns";
 import { api } from "../utils/trpc";
-import { DataTablePagination } from "../components/pagination";
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: { page?: string; limit?: string }) => ({

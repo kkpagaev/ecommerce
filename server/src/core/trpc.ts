@@ -6,13 +6,9 @@ import {
 import { WSSHandlerOptions, applyWSSHandler } from "@trpc/server/adapters/ws";
 import { FastifyInstance } from "fastify";
 
-type PublicProcedure = typeof publicProcedure;
-
 declare module "fastify" {
   interface FastifyInstance {
     t: typeof t;
-    mergeRouters: typeof t.mergeRouters;
-    publicProcedure: PublicProcedure;
   }
 }
 

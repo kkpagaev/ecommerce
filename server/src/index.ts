@@ -1,13 +1,13 @@
 import Fastify from "fastify";
 
-import { fastifyTRPCPlugin } from "./trpc";
+import { fastifyTRPCPlugin } from "./core/trpc";
 
 import { FastifyTRPCPluginOptions } from "@trpc/server/adapters/fastify";
 import { Pool } from "pg";
-import { createContext } from "./context";
+import { createContext } from "./core/context";
 import { AppRouter, createAppRouter } from "./app.router";
-import { publicProcedure, router, t } from "./trpc";
-import { updateRoutes } from "./router.gen";
+import { publicProcedure, router, t } from "./core/trpc";
+import { updateRoutes } from "./core/router.gen";
 import fastifyCors from "@fastify/cors";
 import fastifyWebsocket from "@fastify/websocket";
 
