@@ -1,3 +1,14 @@
+const stylistic = require('@stylistic/eslint-plugin')
+
+const customized = stylistic.configs.customize({
+  // the following options are the default values
+  indent: 2,
+  quotes: 'double',
+  semi: true,
+  arrowParens: 'always',
+  // ...
+})
+
 module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -5,10 +16,9 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint/eslint-plugin"],
+  plugins: ["@typescript-eslint/eslint-plugin", "@stylistic"],
   extends: [
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
   ],
   root: true,
   env: {
@@ -25,5 +35,6 @@ module.exports = {
     // "require-await": "error",
     // "@typescript-eslint/require-await": "warn",
     "@typescript-eslint/no-floating-promises": "error",
+    ...customized.rules,
   },
 }

@@ -1,13 +1,13 @@
 // this file is generated
 `[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"catalog":{"category":{"router":"AdminCatalogCategoryRouter"}}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
-import { FastifyInstance } from "fastify";
+import { FastifyZod } from "fastify";
 import { withValidation } from "./core/utils";
 import AdminAccountDiscordRouter from "./admin/account/discord/router";
 import AdminAccountRouter from "./admin/account/router";
 import AdminCatalogCategoryRouter from "./admin/catalog/category.router";
 import WebCatalogPostRouter from "./web/catalog/post/router";
 
-export async function createAppRouter(fastify: FastifyInstance) {
+export async function createAppRouter(fastify: FastifyZod) {
   const { t } = fastify;
 
   return t.router({

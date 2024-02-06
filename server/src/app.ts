@@ -1,31 +1,30 @@
 import Fastify from "fastify";
 
+import * as path from "path";
 import { fastifyTRPCPlugin } from "./core/trpc";
-
 import { FastifyTRPCPluginOptions } from "@trpc/server/adapters/fastify";
-import { Pool } from "pg";
 import { createContext } from "./core/context";
 import { AppRouter, createAppRouter } from "./app.router";
-import { publicProcedure, router, t } from "./core/trpc";
 import fastifyCors from "@fastify/cors";
 import fastifyWebsocket from "@fastify/websocket";
+import { ZodTypeProvider, validatorCompiler, serializerCompiler } from "fastify-type-provider-zod";
+import fastifyAutoload from "@fastify/autoload";
 
 export async function build() {
   const f = Fastify({
     logger: true,
   });
-  const pool = new Pool({
-    connectionString: "postgresql://user:user@localhost:1252/user",
+
+  await f.register(fastifyAutoload, {
+    dir: path.resolve(__dirname, "plugins"),
   });
 
   await f.register(fastifyWebsocket);
-  f.decorate("pool", pool);
-  f.decorate("t", t);
-  f.decorate("trpc", router);
-  f.decorate("mergeRouters", t.mergeRouters);
-  f.decorate("publicProcedure", publicProcedure);
 
-  const appRouter = await createAppRouter(f);
+  f.setValidatorCompiler(validatorCompiler);
+  f.setSerializerCompiler(serializerCompiler);
+
+  const appRouter = await createAppRouter(f.withTypeProvider<ZodTypeProvider>());
 
   await f.register(fastifyTRPCPlugin, {
     prefix: "/trpc",
@@ -38,8 +37,6 @@ export async function build() {
       },
     } satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
   });
-
-  await pool.connect();
 
   await f.register(fastifyCors, {
     origin: true,

@@ -6,9 +6,9 @@ import {
   findCategoryById,
   listCategoriesCount,
 } from "./category.queries";
-import { FastifyInstance } from "fastify";
+import { FastifyZod } from "fastify";
 
-export default async ({ pool, t }: FastifyInstance) => ({
+export default async ({ pool, t }: FastifyZod) => ({
   listCategories: t.procedure
     .input(
       z.object({
@@ -34,7 +34,11 @@ export default async ({ pool, t }: FastifyInstance) => ({
     }),
 
   findCategoryById: t.procedure
-    .input(z.object({ id: z.number() }))
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
     .query(async ({ input }) => {
       return await findCategoryById.run({ id: input.id }, pool);
     }),
@@ -62,12 +66,10 @@ export default async ({ pool, t }: FastifyInstance) => ({
 
   updateCategory: t.procedure
     .input(
-      z
-        .object({
-          name: z.string(),
-          description: z.string(),
-        })
-        .partial(),
+      z.object({
+        name: z.string(),
+        description: z.string(),
+      }).partial()
     )
     .mutation(async ({ input }) => {
       const foo = await createCategory.run(

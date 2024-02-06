@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { observable } from "@trpc/server/observable";
 import { z } from "zod";
-import { FastifyInstance } from "fastify";
+import { FastifyZod } from "fastify";
 
 const ee = new EventEmitter();
 
@@ -9,7 +9,7 @@ type Post = {
   title: string;
 };
 
-export default async ({ t }: FastifyInstance) => ({
+export default async ({ t }: FastifyZod) => ({
   onAdd: t.procedure.subscription(() => {
     return observable<Post>((emit) => {
       const onAdd = (data: Post) => {

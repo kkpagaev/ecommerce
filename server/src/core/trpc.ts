@@ -31,6 +31,11 @@ export function fastifyTRPCPlugin<TRouter extends AnyTRPCRouter>(
     },
   );
 
+  fastify.decorate("t", t);
+  fastify.decorate("trpc", router);
+  fastify.decorate("mergeRouters", t.mergeRouters);
+  fastify.decorate("publicProcedure", publicProcedure);
+
   let prefix = opts.prefix ?? "";
 
   // https://github.com/fastify/fastify-plugin/blob/fe079bef6557a83794bf437e14b9b9edb8a74104/plugin.js#L11

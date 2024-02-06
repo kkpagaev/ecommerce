@@ -1,5 +1,5 @@
-import { FastifyInstance } from "fastify";
+import { FastifyZod } from "fastify";
 
-export default ({ t }: FastifyInstance) => ({
+export default ({ t }: FastifyZod) => ({
   foo: t.procedure.query(() => "bar"),
 });
