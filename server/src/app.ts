@@ -5,9 +5,7 @@ import { fastifyTRPCPlugin } from "./core/trpc";
 import { FastifyTRPCPluginOptions } from "@trpc/server/adapters/fastify";
 import { createContext } from "./core/context";
 import { AppRouter, createAppRouter } from "./app.router";
-import fastifyCors from "@fastify/cors";
-import fastifyWebsocket from "@fastify/websocket";
-import { ZodTypeProvider, validatorCompiler, serializerCompiler } from "fastify-type-provider-zod";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
 import fastifyAutoload from "@fastify/autoload";
 
 export async function build() {
@@ -18,11 +16,6 @@ export async function build() {
   await f.register(fastifyAutoload, {
     dir: path.resolve(__dirname, "plugins"),
   });
-
-  await f.register(fastifyWebsocket);
-
-  f.setValidatorCompiler(validatorCompiler);
-  f.setSerializerCompiler(serializerCompiler);
 
   const appRouter = await createAppRouter(f.withTypeProvider<ZodTypeProvider>());
 
@@ -36,18 +29,6 @@ export async function build() {
         console.error(`Error in tRPC handler on path '${path}':`, error);
       },
     } satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
-  });
-
-  await f.register(fastifyCors, {
-    origin: true,
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-    credentials: true,
-  });
-
-  f.get("/", async () => {
-    return {
-      hello: "world",
-    };
   });
 
   return f;
