@@ -5,7 +5,7 @@ import { fastifyTRPCPlugin } from "./core/trpc";
 import fastifyAutoload from "@fastify/autoload";
 
 export async function build() {
-  const f = Fastify({
+  const f = await Fastify({
     logger: true,
   });
 

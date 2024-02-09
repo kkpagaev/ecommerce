@@ -7,4 +7,6 @@ export default fp(async function (f) {
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     credentials: true,
   });
+}, {
+  name: "cors",
 });

@@ -18,4 +18,6 @@ export default fp(async function (f) {
   f.addHook("onClose", async () => {
     await pool.end();
   });
+}, {
+  name: "pool",
 });

@@ -8,7 +8,8 @@ import {
 } from "./category.queries";
 import { FastifyZod } from "fastify";
 
-export default async ({ pool, t }: FastifyZod) => ({
+export default async ({ pool, t, catalog }: FastifyZod) => ({
+  foo: t.procedure.query(() => catalog.foo),
   listCategories: t.procedure
     .input(
       z.object({
