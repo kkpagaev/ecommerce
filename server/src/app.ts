@@ -16,5 +16,11 @@ export async function build() {
     prefix: "/trpc",
   });
 
+  f.get("/", () => {
+    return {
+      hello: "world",
+    };
+  });
+
   return f;
 }
