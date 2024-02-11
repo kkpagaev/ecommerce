@@ -1,11 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { testDB } from "../../../utils";
-import { createCategory, findCategoryById } from "../../../../src/core/catalog/category";
+import { Categories } from "../../../../src/core/catalog/category";
+
+async function categories() {
+  const db = await testDB();
+  const category = Categories({ pool: db.pool });
+
+  return {
+    category,
+    [Symbol.asyncDispose]: db[Symbol.asyncDispose],
+  };
+}
 
 describe("category", () => {
   it("create category", async () => {
-    await using db = await testDB();
-    const category = await createCategory(db.pool, {
+    await using service = await categories();
+    const category = await service.category.createCategory({
       name: "test",
       description: "test",
     });
@@ -13,7 +23,7 @@ describe("category", () => {
     expect(category).toHaveProperty("id");
 
     const id = category.id;
-    const category2 = await findCategoryById(db.pool, id);
+    const category2 = await service.category.findCategoryById(id);
 
     expect(category2).toEqual({
       id,
@@ -24,8 +34,8 @@ describe("category", () => {
   });
 
   it("create category with cyrillic name", async () => {
-    await using db = await testDB();
-    const category = await createCategory(db.pool, {
+    await using service = await categories();
+    const category = await service.category.createCategory({
       name: "тест",
       description: "тест",
     });
@@ -33,7 +43,7 @@ describe("category", () => {
     expect(category).toHaveProperty("id");
 
     const id = category.id;
-    const category2 = await findCategoryById(db.pool, id);
+    const category2 = await service.category.findCategoryById(id);
 
     expect(category2).toEqual({
       id,
