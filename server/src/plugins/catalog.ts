@@ -1,19 +1,6 @@
 import { FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
-import { Pool } from "pg";
-
-type Categories = ReturnType<typeof Categories>;
-function Categories(f: { pool: Pool }) {
-  return {
-    listCategories: listCategories.bind(null, f.pool),
-  };
-}
-
-async function listCategories(pool: Pool, limit: number) {
-  const res = await pool.query("SELECT * FROM categories LIMIT $1", [limit]);
-
-  return res;
-}
+import { Categories } from "../core/catalog/category";
 
 type Catalog = {
   categories: Categories;

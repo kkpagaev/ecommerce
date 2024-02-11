@@ -3,7 +3,7 @@ import * as prettier from "prettier";
 import * as fs from "fs";
 import * as readline from "readline";
 
-const routesFile = resolve(__dirname, "..", "src", "app.router.ts");
+const routesFile = resolve(import.meta.dirname, "..", "src", "app.router.ts");
 type Node = {
   router?: string;
 } & {
@@ -83,7 +83,8 @@ function compileCreateAppRouterArgs(n: Node): string {
        ${compileCreateAppRouterArgs(newNode)}
     )
     `;
-    } else {
+    }
+    else {
       return `withValidation(t.router(await ${n.router}(fastify)))`;
     }
   }
@@ -143,17 +144,18 @@ async function getLine(path: string, n: number): Promise<string> {
           reject(new Error("Line not found"));
         }
       });
-    } catch (e) {
+    }
+    catch (e) {
       reject(e);
     }
   });
 }
 
 export async function updateRoutes() {
-  const admin = await gen(resolve(__dirname, "admin"), "./admin/").catch(() => {
+  const admin = await gen(resolve(import.meta.dirname, "admin"), "./admin/").catch(() => {
     return [{}, []] as RouteTree;
   });
-  const web = await gen(resolve(__dirname, "web"), "./web/").catch(() => {
+  const web = await gen(resolve(import.meta.dirname, "web"), "./web/").catch(() => {
     return [{}, []] as RouteTree;
   });
   const imports = admin[1].concat(web[1]);

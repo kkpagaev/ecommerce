@@ -10,7 +10,7 @@ export async function build() {
   });
 
   await f.register(fastifyAutoload, {
-    dir: path.resolve(__dirname, "plugins"),
+    dir: path.resolve(import.meta.dirname, "plugins"),
   });
   await f.register(fastifyTRPCPlugin, {
     prefix: "/trpc",

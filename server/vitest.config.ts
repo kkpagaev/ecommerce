@@ -3,9 +3,14 @@ import * as path from "path"
 import { defineConfig } from "vitest/config"
 
 export default defineConfig({
+  esbuild: {
+    target: "es2022",
+  },
   test: {
-    deps: {
-      inline: ["@fastify/autoload"]
+    server: {
+      deps: {
+        inline: ["@fastify/autoload"]
+      }
     },
     environment: "node",
     include: ["src/**/*.spec.ts", "test/**/*.spec.ts"],

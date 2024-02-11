@@ -1,6 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,9 +9,9 @@
     "debug": "tsx --inspect src/index.ts",
     "brk": "tsx --inspect-brk src/index.ts",
     "exec": "node --experimental-specifier-resolution=node --loader ts-node/esm",
-    "test": "node --loader tsx --test --watch test/**/*.spec.ts",
+    "test": "vitest",
     "test:once": "node --import tsx --test test/**/*.spec.ts",
-    "test:inspect": "node --import tsx --test --inspect-brk test/**/*.spec.ts",
+    "test:inspect": "vitest --inspect-brk --no-file-parallelism",
     "build": "tsc",
     "prod": "NODE_ENV=production node dist/index.js"
   },

@@ -1,15 +1,8 @@
 import { z } from "zod";
 import slugify from "slugify";
-import {
-  listCategories,
-  createCategory,
-  findCategoryById,
-  listCategoriesCount,
-} from "./category.queries";
 import { FastifyZod } from "fastify";
 
 export default async ({ pool, t, catalog }: FastifyZod) => ({
-  foo: t.procedure.query(() => catalog.foo),
   listCategories: t.procedure
     .input(
       z.object({
@@ -19,19 +12,9 @@ export default async ({ pool, t, catalog }: FastifyZod) => ({
       }),
     )
     .query(async ({ input }) => {
-      const res = await listCategories.run(
-        {
-          page: input.page,
-          limit: input.limit,
-        },
-        pool,
-      );
-      const count = await listCategoriesCount.run(undefined, pool);
+      const res = await catalog.categories.listCategories(input);
 
-      return {
-        data: res,
-        count: +(count[0].count ?? 0),
-      };
+      return res;
     }),
 
   findCategoryById: t.procedure
@@ -41,7 +24,7 @@ export default async ({ pool, t, catalog }: FastifyZod) => ({
       })
     )
     .query(async ({ input }) => {
-      return await findCategoryById.run({ id: input.id }, pool);
+      return await catalog.categories.getCategoryById(input.id);
     }),
 
   createCategory: t.procedure
@@ -52,15 +35,7 @@ export default async ({ pool, t, catalog }: FastifyZod) => ({
       }),
     )
     .mutation(async ({ input }) => {
-      const slug = slugify(input.name);
-      const category = await createCategory.run(
-        {
-          name: input.name,
-          slug: slug,
-          description: input.description,
-        },
-        pool,
-      );
+      const category = await catalog.categories.createCategory(input);
 
       return category;
     }),
