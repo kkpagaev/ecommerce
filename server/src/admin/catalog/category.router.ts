@@ -1,5 +1,4 @@
 import { z } from "zod";
-import slugify from "slugify";
 import { FastifyZod } from "fastify";
 
 export default async ({ pool, t, catalog }: FastifyZod) => ({
@@ -24,7 +23,7 @@ export default async ({ pool, t, catalog }: FastifyZod) => ({
       })
     )
     .query(async ({ input }) => {
-      return await catalog.categories.getCategoryById(input.id);
+      return await catalog.categories.findCategoryById(input.id);
     }),
 
   createCategory: t.procedure
@@ -42,20 +41,20 @@ export default async ({ pool, t, catalog }: FastifyZod) => ({
 
   updateCategory: t.procedure
     .input(
-      z.object({
-        name: z.string(),
-        description: z.string(),
-      }).partial()
+      z.object(
+        {
+          id: z.number(),
+        }
+      ).and(
+        z.object({
+          name: z.string(),
+          description: z.string(),
+        }).partial()
+      )
     )
     .mutation(async ({ input }) => {
-      const foo = await createCategory.run(
-        {
-          name: input.name,
-          description: input.description,
-          slug: input.name,
-        },
-        pool,
-      );
+      const id = input.id;
+      const foo = await catalog.categories.updateCategory(id, input);
 
       return foo;
     }),
