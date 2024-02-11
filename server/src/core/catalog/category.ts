@@ -7,7 +7,7 @@ import {
   listCategoriesCountQuery,
   listCategoriesQuery,
   updateCategoryQuery,
-} from "./category.queries";
+} from "./query/category.queries";
 
 export type Categories = ReturnType<typeof Categories>;
 
