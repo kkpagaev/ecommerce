@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { FastifyZod } from "fastify";
 
-export default async ({ pool, t, catalog }: FastifyZod) => ({
+export default async ({ t, catalog }: FastifyZod) => ({
   listCategories: t.procedure
     .input(
       z.object({

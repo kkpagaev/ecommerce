@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/plugins/core/catalog/category.sql" */
+/** Types generated for queries found in "src/core/catalog/query/category.sql" */
 import { PreparedQuery } from "@pgtyped/runtime";
 
 /** 'ListCategoriesCountQuery' parameters type */
