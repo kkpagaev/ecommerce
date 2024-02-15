@@ -8,6 +8,7 @@ import {
   listCategoriesQuery,
   updateCategoryQuery,
 } from "./query/category.queries";
+import { Translation } from "./i18n";
 
 export type Categories = ReturnType<typeof Categories>;
 
@@ -43,11 +44,11 @@ export async function findCategoryById(pool: Pool, id: number) {
 }
 
 type CreateCategoryProps = {
-  name: string;
-  description?: string;
+  name: Translation;
+  description?: Translation;
 };
 export async function createCategory(pool: Pool, input: CreateCategoryProps) {
-  const slug = slugify(input.name);
+  const slug = slugify(input.name.uk);
   const res = await createCategoryQuery.run({
     ...input,
     slug,
@@ -57,11 +58,11 @@ export async function createCategory(pool: Pool, input: CreateCategoryProps) {
 }
 
 type UpdateCategoryProps = {
-  name?: string;
-  description?: string;
+  name?: Translation;
+  description?: Translation;
 };
 export async function updateCategory(pool: Pool, id: number, input: UpdateCategoryProps) {
-  const slug = input.name ? slugify(input.name) : undefined;
+  const slug = input.name ? slugify(input.name.uk) : undefined;
 
   return await updateCategoryQuery.run({
     ...input,

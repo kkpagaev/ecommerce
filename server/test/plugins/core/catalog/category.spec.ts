@@ -16,8 +16,16 @@ describe("category", () => {
   it("create category", async () => {
     await using service = await categories();
     const category = await service.category.createCategory({
-      name: "test",
-      description: "test",
+      name: {
+        uk: "test",
+        ru: "test",
+        en: "test",
+      },
+      description: {
+        uk: "test",
+        ru: "test",
+        en: "test",
+      },
     });
 
     expect(category).toHaveProperty("id");
@@ -27,17 +35,33 @@ describe("category", () => {
 
     expect(category2).toEqual({
       id,
-      name: "test",
+      name: {
+        uk: "test",
+        ru: "test",
+        en: "test",
+      },
       slug: "test",
-      description: "test",
+      description: {
+        uk: "test",
+        ru: "test",
+        en: "test",
+      },
     });
   });
 
   it("create category with cyrillic name", async () => {
     await using service = await categories();
     const category = await service.category.createCategory({
-      name: "тест",
-      description: "тест",
+      name: {
+        uk: "тест",
+        ru: "test",
+        en: "test",
+      },
+      description: {
+        uk: "тест опис",
+        ru: "test",
+        en: "test",
+      },
     });
 
     expect(category).toHaveProperty("id");
@@ -47,9 +71,17 @@ describe("category", () => {
 
     expect(category2).toEqual({
       id,
-      name: "тест",
+      name: {
+        uk: "тест",
+        ru: "test",
+        en: "test",
+      },
       slug: "test",
-      description: "тест",
+      description: {
+        uk: "тест опис",
+        ru: "test",
+        en: "test",
+      },
     });
   });
 });
