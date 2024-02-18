@@ -3,8 +3,8 @@
 CREATE TABLE products (
   id SERIAL PRIMARY KEY,
   category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,
-  name VARCHAR(255) NOT NULL,
-  description VARCHAR(255),
+  name jsonb NOT NULL,
+  description jsonb,
   slug VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()

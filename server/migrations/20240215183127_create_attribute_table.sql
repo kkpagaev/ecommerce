@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TYPE attribute_type AS ENUM ('string', 'number', 'boolean', 'date', 'list');
+CREATE TYPE attribute_type AS ENUM ('string', 'number', 'boolean', 'date');
 
 CREATE TABLE attributes (
   id SERIAL PRIMARY KEY,
