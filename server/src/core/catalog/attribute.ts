@@ -1,8 +1,7 @@
 import { Translation } from "./i18n";
 import { Pool } from "pg";
-import { createAttributeQuery, updateAttirubeQuery } from "./query/attribute.queries";
-import { createAttributeValuesQuery } from "./query/attribute_values.queries";
 import { sql } from "@pgtyped/runtime";
+import { attributeCreateQuery, attributeUpdateQuery, attributeValuesCreateQuery } from "./queries";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {
@@ -17,14 +16,14 @@ type CreateAttributeProps = {
   description?: Translation;
 };
 export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
-  const res = await createAttributeQuery.run(input, pool);
+  const res = await attributeCreateQuery.run(input, pool);
 
   return res[0];
 }
 
 type UpdateAttributeProps = Partial<CreateAttributeProps>;
 export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
-  const res = await updateAttirubeQuery.run({
+  const res = await attributeUpdateQuery.run({
     ...input,
     id,
   }, pool);
@@ -37,7 +36,7 @@ type CreateAttributeValueProps = {
   value: Translation;
 };
 export async function createAttributeValue(pool: Pool, input: CreateAttributeValueProps) {
-  return createAttributeValuesQuery.run({
+  return attributeValuesCreateQuery.run({
     values: [
       input,
     ],

@@ -1,14 +1,8 @@
 import { Pool } from "pg";
 import slugify from "slugify";
-import {
-  IListCategoriesQueryParams,
-  createCategoryQuery,
-  findCategoryByIdQuery,
-  listCategoriesCountQuery,
-  listCategoriesQuery,
-  updateCategoryQuery,
-} from "./query/category.queries";
 import { Translation } from "./i18n";
+import { categoryCreateQuery, categoryFindByIdQuery, categoryListCountQuery, categoryListQuery, categoryUpdateQuery } from "./queries";
+import { ICategoryListQueryParams } from "./queries.types";
 
 export type Categories = ReturnType<typeof Categories>;
 
@@ -21,15 +15,15 @@ export function Categories(f: { pool: Pool }) {
   };
 }
 
-export async function listCategories(pool: Pool, input: IListCategoriesQueryParams) {
-  const res = await listCategoriesQuery.run(
+export async function listCategories(pool: Pool, input: ICategoryListQueryParams) {
+  const res = await categoryListQuery.run(
     {
       page: input.page,
       limit: input.limit,
     },
     pool
   );
-  const count = await listCategoriesCountQuery.run(undefined, pool);
+  const count = await categoryListCountQuery.run(undefined, pool);
 
   return {
     data: res,
@@ -38,7 +32,7 @@ export async function listCategories(pool: Pool, input: IListCategoriesQueryPara
 }
 
 export async function findCategoryById(pool: Pool, id: number) {
-  const res = await findCategoryByIdQuery.run({ id }, pool);
+  const res = await categoryFindByIdQuery.run({ id }, pool);
 
   return res[0];
 }
@@ -49,7 +43,7 @@ type CreateCategoryProps = {
 };
 export async function createCategory(pool: Pool, input: CreateCategoryProps) {
   const slug = slugify(input.name.uk);
-  const res = await createCategoryQuery.run({
+  const res = await categoryCreateQuery.run({
     ...input,
     slug,
   }, pool);
@@ -64,7 +58,7 @@ type UpdateCategoryProps = {
 export async function updateCategory(pool: Pool, id: number, input: UpdateCategoryProps) {
   const slug = input.name ? slugify(input.name.uk) : undefined;
 
-  return await updateCategoryQuery.run({
+  return await categoryUpdateQuery.run({
     ...input,
     slug,
     id,
