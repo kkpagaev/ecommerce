@@ -7,7 +7,7 @@
     },
     {
       "mode": "ts",
-      "include": "**/action.ts",
+      "include": "**/queries.ts",
       "emitTemplate": "{{dir}}/{{name}}.types.ts"
     }
   ],

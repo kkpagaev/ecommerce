@@ -1,24 +1,20 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TYPE attribute_type AS ENUM ('string', 'number', 'boolean', 'date');
-
 CREATE TABLE attributes (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  type attribute_type NOT NULL,
-  description VARCHAR(255)
+  name jsonb NOT NULL,
+  description jsonb
 );
 
-CREATE TABLE attribute_string_values (
+CREATE TABLE attribute_values (
+  id SERIAL PRIMARY KEY,
   attribute_id INTEGER REFERENCES attributes(id) ON DELETE CASCADE,
-  value VARCHAR(255) NOT NULL,
-  PRIMARY KEY (attribute_id, value)
+  value jsonb NOT NULL
 );
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE attribute_string_values;
+DROP TABLE attribute_values;
 DROP TABLE attributes;
-DROP TYPE attribute_type;
 -- +goose StatementEnd
