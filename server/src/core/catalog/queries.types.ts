@@ -1,6 +1,8 @@
 /** Types generated for queries found in "src/core/catalog/queries.ts" */
 export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
 
+export type NumberOrString = number | string;
+
 /** 'AttributeFindByIdQuery' parameters type */
 export interface IAttributeFindByIdQueryParams {
   id: number;
@@ -120,8 +122,8 @@ export interface IAttributeValueListQueryQuery {
 /** 'AttributeValueCreateQuery' parameters type */
 export interface IAttributeValueCreateQueryParams {
   values: readonly ({
-    attributeId: number | null | void,
-    value: Json | null | void
+    attributeId: number | null | void;
+    value: Json | null | void;
   })[];
 }
 
@@ -251,65 +253,79 @@ export interface ICategoryUpdateQueryQuery {
   result: ICategoryUpdateQueryResult;
 }
 
-/** 'OptionCreateQuery' parameters type */
-export interface IOptionCreateQueryParams {
+/** 'ProductListQuery' parameters type */
+export interface IProductListQueryParams {
+  limit?: number | null | void;
+  page?: number | null | void;
+}
+
+/** 'ProductListQuery' return type */
+export interface IProductListQueryResult {
+  category_id: number | null;
+  created_at: Date;
+  description: Json | null;
+  id: number;
   name: Json;
+  slug: string;
+  updated_at: Date;
 }
 
-/** 'OptionCreateQuery' return type */
-export interface IOptionCreateQueryResult {
-  id: number;
+/** 'ProductListQuery' query type */
+export interface IProductListQueryQuery {
+  params: IProductListQueryParams;
+  result: IProductListQueryResult;
 }
 
-/** 'OptionCreateQuery' query type */
-export interface IOptionCreateQueryQuery {
-  params: IOptionCreateQueryParams;
-  result: IOptionCreateQueryResult;
+/** 'ProductListCountQuery' parameters type */
+export type IProductListCountQueryParams = void;
+
+/** 'ProductListCountQuery' return type */
+export interface IProductListCountQueryResult {
+  count: string | null;
 }
 
-/** 'OptionUpdateQuery' parameters type */
-export interface IOptionUpdateQueryParams {
-  id: number;
-  name?: Json | null | void;
+/** 'ProductListCountQuery' query type */
+export interface IProductListCountQueryQuery {
+  params: IProductListCountQueryParams;
+  result: IProductListCountQueryResult;
 }
 
-/** 'OptionUpdateQuery' return type */
-export type IOptionUpdateQueryResult = void;
-
-/** 'OptionUpdateQuery' query type */
-export interface IOptionUpdateQueryQuery {
-  params: IOptionUpdateQueryParams;
-  result: IOptionUpdateQueryResult;
-}
-
-/** 'OptionDeleteQuery' parameters type */
-export interface IOptionDeleteQueryParams {
+/** 'ProductFindByIdQuery' parameters type */
+export interface IProductFindByIdQueryParams {
   id?: number | null | void;
 }
 
-/** 'OptionDeleteQuery' return type */
-export type IOptionDeleteQueryResult = void;
-
-/** 'OptionDeleteQuery' query type */
-export interface IOptionDeleteQueryQuery {
-  params: IOptionDeleteQueryParams;
-  result: IOptionDeleteQueryResult;
-}
-
-/** 'OptionFindByIdQuery' parameters type */
-export interface IOptionFindByIdQueryParams {
-  id?: number | null | void;
-}
-
-/** 'OptionFindByIdQuery' return type */
-export interface IOptionFindByIdQueryResult {
+/** 'ProductFindByIdQuery' return type */
+export interface IProductFindByIdQueryResult {
+  category_id: number | null;
+  created_at: Date;
+  description: Json | null;
   id: number;
   name: Json;
+  slug: string;
+  updated_at: Date;
 }
 
-/** 'OptionFindByIdQuery' query type */
-export interface IOptionFindByIdQueryQuery {
-  params: IOptionFindByIdQueryParams;
-  result: IOptionFindByIdQueryResult;
+/** 'ProductFindByIdQuery' query type */
+export interface IProductFindByIdQueryQuery {
+  params: IProductFindByIdQueryParams;
+  result: IProductFindByIdQueryResult;
 }
 
+/** 'PriceUpsertQuery' parameters type */
+export interface IPriceUpsertQueryParams {
+  values: readonly ({
+    product_id: NumberOrString;
+    price: NumberOrString;
+    type: string | null | void;
+  })[];
+}
+
+/** 'PriceUpsertQuery' return type */
+export type IPriceUpsertQueryResult = void;
+
+/** 'PriceUpsertQuery' query type */
+export interface IPriceUpsertQueryQuery {
+  params: IPriceUpsertQueryParams;
+  result: IPriceUpsertQueryResult;
+}

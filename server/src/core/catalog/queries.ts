@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IOptionUpdateQueryQuery, IOptionCreateQueryQuery, IOptionFindByIdQueryQuery, IOptionDeleteQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -103,32 +103,55 @@ export const categoryUpdateQuery = sql<ICategoryUpdateQueryQuery>`
     id = $id!;
 `;
 
-export const optionCreateQuery = sql<IOptionCreateQueryQuery>`
-  INSERT INTO options
-    (name)
-  VALUES
-    ($name!)
-  RETURNING id;
+// export const optionCreateQuery = sql<IOptionCreateQueryQuery>`
+//   INSERT INTO options
+//     (name)
+//   VALUES
+//     ($name!)
+//   RETURNING id;
+// `;
+
+// export const optionUpdateQuery = sql<IOptionUpdateQueryQuery>`
+//   UPDATE options
+//   SET
+//     name = COALESCE($name, name)
+//   WHERE
+//     id = $id!;
+// `;
+
+// export const optionDeleteQuery = sql<IOptionDeleteQueryQuery>`
+//   DELETE FROM options
+//   WHERE
+//     id = $id;
+// `;
+
+// export const optionFindByIdQuery = sql<IOptionFindByIdQueryQuery>`
+//   SELECT id, name
+//   FROM options
+//   WHERE id = $id;
+// `;
+
+export const productListQuery = sql<IProductListQueryQuery>`
+  SELECT * FROM products
+  ORDER BY id
+  LIMIT COALESCE($limit, 10)
+  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
 
-export const optionUpdateQuery = sql<IOptionUpdateQueryQuery>`
-  UPDATE options
-  SET
-    name = COALESCE($name, name)
-  WHERE
-    id = $id!;
+export const productListCountQuery = sql<IProductListCountQueryQuery>`
+  SELECT COUNT(*) FROM products
 `;
 
-export const optionDeleteQuery = sql<IOptionDeleteQueryQuery>`
-  DELETE FROM options
-  WHERE
-    id = $id;
-`;
-
-export const optionFindByIdQuery = sql<IOptionFindByIdQueryQuery>`
-  SELECT id, name
-  FROM options
+export const productFindByIdQuery = sql<IProductFindByIdQueryQuery>`
+  SELECT * FROM products
   WHERE id = $id;
+`;
+
+export const priceUpsertQuery = sql<IPriceUpsertQueryQuery>`
+  INSERT INTO prices (product_id, price, type)
+  VALUES $$values(product_id!, price!, type)
+  ON CONFLICT (product_id, type)
+  DO UPDATE SET price = EXCLUDED.price;
 `;
 
 export const catalogQueries = {
@@ -153,10 +176,18 @@ export const catalogQueries = {
     delete: attributeValueDeleteQuery,
     list: attributeValueListQuery,
   },
-  option: {
-    update: optionUpdateQuery,
-    create: optionCreateQuery,
-    delete: optionDeleteQuery,
-    findById: optionFindByIdQuery,
+  // option: {
+  //   update: optionUpdateQuery,
+  //   create: optionCreateQuery,
+  //   delete: optionDeleteQuery,
+  //   findById: optionFindByIdQuery,
+  // },
+  product: {
+    listCount: productListCountQuery,
+    list: productListQuery,
+    findById: productFindByIdQuery,
+  },
+  price: {
+    upsert: priceUpsertQuery,
   },
 };
