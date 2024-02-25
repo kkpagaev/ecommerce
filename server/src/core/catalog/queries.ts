@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IOptionCreateQueryQuery, IOptionFindByIdQueryQuery, IOptionDeleteQueryQuery, IAttributeValuesDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValuesCreateQueryQuery, IAttributeValuesListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValuesUpdateQueryQuery } from "./queries.types";
+import { IOptionCreateQueryQuery, IOptionFindByIdQueryQuery, IOptionDeleteQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -41,21 +41,21 @@ export const attributeDeleteQuery = sql<IAttributeDeleteQueryQuery>`
   WHERE id = $id!;
 `;
 
-export const attributeValuesListQuery = sql<IAttributeValuesListQueryQuery>`
+export const attributeValueListQuery = sql<IAttributeValueListQueryQuery>`
   SELECT id, value, attribute_id
   FROM attribute_values
   WHERE attribute_id = $attribute_id
   ORDER BY id;
 `;
 
-export const attributeValuesCreateQuery = sql<IAttributeValuesCreateQueryQuery>`
+export const attributeValueCreateQuery = sql<IAttributeValueCreateQueryQuery>`
   INSERT INTO attribute_values
     (attribute_id, value)
   VALUES
     $$values(attributeId, value);
 `;
 
-export const attributeValuesUpdateQuery = sql<IAttributeValuesUpdateQueryQuery>`
+export const attributeValueUpdateQuery = sql<IAttributeValueUpdateQueryQuery>`
   UPDATE attribute_values
   SET
     value = COALESCE($value, value)
@@ -63,7 +63,7 @@ export const attributeValuesUpdateQuery = sql<IAttributeValuesUpdateQueryQuery>`
     id = $id!;
 `;
 
-export const attributeValuesDeleteQuery = sql<IAttributeValuesDeleteQueryQuery>`
+export const attributeValueDeleteQuery = sql<IAttributeValueDeleteQueryQuery>`
   DELETE FROM attribute_values
   WHERE id = $id!;
 `;
@@ -148,10 +148,10 @@ export const catalogQueries = {
     delete: attributeDeleteQuery,
   },
   attributeValue: {
-    create: attributeValuesCreateQuery,
-    update: attributeValuesUpdateQuery,
-    delete: attributeValuesDeleteQuery,
-    list: attributeValuesListQuery,
+    create: attributeValueCreateQuery,
+    update: attributeValueUpdateQuery,
+    delete: attributeValueDeleteQuery,
+    list: attributeValueListQuery,
   },
   option: {
     create: optionCreateQuery,

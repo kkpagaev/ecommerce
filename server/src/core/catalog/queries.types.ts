@@ -99,68 +99,68 @@ export interface IAttributeDeleteQueryQuery {
   result: IAttributeDeleteQueryResult;
 }
 
-/** 'AttributeValuesListQuery' parameters type */
-export interface IAttributeValuesListQueryParams {
+/** 'AttributeValueListQuery' parameters type */
+export interface IAttributeValueListQueryParams {
   attribute_id?: number | null | void;
 }
 
-/** 'AttributeValuesListQuery' return type */
-export interface IAttributeValuesListQueryResult {
+/** 'AttributeValueListQuery' return type */
+export interface IAttributeValueListQueryResult {
   attribute_id: number | null;
   id: number;
   value: Json;
 }
 
-/** 'AttributeValuesListQuery' query type */
-export interface IAttributeValuesListQueryQuery {
-  params: IAttributeValuesListQueryParams;
-  result: IAttributeValuesListQueryResult;
+/** 'AttributeValueListQuery' query type */
+export interface IAttributeValueListQueryQuery {
+  params: IAttributeValueListQueryParams;
+  result: IAttributeValueListQueryResult;
 }
 
-/** 'AttributeValuesCreateQuery' parameters type */
-export interface IAttributeValuesCreateQueryParams {
+/** 'AttributeValueCreateQuery' parameters type */
+export interface IAttributeValueCreateQueryParams {
   values: readonly ({
-    attributeId: number | null | void,
-    value: Json | null | void
+    attributeId: number | null | void;
+    value: Json | null | void;
   })[];
 }
 
-/** 'AttributeValuesCreateQuery' return type */
-export type IAttributeValuesCreateQueryResult = void;
+/** 'AttributeValueCreateQuery' return type */
+export type IAttributeValueCreateQueryResult = void;
 
-/** 'AttributeValuesCreateQuery' query type */
-export interface IAttributeValuesCreateQueryQuery {
-  params: IAttributeValuesCreateQueryParams;
-  result: IAttributeValuesCreateQueryResult;
+/** 'AttributeValueCreateQuery' query type */
+export interface IAttributeValueCreateQueryQuery {
+  params: IAttributeValueCreateQueryParams;
+  result: IAttributeValueCreateQueryResult;
 }
 
-/** 'AttributeValuesUpdateQuery' parameters type */
-export interface IAttributeValuesUpdateQueryParams {
+/** 'AttributeValueUpdateQuery' parameters type */
+export interface IAttributeValueUpdateQueryParams {
   id: number;
   value?: Json | null | void;
 }
 
-/** 'AttributeValuesUpdateQuery' return type */
-export type IAttributeValuesUpdateQueryResult = void;
+/** 'AttributeValueUpdateQuery' return type */
+export type IAttributeValueUpdateQueryResult = void;
 
-/** 'AttributeValuesUpdateQuery' query type */
-export interface IAttributeValuesUpdateQueryQuery {
-  params: IAttributeValuesUpdateQueryParams;
-  result: IAttributeValuesUpdateQueryResult;
+/** 'AttributeValueUpdateQuery' query type */
+export interface IAttributeValueUpdateQueryQuery {
+  params: IAttributeValueUpdateQueryParams;
+  result: IAttributeValueUpdateQueryResult;
 }
 
-/** 'AttributeValuesDeleteQuery' parameters type */
-export interface IAttributeValuesDeleteQueryParams {
+/** 'AttributeValueDeleteQuery' parameters type */
+export interface IAttributeValueDeleteQueryParams {
   id: number;
 }
 
-/** 'AttributeValuesDeleteQuery' return type */
-export type IAttributeValuesDeleteQueryResult = void;
+/** 'AttributeValueDeleteQuery' return type */
+export type IAttributeValueDeleteQueryResult = void;
 
-/** 'AttributeValuesDeleteQuery' query type */
-export interface IAttributeValuesDeleteQueryQuery {
-  params: IAttributeValuesDeleteQueryParams;
-  result: IAttributeValuesDeleteQueryResult;
+/** 'AttributeValueDeleteQuery' query type */
+export interface IAttributeValueDeleteQueryQuery {
+  params: IAttributeValueDeleteQueryParams;
+  result: IAttributeValueDeleteQueryResult;
 }
 
 /** 'CategoryListCountQuery' parameters type */
@@ -312,4 +312,3 @@ export interface IOptionFindByIdQueryQuery {
   params: IOptionFindByIdQueryParams;
   result: IOptionFindByIdQueryResult;
 }
-
