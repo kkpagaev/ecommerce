@@ -120,8 +120,8 @@ export interface IAttributeValueListQueryQuery {
 /** 'AttributeValueCreateQuery' parameters type */
 export interface IAttributeValueCreateQueryParams {
   values: readonly ({
-    attributeId: number | null | void;
-    value: Json | null | void;
+    attributeId: number | null | void,
+    value: Json | null | void
   })[];
 }
 
@@ -312,3 +312,4 @@ export interface IOptionFindByIdQueryQuery {
   params: IOptionFindByIdQueryParams;
   result: IOptionFindByIdQueryResult;
 }
+

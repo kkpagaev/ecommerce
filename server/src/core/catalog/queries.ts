@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IOptionCreateQueryQuery, IOptionFindByIdQueryQuery, IOptionDeleteQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IOptionUpdateQueryQuery, IOptionCreateQueryQuery, IOptionFindByIdQueryQuery, IOptionDeleteQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -111,7 +111,7 @@ export const optionCreateQuery = sql<IOptionCreateQueryQuery>`
   RETURNING id;
 `;
 
-export const optionUpdateQuery = sql`
+export const optionUpdateQuery = sql<IOptionUpdateQueryQuery>`
   UPDATE options
   SET
     name = COALESCE($name, name)
@@ -154,6 +154,7 @@ export const catalogQueries = {
     list: attributeValueListQuery,
   },
   option: {
+    update: optionUpdateQuery,
     create: optionCreateQuery,
     delete: optionDeleteQuery,
     findById: optionFindByIdQuery,
