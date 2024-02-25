@@ -134,6 +134,35 @@ export interface IAttributeValuesCreateQueryQuery {
   result: IAttributeValuesCreateQueryResult;
 }
 
+/** 'AttributeValuesUpdateQuery' parameters type */
+export interface IAttributeValuesUpdateQueryParams {
+  id: number;
+  value?: Json | null | void;
+}
+
+/** 'AttributeValuesUpdateQuery' return type */
+export type IAttributeValuesUpdateQueryResult = void;
+
+/** 'AttributeValuesUpdateQuery' query type */
+export interface IAttributeValuesUpdateQueryQuery {
+  params: IAttributeValuesUpdateQueryParams;
+  result: IAttributeValuesUpdateQueryResult;
+}
+
+/** 'AttributeValuesDeleteQuery' parameters type */
+export interface IAttributeValuesDeleteQueryParams {
+  id: number;
+}
+
+/** 'AttributeValuesDeleteQuery' return type */
+export type IAttributeValuesDeleteQueryResult = void;
+
+/** 'AttributeValuesDeleteQuery' query type */
+export interface IAttributeValuesDeleteQueryQuery {
+  params: IAttributeValuesDeleteQueryParams;
+  result: IAttributeValuesDeleteQueryResult;
+}
+
 /** 'CategoryListCountQuery' parameters type */
 export type ICategoryListCountQueryParams = void;
 
@@ -220,5 +249,67 @@ export type ICategoryUpdateQueryResult = void;
 export interface ICategoryUpdateQueryQuery {
   params: ICategoryUpdateQueryParams;
   result: ICategoryUpdateQueryResult;
+}
+
+/** 'OptionCreateQuery' parameters type */
+export interface IOptionCreateQueryParams {
+  name: Json;
+}
+
+/** 'OptionCreateQuery' return type */
+export interface IOptionCreateQueryResult {
+  id: number;
+}
+
+/** 'OptionCreateQuery' query type */
+export interface IOptionCreateQueryQuery {
+  params: IOptionCreateQueryParams;
+  result: IOptionCreateQueryResult;
+}
+
+/** 'OptionUpdateQuery' parameters type */
+export interface IOptionUpdateQueryParams {
+  id: number;
+  name?: Json | null | void;
+}
+
+/** 'OptionUpdateQuery' return type */
+export type IOptionUpdateQueryResult = void;
+
+/** 'OptionUpdateQuery' query type */
+export interface IOptionUpdateQueryQuery {
+  params: IOptionUpdateQueryParams;
+  result: IOptionUpdateQueryResult;
+}
+
+/** 'OptionDeleteQuery' parameters type */
+export interface IOptionDeleteQueryParams {
+  id?: number | null | void;
+}
+
+/** 'OptionDeleteQuery' return type */
+export type IOptionDeleteQueryResult = void;
+
+/** 'OptionDeleteQuery' query type */
+export interface IOptionDeleteQueryQuery {
+  params: IOptionDeleteQueryParams;
+  result: IOptionDeleteQueryResult;
+}
+
+/** 'OptionFindByIdQuery' parameters type */
+export interface IOptionFindByIdQueryParams {
+  id?: number | null | void;
+}
+
+/** 'OptionFindByIdQuery' return type */
+export interface IOptionFindByIdQueryResult {
+  id: number;
+  name: Json;
+}
+
+/** 'OptionFindByIdQuery' query type */
+export interface IOptionFindByIdQueryQuery {
+  params: IOptionFindByIdQueryParams;
+  result: IOptionFindByIdQueryResult;
 }
 

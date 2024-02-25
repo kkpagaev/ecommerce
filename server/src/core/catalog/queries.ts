@@ -1,7 +1,7 @@
 import { sql } from "@pgtyped/runtime";
-import { IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeFindByIdQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValuesCreateQueryQuery, IAttributeValuesListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery } from "./queries.types";
+import { IOptionCreateQueryQuery, IOptionFindByIdQueryQuery, IOptionDeleteQueryQuery, IAttributeValuesDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValuesCreateQueryQuery, IAttributeValuesListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValuesUpdateQueryQuery } from "./queries.types";
 
-export const attributeFindByIdQuery = sql<IAttributeFindByIdQueryQuery>`
+export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
  FROM attributes
  WHERE id = $id!
@@ -55,6 +55,19 @@ export const attributeValuesCreateQuery = sql<IAttributeValuesCreateQueryQuery>`
     $$values(attributeId, value);
 `;
 
+export const attributeValuesUpdateQuery = sql<IAttributeValuesUpdateQueryQuery>`
+  UPDATE attribute_values
+  SET
+    value = COALESCE($value, value)
+  WHERE
+    id = $id!;
+`;
+
+export const attributeValuesDeleteQuery = sql<IAttributeValuesDeleteQueryQuery>`
+  DELETE FROM attribute_values
+  WHERE id = $id!;
+`;
+
 export const categoryListCountQuery = sql<ICategoryListCountQueryQuery>`
   SELECT COUNT(*) FROM categories;
 `;
@@ -90,6 +103,34 @@ export const categoryUpdateQuery = sql<ICategoryUpdateQueryQuery>`
     id = $id!;
 `;
 
+export const optionCreateQuery = sql<IOptionCreateQueryQuery>`
+  INSERT INTO options
+    (name)
+  VALUES
+    ($name!)
+  RETURNING id;
+`;
+
+export const optionUpdateQuery = sql`
+  UPDATE options
+  SET
+    name = COALESCE($name, name)
+  WHERE
+    id = $id!;
+`;
+
+export const optionDeleteQuery = sql<IOptionDeleteQueryQuery>`
+  DELETE FROM options
+  WHERE
+    id = $id;
+`;
+
+export const optionFindByIdQuery = sql<IOptionFindByIdQueryQuery>`
+  SELECT id, name
+  FROM options
+  WHERE id = $id;
+`;
+
 export const catalogQueries = {
   category: {
     create: categoryCreateQuery,
@@ -108,6 +149,13 @@ export const catalogQueries = {
   },
   attributeValue: {
     create: attributeValuesCreateQuery,
+    update: attributeValuesUpdateQuery,
+    delete: attributeValuesDeleteQuery,
     list: attributeValuesListQuery,
+  },
+  option: {
+    create: optionCreateQuery,
+    delete: optionDeleteQuery,
+    findById: optionFindByIdQuery,
   },
 };
