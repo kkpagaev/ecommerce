@@ -1,7 +1,6 @@
 import { Translation } from "./i18n";
 import { Pool } from "pg";
-import { sql } from "@pgtyped/runtime";
-import { attributeCreateQuery, attributeUpdateQuery, attributeValuesCreateQuery } from "./queries";
+import { catalogQueries as queries } from "./queries";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {
@@ -16,14 +15,17 @@ type CreateAttributeProps = {
   description?: Translation;
 };
 export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
-  const res = await attributeCreateQuery.run(input, pool);
+  const res = await queries.attribute.create.run({
+    name: input.name,
+    description: input.description,
+  }, pool);
 
   return res[0];
 }
 
 type UpdateAttributeProps = Partial<CreateAttributeProps>;
 export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
-  const res = await attributeUpdateQuery.run({
+  const res = await queries.attribute.update.run({
     ...input,
     id,
   }, pool);
@@ -36,17 +38,15 @@ type CreateAttributeValueProps = {
   value: Translation;
 };
 export async function createAttributeValue(pool: Pool, input: CreateAttributeValueProps) {
-  return attributeValuesCreateQuery.run({
+  return queries.attributeValue.create.run({
     values: [
       input,
     ],
   }, pool);
 }
 
-const findAttributeByIdQuery = sql`SELECT * FROM attributes WHERE id = :id!`;
-
 export async function findAttributeById(pool: Pool, id: number) {
-  const res = await findAttributeByIdQuery.run({ id }, pool);
+  const res = await queries.attribute.findById.run({ id }, pool);
 
   return res;
 }

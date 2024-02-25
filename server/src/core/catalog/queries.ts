@@ -89,3 +89,25 @@ export const categoryUpdateQuery = sql<ICategoryUpdateQueryQuery>`
   WHERE
     id = $id!;
 `;
+
+export const catalogQueries = {
+  category: {
+    create: categoryCreateQuery,
+    update: categoryUpdateQuery,
+    list: categoryListQuery,
+    listCount: categoryListCountQuery,
+    findById: categoryFindByIdQuery,
+  },
+  attribute: {
+    list: attributeListQuery,
+    listCount: attributeListCountQuery,
+    findById: attributeFindByIdQuery,
+    create: attributeCreateQuery,
+    update: attributeUpdateQuery,
+    delete: attributeDeleteQuery,
+  },
+  attributeValue: {
+    create: attributeValuesCreateQuery,
+    list: attributeValuesListQuery,
+  },
+};
