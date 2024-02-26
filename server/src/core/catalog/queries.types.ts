@@ -280,6 +280,28 @@ export interface IProductListQueryQuery {
   result: IProductListQueryResult;
 }
 
+/** 'ProductFindOneQuery' parameters type */
+export interface IProductFindOneQueryParams {
+  id?: number | null | void;
+}
+
+/** 'ProductFindOneQuery' return type */
+export interface IProductFindOneQueryResult {
+  category_id: number | null;
+  created_at: Date;
+  description: Json | null;
+  id: number;
+  name: Json;
+  slug: string;
+  updated_at: Date;
+}
+
+/** 'ProductFindOneQuery' query type */
+export interface IProductFindOneQueryQuery {
+  params: IProductFindOneQueryParams;
+  result: IProductFindOneQueryResult;
+}
+
 /** 'ProductCreateQuery' parameters type */
 export interface IProductCreateQueryParams {
   categoryId: number;

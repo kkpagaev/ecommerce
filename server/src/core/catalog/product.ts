@@ -7,6 +7,7 @@ import { tx } from "../../plugins/pool";
 export type Products = ReturnType<typeof Products>;
 export function Products(f: { pool: Pool }) {
   return {
+    findOneProduct: findOneProduct.bind(null, f.pool),
     createProduct: createProduct.bind(null, f.pool),
     updateProduct: updateProduct.bind(null, f.pool),
   };
@@ -52,6 +53,15 @@ async function createProduct(
 
     return product;
   });
+}
+
+type FindOneProductProps = {
+  id?: number;
+};
+export async function findOneProduct(pool: Pool, props: FindOneProductProps) {
+  return q.product.findOne.run({
+    id: props.id,
+  }, pool).then((res) => res[0]);
 }
 
 type UpdateProductProps = Partial<CreateProductProps>;

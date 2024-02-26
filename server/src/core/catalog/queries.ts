@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductAttributeValueUpsertQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -146,6 +146,12 @@ export const productListQuery = sql<IProductListQueryQuery>`
   OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
 
+export const productFindOneQuery = sql<IProductFindOneQueryQuery>`
+  SELECT * FROM products
+  WHERE id = COALESCE($id, id)
+  LIMIT 1;
+`;
+
 export const productCreateQuery = sql<IProductCreateQueryQuery>`
   INSERT INTO products
   (name, description, slug, category_id)
@@ -213,6 +219,7 @@ export const catalogQueries = {
     delete: productAttributeValueDeleteQuery,
   },
   product: {
+    findOne: productFindOneQuery,
     create: productCreateQuery,
     listCount: productListCountQuery,
     list: productListQuery,
