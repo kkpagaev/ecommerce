@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Products > createProduct > should create product with attributes 1`] = `
+{
+  "id": Any<Number>,
+}
+`;

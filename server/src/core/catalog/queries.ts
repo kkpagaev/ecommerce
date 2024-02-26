@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductAttributeValueUpsertQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -23,7 +23,7 @@ export const attributeCreateQuery = sql<IAttributeCreateQueryQuery>`
   INSERT INTO attributes
     (name, description)
   VALUES
-    ($name!, $description)
+    $$values(name!, description)
   RETURNING id;
 `;
 
@@ -52,7 +52,8 @@ export const attributeValueCreateQuery = sql<IAttributeValueCreateQueryQuery>`
   INSERT INTO attribute_values
     (attribute_id, value)
   VALUES
-    $$values(attributeId, value);
+    $$values(attributeId, value)
+  RETURNING id;
 `;
 
 export const attributeValueUpdateQuery = sql<IAttributeValueUpdateQueryQuery>`
@@ -84,6 +85,13 @@ export const categoryFindByIdQuery = sql<ICategoryFindByIdQueryQuery>`
   SELECT id, name, slug, description FROM categories
   WHERE id = $id;
 `;
+
+// export const categoryFindQuery = sql<ICategoryFindQueryQuery>`
+//   SELECT id, name, slug, description FROM categories
+//   WHERE id = COALESCE($id, id)
+//   AND name->>$locale! = COALESCE($name, name->>$locale!)
+//   AND slug = COALESCE($slug, slug)
+// `;
 
 export const categoryCreateQuery = sql<ICategoryCreateQueryQuery>`
   INSERT INTO categories
@@ -138,6 +146,24 @@ export const productListQuery = sql<IProductListQueryQuery>`
   OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
 
+export const productCreateQuery = sql<IProductCreateQueryQuery>`
+  INSERT INTO products
+  (name, description, slug, category_id)
+  VALUES
+  ($name!, $description, $slug!, $categoryId!)
+  RETURNING id;
+`;
+
+export const productAttributeValueDeleteQuery = sql<IProductAttributeValueDeleteQueryQuery>`
+  DELETE FROM product_attributes WHERE product_id = $product_id;
+`;
+
+export const productAttributeVAlueInsertQuery = sql<IProductAttributeVAlueInsertQueryQuery>`
+  INSERT INTO product_attributes(product_id, attribute_value_id) 
+  VALUES
+  $$values(product_id!, attribute_value_id!);
+`;
+
 export const productListCountQuery = sql<IProductListCountQueryQuery>`
   SELECT COUNT(*) FROM products
 `;
@@ -182,7 +208,12 @@ export const catalogQueries = {
   //   delete: optionDeleteQuery,
   //   findById: optionFindByIdQuery,
   // },
+  productAttributeValue: {
+    create: productAttributeVAlueInsertQuery,
+    delete: productAttributeValueDeleteQuery,
+  },
   product: {
+    create: productCreateQuery,
     listCount: productListCountQuery,
     list: productListQuery,
     findById: productFindByIdQuery,

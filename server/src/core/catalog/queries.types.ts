@@ -56,8 +56,10 @@ export interface IAttributeListQueryQuery {
 
 /** 'AttributeCreateQuery' parameters type */
 export interface IAttributeCreateQueryParams {
-  description?: Json | null | void;
-  name: Json;
+  values: readonly ({
+    name: Json,
+    description: Json | null | void
+  })[];
 }
 
 /** 'AttributeCreateQuery' return type */
@@ -122,13 +124,15 @@ export interface IAttributeValueListQueryQuery {
 /** 'AttributeValueCreateQuery' parameters type */
 export interface IAttributeValueCreateQueryParams {
   values: readonly ({
-    attributeId: number | null | void;
-    value: Json | null | void;
+    attributeId: number | null | void,
+    value: Json | null | void
   })[];
 }
 
 /** 'AttributeValueCreateQuery' return type */
-export type IAttributeValueCreateQueryResult = void;
+export interface IAttributeValueCreateQueryResult {
+  id: number;
+}
 
 /** 'AttributeValueCreateQuery' query type */
 export interface IAttributeValueCreateQueryQuery {
@@ -276,6 +280,56 @@ export interface IProductListQueryQuery {
   result: IProductListQueryResult;
 }
 
+/** 'ProductCreateQuery' parameters type */
+export interface IProductCreateQueryParams {
+  categoryId: number;
+  description?: Json | null | void;
+  name: Json;
+  slug: string;
+}
+
+/** 'ProductCreateQuery' return type */
+export interface IProductCreateQueryResult {
+  id: number;
+}
+
+/** 'ProductCreateQuery' query type */
+export interface IProductCreateQueryQuery {
+  params: IProductCreateQueryParams;
+  result: IProductCreateQueryResult;
+}
+
+/** 'ProductAttributeValueDeleteQuery' parameters type */
+export interface IProductAttributeValueDeleteQueryParams {
+  product_id?: number | null | void;
+}
+
+/** 'ProductAttributeValueDeleteQuery' return type */
+export type IProductAttributeValueDeleteQueryResult = void;
+
+/** 'ProductAttributeValueDeleteQuery' query type */
+export interface IProductAttributeValueDeleteQueryQuery {
+  params: IProductAttributeValueDeleteQueryParams;
+  result: IProductAttributeValueDeleteQueryResult;
+}
+
+/** 'ProductAttributeVAlueInsertQuery' parameters type */
+export interface IProductAttributeVAlueInsertQueryParams {
+  values: readonly ({
+    product_id: number,
+    attribute_value_id: number
+  })[];
+}
+
+/** 'ProductAttributeVAlueInsertQuery' return type */
+export type IProductAttributeVAlueInsertQueryResult = void;
+
+/** 'ProductAttributeVAlueInsertQuery' query type */
+export interface IProductAttributeVAlueInsertQueryQuery {
+  params: IProductAttributeVAlueInsertQueryParams;
+  result: IProductAttributeVAlueInsertQueryResult;
+}
+
 /** 'ProductListCountQuery' parameters type */
 export type IProductListCountQueryParams = void;
 
@@ -315,9 +369,9 @@ export interface IProductFindByIdQueryQuery {
 /** 'PriceUpsertQuery' parameters type */
 export interface IPriceUpsertQueryParams {
   values: readonly ({
-    product_id: NumberOrString;
-    price: NumberOrString;
-    type: string | null | void;
+    product_id: NumberOrString,
+    price: NumberOrString,
+    type: string | null | void
   })[];
 }
 
@@ -329,3 +383,4 @@ export interface IPriceUpsertQueryQuery {
   params: IPriceUpsertQueryParams;
   result: IPriceUpsertQueryResult;
 }
+

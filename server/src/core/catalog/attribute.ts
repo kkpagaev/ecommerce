@@ -16,8 +16,10 @@ type CreateAttributeProps = {
 };
 export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
   const res = await queries.attribute.create.run({
-    name: input.name,
-    description: input.description,
+    values: [{
+      name: input.name,
+      description: input.description,
+    }],
   }, pool);
 
   return res[0];
