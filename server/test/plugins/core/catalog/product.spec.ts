@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { testDB } from "../../../utils";
 import { Products } from "../../../../src/core/catalog/product";
 import { catalogQueries as q } from "../../../../src/core/catalog/queries";
-import { PoolClient } from "pg";
+import { Pool } from "pg";
 
 async function createProducts() {
   const db = await testDB();
@@ -15,11 +15,11 @@ async function createProducts() {
   };
 }
 
-async function fixture(client: PoolClient) {
+async function fixture(pool: Pool) {
   const catId = await q.category.create.run({
     name: { uk: "test" },
     slug: "test",
-  }, client).then((res) => res[0].id);
+  }, pool).then((res) => res[0].id);
   const attributes = await q.attribute.create.run({
     values: [{
       name: { uk: "test" },
@@ -29,7 +29,7 @@ async function fixture(client: PoolClient) {
       name: { uk: "test2" },
       description: { uk: "test2" },
     }],
-  }, client).then((res) => res.map((r) => r.id));
+  }, pool).then((res) => res.map((r) => r.id));
   const attributeValues = await q.attributeValue.create.run({
     values: attributes.map((id) => {
       return {
@@ -37,16 +37,57 @@ async function fixture(client: PoolClient) {
         attributeId: id,
       };
     }),
-  }, client).then((res) => res.map((r) => r.id));
+  }, pool).then((res) => res.map((r) => r.id));
+  const product = await q.product.create.run({
+    name: { uk: "test", en: "test", ru: "test" },
+    description: { uk: "test", en: "test", ru: "test" },
+    categoryId: catId,
+    slug: "test",
+  }, pool).then((res) => res[0]);
+  await q.productAttributeValue.create.run({
+    values: attributeValues.map((id) => ({
+      productId: product.id,
+      attributeValueId: id,
+    })),
+  }, pool);
 
-  return { catId, attributes, attributeValues };
+  return { catId, attributes, attributeValues, product };
 }
 
 describe("Products", () => {
+  describe("findOneProduct", () => {
+    it("should find product by id", async () => {
+      await using p = await createProducts();
+      const fix = await fixture(p.db.pool);
+      const product = await p.products.findOneProduct({
+        id: fix.product.id,
+      });
+
+      expect(product).toEqual({
+        id: fix.product.id,
+        name: { uk: "test", en: "test", ru: "test" },
+        description: { uk: "test", en: "test", ru: "test" },
+        attributes: expect.any(Array),
+        category_id: expect.any(Number),
+        slug: "test",
+        created_at: expect.any(Date),
+        updated_at: expect.any(Date),
+      });
+
+      expect(product.attributes).toHaveLength(fix.attributeValues.length);
+      expect(product.attributes[0]).toEqual({
+        attribute_id: expect.any(Number),
+        attribute_name: expect.any(Object),
+        id: expect.any(Number),
+        value: expect.any(Object),
+      });
+    });
+  });
+
   describe("createProduct", () => {
     it("should create product with attributes", async () => {
       await using p = await createProducts();
-      const fix = await fixture(p.db.client);
+      const fix = await fixture(p.db.pool);
       const product = await p.products.createProduct({
         attributes: fix.attributeValues,
         categoryId: fix.catId,
