@@ -46,8 +46,8 @@ async function createProduct(
 
     await q.productAttributeValue.create.run({
       values: input.attributes?.map((id) => ({
-        product_id: product.id,
-        attribute_value_id: id,
+        productId: product.id,
+        attributeValueId: id,
       })) ?? [],
     }, client);
 
@@ -59,9 +59,17 @@ type FindOneProductProps = {
   id?: number;
 };
 export async function findOneProduct(pool: Pool, props: FindOneProductProps) {
-  return q.product.findOne.run({
+  const product = await q.product.findOne.run({
     id: props.id,
   }, pool).then((res) => res[0]);
+  const attributes = await q.productAttributeValue.list.run({
+    productId: product.id,
+  }, pool);
+
+  return {
+    ...product,
+    attributes,
+  };
 }
 
 type UpdateProductProps = Partial<CreateProductProps>;

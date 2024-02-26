@@ -321,6 +321,25 @@ export interface IProductCreateQueryQuery {
   result: IProductCreateQueryResult;
 }
 
+/** 'ProductAttributeValueListQuery' parameters type */
+export interface IProductAttributeValueListQueryParams {
+  productId?: number | null | void;
+}
+
+/** 'ProductAttributeValueListQuery' return type */
+export interface IProductAttributeValueListQueryResult {
+  attribute_id: number | null;
+  attribute_name: Json;
+  id: number;
+  value: Json;
+}
+
+/** 'ProductAttributeValueListQuery' query type */
+export interface IProductAttributeValueListQueryQuery {
+  params: IProductAttributeValueListQueryParams;
+  result: IProductAttributeValueListQueryResult;
+}
+
 /** 'ProductAttributeValueDeleteQuery' parameters type */
 export interface IProductAttributeValueDeleteQueryParams {
   product_id?: number | null | void;
@@ -338,8 +357,8 @@ export interface IProductAttributeValueDeleteQueryQuery {
 /** 'ProductAttributeVAlueInsertQuery' parameters type */
 export interface IProductAttributeVAlueInsertQueryParams {
   values: readonly ({
-    product_id: number,
-    attribute_value_id: number
+    productId: number,
+    attributeValueId: number
   })[];
 }
 

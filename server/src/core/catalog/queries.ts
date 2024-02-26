@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -160,6 +160,17 @@ export const productCreateQuery = sql<IProductCreateQueryQuery>`
   RETURNING id;
 `;
 
+export const productAttributeValueListQuery = sql<IProductAttributeValueListQueryQuery>`
+  SELECT v.*,
+     a.NAME AS attribute_name
+  FROM   attribute_values v
+     JOIN product_attributes pa
+       ON pa.attribute_value_id = v.id
+     JOIN attributes a
+       ON a.id = v.attribute_id
+  WHERE  pa.product_id = $productId
+`;
+
 export const productAttributeValueDeleteQuery = sql<IProductAttributeValueDeleteQueryQuery>`
   DELETE FROM product_attributes WHERE product_id = $product_id;
 `;
@@ -167,7 +178,7 @@ export const productAttributeValueDeleteQuery = sql<IProductAttributeValueDelete
 export const productAttributeVAlueInsertQuery = sql<IProductAttributeVAlueInsertQueryQuery>`
   INSERT INTO product_attributes(product_id, attribute_value_id) 
   VALUES
-  $$values(product_id!, attribute_value_id!);
+  $$values(productId!, attributeValueId!);
 `;
 
 export const productListCountQuery = sql<IProductListCountQueryQuery>`
@@ -215,6 +226,7 @@ export const catalogQueries = {
   //   findById: optionFindByIdQuery,
   // },
   productAttributeValue: {
+    list: productAttributeValueListQuery,
     create: productAttributeVAlueInsertQuery,
     delete: productAttributeValueDeleteQuery,
   },
