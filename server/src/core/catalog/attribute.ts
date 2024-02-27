@@ -16,16 +16,28 @@ export function Attributes(f: { pool: Pool }) {
 type CreateAttributeProps = {
   name: Translation;
   description?: Translation;
+  values?: Omit<CreateAttributeValue, "attributeId">[];
 };
 export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
-  const res = await q.attribute.create.run({
-    values: [{
-      name: input.name,
-      description: input.description,
-    }],
-  }, pool);
-
-  return res[0];
+  return tx(pool, async (client) => {
+    const att = await q.attribute.create.run({
+      values: [{
+        name: input.name,
+        description: input.description,
+      }],
+    }, pool).then((r) => r[0]);
+    if (input.values) {
+      await upsertAttributeValueTransaction(
+        client,
+        att.id,
+        input.values.map((v) => ({
+          value: v.value,
+          attributeId: att.id,
+        }))
+      );
+    }
+    return att;
+  });
 }
 
 type UpdateAttributeProps = Partial<CreateAttributeProps>;
