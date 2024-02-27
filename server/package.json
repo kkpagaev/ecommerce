@@ -10,7 +10,7 @@
     "brk": "tsx --inspect-brk src/index.ts",
     "exec": "node --experimental-specifier-resolution=node --loader ts-node/esm",
     "test": "vitest",
-    "test:once": "node --import tsx --test test/**/*.spec.ts",
+    "test:once": "vitest run",
     "test:inspect": "vitest --inspect-brk --no-file-parallelism",
     "coverage": "vitest run --coverage",
     "build": "tsc",
