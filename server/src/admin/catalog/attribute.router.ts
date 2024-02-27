@@ -47,4 +47,12 @@ export default async ({ t, catalog }: FastifyZod) => ({
 
       return attributes;
     }),
+  findOneAttribute: t.procedure
+    .input(z.object({
+      id: z.number(),
+    }).strict())
+    .use(isAuthed)
+    .query(async ({ input }) => {
+      return await catalog.attributes.findOneAttribute(input);
+    }),
 });

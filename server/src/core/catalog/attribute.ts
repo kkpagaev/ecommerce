@@ -10,6 +10,8 @@ export function Attributes(f: { pool: Pool }) {
     upsertAttributeValue: upsertAttributeValue.bind(null, f.pool),
     createAttribute: createAttribute.bind(null, f.pool),
     updateAttribute: updateAttribute.bind(null, f.pool),
+    findAttributeById: findAttributeById.bind(null, f.pool),
+    findOneAttribute: findOneAttribute.bind(null, f.pool),
   };
 }
 
@@ -116,4 +118,21 @@ export async function findAttributeById(pool: Pool, id: number) {
   const res = await q.attribute.findById.run({ id }, pool);
 
   return res;
+}
+
+type FindOneAttributeProps = {
+  id?: number;
+};
+export async function findOneAttribute(pool: Pool, props: FindOneAttributeProps) {
+  const attribute = await q.attribute.findOne.run({
+    id: props.id,
+  }, pool).then((res) => res[0]);
+  const values = await q.attributeValue.list.run({
+    attribute_id: attribute.id,
+  }, pool);
+
+  return {
+    ...attribute,
+    values,
+  };
 }

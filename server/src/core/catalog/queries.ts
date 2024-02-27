@@ -1,11 +1,18 @@
 import { sql } from "@pgtyped/runtime";
-import { IAttributeValueDeleteManyQueryQuery, IAttributeValueIdListQueryQuery, IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery, Json } from "./queries.types";
+import { IAttributeFindOneQueryQuery, IAttributeValueDeleteManyQueryQuery, IAttributeValueIdListQueryQuery, IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery, Json } from "./queries.types";
 import { PoolClient } from "pg";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
  FROM attributes
  WHERE id = $id!
+`;
+
+export const attributeFindOneQuery = sql<IAttributeFindOneQueryQuery>`
+ SELECT id, name, description
+ FROM attributes
+ WHERE id = COALESCE($id, id)
+ LIMIT 1;
 `;
 
 export const attributeListCountQuery = sql<IAttributeListCountQueryQuery>`
@@ -270,6 +277,7 @@ export const catalogQueries = {
     findById: categoryFindByIdQuery,
   },
   attribute: {
+    findOne: attributeFindOneQuery,
     list: attributeListQuery,
     listCount: attributeListCountQuery,
     findById: attributeFindByIdQuery,

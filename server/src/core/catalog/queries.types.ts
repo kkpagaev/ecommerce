@@ -21,6 +21,24 @@ export interface IAttributeFindByIdQueryQuery {
   result: IAttributeFindByIdQueryResult;
 }
 
+/** 'AttributeFindOneQuery' parameters type */
+export interface IAttributeFindOneQueryParams {
+  id?: number | null | void;
+}
+
+/** 'AttributeFindOneQuery' return type */
+export interface IAttributeFindOneQueryResult {
+  description: Json | null;
+  id: number;
+  name: Json;
+}
+
+/** 'AttributeFindOneQuery' query type */
+export interface IAttributeFindOneQueryQuery {
+  params: IAttributeFindOneQueryParams;
+  result: IAttributeFindOneQueryResult;
+}
+
 /** 'AttributeListCountQuery' parameters type */
 export type IAttributeListCountQueryParams = void;
 
