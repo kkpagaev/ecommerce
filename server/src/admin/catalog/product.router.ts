@@ -39,4 +39,32 @@ export default async ({ t, catalog }: FastifyZod) => ({
 
       return res;
     }),
+  updateProduct: t.procedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+        .and(
+          z.object({
+            name: translationSchema,
+            price: z.number().positive()
+              .multipleOf(0.01),
+            categoryId: z.number(),
+            attributes: z.array(z.number()).optional(),
+            description: translationSchema.optional(),
+          }).partial()
+        )
+    )
+    .mutation(async ({ input }) => {
+      const res = await catalog.products.updateProduct(input.id, {
+        description: input.description,
+        categoryId: input.categoryId,
+        attributes: input.attributes,
+        name: input.name,
+        price: input.price,
+      });
+
+      return res;
+    }),
+
 });
