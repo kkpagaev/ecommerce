@@ -1,7 +1,11 @@
 import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
+import { JwtPayload } from "./auth/auth";
 
-export function createContext({ req }: CreateFastifyContextOptions) {
-  const user = { name: req.headers.username ?? "anonymous" };
+export async function createContext(
+  handleAuth: (header: string) => Promise<JwtPayload | null>,
+  { req }: CreateFastifyContextOptions
+) {
+  const user = req.headers.authorization ? await handleAuth(req.headers.authorization) : null;
 
   return { user };
 }

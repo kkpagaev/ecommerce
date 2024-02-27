@@ -1,5 +1,12 @@
 import { z } from "zod";
 import { FastifyZod } from "fastify";
+import { isAuthed } from "../../core/trpc";
+
+export const translationSchema = z.object({
+  uk: z.string(),
+  ru: z.string(),
+  en: z.string(),
+}).strict();
 
 export default async ({ t, catalog }: FastifyZod) => ({
   listCategories: t.procedure
@@ -29,12 +36,13 @@ export default async ({ t, catalog }: FastifyZod) => ({
   createCategory: t.procedure
     .input(
       z.object({
-        name: z.string().min(2),
-        description: z.string().optional(),
+        name: translationSchema,
+        description: translationSchema.optional(),
       }),
     )
     .mutation(async ({ input }) => {
       const category = await catalog.categories.createCategory(input);
+      // ctx.user;
 
       return category;
     }),
@@ -47,11 +55,12 @@ export default async ({ t, catalog }: FastifyZod) => ({
         }
       ).and(
         z.object({
-          name: z.string(),
-          description: z.string(),
+          name: translationSchema,
+          description: translationSchema,
         }).partial()
       )
     )
+    .use(isAuthed)
     .mutation(async ({ input }) => {
       const id = input.id;
       const foo = await catalog.categories.updateCategory(id, input);

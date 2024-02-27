@@ -1,4 +1,4 @@
-import { AnyTRPCRouter, initTRPC } from "@trpc/server";
+import { AnyTRPCRouter, TRPCError, initTRPC } from "@trpc/server";
 import {
   FastifyTRPCPluginOptions,
   fastifyRequestHandler,
@@ -42,10 +42,13 @@ export async function fastifyTRPCPlugin<TRouter extends AnyTRPCRouter>(
   let prefix = opts.prefix ?? "";
 
   const appRouter = await createAppRouter(fastify.withTypeProvider<ZodTypeProvider>());
+  const auth = fastify.auth;
 
   const trpcOptions = {
     router: appRouter,
-    createContext,
+    createContext: createContext.bind(null, async (s) => {
+      return auth.parseAndVerify(s);
+    }),
     onError({ path, error }) {
       console.error(`Error in tRPC handler on path '${path}':`, error);
     },
@@ -123,3 +126,17 @@ export function withValidation<T extends AnyTRPCRouter>(router: T) {
     router,
   );
 }
+
+export const isAuthed = t.middleware((
+  opts
+) => {
+  const { ctx } = opts;
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return opts.next({
+    ctx: {
+      user: ctx.user,
+    },
+  });
+});
