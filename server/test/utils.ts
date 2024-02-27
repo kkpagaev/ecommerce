@@ -25,7 +25,7 @@ async function dropTables(pool: Pool, tables: string[]) {
 
 export async function testDB() {
   const pool = new Pool({
-    connectionString: "postgresql://user:user@localhost:1252/user",
+    connectionString: process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
   });
   const client = await pool.connect();
   const tables = await getTables(pool);

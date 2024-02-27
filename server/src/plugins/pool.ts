@@ -29,7 +29,7 @@ export async function tx<T>(pool: Pool, callback: (client: PoolClient) => Promis
 
 export default fp(async function (f) {
   const pool = new Pool({
-    connectionString: "postgresql://user:user@localhost:1252/user",
+    connectionString: process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
   });
   await pool.connect();
 
