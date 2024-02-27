@@ -100,4 +100,23 @@ describe("Products", () => {
       });
     });
   });
+
+  describe("deleteProduct", () => {
+    it("should delete product", async () => {
+      await using p = await createProducts();
+      const fix = await fixture(p.db.pool);
+
+      await expect(p.products.deleteProduct({
+        id: fix.product.id,
+      })).resolves.toBe(fix.product.id);
+    });
+
+    it("should not delete product", async () => {
+      await using p = await createProducts();
+
+      await expect(p.products.deleteProduct({
+        id: 1000000000,
+      })).resolves.toBeUndefined();
+    });
+  });
 });

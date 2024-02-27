@@ -7,6 +7,7 @@ import { tx } from "../../plugins/pool";
 export type Products = ReturnType<typeof Products>;
 export function Products(f: { pool: Pool }) {
   return {
+    deleteProduct: deleteProduct.bind(null, f.pool),
     findOneProduct: findOneProduct.bind(null, f.pool),
     createProduct: createProduct.bind(null, f.pool),
     updateProduct: updateProduct.bind(null, f.pool),
@@ -79,4 +80,15 @@ async function updateProduct(
   input: UpdateProductProps,
 ) {
   return null;
+}
+
+type DeleteProductProps = {
+  id: number;
+};
+export async function deleteProduct(
+  pool: Pool, props: DeleteProductProps
+): Promise<number | undefined> {
+  return q.product.delete.run({
+    id: props.id,
+  }, pool).then((res) => res[0]?.id);
 }

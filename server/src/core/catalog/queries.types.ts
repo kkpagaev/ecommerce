@@ -302,6 +302,22 @@ export interface IProductFindOneQueryQuery {
   result: IProductFindOneQueryResult;
 }
 
+/** 'ProductDeleteQuery' parameters type */
+export interface IProductDeleteQueryParams {
+  id: number;
+}
+
+/** 'ProductDeleteQuery' return type */
+export interface IProductDeleteQueryResult {
+  id: number;
+}
+
+/** 'ProductDeleteQuery' query type */
+export interface IProductDeleteQueryQuery {
+  params: IProductDeleteQueryParams;
+  result: IProductDeleteQueryResult;
+}
+
 /** 'ProductCreateQuery' parameters type */
 export interface IProductCreateQueryParams {
   categoryId: number;
