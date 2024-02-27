@@ -45,12 +45,9 @@ async function createProduct(
       ],
     }, client);
 
-    await q.productAttributeValue.create.run({
-      values: input.attributes?.map((id) => ({
-        productId: product.id,
-        attributeValueId: id,
-      })) ?? [],
-    }, client);
+    if (input.attributes) {
+      await upsertAttributes(client, product.id, input.attributes);
+    }
 
     return product;
   });

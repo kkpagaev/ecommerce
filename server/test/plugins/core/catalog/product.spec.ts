@@ -99,6 +99,36 @@ describe("Products", () => {
         id: expect.any(Number),
       });
     });
+
+    it("should create product without attributes", async () => {
+      await using p = await createProducts();
+      const fix = await fixture(p.db.pool);
+      const product = await p.products.createProduct({
+        // attributes: fix.attributeValues,
+        categoryId: fix.catId,
+        price: 100,
+        name: { uk: "test", en: "test", ru: "test" },
+      });
+
+      expect(product).toEqual({
+        id: expect.any(Number),
+      });
+    });
+
+    it("should create products with empty attributes", async () => {
+      await using p = await createProducts();
+      const fix = await fixture(p.db.pool);
+      const product = await p.products.createProduct({
+        attributes: [],
+        categoryId: fix.catId,
+        price: 100,
+        name: { uk: "test", en: "test", ru: "test" },
+      });
+
+      expect(product).toEqual({
+        id: expect.any(Number),
+      });
+    });
   });
 
   describe("updateProduct", () => {
