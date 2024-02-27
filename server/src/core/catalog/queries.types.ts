@@ -337,6 +337,24 @@ export interface IProductCreateQueryQuery {
   result: IProductCreateQueryResult;
 }
 
+/** 'ProductUpdateQuery' parameters type */
+export interface IProductUpdateQueryParams {
+  categoryId?: number | null | void;
+  description?: Json | null | void;
+  id: number;
+  name?: Json | null | void;
+  slug?: string | null | void;
+}
+
+/** 'ProductUpdateQuery' return type */
+export type IProductUpdateQueryResult = void;
+
+/** 'ProductUpdateQuery' query type */
+export interface IProductUpdateQueryQuery {
+  params: IProductUpdateQueryParams;
+  result: IProductUpdateQueryResult;
+}
+
 /** 'ProductAttributeValueListQuery' parameters type */
 export interface IProductAttributeValueListQueryParams {
   productId?: number | null | void;

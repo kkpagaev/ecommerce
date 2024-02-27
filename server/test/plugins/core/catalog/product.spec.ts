@@ -101,6 +101,41 @@ describe("Products", () => {
     });
   });
 
+  describe("updateProduct", () => {
+    it("should update update attributes", async () => {
+      await using p = await createProducts();
+      const fix = await fixture(p.db.pool);
+
+      async function getProduct() {
+        const product = await p.products.findOneProduct({
+          id: fix.product.id,
+        });
+        return product;
+      }
+
+      // decrease attribute count
+      await expect(p.products.updateProduct(fix.product.id, {
+        attributes: [fix.attributeValues[0]],
+      })).resolves.not.toThrow();
+
+      expect(await getProduct().then((r) => r.attributes)).toHaveLength(1);
+
+      // get back the same
+      await expect(p.products.updateProduct(fix.product.id, {
+        attributes: fix.attributeValues,
+      })).resolves.not.toThrow();
+
+      expect(await getProduct().then((r) => r.attributes)).toHaveLength(2);
+
+      // set attributes to 0
+      await expect(p.products.updateProduct(fix.product.id, {
+        attributes: [],
+      })).resolves.not.toThrow();
+
+      expect(await getProduct().then((r) => r.attributes)).toHaveLength(0);
+    });
+  });
+
   describe("deleteProduct", () => {
     it("should delete product", async () => {
       await using p = await createProducts();

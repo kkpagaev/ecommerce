@@ -1,5 +1,5 @@
 import { Translation } from "./i18n";
-import { Pool } from "pg";
+import { Pool, PoolClient } from "pg";
 import { catalogQueries as q } from "./queries";
 import slugify from "slugify";
 import { tx } from "../../plugins/pool";
@@ -73,13 +73,47 @@ export async function findOneProduct(pool: Pool, props: FindOneProductProps) {
   };
 }
 
+async function upsertAttributes(client: PoolClient, id: number, attributes: Array<number>) {
+  await q.productAttributeValue.delete.run({
+    product_id: id,
+  }, client);
+  if (attributes.length !== 0) {
+    await q.productAttributeValue.create.run({
+      values: attributes.map((attrId) => ({
+        attributeValueId: attrId,
+        productId: id,
+      })),
+    }, client);
+  }
+}
+
 type UpdateProductProps = Partial<CreateProductProps>;
 async function updateProduct(
   pool: Pool,
   id: number,
   input: UpdateProductProps,
 ) {
-  return null;
+  const slug = input.name?.uk && slugify(input.name.uk);
+
+  return tx(pool, async (client) => {
+    await q.product.update.run({
+      id: id,
+      name: input.name,
+      description: input.description,
+      slug: slug,
+      categoryId: input.categoryId,
+    }, client);
+    if (input.price) {
+      await q.price.upsert.run({
+        values: [
+          { price: input.price, type: "default", product_id: id },
+        ],
+      }, client);
+    }
+    if (input.attributes) {
+      await upsertAttributes(client, id, input.attributes);
+    }
+  });
 }
 
 type DeleteProductProps = {

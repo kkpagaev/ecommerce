@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -166,6 +166,17 @@ export const productCreateQuery = sql<IProductCreateQueryQuery>`
   RETURNING id;
 `;
 
+export const productUpdateQuery = sql<IProductUpdateQueryQuery>`
+  UPDATE products
+  SET
+    name = COALESCE($name, name),
+    description = COALESCE($description, description),
+    slug = COALESCE($slug, slug),
+    category_id = COALESCE($categoryId, category_id)
+  WHERE
+    id = $id!;
+`;
+
 export const productAttributeValueListQuery = sql<IProductAttributeValueListQueryQuery>`
   SELECT v.*,
      a.NAME AS attribute_name
@@ -237,6 +248,7 @@ export const catalogQueries = {
     delete: productAttributeValueDeleteQuery,
   },
   product: {
+    update: productUpdateQuery,
     delete: productDeleteQuery,
     findOne: productFindOneQuery,
     create: productCreateQuery,
