@@ -7,6 +7,10 @@ export default defineConfig({
     target: "es2022",
   },
   test: {
+    coverage: {
+      provider: 'istanbul', // or 'v8'
+      reporter: ['html'],
+    },
     server: {
       deps: {
         inline: ["@fastify/autoload"]
