@@ -7,7 +7,7 @@ import { WSSHandlerOptions, applyWSSHandler } from "@trpc/server/adapters/ws";
 import { FastifyInstance } from "fastify";
 import { AppRouter, createAppRouter } from "../app.router";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { createContext } from "./context";
+import { createContext, Context } from "./context";
 import { ZodSchema } from "zod";
 
 declare module "fastify" {
@@ -16,7 +16,7 @@ declare module "fastify" {
   }
 }
 
-export const t = initTRPC.create();
+export const t = initTRPC.context<Context>().create();
 
 export const router = t.router;
 export const publicProcedure = t.procedure;

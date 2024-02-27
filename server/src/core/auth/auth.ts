@@ -15,14 +15,14 @@ export class JwtService {
     return jwt.verify(token, this.secret) as JwtPayload;
   }
 
-  parseAndVerify(header: string): JwtPayload | undefined {
+  parseAndVerify(header: string): JwtPayload | null {
     const token = this.parseBearerToken(header);
 
     if (token) {
       return this.verify(token);
     }
     else {
-      return undefined;
+      return null;
     }
   }
 
