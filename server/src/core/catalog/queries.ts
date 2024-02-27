@@ -1,5 +1,6 @@
 import { sql } from "@pgtyped/runtime";
-import { IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IAttributeValueDeleteManyQueryQuery, IAttributeValueIdListQueryQuery, IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery, Json } from "./queries.types";
+import { PoolClient } from "pg";
 
 export const attributeFindByIdQuery = sql`
  SELECT id, name, description 
@@ -48,6 +49,11 @@ export const attributeValueListQuery = sql<IAttributeValueListQueryQuery>`
   ORDER BY id;
 `;
 
+export const attributeValueIdListQuery = sql<IAttributeValueIdListQueryQuery>`
+  SELECT id FROM attribute_values
+  WHERE attribute_id = $attributeId!;
+`;
+
 export const attributeValueCreateQuery = sql<IAttributeValueCreateQueryQuery>`
   INSERT INTO attribute_values
     (attribute_id, value)
@@ -68,6 +74,47 @@ export const attributeValueDeleteQuery = sql<IAttributeValueDeleteQueryQuery>`
   DELETE FROM attribute_values
   WHERE id = $id!;
 `;
+
+export const attributeValueDeleteManyQuery = sql<IAttributeValueDeleteManyQueryQuery>`
+  DELETE FROM attribute_values
+  WHERE id IN $$ids;
+`;
+
+export interface IAttributeValueUpsertQueryParams {
+  values: readonly ({
+    id: number | null | void;
+    attributeId: number;
+    value: Json;
+  })[];
+}
+
+// basicaly when inserting null as id, it uses autoincrement
+export async function attributeValueUpsertQuery(
+  { values }: IAttributeValueUpsertQueryParams,
+  client: PoolClient,
+): Promise<any> {
+  return await client.query(
+    `
+  INSERT INTO attribute_values
+  (id, attribute_id, value)
+  VALUES ${
+    // ???
+    values.map(
+      (_, i) => `(
+      COALESCE(
+        $${i * 3 + 1},
+        nextval('attributes_id_seq'::regclass)
+      ),
+      $${i * 3 + 2}, 
+      $${i * 3 + 3})`
+    )
+  }
+  ON CONFLICT (id)
+  DO UPDATE SET value = EXCLUDED.value;
+    `,
+    values.map((i) => [i.id, i.attributeId, i.value]).flat()
+  );
+}
 
 export const categoryListCountQuery = sql<ICategoryListCountQueryQuery>`
   SELECT COUNT(*) FROM categories;
@@ -231,6 +278,9 @@ export const catalogQueries = {
     delete: attributeDeleteQuery,
   },
   attributeValue: {
+    upsert: { run: attributeValueUpsertQuery },
+    deleteMany: attributeValueDeleteManyQuery,
+    idList: attributeValueIdListQuery,
     create: attributeValueCreateQuery,
     update: attributeValueUpdateQuery,
     delete: attributeValueDeleteQuery,

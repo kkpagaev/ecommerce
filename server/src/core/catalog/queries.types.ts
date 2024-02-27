@@ -121,6 +121,22 @@ export interface IAttributeValueListQueryQuery {
   result: IAttributeValueListQueryResult;
 }
 
+/** 'AttributeValueIdListQuery' parameters type */
+export interface IAttributeValueIdListQueryParams {
+  attributeId: number;
+}
+
+/** 'AttributeValueIdListQuery' return type */
+export interface IAttributeValueIdListQueryResult {
+  id: number;
+}
+
+/** 'AttributeValueIdListQuery' query type */
+export interface IAttributeValueIdListQueryQuery {
+  params: IAttributeValueIdListQueryParams;
+  result: IAttributeValueIdListQueryResult;
+}
+
 /** 'AttributeValueCreateQuery' parameters type */
 export interface IAttributeValueCreateQueryParams {
   values: readonly ({
@@ -167,6 +183,20 @@ export type IAttributeValueDeleteQueryResult = void;
 export interface IAttributeValueDeleteQueryQuery {
   params: IAttributeValueDeleteQueryParams;
   result: IAttributeValueDeleteQueryResult;
+}
+
+/** 'AttributeValueDeleteManyQuery' parameters type */
+export interface IAttributeValueDeleteManyQueryParams {
+  ids: readonly (number | null | void)[];
+}
+
+/** 'AttributeValueDeleteManyQuery' return type */
+export type IAttributeValueDeleteManyQueryResult = void;
+
+/** 'AttributeValueDeleteManyQuery' query type */
+export interface IAttributeValueDeleteManyQueryQuery {
+  params: IAttributeValueDeleteManyQueryParams;
+  result: IAttributeValueDeleteManyQueryResult;
 }
 
 /** 'CategoryListCountQuery' parameters type */
