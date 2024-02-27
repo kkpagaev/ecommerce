@@ -1,11 +1,12 @@
 // this file is generated
-`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"category":{"router":"AdminCatalogCategoryRouter"}}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
+`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"category":{"router":"AdminCatalogCategoryRouter"},"product":{"router":"AdminCatalogProductRouter"}}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["AdminCatalogProductRouter","./admin/catalog/product.router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
 import { FastifyInstance } from "fastify";
 import { withValidation } from "./core/trpc";
 import AdminAccountDiscordRouter from "./admin/account/discord/router";
 import AdminAccountRouter from "./admin/account/router";
 import AdminCatalogAttributeRouter from "./admin/catalog/attribute.router";
 import AdminCatalogCategoryRouter from "./admin/catalog/category.router";
+import AdminCatalogProductRouter from "./admin/catalog/product.router";
 import WebCatalogPostRouter from "./web/catalog/post/router";
 
 export async function createAppRouter(fastify: FastifyInstance) {
@@ -27,6 +28,9 @@ export async function createAppRouter(fastify: FastifyInstance) {
         ),
         category: withValidation(
           t.router(await AdminCatalogCategoryRouter(fastify)),
+        ),
+        product: withValidation(
+          t.router(await AdminCatalogProductRouter(fastify)),
         ),
       }),
     }),

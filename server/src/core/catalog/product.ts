@@ -7,6 +7,7 @@ import { tx } from "../../plugins/pool";
 export type Products = ReturnType<typeof Products>;
 export function Products(f: { pool: Pool }) {
   return {
+    listProducts: listProducts.bind(null, f.pool),
     deleteProduct: deleteProduct.bind(null, f.pool),
     findOneProduct: findOneProduct.bind(null, f.pool),
     createProduct: createProduct.bind(null, f.pool),
@@ -122,4 +123,22 @@ export async function deleteProduct(
   return q.product.delete.run({
     id: props.id,
   }, pool).then((res) => res[0]?.id);
+}
+
+type ListProductsProps = {
+  limit?: number;
+  page?: number;
+};
+export async function listProducts(pool: Pool, input: ListProductsProps) {
+  const products = await q.product.list.run({
+    limit: input.limit,
+    page: input.page,
+  }, pool);
+  const count = await q.product.listCount.run(undefined, pool)
+    .then((res) => +(res[0].count ?? 0));
+
+  return {
+    data: products,
+    count: count,
+  };
 }
