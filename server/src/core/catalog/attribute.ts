@@ -40,14 +40,23 @@ export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
   });
 }
 
-type UpdateAttributeProps = Partial<CreateAttributeProps>;
+type UpdateAttributeProps = {
+  name?: Translation;
+  description?: Translation;
+  values?: UpsertAttributeValueProps[];
+};
 export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
-  const res = await q.attribute.update.run({
-    ...input,
-    id,
-  }, pool);
-
-  return res;
+  return tx(pool, async (client) => {
+    const res = await q.attribute.update.run({
+      name: input.name,
+      description: input.description,
+      id,
+    }, pool);
+    if (input.values) {
+      await upsertAttributeValueTransaction(client, id, input.values);
+    }
+    return res;
+  });
 }
 
 type CreateAttributeValue = {
@@ -64,11 +73,11 @@ export async function createAttributeValue(
   }, pool);
 }
 
-type UpsertAttributeValueProps = Array<CreateAttributeValue & { id?: number }>;
+type UpsertAttributeValueProps = CreateAttributeValue & { id?: number };
 export async function upsertAttributeValue(
   pool: Pool,
   attributeId: number,
-  input: UpsertAttributeValueProps,
+  input: UpsertAttributeValueProps[],
 ) {
   return tx(pool, async (client) => {
     await upsertAttributeValueTransaction(client, attributeId, input);
@@ -78,7 +87,7 @@ export async function upsertAttributeValue(
 export async function upsertAttributeValueTransaction(
   client: PoolClient,
   attributeId: number,
-  input: UpsertAttributeValueProps,
+  input: UpsertAttributeValueProps[],
 ) {
   const { toDelete, toUpsert } = filterUpsertEntries(
     input,

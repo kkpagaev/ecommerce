@@ -1,13 +1,14 @@
 // this file is generated
-`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"catalog":{"category":{"router":"AdminCatalogCategoryRouter"}}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
-import { FastifyZod } from "fastify";
+`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"category":{"router":"AdminCatalogCategoryRouter"}}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
+import { FastifyInstance } from "fastify";
 import { withValidation } from "./core/trpc";
 import AdminAccountDiscordRouter from "./admin/account/discord/router";
 import AdminAccountRouter from "./admin/account/router";
+import AdminCatalogAttributeRouter from "./admin/catalog/attribute.router";
 import AdminCatalogCategoryRouter from "./admin/catalog/category.router";
 import WebCatalogPostRouter from "./web/catalog/post/router";
 
-export async function createAppRouter(fastify: FastifyZod) {
+export async function createAppRouter(fastify: FastifyInstance) {
   const { t } = fastify;
 
   return t.router({
@@ -21,6 +22,9 @@ export async function createAppRouter(fastify: FastifyZod) {
         }),
       ),
       catalog: t.router({
+        attribute: withValidation(
+          t.router(await AdminCatalogAttributeRouter(fastify)),
+        ),
         category: withValidation(
           t.router(await AdminCatalogCategoryRouter(fastify)),
         ),
