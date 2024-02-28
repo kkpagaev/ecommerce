@@ -1,5 +1,5 @@
 import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
-import { JwtPayload } from "./auth/auth";
+import { JwtPayload } from "./auth/jwt";
 
 export async function createContext(
   handleAuth: (header: string) => Promise<JwtPayload | null>,
