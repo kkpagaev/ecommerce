@@ -1,9 +1,10 @@
 // this file is generated
-`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"admin":{"router":"AdminAdminRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"category":{"router":"AdminCatalogCategoryRouter"},"product":{"router":"AdminCatalogProductRouter"}}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminAdminRouter","./admin/admin/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["AdminCatalogProductRouter","./admin/catalog/product.router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
+`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"admin":{"auth":{"router":"AdminAdminAuthRouter"},"router":"AdminAdminRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"category":{"router":"AdminCatalogCategoryRouter"},"product":{"router":"AdminCatalogProductRouter"}}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminAdminAuthRouter","./admin/admin/auth.router"],["AdminAdminRouter","./admin/admin/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["AdminCatalogProductRouter","./admin/catalog/product.router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
 import { FastifyInstance } from "fastify";
 import { withValidation } from "./core/trpc";
 import AdminAccountDiscordRouter from "./admin/account/discord/router";
 import AdminAccountRouter from "./admin/account/router";
+import AdminAdminAuthRouter from "./admin/admin/auth.router";
 import AdminAdminRouter from "./admin/admin/router";
 import AdminCatalogAttributeRouter from "./admin/catalog/attribute.router";
 import AdminCatalogCategoryRouter from "./admin/catalog/category.router";
@@ -23,7 +24,12 @@ export async function createAppRouter(fastify: FastifyInstance) {
           ),
         }),
       ),
-      admin: withValidation(t.router(await AdminAdminRouter(fastify))),
+      admin: t.mergeRouters(
+        withValidation(t.router(await AdminAdminRouter(fastify))),
+        t.router({
+          auth: withValidation(t.router(await AdminAdminAuthRouter(fastify))),
+        }),
+      ),
       catalog: t.router({
         attribute: withValidation(
           t.router(await AdminCatalogAttributeRouter(fastify)),

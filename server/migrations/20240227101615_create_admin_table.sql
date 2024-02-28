@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE IF NOT EXISTS admin (
+CREATE TABLE IF NOT EXISTS admins (
   id       SERIAL PRIMARY KEY,
   name     VARCHAR(255),
   surname  VARCHAR(255),
@@ -13,5 +13,5 @@ CREATE TABLE IF NOT EXISTS admin (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS admins;
 -- +goose StatementEnd

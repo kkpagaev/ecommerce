@@ -11,7 +11,7 @@ import { IAdminListCountQueryQuery, IAdminListQueryQuery, IAdminDeleteQueryQuery
 // | created_at | timestamp without time zone |  not null default CURRENT_TIMESTAMP                 |
 
 export const adminCreateQuery = sql<IAdminCreateQueryQuery>`
-  INSERT INTO admin (email, password, name, surname)
+  INSERT INTO admins (email, password, name, surname)
   VALUES (
     $email!,
     $password!,
@@ -22,7 +22,7 @@ export const adminCreateQuery = sql<IAdminCreateQueryQuery>`
 `;
 
 export const adminUpdateQuery = sql<IAdminUpdateQueryQuery>`
-  UPDATE admin
+  UPDATE admins
   SET
     name = COALESCE($name, name),
     surname = COALESCE($surname, surname),
@@ -34,24 +34,24 @@ export const adminUpdateQuery = sql<IAdminUpdateQueryQuery>`
 `;
 
 export const adminFindOneQuery = sql<IAdminFindOneQueryQuery>`
-  SELECT * FROM admin
+  SELECT * FROM admins
   WHERE id = COALESCE($id, id)
   AND email = COALESCE($email, email)
 `;
 
 export const adminDeleteQuery = sql<IAdminDeleteQueryQuery>`
-  DELETE FROM admin
+  DELETE FROM admins
   WHERE id = $id!
 `;
 
 export const adminListQuery = sql<IAdminListQueryQuery>`
-  SELECT * FROM admin
+  SELECT * FROM admins
   LIMIT COALESCE($limit, 10)
   OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
 
 export const adminListCountQuery = sql<IAdminListCountQueryQuery>`
-  SELECT COUNT(*) FROM admin;
+  SELECT COUNT(*) FROM admins;
 `;
 
 export const adminQueries = {
