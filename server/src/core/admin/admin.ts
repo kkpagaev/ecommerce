@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { adminQueries as q } from "./queries";
+import * as bcrypt from "bcrypt";
 
 export type Admins = ReturnType<typeof Admins>;
 export function Admins(f: { pool: Pool }) {
@@ -10,6 +11,10 @@ export function Admins(f: { pool: Pool }) {
   };
 }
 
+async function hashPassword(password: string) {
+  return await bcrypt.hash(password, 10);
+}
+
 type CreateAdmin = {
   name?: string;
   surname?: string;
@@ -17,22 +22,25 @@ type CreateAdmin = {
   password: string;
 };
 export async function createAdmin(pool: Pool, input: CreateAdmin) {
+  const hashedPassword = await hashPassword(input.password);
   return await q.admin.create.run({
     name: input.name,
     surname: input.surname,
     email: input.email,
-    password: input.password,
+    password: hashedPassword,
   }, pool).then((res) => res[0]);
 }
 
 type UpdateAdmin = Partial<CreateAdmin>;
 export async function updateAdmin(pool: Pool, id: number, input: UpdateAdmin) {
+  const hashedPassword = input.password ? await hashPassword(input.password) : undefined;
+
   return await q.admin.update.run({
     id: id,
     name: input.name,
     surname: input.surname,
     email: input.email,
-    password: input.password,
+    password: hashedPassword,
   }, pool);
 }
 
