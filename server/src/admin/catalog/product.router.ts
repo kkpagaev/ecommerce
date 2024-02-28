@@ -66,5 +66,16 @@ export default async ({ t, catalog }: FastifyZod) => ({
 
       return res;
     }),
+  findOneProduct: t.procedure
+    .input(z.object({
+      id: z.number(),
+    }))
+    .query(async ({ input }) => {
+      const res = await catalog.products.findOneProduct({
+        id: input.id,
+      });
+
+      return res;
+    }),
 
 });

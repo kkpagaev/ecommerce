@@ -61,6 +61,9 @@ export async function findOneProduct(pool: Pool, props: FindOneProductProps) {
   const product = await q.product.findOne.run({
     id: props.id,
   }, pool).then((res) => res[0]);
+  if (!product) {
+    return null;
+  }
   const attributes = await q.productAttributeValue.list.run({
     productId: product.id,
   }, pool);
