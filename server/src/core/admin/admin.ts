@@ -5,6 +5,7 @@ import * as bcrypt from "bcrypt";
 export type Admins = ReturnType<typeof Admins>;
 export function Admins(f: { pool: Pool }) {
   return {
+    listAdmins: listAdmins.bind(null, f.pool),
     findOneAdmin: getOneAdmin.bind(null, f.pool),
     createAdmin: createAdmin.bind(null, f.pool),
     updateAdmin: updateAdmin.bind(null, f.pool),
@@ -41,7 +42,7 @@ export async function updateAdmin(pool: Pool, id: number, input: UpdateAdmin) {
     surname: input.surname,
     email: input.email,
     password: hashedPassword,
-  }, pool);
+  }, pool).then((res) => res[0]);
 }
 
 type GetOneAdmin = {
