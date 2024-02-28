@@ -1,9 +1,10 @@
 import { Pool } from "pg";
 import { adminQueries as q } from "./queries";
 
+export type Admins = ReturnType<typeof Admins>;
 export function Admins(f: { pool: Pool }) {
   return {
-    findOne: getOneAdmin.bind(null, f.pool),
+    findOneAdmin: getOneAdmin.bind(null, f.pool),
     createAdmin: createAdmin.bind(null, f.pool),
     updateAdmin: updateAdmin.bind(null, f.pool),
   };
@@ -40,10 +41,14 @@ type GetOneAdmin = {
   email?: string;
 };
 export async function getOneAdmin(pool: Pool, input: GetOneAdmin) {
-  return await q.admin.findOne.run({
+  const admin = await q.admin.findOne.run({
     id: input.id,
     email: input.email,
   }, pool).then((res) => res[0]);
+  if (!admin) {
+    return null;
+  }
+  return admin;
 }
 
 export async function deleteAdmin(pool: Pool, id: number) {
