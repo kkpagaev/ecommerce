@@ -4,12 +4,12 @@ import { JwtService } from "../core/auth/jwt";
 
 declare module "fastify" {
   export interface FastifyInstance {
-    auth: JwtService;
+    jwt: JwtService;
   }
 }
 
 export default fp(async function (f: FastifyInstance) {
-  f.decorate("auth", new JwtService("secret"));
+  f.decorate("jwt", new JwtService("secret"));
 }, {
   name: "auth",
 });

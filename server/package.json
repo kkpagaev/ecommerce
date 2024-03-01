@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch --ignore src/foo.ts src/index.ts | pino-pretty",
+    "dev": "NODE_ENV=production tsx watch --ignore src/foo.ts src/index.ts | pino-pretty",
     "debug": "tsx --inspect src/index.ts",
     "brk": "tsx --inspect-brk src/index.ts",
     "exec": "node --experimental-specifier-resolution=node --loader ts-node/esm",

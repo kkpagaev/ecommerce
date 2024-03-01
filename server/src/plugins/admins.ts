@@ -14,4 +14,5 @@ export default fp(async function (f: FastifyInstance) {
   }));
 }, {
   name: "admin",
+  dependencies: ["pool"],
 });

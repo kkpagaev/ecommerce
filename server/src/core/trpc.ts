@@ -42,12 +42,12 @@ export async function fastifyTRPCPlugin<TRouter extends AnyTRPCRouter>(
   let prefix = opts.prefix ?? "";
 
   const appRouter = await createAppRouter(fastify.withTypeProvider<ZodTypeProvider>());
-  const auth = fastify.auth;
+  const jwt = fastify.jwt;
 
   const trpcOptions = {
     router: appRouter,
     createContext: createContext.bind(null, async (s) => {
-      return auth.parseAndVerify(s);
+      return jwt.parseAndVerify(s);
     }),
     onError({ path, error }) {
       console.error(`Error in tRPC handler on path '${path}':`, error);

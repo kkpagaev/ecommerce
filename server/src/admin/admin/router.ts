@@ -8,7 +8,7 @@ export default async ({ t, admins }: FastifyZod) => ({
     .input(z.object({
       page: z.number().optional(),
       limit: z.number().optional(),
-    }).strict())
+    }).partial())
     .query(async ({ input }) => {
       const res = await admins.listAdmins({
         page: input.page,
