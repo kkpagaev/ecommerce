@@ -1,8 +1,8 @@
-import { Translation } from "src/core/catalog/i18n";
 import { Pool, PoolClient } from "pg";
 import { catalogQueries as q } from "./queries";
 import slugify from "slugify";
 import { tx } from "../../plugins/pool";
+import { Translation } from "./i18n";
 
 export type Products = ReturnType<typeof Products>;
 export function Products(f: { pool: Pool }) {

@@ -1,39 +1,12 @@
 {
-  "ts-node": {
-    // Do not forget to `npm i -D tsconfig-paths`
-    "require": ["tsconfig-paths/register"]
-  },
+  "extends": "@repo/typescript-config/node.json",
   "compilerOptions": {
-    "declaration": true,
-    "removeComments": false,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",
-    "jsx": "react",
-    "baseUrl": ".",
     "paths": {
       "src/*": ["./src/*"],
       "test/*": ["./test/*"]
     },
-    "sourceMap": true,
-    "incremental": true,
-    "strictNullChecks": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": true,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "lib": ["es2022"],
-    "moduleResolution": "Bundler",
-    "module": "ESNext",
     "noEmit": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true
+    "outDir": "dist"
   },
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]

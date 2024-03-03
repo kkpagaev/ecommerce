@@ -10,5 +10,6 @@ module.exports = {
     project: true,
   },
   rules: {
+    "no-redeclare": "off"
   }
 }

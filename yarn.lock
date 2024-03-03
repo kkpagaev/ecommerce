@@ -1707,6 +1707,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@repo/typescript-config@*, @repo/typescript-config@workspace:packages/typescript-config":
+  version: 0.0.0-use.local
+  resolution: "@repo/typescript-config@workspace:packages/typescript-config"
+  languageName: unknown
+  linkType: soft
+
 "@rollup/rollup-android-arm-eabi@npm:4.9.6":
   version: 4.9.6
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.9.6"
@@ -8193,6 +8199,7 @@ __metadata:
     "@pgtyped/cli": ^2.3.0
     "@pgtyped/runtime": ^2.3.0
     "@repo/eslint-config": "*"
+    "@repo/typescript-config": "*"
     "@trpc/server": next
     "@types/bcrypt": ^5.0.2
     "@types/jsonwebtoken": ^9.0.6
