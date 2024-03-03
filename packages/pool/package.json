@@ -2,7 +2,14 @@
   "name": "@repo/pool",
   "version": "1.0.0",
   "public": true,
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "dev": "NODE_ENV=production tsx watch --ignore src/foo.ts src/index.ts | pino-pretty",
     "debug": "tsx --inspect src/index.ts",
