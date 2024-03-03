@@ -25,7 +25,7 @@ export async function tx<T>(pool: Pool, callback: (client: PoolClient) => Promis
   finally {
     client.release();
   }
-};
+}
 
 export default fp(async function (f) {
   const pool = new Pool({

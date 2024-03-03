@@ -1,8 +1,6 @@
 import { FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
-import { Categories } from "../core/catalog/category";
-import { Products } from "../core/catalog/product";
-import { Attributes } from "../core/catalog/attribute";
+import { Categories, Products, Attributes } from "@repo/catalog";
 
 type Catalog = {
   categories: Categories;

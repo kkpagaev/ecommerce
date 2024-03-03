@@ -1,7 +1,7 @@
 import { Pool, PoolClient } from "pg";
 import { catalogQueries as q } from "./queries";
 import slugify from "slugify";
-import { tx } from "../../plugins/pool";
+import { tx } from "@repo/pool";
 import { Translation } from "./i18n";
 
 export type Products = ReturnType<typeof Products>;

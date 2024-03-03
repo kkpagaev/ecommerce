@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { testDB } from "../../../utils";
-import { Products } from "../../../../src/core/catalog/product";
-import { catalogQueries as q } from "../../../../src/core/catalog/queries";
 import { Pool } from "pg";
+import { catalogQueries as q } from "../src/queries";
+import { Products } from "../src";
+import { testDB } from "./utils";
 
 async function createProducts() {
   const db = await testDB();

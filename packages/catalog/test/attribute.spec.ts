@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { Attributes } from "../../../../src/core/catalog/attribute";
-import { testDB } from "../../../utils";
-import { catalogQueries as q } from "../../../../src/core/catalog/queries";
 import { Pool } from "pg";
+import { catalogQueries as q } from "../src/queries";
+import { Attributes } from "../src/attribute";
+import { testDB } from "./utils";
 
 async function createAttributes() {
   const db = await testDB();

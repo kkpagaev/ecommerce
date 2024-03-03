@@ -1720,6 +1720,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@repo/catalog@*, @repo/catalog@workspace:packages/catalog":
+  version: 0.0.0-use.local
+  resolution: "@repo/catalog@workspace:packages/catalog"
+  dependencies:
+    "@pgtyped/cli": ^2.3.0
+    "@repo/eslint-config": "*"
+    "@repo/pool": "*"
+    "@repo/typescript-config": "*"
+    "@types/pg": ^8.11.2
+    pg: ^8.11.3
+    typescript: ^5.3.3
+    vitest: ^1.3.1
+  languageName: unknown
+  linkType: soft
+
 "@repo/eslint-config@*, @repo/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@repo/eslint-config@workspace:packages/eslint-config"
@@ -1737,6 +1752,18 @@ __metadata:
     eslint-plugin-react-refresh: ^0.4.5
     prettier: ^3.2.0
     typescript: ^5.3.3
+  languageName: unknown
+  linkType: soft
+
+"@repo/pool@*, @repo/pool@workspace:packages/pool":
+  version: 0.0.0-use.local
+  resolution: "@repo/pool@workspace:packages/pool"
+  dependencies:
+    "@types/pg": ^8.10.9
+    fastify-plugin: ^4.5.1
+    pg: ^8.11.3
+    typescript: ^5.3.3
+    vitest: ^1.3.1
   languageName: unknown
   linkType: soft
 
@@ -2298,6 +2325,17 @@ __metadata:
     pg-protocol: "*"
     pg-types: ^4.0.1
   checksum: c0c750af1f0945fe31c2793931da33bf596476ec8b52babfdb20f61006570c1c6c7f62f2dedd0cb9aefd2cddab238f2ed279337d3b2aa734ddd1ee8958e2355e
+  languageName: node
+  linkType: hard
+
+"@types/pg@npm:^8.11.2":
+  version: 8.11.2
+  resolution: "@types/pg@npm:8.11.2"
+  dependencies:
+    "@types/node": "*"
+    pg-protocol: "*"
+    pg-types: ^4.0.1
+  checksum: 2a0290a60fafed0b3994105c342ff14c4b4840e308a5a8643dcef6276d8b39b50e42c910b59b28ac2b7d1c804c8ed8bc20a3d09be5a381f4618d67f765d30702
   languageName: node
   linkType: hard
 
@@ -8246,7 +8284,9 @@ __metadata:
     "@fastify/websocket": ^8.3.1
     "@pgtyped/cli": ^2.3.0
     "@pgtyped/runtime": ^2.3.0
+    "@repo/catalog": "*"
     "@repo/eslint-config": "*"
+    "@repo/pool": "*"
     "@repo/typescript-config": "*"
     "@trpc/server": next
     "@types/bcrypt": ^5.0.2

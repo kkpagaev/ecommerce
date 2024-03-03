@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { testDB } from "../../../utils";
-import { Categories } from "../../../../src/core/catalog/category";
+import { Categories } from "../src/category";
+import { testDB } from "./utils";
 
 async function categories() {
   const db = await testDB();

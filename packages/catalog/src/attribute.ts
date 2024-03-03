@@ -1,8 +1,8 @@
 import { Translation } from "./i18n";
 import { Pool, PoolClient } from "pg";
 import { catalogQueries as q } from "./queries";
-import { filterUpsertEntries } from "../utils";
-import { tx } from "../../plugins/pool";
+import { filterUpsertEntries } from "./utils";
+import { tx } from "@repo/pool";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {

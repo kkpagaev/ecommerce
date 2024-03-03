@@ -40,7 +40,9 @@
   },
   "devDependencies": {
     "@pgtyped/cli": "^2.3.0",
+    "@repo/catalog": "*",
     "@repo/eslint-config": "*",
+    "@repo/pool": "*",
     "@repo/typescript-config": "*",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
