@@ -50,8 +50,10 @@ export const columns: ColumnDef<Category>[] = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => {
-      return <div className="capitalize">{row.getValue<Translation>("name").uk}</div>
-    }
+      return (
+        <div className="capitalize">{row.getValue<Translation>("name").uk}</div>
+      );
+    },
   },
   {
     accessorKey: "slug",

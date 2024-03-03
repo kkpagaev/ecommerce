@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
-import { Admins } from "../core/admin/admin";
+import { Admins } from "@repo/admin";
 
 declare module "fastify" {
   export interface FastifyInstance {

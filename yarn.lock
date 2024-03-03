@@ -1720,6 +1720,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@repo/admin@*, @repo/admin@workspace:packages/admin":
+  version: 0.0.0-use.local
+  resolution: "@repo/admin@workspace:packages/admin"
+  dependencies:
+    "@pgtyped/cli": ^2.3.0
+    "@repo/eslint-config": "*"
+    "@repo/pool": "*"
+    "@repo/typescript-config": "*"
+    "@types/pg": ^8.11.2
+    pg: ^8.11.3
+    typescript: ^5.3.3
+    vitest: ^1.3.1
+  languageName: unknown
+  linkType: soft
+
 "@repo/catalog@*, @repo/catalog@workspace:packages/catalog":
   version: 0.0.0-use.local
   resolution: "@repo/catalog@workspace:packages/catalog"
@@ -8284,6 +8299,7 @@ __metadata:
     "@fastify/websocket": ^8.3.1
     "@pgtyped/cli": ^2.3.0
     "@pgtyped/runtime": ^2.3.0
+    "@repo/admin": "*"
     "@repo/catalog": "*"
     "@repo/eslint-config": "*"
     "@repo/pool": "*"
