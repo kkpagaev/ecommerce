@@ -32,6 +32,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@repo/eslint-config": "*",
     "@tanstack/router-devtools": "^1.14.0",
     "@tanstack/router-vite-plugin": "^1.12.16",
     "@types/node": "^20.11.8",

@@ -1,14 +1,15 @@
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
-  ],
+  parserOptions: {
+    project: "./tsconfig.json",
+  },
+  parser: "@typescript-eslint/parser",
   ignorePatterns: ['dist', '.eslintrc.cjs', 'src/routeTree.gen.ts'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  extends: ["@repo/eslint-config/react.js"],
+  parserOptions: {
+    project: true,
+  },
   rules: {
     'react-refresh/only-export-components': [
       'warn',
