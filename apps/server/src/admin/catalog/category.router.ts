@@ -6,7 +6,7 @@ export const translationSchema = z.object({
   uk: z.string(),
   ru: z.string(),
   en: z.string(),
-}).strict();
+    }).strict();
 
 export default async ({ t, catalog }: FastifyZod) => ({
   listCategories: t.procedure
