@@ -1,5 +1,5 @@
 /** Types generated for queries found in "src/core/catalog/queries.ts" */
-export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
+import type { Translation } from "./i18n";
 
 export type NumberOrString = number | string;
 
@@ -10,9 +10,9 @@ export interface IAttributeFindByIdQueryParams {
 
 /** 'AttributeFindByIdQuery' return type */
 export interface IAttributeFindByIdQueryResult {
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json;
+  name: Translation;
 }
 
 /** 'AttributeFindByIdQuery' query type */
@@ -28,9 +28,9 @@ export interface IAttributeFindOneQueryParams {
 
 /** 'AttributeFindOneQuery' return type */
 export interface IAttributeFindOneQueryResult {
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json;
+  name: Translation;
 }
 
 /** 'AttributeFindOneQuery' query type */
@@ -61,9 +61,9 @@ export interface IAttributeListQueryParams {
 
 /** 'AttributeListQuery' return type */
 export interface IAttributeListQueryResult {
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json;
+  name: Translation;
 }
 
 /** 'AttributeListQuery' query type */
@@ -75,8 +75,8 @@ export interface IAttributeListQueryQuery {
 /** 'AttributeCreateQuery' parameters type */
 export interface IAttributeCreateQueryParams {
   values: readonly ({
-    name: Json,
-    description: Json | null | void
+    name: Translation;
+    description: Translation | null | void;
   })[];
 }
 
@@ -93,9 +93,9 @@ export interface IAttributeCreateQueryQuery {
 
 /** 'AttributeUpdateQuery' parameters type */
 export interface IAttributeUpdateQueryParams {
-  description?: Json | null | void;
+  description?: Translation | null | void;
   id: number;
-  name?: Json | null | void;
+  name?: Translation | null | void;
 }
 
 /** 'AttributeUpdateQuery' return type */
@@ -130,7 +130,7 @@ export interface IAttributeValueListQueryParams {
 export interface IAttributeValueListQueryResult {
   attribute_id: number | null;
   id: number;
-  value: Json;
+  value: Translation;
 }
 
 /** 'AttributeValueListQuery' query type */
@@ -158,8 +158,8 @@ export interface IAttributeValueIdListQueryQuery {
 /** 'AttributeValueCreateQuery' parameters type */
 export interface IAttributeValueCreateQueryParams {
   values: readonly ({
-    attributeId: number | null | void,
-    value: Json | null | void
+    attributeId: number | null | void;
+    value: Translation | null | void;
   })[];
 }
 
@@ -177,7 +177,7 @@ export interface IAttributeValueCreateQueryQuery {
 /** 'AttributeValueUpdateQuery' parameters type */
 export interface IAttributeValueUpdateQueryParams {
   id: number;
-  value?: Json | null | void;
+  value?: Translation | null | void;
 }
 
 /** 'AttributeValueUpdateQuery' return type */
@@ -239,9 +239,9 @@ export interface ICategoryListQueryParams {
 
 /** 'CategoryListQuery' return type */
 export interface ICategoryListQueryResult {
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json | null;
+  name: Translation | null;
   slug: string;
 }
 
@@ -258,9 +258,9 @@ export interface ICategoryFindByIdQueryParams {
 
 /** 'CategoryFindByIdQuery' return type */
 export interface ICategoryFindByIdQueryResult {
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json | null;
+  name: Translation | null;
   slug: string;
 }
 
@@ -272,8 +272,8 @@ export interface ICategoryFindByIdQueryQuery {
 
 /** 'CategoryCreateQuery' parameters type */
 export interface ICategoryCreateQueryParams {
-  description?: Json | null | void;
-  name: Json;
+  description?: Translation | null | void;
+  name: Translation;
   slug: string;
 }
 
@@ -290,9 +290,9 @@ export interface ICategoryCreateQueryQuery {
 
 /** 'CategoryUpdateQuery' parameters type */
 export interface ICategoryUpdateQueryParams {
-  description?: Json | null | void;
+  description?: Translation | null | void;
   id: number;
-  name?: Json | null | void;
+  name?: Translation | null | void;
   slug?: string | null | void;
 }
 
@@ -315,9 +315,9 @@ export interface IProductListQueryParams {
 export interface IProductListQueryResult {
   category_id: number | null;
   created_at: Date;
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json;
+  name: Translation;
   slug: string;
   updated_at: Date;
 }
@@ -337,9 +337,9 @@ export interface IProductFindOneQueryParams {
 export interface IProductFindOneQueryResult {
   category_id: number | null;
   created_at: Date;
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json;
+  name: Translation;
   slug: string;
   updated_at: Date;
 }
@@ -369,8 +369,8 @@ export interface IProductDeleteQueryQuery {
 /** 'ProductCreateQuery' parameters type */
 export interface IProductCreateQueryParams {
   categoryId: number;
-  description?: Json | null | void;
-  name: Json;
+  description?: Translation | null | void;
+  name: Translation;
   slug: string;
 }
 
@@ -388,9 +388,9 @@ export interface IProductCreateQueryQuery {
 /** 'ProductUpdateQuery' parameters type */
 export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;
-  description?: Json | null | void;
+  description?: Translation | null | void;
   id: number;
-  name?: Json | null | void;
+  name?: Translation | null | void;
   slug?: string | null | void;
 }
 
@@ -411,9 +411,9 @@ export interface IProductAttributeValueListQueryParams {
 /** 'ProductAttributeValueListQuery' return type */
 export interface IProductAttributeValueListQueryResult {
   attribute_id: number | null;
-  attribute_name: Json;
+  attribute_name: Translation;
   id: number;
-  value: Json;
+  value: Translation;
 }
 
 /** 'ProductAttributeValueListQuery' query type */
@@ -439,8 +439,8 @@ export interface IProductAttributeValueDeleteQueryQuery {
 /** 'ProductAttributeVAlueInsertQuery' parameters type */
 export interface IProductAttributeVAlueInsertQueryParams {
   values: readonly ({
-    productId: number,
-    attributeValueId: number
+    productId: number;
+    attributeValueId: number;
   })[];
 }
 
@@ -476,9 +476,9 @@ export interface IProductFindByIdQueryParams {
 export interface IProductFindByIdQueryResult {
   category_id: number | null;
   created_at: Date;
-  description: Json | null;
+  description: Translation | null;
   id: number;
-  name: Json;
+  name: Translation;
   slug: string;
   updated_at: Date;
 }
@@ -492,9 +492,9 @@ export interface IProductFindByIdQueryQuery {
 /** 'PriceUpsertQuery' parameters type */
 export interface IPriceUpsertQueryParams {
   values: readonly ({
-    product_id: NumberOrString,
-    price: NumberOrString,
-    type: string | null | void
+    product_id: NumberOrString;
+    price: NumberOrString;
+    type: string | null | void;
   })[];
 }
 
@@ -506,4 +506,3 @@ export interface IPriceUpsertQueryQuery {
   params: IPriceUpsertQueryParams;
   result: IPriceUpsertQueryResult;
 }
-

@@ -1,4 +1,4 @@
-import { Translation } from "./i18n";
+import { Translation } from "src/core/catalog/i18n";
 import { Pool, PoolClient } from "pg";
 import { catalogQueries as q } from "./queries";
 import slugify from "slugify";

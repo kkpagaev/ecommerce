@@ -1,5 +1,6 @@
 import { updateRoutes } from "./router.gen";
 import { build } from "./app";
+import { AppRouter } from "./app.router";
 
 process.env.NODE_ENV = "production";
 
@@ -13,3 +14,5 @@ async function main() {
 }
 
 void main();
+
+export type { AppRouter };

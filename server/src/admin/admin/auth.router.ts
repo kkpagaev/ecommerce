@@ -1,9 +1,9 @@
 import { FastifyZod } from "fastify";
 
-export default async ({ t, auth }: FastifyZod) => ({
+export default async ({ t, jwt }: FastifyZod) => ({
   signIn: t.procedure
     .mutation(async () => {
-      const token = auth.sign({
+      const token = jwt.sign({
         userId: 1,
       });
 

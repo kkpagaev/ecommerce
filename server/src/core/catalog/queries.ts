@@ -1,8 +1,9 @@
 import { sql } from "@pgtyped/runtime";
-import { IAttributeFindOneQueryQuery, IAttributeValueDeleteManyQueryQuery, IAttributeValueIdListQueryQuery, IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery, Json } from "./queries.types";
+import { IAttributeFindByIdQueryQuery, IAttributeFindOneQueryQuery, IAttributeValueDeleteManyQueryQuery, IAttributeValueIdListQueryQuery, IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 import { PoolClient } from "pg";
+import { Translation } from "./i18n";
 
-export const attributeFindByIdQuery = sql`
+export const attributeFindByIdQuery = sql<IAttributeFindByIdQueryQuery>`
  SELECT id, name, description 
  FROM attributes
  WHERE id = $id!
@@ -91,7 +92,7 @@ export interface IAttributeValueUpsertQueryParams {
   values: readonly ({
     id: number | null | void;
     attributeId: number;
-    value: Json;
+    value: Translation;
   })[];
 }
 

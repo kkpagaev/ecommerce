@@ -58,18 +58,18 @@ describe("AttributeValues", () => {
   async function fixture(pool: Pool) {
     const attributes = await q.attribute.create.run({
       values: [{
-        name: { uk: "test" },
-        description: { uk: "test" },
+        name: { uk: "test", en: "test", ru: "test" },
+        description: { uk: "test", en: "test", ru: "test" },
       },
       {
-        name: { uk: "test2" },
-        description: { uk: "test2" },
+        name: { uk: "test2", en: "test2", ru: "test2" },
+        description: { uk: "test2", en: "test2", ru: "test2" },
       }],
     }, pool).then((res) => res.map((r) => r.id));
     const attributeValues = await q.attributeValue.create.run({
       values: attributes.map((id) => {
         return {
-          value: { uk: "value" + id },
+          value: { uk: "value" + id, en: "value" + id, ru: "value" + id },
           attributeId: id,
         };
       }),

@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { AdminOutputs } from "@/utils/trpc";
+import type { Translation } from "server/dist/src/core/catalog/i18n";
 
 type Category =
   AdminOutputs["catalog"]["category"]["listCategories"]["data"][0];
@@ -48,7 +49,9 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    cell: ({ row }) => {
+      return <div className="capitalize">{row.getValue<Translation>("name").uk}</div>
+    }
   },
   {
     accessorKey: "slug",
