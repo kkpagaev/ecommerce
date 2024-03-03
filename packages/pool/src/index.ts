@@ -2,7 +2,7 @@ import fp from "fastify-plugin";
 import { Pool, PoolClient } from "pg";
 
 declare module "fastify" {
-  interface FastifyInstance {
+  export interface FastifyInstance {
     pool: Pool;
   }
 }
