@@ -62,6 +62,8 @@ jobs:
       - run: corepack enable
       - name: Install dependencies
         run: yarn install
+      - name: Build
+        run: yarn build
       - name: Run Tests
         run: |
           yarn test
