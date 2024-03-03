@@ -1759,7 +1759,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@repo/pool@workspace:packages/pool"
   dependencies:
-    "@types/pg": ^8.10.9
+    "@types/pg": ^8.11.2
     fastify-plugin: ^4.5.1
     pg: ^8.11.3
     typescript: ^5.3.3
