@@ -32,9 +32,12 @@ async function dropTables(pool, tables) {
   }
 }
 
-export async function testDB() {
+/**
+ * @param {string} url
+ */
+export async function testDB(url) {
   const pool = new Pool({
-    connectionString: process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
+    connectionString: url,
   });
   const client = await pool.connect();
   const tables = await getTables(pool);
