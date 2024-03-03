@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/core/admin/queries.ts" */
+/** Types generated for queries found in "src/index.ts" */
 
 /** 'AdminCreateQuery' parameters type */
 export interface IAdminCreateQueryParams {
@@ -110,4 +110,3 @@ export interface IAdminListCountQueryQuery {
   params: IAdminListCountQueryParams;
   result: IAdminListCountQueryResult;
 }
-
