@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - server/**
+      - apps/server/**
       - .github/workflows/server.yml
 jobs:
   deploy:
@@ -45,7 +45,7 @@ jobs:
           GIT_TRACE: '1'
       - name: Run migrations
         run: |
-          cd server 
+          cd apps/server 
           goose -dir ./migrations/ up
         env:
           GOOSE_DRIVER: postgres
@@ -58,7 +58,7 @@ jobs:
         run: yarn install
       - name: Run Tests
         run: |
-          cd server
+          cd apps/server
           yarn test:once
         env:
           DATABASE_URL: "postgres://user:user@localhost:5432/user"
