@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "husky install",
-    "build": "turbo build",
+    "build": "turbo run build --cache-dir=.turbo",
+    "test": "turbo run test",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
