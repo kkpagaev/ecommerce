@@ -1,0 +1,15 @@
+{
+  "name": "@repo/test-utils",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/pg": "^8.11.2",
+    "typescript": "^5.3.3"
+  }
+}
