@@ -1,5 +1,5 @@
-/** Types generated for queries found in "src/core/catalog/queries.ts" */
-import type { Translation } from "./i18n";
+/** Types generated for queries found in "src/queries.ts" */
+export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
 
 export type NumberOrString = number | string;
 
@@ -10,9 +10,9 @@ export interface IAttributeFindByIdQueryParams {
 
 /** 'AttributeFindByIdQuery' return type */
 export interface IAttributeFindByIdQueryResult {
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation;
+  name: Json;
 }
 
 /** 'AttributeFindByIdQuery' query type */
@@ -28,9 +28,9 @@ export interface IAttributeFindOneQueryParams {
 
 /** 'AttributeFindOneQuery' return type */
 export interface IAttributeFindOneQueryResult {
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation;
+  name: Json;
 }
 
 /** 'AttributeFindOneQuery' query type */
@@ -61,9 +61,9 @@ export interface IAttributeListQueryParams {
 
 /** 'AttributeListQuery' return type */
 export interface IAttributeListQueryResult {
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation;
+  name: Json;
 }
 
 /** 'AttributeListQuery' query type */
@@ -75,8 +75,8 @@ export interface IAttributeListQueryQuery {
 /** 'AttributeCreateQuery' parameters type */
 export interface IAttributeCreateQueryParams {
   values: readonly ({
-    name: Translation;
-    description: Translation | null | void;
+    name: Json,
+    description: Json | null | void
   })[];
 }
 
@@ -93,9 +93,9 @@ export interface IAttributeCreateQueryQuery {
 
 /** 'AttributeUpdateQuery' parameters type */
 export interface IAttributeUpdateQueryParams {
-  description?: Translation | null | void;
+  description?: Json | null | void;
   id: number;
-  name?: Translation | null | void;
+  name?: Json | null | void;
 }
 
 /** 'AttributeUpdateQuery' return type */
@@ -130,7 +130,7 @@ export interface IAttributeValueListQueryParams {
 export interface IAttributeValueListQueryResult {
   attribute_id: number | null;
   id: number;
-  value: Translation;
+  value: Json;
 }
 
 /** 'AttributeValueListQuery' query type */
@@ -158,8 +158,8 @@ export interface IAttributeValueIdListQueryQuery {
 /** 'AttributeValueCreateQuery' parameters type */
 export interface IAttributeValueCreateQueryParams {
   values: readonly ({
-    attributeId: number | null | void;
-    value: Translation | null | void;
+    attributeId: number | null | void,
+    value: Json | null | void
   })[];
 }
 
@@ -177,7 +177,7 @@ export interface IAttributeValueCreateQueryQuery {
 /** 'AttributeValueUpdateQuery' parameters type */
 export interface IAttributeValueUpdateQueryParams {
   id: number;
-  value?: Translation | null | void;
+  value?: Json | null | void;
 }
 
 /** 'AttributeValueUpdateQuery' return type */
@@ -239,9 +239,9 @@ export interface ICategoryListQueryParams {
 
 /** 'CategoryListQuery' return type */
 export interface ICategoryListQueryResult {
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation | null;
+  name: Json | null;
   slug: string;
 }
 
@@ -258,9 +258,9 @@ export interface ICategoryFindByIdQueryParams {
 
 /** 'CategoryFindByIdQuery' return type */
 export interface ICategoryFindByIdQueryResult {
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation | null;
+  name: Json | null;
   slug: string;
 }
 
@@ -272,8 +272,8 @@ export interface ICategoryFindByIdQueryQuery {
 
 /** 'CategoryCreateQuery' parameters type */
 export interface ICategoryCreateQueryParams {
-  description?: Translation | null | void;
-  name: Translation;
+  description?: Json | null | void;
+  name: Json;
   slug: string;
 }
 
@@ -290,9 +290,9 @@ export interface ICategoryCreateQueryQuery {
 
 /** 'CategoryUpdateQuery' parameters type */
 export interface ICategoryUpdateQueryParams {
-  description?: Translation | null | void;
+  description?: Json | null | void;
   id: number;
-  name?: Translation | null | void;
+  name?: Json | null | void;
   slug?: string | null | void;
 }
 
@@ -313,11 +313,11 @@ export interface IProductListQueryParams {
 
 /** 'ProductListQuery' return type */
 export interface IProductListQueryResult {
-  category_id: number | null;
+  category_id: number;
   created_at: Date;
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation;
+  name: Json;
   slug: string;
   updated_at: Date;
 }
@@ -335,11 +335,11 @@ export interface IProductFindOneQueryParams {
 
 /** 'ProductFindOneQuery' return type */
 export interface IProductFindOneQueryResult {
-  category_id: number | null;
+  category_id: number;
   created_at: Date;
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation;
+  name: Json;
   slug: string;
   updated_at: Date;
 }
@@ -369,8 +369,8 @@ export interface IProductDeleteQueryQuery {
 /** 'ProductCreateQuery' parameters type */
 export interface IProductCreateQueryParams {
   categoryId: number;
-  description?: Translation | null | void;
-  name: Translation;
+  description?: Json | null | void;
+  name: Json;
   slug: string;
 }
 
@@ -388,9 +388,9 @@ export interface IProductCreateQueryQuery {
 /** 'ProductUpdateQuery' parameters type */
 export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;
-  description?: Translation | null | void;
+  description?: Json | null | void;
   id: number;
-  name?: Translation | null | void;
+  name?: Json | null | void;
   slug?: string | null | void;
 }
 
@@ -411,9 +411,9 @@ export interface IProductAttributeValueListQueryParams {
 /** 'ProductAttributeValueListQuery' return type */
 export interface IProductAttributeValueListQueryResult {
   attribute_id: number | null;
-  attribute_name: Translation;
+  attribute_name: Json;
   id: number;
-  value: Translation;
+  value: Json;
 }
 
 /** 'ProductAttributeValueListQuery' query type */
@@ -439,8 +439,8 @@ export interface IProductAttributeValueDeleteQueryQuery {
 /** 'ProductAttributeVAlueInsertQuery' parameters type */
 export interface IProductAttributeVAlueInsertQueryParams {
   values: readonly ({
-    productId: number;
-    attributeValueId: number;
+    productId: number,
+    attributeValueId: number
   })[];
 }
 
@@ -474,11 +474,11 @@ export interface IProductFindByIdQueryParams {
 
 /** 'ProductFindByIdQuery' return type */
 export interface IProductFindByIdQueryResult {
-  category_id: number | null;
+  category_id: number;
   created_at: Date;
-  description: Translation | null;
+  description: Json | null;
   id: number;
-  name: Translation;
+  name: Json;
   slug: string;
   updated_at: Date;
 }
@@ -492,9 +492,9 @@ export interface IProductFindByIdQueryQuery {
 /** 'PriceUpsertQuery' parameters type */
 export interface IPriceUpsertQueryParams {
   values: readonly ({
-    product_id: NumberOrString;
-    price: NumberOrString;
-    type: string | null | void;
+    product_id: NumberOrString,
+    price: NumberOrString,
+    type: string | null | void
   })[];
 }
 
@@ -506,3 +506,4 @@ export interface IPriceUpsertQueryQuery {
   params: IPriceUpsertQueryParams;
   result: IPriceUpsertQueryResult;
 }
+
