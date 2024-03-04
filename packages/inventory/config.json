@@ -2,7 +2,7 @@
   "transforms": [
     {
       "mode": "ts",
-      "include": "**/index.ts",
+      "include": "**/*.ts",
       "emitTemplate": "{{dir}}/{{name}}.types.ts"
     },
     {
