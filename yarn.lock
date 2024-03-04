@@ -1725,6 +1725,7 @@ __metadata:
   resolution: "@repo/admin@workspace:packages/admin"
   dependencies:
     "@pgtyped/cli": ^2.3.0
+    "@pgtyped/runtime": ^2.3.0
     "@repo/eslint-config": "*"
     "@repo/pool": "*"
     "@repo/test-utils": "*"
@@ -1776,6 +1777,7 @@ __metadata:
   resolution: "@repo/inventory@workspace:packages/inventory"
   dependencies:
     "@pgtyped/cli": ^2.3.0
+    "@pgtyped/runtime": ^2.3.0
     "@repo/eslint-config": "*"
     "@repo/pool": "*"
     "@repo/test-utils": "*"
