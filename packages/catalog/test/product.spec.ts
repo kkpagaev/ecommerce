@@ -19,7 +19,7 @@ async function fixture(pool: Pool) {
   const catId = await q.category.create.run({
     name: { uk: "test", en: "test", ru: "test" },
     slug: "test",
-  }, pool).then((res) => res[0].id);
+  }, pool).then((res) => res[0]!.id);
   const attributes = await q.attribute.create.run({
     values: [{
       name: { uk: "test", en: "test", ru: "test" },
@@ -43,7 +43,7 @@ async function fixture(pool: Pool) {
     description: { uk: "test", en: "test", ru: "test" },
     categoryId: catId,
     slug: "test",
-  }, pool).then((res) => res[0]);
+  }, pool).then((res) => res[0]!);
   await q.productAttributeValue.create.run({
     values: attributeValues.map((id) => ({
       productId: product.id,
@@ -145,7 +145,7 @@ describe("Products", () => {
 
       // decrease attribute count
       await expect(p.products.updateProduct(fix.product.id, {
-        attributes: [fix.attributeValues[0]],
+        attributes: [fix.attributeValues[0]!],
       })).resolves.not.toThrow();
 
       expect(await getProduct().then((r) => r?.attributes)).toHaveLength(1);

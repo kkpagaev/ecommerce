@@ -70,7 +70,8 @@ export async function fastifyTRPCPlugin<TRouter extends AnyTRPCRouter>(
     // so when we call like category.createCategory.serverValidate
     // we "redirect" it to category.validate.createCategory
     const len = trpcPath.length;
-    [trpcPath[len - 2], trpcPath[len - 1]] = ["validator", trpcPath[len - 2]];
+    trpcPath[len - 2] = "validate";
+    trpcPath[len - 1] = trpcPath[len - 2] || "";
 
     return trpcPath.join(".");
   }

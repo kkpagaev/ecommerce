@@ -42,10 +42,10 @@ describe("Attributes", () => {
     });
 
     {
-      const vals = await allAttributes(a.db.pool, attribute.id);
+      const vals = await allAttributes(a.db.pool, attribute!.id);
 
       expect(vals).toHaveLength(1);
-      expect(vals[0].value).toEqual({ uk: "should create with values", en: "value", ru: "value" });
+      expect(vals[0]!.value).toEqual({ uk: "should create with values", en: "value", ru: "value" });
     }
 
     expect(attribute).toEqual({
@@ -83,20 +83,20 @@ describe("AttributeValues", () => {
       await using a = await createAttributes();
       const fix = await fixture(a.db.pool);
 
-      await a.attributes.upsertAttributeValue(fix.attributes[0], [{
+      await a.attributes.upsertAttributeValue(fix!.attributes[0]!, [{
         value: { uk: "new", en: "new", ru: "new" },
-        attributeId: fix.attributes[0],
+        attributeId: fix.attributes[0]!,
       }, {
         value: { uk: "new2", en: "new2", ru: "new2" },
-        attributeId: fix.attributes[0],
+        attributeId: fix.attributes[0]!,
       }]);
       {
-        const res = await allAttributes(a.db.pool, fix.attributes[0]);
+        const res = await allAttributes(a.db.pool, fix.attributes[0]!);
 
         expect(res).toHaveLength(2);
         expect(res.map((r) => r.id)).not.include(fix.attributeValues[0]);
-        expect(res[0].value).toEqual({ uk: "new", en: "new", ru: "new" });
-        expect(res[1].value).toEqual({ uk: "new2", en: "new2", ru: "new2" });
+        expect(res[0]!.value).toEqual({ uk: "new", en: "new", ru: "new" });
+        expect(res[1]!.value).toEqual({ uk: "new2", en: "new2", ru: "new2" });
       }
     });
 
@@ -104,18 +104,18 @@ describe("AttributeValues", () => {
       await using a = await createAttributes();
       const fix = await fixture(a.db.pool);
 
-      await a.attributes.upsertAttributeValue(fix.attributes[0], [{
+      await a.attributes.upsertAttributeValue(fix.attributes[0]!, [{
         id: fix.attributeValues[0],
         value: { uk: "new", en: "new", ru: "new" },
-        attributeId: fix.attributes[0],
+        attributeId: fix.attributes[0]!,
       }]);
 
       {
-        const res = await allAttributes(a.db.pool, fix.attributes[0]);
+        const res = await allAttributes(a.db.pool, fix.attributes[0]!);
 
         expect(res).toHaveLength(1);
-        expect(res[0].id).toEqual(fix.attributeValues[0]);
-        expect(res[0].value).toEqual({ uk: "new", en: "new", ru: "new" });
+        expect(res[0]!.id).toEqual(fix.attributeValues[0]!);
+        expect(res[0]!.value).toEqual({ uk: "new", en: "new", ru: "new" });
       }
     });
   });

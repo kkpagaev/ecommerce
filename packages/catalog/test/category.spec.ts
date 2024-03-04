@@ -30,7 +30,7 @@ describe("category", () => {
 
     expect(category).toHaveProperty("id");
 
-    const id = category.id;
+    const id = category!.id;
     const category2 = await service.category.findCategoryById(id);
 
     expect(category2).toEqual({
@@ -65,8 +65,9 @@ describe("category", () => {
     });
 
     expect(category).toHaveProperty("id");
+    expect(category).toBeDefined();
 
-    const id = category.id;
+    const id = category!.id;
     const category2 = await service.category.findCategoryById(id);
 
     expect(category2).toEqual({

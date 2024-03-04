@@ -28,6 +28,7 @@ export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
         description: input.description,
       }],
     }, pool).then((r) => r[0]);
+    if (!att) throw new Error("Failed to create attribute");
     if (input.values) {
       await upsertAttributeValueTransaction(
         client,
@@ -127,6 +128,8 @@ export async function findOneAttribute(pool: Pool, props: FindOneAttributeProps)
   const attribute = await q.attribute.findOne.run({
     id: props.id,
   }, pool).then((res) => res[0]);
+  if (!attribute) return null;
+
   const values = await q.attributeValue.list.run({
     attribute_id: attribute.id,
   }, pool);

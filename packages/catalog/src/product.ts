@@ -35,6 +35,9 @@ async function createProduct(
       slug: slug,
       categoryId: input.categoryId,
     }, client).then((res) => res[0]);
+    if (!product) {
+      throw new Error("Failed to create product");
+    }
 
     await q.price.upsert.run({
       values: [
@@ -138,7 +141,7 @@ export async function listProducts(pool: Pool, input: ListProductsProps) {
     page: input.page,
   }, pool);
   const count = await q.product.listCount.run(undefined, pool)
-    .then((res) => +(res[0].count ?? 0));
+    .then((res) => +(res[0]?.count ?? 0));
 
   return {
     data: products,

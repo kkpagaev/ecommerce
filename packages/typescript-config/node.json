@@ -3,6 +3,7 @@
   "display": "node",
   "extends": "./base.json",
   "compilerOptions": {
+    "noUncheckedIndexedAccess": true,
     "declaration": true,
     "removeComments": false,
     "experimentalDecorators": true,

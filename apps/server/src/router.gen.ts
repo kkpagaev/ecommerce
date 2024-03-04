@@ -17,7 +17,7 @@ function getImportName(path: string) {
     .slice(2)
     .replace(/[.-]/g, "/")
     .split("/")
-    .map((x) => x[0].toUpperCase() + x.slice(1))
+    .map((x) => x[0]?.toUpperCase() + x.slice(1))
     .join("");
 }
 

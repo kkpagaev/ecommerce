@@ -27,7 +27,7 @@ export async function listCategories(pool: Pool, input: ICategoryListQueryParams
 
   return {
     data: res,
-    count: +(count[0].count ?? 0),
+    count: +(count[0]?.count ?? 0),
   };
 }
 

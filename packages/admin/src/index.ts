@@ -120,7 +120,7 @@ export async function listAdmins(pool: Pool, input: ListAdmins) {
   }, pool);
 
   const count = await adminListCountQuery.run(undefined, pool)
-    .then((res) => +(res[0].count ?? 0));
+    .then((res) => +(res[0]?.count ?? 0));
 
   return {
     data: admins,
