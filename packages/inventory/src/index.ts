@@ -1,3 +1,1 @@
-export function Inventory() {
-  return "inventory";
-}
+export * from "./location";
