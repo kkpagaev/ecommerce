@@ -58,7 +58,7 @@ export const categoryFindOneQuery = sql<ICategoryFindOneQueryQuery>`
   AND slug = COALESCE($slug, slug);
 `;
 export const categoryDescriptionListQuery = sql<ICategoryDescriptionListQueryQuery>`
-  SELECT category_id as "categoryId", language_id as "languageId", name FROM category_descriptions
+  SELECT category_id, language_id, name FROM category_descriptions
   WHERE category_id = $category_id!
 `;
 
