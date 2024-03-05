@@ -2,10 +2,10 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS stocks (
   product_id INTEGER NOT NULL REFERENCES products(id),
-  attribute_value_id INTEGER NOT NULL REFERENCES attribute_values(id),
-  location_id INTEGER NOT NULL REFERENCES inventory_locations(id),
+  attribute_id INTEGER NOT NULL REFERENCES attributes(id),
+  location_id INTEGER NOT NULL REFERENCES locations(id),
   count INTEGER NOT NULL,
-  PRIMARY KEY (product_id, attribute_value_id, location_id)
+  PRIMARY KEY (product_id, attribute_id, location_id)
 );
 -- +goose StatementEnd
 
