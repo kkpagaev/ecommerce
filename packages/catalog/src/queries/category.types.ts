@@ -61,8 +61,8 @@ export interface ICategoryDescriptionListQueryParams {
 
 /** 'CategoryDescriptionListQuery' return type */
 export interface ICategoryDescriptionListQueryResult {
-  category_id: number;
-  language_id: number;
+  categoryId: number;
+  languageId: number;
   name: string;
 }
 

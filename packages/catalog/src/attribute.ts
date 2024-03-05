@@ -1,15 +1,41 @@
 import { Pool } from "pg";
 import { tx } from "@repo/pool";
 import { sql } from "@pgtyped/runtime";
-import { IAttributeDescriptionDeleteQueryQuery, IAttributeDeletQueryQuery, IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./queries/attribute.types";
+import { IAttributeFindOneQueryQuery, IAttributeDescriptionListQueryQuery, IAttributeDescriptionDeleteQueryQuery, IAttributeDeletQueryQuery, IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./queries/attribute.types";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {
   return {
+    findOneAttribute: findOneAttribute.bind(null, f.pool),
     createAttribute: createAttribute.bind(null, f.pool),
     deleteAttribute: deleteAttribute.bind(null, f.pool),
     updateAttribute: updateAttribute.bind(null, f.pool),
     deleteAttributeDescription: deleteAttributeDescription.bind(null, f.pool),
+  };
+}
+
+export const attributeFindOneQuery = sql<IAttributeFindOneQueryQuery>`
+  SELECT *
+  FROM attributes
+  WHERE id = $id!;
+`;
+export const attributeDescriptionListQuery = sql<IAttributeDescriptionListQueryQuery>`
+  SELECT *
+    FROM attribute_descriptions
+    WHERE attribute_id = $attribute_id!
+`;
+type FindOneAttributeProps = {
+  id: number;
+};
+export async function findOneAttribute(pool: Pool, props: FindOneAttributeProps) {
+  const attribute = await attributeFindOneQuery.run(props, pool).then((res) => res[0]);
+  if (!attribute) return null;
+  const descriptions = await attributeDescriptionListQuery.run({
+    attribute_id: attribute.id,
+  }, pool);
+  return {
+    ...attribute,
+    descriptions,
   };
 }
 

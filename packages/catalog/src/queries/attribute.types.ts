@@ -1,5 +1,40 @@
 /** Types generated for queries found in "src/attribute.ts" */
 
+/** 'AttributeFindOneQuery' parameters type */
+export interface IAttributeFindOneQueryParams {
+  id: number;
+}
+
+/** 'AttributeFindOneQuery' return type */
+export interface IAttributeFindOneQueryResult {
+  attribute_group_id: number;
+  id: number;
+}
+
+/** 'AttributeFindOneQuery' query type */
+export interface IAttributeFindOneQueryQuery {
+  params: IAttributeFindOneQueryParams;
+  result: IAttributeFindOneQueryResult;
+}
+
+/** 'AttributeDescriptionListQuery' parameters type */
+export interface IAttributeDescriptionListQueryParams {
+  attribute_id: number;
+}
+
+/** 'AttributeDescriptionListQuery' return type */
+export interface IAttributeDescriptionListQueryResult {
+  attribute_id: number;
+  language_id: number;
+  name: string;
+}
+
+/** 'AttributeDescriptionListQuery' query type */
+export interface IAttributeDescriptionListQueryQuery {
+  params: IAttributeDescriptionListQueryParams;
+  result: IAttributeDescriptionListQueryResult;
+}
+
 /** 'AttributeDescriptionDeleteQuery' parameters type */
 export interface IAttributeDescriptionDeleteQueryParams {
   attributeId: number;
