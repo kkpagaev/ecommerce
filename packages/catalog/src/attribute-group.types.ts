@@ -24,9 +24,9 @@ export interface IAttributeGroupDescriptionListQueryParams {
 
 /** 'AttributeGroupDescriptionListQuery' return type */
 export interface IAttributeGroupDescriptionListQueryResult {
-  attributeGroupId: number | null;
+  attributeGroupId: number;
   description: string | null;
-  languageId: number | null;
+  languageId: number;
   name: string;
 }
 
@@ -44,10 +44,10 @@ export interface IAttributeListQueryParams {
 
 /** 'AttributeListQuery' return type */
 export interface IAttributeListQueryResult {
-  attributeGroupId: number | null;
-  attributeId: number | null;
+  attributeGroupId: number;
+  attributeId: number;
   id: number;
-  languageId: number | null;
+  languageId: number;
   name: string;
 }
 
@@ -86,9 +86,9 @@ export interface IAttributeGroupDescriptionUpsertQueryParams {
 
 /** 'AttributeGroupDescriptionUpsertQuery' return type */
 export interface IAttributeGroupDescriptionUpsertQueryResult {
-  attributeGroupId: number | null;
+  attributeGroupId: number;
   description: string | null;
-  languageId: number | null;
+  languageId: number;
   name: string;
 }
 

@@ -77,52 +77,6 @@ export type IAttributeValueDeleteManyQueryResult = never;
  *  */
 export type IAttributeValueDeleteManyQueryParams = never;
 
-/** 'CategoryListCountQuery' parameters type */
-export type ICategoryListCountQueryParams = void;
-
-/** 'CategoryListCountQuery' return type */
-export interface ICategoryListCountQueryResult {
-  count: string | null;
-}
-
-/** 'CategoryListCountQuery' query type */
-export interface ICategoryListCountQueryQuery {
-  params: ICategoryListCountQueryParams;
-  result: ICategoryListCountQueryResult;
-}
-
-/** Query 'CategoryListQuery' is invalid, so its result is assigned type 'never'.
- *  */
-export type ICategoryListQueryResult = never;
-
-/** Query 'CategoryListQuery' is invalid, so its parameters are assigned type 'never'.
- *  */
-export type ICategoryListQueryParams = never;
-
-/** Query 'CategoryFindByIdQuery' is invalid, so its result is assigned type 'never'.
- *  */
-export type ICategoryFindByIdQueryResult = never;
-
-/** Query 'CategoryFindByIdQuery' is invalid, so its parameters are assigned type 'never'.
- *  */
-export type ICategoryFindByIdQueryParams = never;
-
-/** Query 'CategoryCreateQuery' is invalid, so its result is assigned type 'never'.
- *  */
-export type ICategoryCreateQueryResult = never;
-
-/** Query 'CategoryCreateQuery' is invalid, so its parameters are assigned type 'never'.
- *  */
-export type ICategoryCreateQueryParams = never;
-
-/** Query 'CategoryUpdateQuery' is invalid, so its result is assigned type 'never'.
- *  */
-export type ICategoryUpdateQueryResult = never;
-
-/** Query 'CategoryUpdateQuery' is invalid, so its parameters are assigned type 'never'.
- *  */
-export type ICategoryUpdateQueryParams = never;
-
 /** 'ProductListQuery' parameters type */
 export interface IProductListQueryParams {
   limit?: number | null | void;

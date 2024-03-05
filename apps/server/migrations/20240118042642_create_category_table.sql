@@ -8,8 +8,8 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE category_descriptions (
-  category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,
-  language_id INTEGER REFERENCES languages(id) ON DELETE CASCADE,
+  category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+  language_id INTEGER NOT NULL REFERENCES languages(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL
 );
 -- +goose StatementEnd

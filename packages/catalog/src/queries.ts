@@ -1,5 +1,5 @@
 import { sql } from "@pgtyped/runtime";
-import { IAttributeFindByIdQueryQuery, IAttributeFindOneQueryQuery, IAttributeValueDeleteManyQueryQuery, IAttributeValueIdListQueryQuery, IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeUpdateQueryQuery, IAttributeCreateQueryQuery, IAttributeValueCreateQueryQuery, IAttributeValueListQueryQuery, ICategoryCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryUpdateQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
+import { IAttributeValueDeleteManyQueryQuery, IAttributeValueIdListQueryQuery, IProductUpdateQueryQuery, IProductDeleteQueryQuery, IProductAttributeValueListQueryQuery, IProductFindOneQueryQuery, IProductAttributeVAlueInsertQueryQuery, IProductAttributeValueDeleteQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductFindByIdQueryQuery, IAttributeValueDeleteQueryQuery, IAttributeListCountQueryQuery, IAttributeListQueryQuery, IAttributeDeleteQueryQuery, IAttributeValueCreateQueryQuery, ICategoryFindByIdQueryQuery, ICategoryListCountQueryQuery, IAttributeValueUpdateQueryQuery } from "./queries.types";
 import { PoolClient } from "pg";
 import { Translation } from "./i18n";
 
@@ -87,47 +87,12 @@ export async function attributeValueUpsertQuery(
   );
 }
 
-export const categoryListCountQuery = sql<ICategoryListCountQueryQuery>`
-  SELECT COUNT(*) FROM categories;
-`;
-
-export const categoryListQuery = sql<ICategoryListQueryQuery>`
-  SELECT id, name, slug, description
-  FROM categories
-  ORDER BY id
-  LIMIT COALESCE($limit, 10)
-  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
-`;
-
-export const categoryFindByIdQuery = sql<ICategoryFindByIdQueryQuery>`
-  SELECT id, name, slug, description FROM categories
-  WHERE id = $id;
-`;
-
 // export const categoryFindQuery = sql<ICategoryFindQueryQuery>`
 //   SELECT id, name, slug, description FROM categories
 //   WHERE id = COALESCE($id, id)
 //   AND name->>$locale! = COALESCE($name, name->>$locale!)
 //   AND slug = COALESCE($slug, slug)
 // `;
-
-export const categoryCreateQuery = sql<ICategoryCreateQueryQuery>`
-  INSERT INTO categories
-    (name, slug, description)
-  VALUES
-    ($name!, $slug!, $description)
-  RETURNING id;
-`;
-
-export const categoryUpdateQuery = sql<ICategoryUpdateQueryQuery>`
-  UPDATE categories
-  SET
-    name = COALESCE($name, name),
-    slug = COALESCE($slug, slug),
-    description = COALESCE($description, description)
-  WHERE
-    id = $id!;
-`;
 
 // export const optionCreateQuery = sql<IOptionCreateQueryQuery>`
 //   INSERT INTO options
@@ -233,20 +198,9 @@ export const priceUpsertQuery = sql<IPriceUpsertQueryQuery>`
 `;
 
 export const catalogQueries = {
-  category: {
-    create: categoryCreateQuery,
-    update: categoryUpdateQuery,
-    list: categoryListQuery,
-    listCount: categoryListCountQuery,
-    findById: categoryFindByIdQuery,
-  },
   attribute: {
-    findOne: attributeFindOneQuery,
     list: attributeListQuery,
     listCount: attributeListCountQuery,
-    findById: attributeFindByIdQuery,
-    create: attributeCreateQuery,
-    update: attributeUpdateQuery,
     delete: attributeDeleteQuery,
   },
   attributeValue: {
@@ -256,7 +210,6 @@ export const catalogQueries = {
     create: attributeValueCreateQuery,
     update: attributeValueUpdateQuery,
     delete: attributeValueDeleteQuery,
-    list: attributeValueListQuery,
   },
   // option: {
   //   update: optionUpdateQuery,
