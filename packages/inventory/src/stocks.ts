@@ -10,11 +10,11 @@ export function Stocks(f: { pool: Pool }) {
 
 export const stockUpsertQuery = sql<IStockUpsertQueryQuery>`
   INSERT INTO stocks
-    (product_id, attribute_value_id, location_id, count)
+    (product_id, attribute_id, location_id, count)
   VALUES
-    $$values(product_id!, attribute_value_id!, location_id!, count!)
+    $$values(product_id!, attribute_id!, location_id!, count!)
   ON CONFLICT
-    (product_id, attribute_value_id, location_id)
+    (product_id, attribute_id, location_id)
   DO
     UPDATE
       SET count = EXCLUDED.count
@@ -32,7 +32,7 @@ export async function upsertStocks(pool: Pool, params: CreateStockParams) {
   const result = await stockUpsertQuery.run({
     values: params.map((p) => ({
       product_id: p.productId,
-      attribute_value_id: p.attributeValueId,
+      attribute_id: p.attributeValueId,
       location_id: p.locationId,
       count: p.count,
     })),

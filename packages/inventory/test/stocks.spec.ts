@@ -10,7 +10,7 @@ async function usingStocks() {
 
   await pool.query(`CREATE TEMPORARY TABLE products (id serial primary key)`);
   await pool.query(`CREATE TEMPORARY TABLE attribute_values (id serial primary key)`);
-  await pool.query(`CREATE TEMPORARY TABLE inventory_locations (LIKE inventory_locations INCLUDING ALL)`);
+  await pool.query(`CREATE TEMPORARY TABLE locations (LIKE locations INCLUDING ALL)`);
   await pool.query(`CREATE TEMPORARY TABLE stocks (LIKE stocks INCLUDING ALL)`);
 
   const stocks = Stocks({ pool: pool });
@@ -34,7 +34,7 @@ async function fixture(pool: Pool) {
     INSERT INTO attribute_values (id) VALUES (1) RETURNING id
  `).then((res) => res.rows[0]);
   const location: { id: number; name: string } = await pool.query(`
-    INSERT INTO inventory_locations (id, name) VALUES (1, 'test') RETURNING id, name
+    INSERT INTO locations (id, name) VALUES (1, 'test') RETURNING id, name
   `).then((res) => res.rows[0]);
 
   return {

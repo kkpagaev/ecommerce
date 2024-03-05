@@ -13,7 +13,7 @@ export function Locations(f: { pool: Pool }) {
 }
 
 export const locationCreateQuery = sql<ILocationCreateQueryQuery>`
-  INSERT INTO inventory_locations (name) VALUES ($name!) RETURNING id;
+  INSERT INTO locations (name) VALUES ($name!) RETURNING id;
 `;
 
 export type CreateLocationParams = {
@@ -28,7 +28,7 @@ export async function createLocation(pool: Pool, params: CreateLocationParams) {
 }
 
 export const locationUpdateQuery = sql<ILocationUpdateQueryQuery>`
-  UPDATE inventory_locations
+  UPDATE locations
   SET
       name = COALESCE($name, name)
   WHERE
@@ -50,7 +50,7 @@ export const locationListQuery = sql<ILocationListQueryQuery>`
       id,
       name
   FROM
-      inventory_locations
+      locations
   ORDER BY
       id
 `;
@@ -61,7 +61,7 @@ export async function listLocations(pool: Pool) {
 }
 
 export const locationDeleteQuery = sql<ILocationDeleteQueryQuery>`
-  DELETE FROM inventory_locations
+  DELETE FROM locations
   WHERE id = $id!
 `;
 export async function deleteLocation(pool: Pool, id: number) {
@@ -77,7 +77,7 @@ export const locationFindOneQuery = sql<ILocationFindOneQueryQuery>`
       id,
       name
   FROM
-      inventory_locations
+      locations
   WHERE
     id = COALESCE($id, id)
     AND name = COALESCE($name, name)
