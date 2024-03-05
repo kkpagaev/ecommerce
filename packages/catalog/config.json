@@ -3,7 +3,7 @@
     {
       "mode": "ts",
       "include": "**/*.ts",
-      "emitTemplate": "{{dir}}/{{name}}.types.ts"
+      "emitTemplate": "{{dir}}/queries/{{name}}.types.ts"
     },
     {
       "mode": "ts",

@@ -4,7 +4,7 @@
 export interface IStockUpsertQueryParams {
   values: readonly ({
     product_id: number,
-    attribute_value_id: number,
+    attribute_id: number,
     location_id: number,
     count: number
   })[];
@@ -12,7 +12,7 @@ export interface IStockUpsertQueryParams {
 
 /** 'StockUpsertQuery' return type */
 export interface IStockUpsertQueryResult {
-  attribute_value_id: number;
+  attribute_id: number;
   count: number;
   location_id: number;
   product_id: number;

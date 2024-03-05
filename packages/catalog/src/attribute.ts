@@ -1,141 +1,128 @@
-import { Translation } from "./i18n";
-import { Pool, PoolClient } from "pg";
-import { catalogQueries as q } from "./queries";
-import { filterUpsertEntries } from "./utils";
+import { Pool } from "pg";
 import { tx } from "@repo/pool";
+import { sql } from "@pgtyped/runtime";
+import { IAttributeFindOneQueryQuery, IAttributeDescriptionListQueryQuery, IAttributeDescriptionDeleteQueryQuery, IAttributeDeletQueryQuery, IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./queries/attribute.types";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {
   return {
-    upsertAttributeValue: upsertAttributeValue.bind(null, f.pool),
-    createAttribute: createAttribute.bind(null, f.pool),
-    updateAttribute: updateAttribute.bind(null, f.pool),
-    findAttributeById: findAttributeById.bind(null, f.pool),
     findOneAttribute: findOneAttribute.bind(null, f.pool),
+    createAttribute: createAttribute.bind(null, f.pool),
+    deleteAttribute: deleteAttribute.bind(null, f.pool),
+    updateAttribute: updateAttribute.bind(null, f.pool),
+    deleteAttributeDescription: deleteAttributeDescription.bind(null, f.pool),
   };
 }
 
-type CreateAttributeProps = {
-  name: Translation;
-  description?: Translation;
-  values?: Omit<CreateAttributeValue, "attributeId">[];
-};
-export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
-  return tx(pool, async (client) => {
-    const att = await q.attribute.create.run({
-      values: [{
-        name: input.name,
-        description: input.description,
-      }],
-    }, pool).then((r) => r[0]);
-    if (!att) throw new Error("Failed to create attribute");
-    if (input.values) {
-      await upsertAttributeValueTransaction(
-        client,
-        att.id,
-        input.values.map((v) => ({
-          value: v.value,
-          attributeId: att.id,
-        }))
-      );
-    }
-    return att;
-  });
-}
-
-type UpdateAttributeProps = {
-  name?: Translation;
-  description?: Translation;
-  values?: UpsertAttributeValueProps[];
-};
-export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
-  return tx(pool, async (client) => {
-    const res = await q.attribute.update.run({
-      name: input.name,
-      description: input.description,
-      id,
-    }, pool);
-    if (input.values) {
-      await upsertAttributeValueTransaction(client, id, input.values);
-    }
-    return res;
-  });
-}
-
-type CreateAttributeValue = {
-  attributeId: number;
-  value: Translation;
-};
-type CreateAttributeValueProps = CreateAttributeValue[];
-export async function createAttributeValue(
-  pool: Pool,
-  input: CreateAttributeValueProps,
-) {
-  return q.attributeValue.create.run({
-    values: input,
-  }, pool);
-}
-
-type UpsertAttributeValueProps = CreateAttributeValue & { id?: number };
-export async function upsertAttributeValue(
-  pool: Pool,
-  attributeId: number,
-  input: UpsertAttributeValueProps[],
-) {
-  return tx(pool, async (client) => {
-    await upsertAttributeValueTransaction(client, attributeId, input);
-  });
-}
-
-export async function upsertAttributeValueTransaction(
-  client: PoolClient,
-  attributeId: number,
-  input: UpsertAttributeValueProps[],
-) {
-  const { toDelete, toUpsert } = filterUpsertEntries(
-    input,
-    await q.attributeValue.idList.run({
-      attributeId: attributeId,
-    }, client)
-  );
-
-  if (toDelete.length > 0) {
-    await q.attributeValue.deleteMany.run({
-      ids: toDelete,
-    }, client);
-  }
-  if (toUpsert.length > 0) {
-    await q.attributeValue.upsert.run({
-      values: toUpsert.map((i) => ({
-        id: i.id,
-        value: i.value,
-        attributeId: attributeId,
-      })),
-    }, client);
-  }
-}
-
-export async function findAttributeById(pool: Pool, id: number) {
-  const res = await q.attribute.findById.run({ id }, pool);
-
-  return res;
-}
-
+export const attributeFindOneQuery = sql<IAttributeFindOneQueryQuery>`
+  SELECT *
+  FROM attributes
+  WHERE id = $id!;
+`;
+export const attributeDescriptionListQuery = sql<IAttributeDescriptionListQueryQuery>`
+  SELECT *
+    FROM attribute_descriptions
+    WHERE attribute_id = $attribute_id!
+`;
 type FindOneAttributeProps = {
-  id?: number;
+  id: number;
 };
 export async function findOneAttribute(pool: Pool, props: FindOneAttributeProps) {
-  const attribute = await q.attribute.findOne.run({
-    id: props.id,
-  }, pool).then((res) => res[0]);
+  const attribute = await attributeFindOneQuery.run(props, pool).then((res) => res[0]);
   if (!attribute) return null;
-
-  const values = await q.attributeValue.list.run({
+  const descriptions = await attributeDescriptionListQuery.run({
     attribute_id: attribute.id,
   }, pool);
-
   return {
     ...attribute,
-    values,
+    descriptions,
   };
+}
+
+export const attributeDescriptionDeleteQuery = sql<IAttributeDescriptionDeleteQueryQuery>`
+  DELETE FROM attribute_descriptions
+  WHERE language_id = $languageId!
+  AND attribute_id = $attributeId!;
+`;
+export async function deleteAttributeDescription(pool: Pool, input: { attributeId: number; languageId: number }) {
+  return await attributeDescriptionDeleteQuery.run(input, pool);
+}
+type UpdateAttributeProps = {
+  descriptions: Array<{
+    languageId: number;
+    name: string;
+  }>;
+};
+export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
+  return await tx(pool, async (client) => {
+    const descriptions = await attributeDescriptionUpsertQuery.run({
+      values: input.descriptions.map((d) => ({
+        name: d.name,
+        languageId: d.languageId,
+        attributeId: id,
+      })),
+    }, client);
+
+    return {
+      descriptions,
+    };
+  });
+}
+export const attributeDeletQuery = sql<IAttributeDeletQueryQuery>`
+  DELETE FROM attributes
+  WHERE id = $id!;
+`;
+export async function deleteAttribute(pool: Pool, id: number) {
+  return await attributeDeletQuery.run({
+    id: id,
+  }, pool);
+}
+
+export const attributeCreateQuery = sql<IAttributeCreateQueryQuery>`
+  INSERT INTO attributes
+    (attribute_group_id)
+  VALUES
+    ($attributeGroupId!)
+  RETURNING id;
+`;
+export const attributeDescriptionUpsertQuery = sql<IAttributeDescriptionUpsertQueryQuery>`
+  INSERT INTO attribute_descriptions
+    (attribute_id, language_id, name)
+  VALUES
+    $$values(attributeId!, languageId!, name!)
+  ON CONFLICT
+    (attribute_id, language_id)
+  DO UPDATE
+    SET
+      name = EXCLUDED.name
+`;
+type CreateAttribute = {
+  groupId: number;
+  descriptions: Array<{
+    languageId: number;
+    name: string;
+  }>;
+};
+export async function createAttribute(
+  pool: Pool,
+  input: CreateAttribute,
+) {
+  return tx(pool, async (client) => {
+    const attribute = await attributeCreateQuery.run({
+      attributeGroupId: input.groupId,
+    }, pool).then((r) => r[0]);
+    if (!attribute) throw new Error("Failed to create attribute");
+    const descriptions = await attributeDescriptionUpsertQuery.run({
+      values: input.descriptions.map((d) => ({
+        name: d.name,
+        languageId: d.languageId,
+        attributeId: attribute.id,
+      })),
+    }, client);
+
+    return {
+      ...attribute,
+      descriptions,
+    };
+  });
 }

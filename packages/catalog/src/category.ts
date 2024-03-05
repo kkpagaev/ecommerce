@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 import slugify from "slugify";
-import { Translation } from "./i18n";
-import { catalogQueries } from "./queries";
-import { ICategoryListQueryParams } from "./queries.types";
+import { ICategoryDescriptionListQueryQuery, ICategoryFindOneQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, ICategoryUpdateQueryQuery, ICategoryDescriptionUpsertQueryQuery, ICategoryCreateQueryQuery } from "./queries/category.types";
+import { sql } from "@pgtyped/runtime";
+import { tx } from "@repo/pool";
 
 export type Categories = ReturnType<typeof Categories>;
 
@@ -15,54 +15,149 @@ export function Categories(f: { pool: Pool }) {
   };
 }
 
-export async function listCategories(pool: Pool, input: ICategoryListQueryParams) {
-  const res = await catalogQueries.category.list.run(
+export const categoryListQuery = sql<ICategoryListQueryQuery>`
+  SELECT id, slug, cd.*
+  FROM categories c
+  JOIN category_descriptions cd ON c.id = cd.category_id
+  WHERE cd.language_id = $language_id!
+  ORDER BY id
+  LIMIT COALESCE($limit, 10)
+  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
+`;
+export const categoryListCountQuery = sql<ICategoryListCountQueryQuery>`
+  SELECT COUNT(*) FROM categories;
+`;
+
+type ListCategoriesProps = {
+  languageId: number;
+  page: number;
+  limit: number;
+};
+export async function listCategories(pool: Pool, input: ListCategoriesProps) {
+  const res = await categoryListQuery.run(
     {
+      language_id: input.languageId,
       page: input.page,
       limit: input.limit,
     },
     pool
   );
-  const count = await catalogQueries.category.listCount.run(undefined, pool);
+  const count = await categoryListCountQuery
+    .run(undefined, pool)
+    .then((res) => +(res[0]?.count ?? 0));
 
   return {
     data: res,
-    count: +(count[0]?.count ?? 0),
+    count: count,
   };
 }
 
-export async function findCategoryById(pool: Pool, id: number) {
-  const res = await catalogQueries.category.findById.run({ id }, pool);
+export const categoryFindOneQuery = sql<ICategoryFindOneQueryQuery>`
+  SELECT id, slug FROM categories
+  WHERE id = COALESCE($id, id)
+  AND slug = COALESCE($slug, slug);
+`;
+export const categoryDescriptionListQuery = sql<ICategoryDescriptionListQueryQuery>`
+  SELECT category_id as "categoryId", language_id as "languageId", name FROM category_descriptions
+  WHERE category_id = $category_id!
+`;
 
-  return res[0];
+export async function findCategoryById(pool: Pool, id: number) {
+  const res = await categoryFindOneQuery.run({ id }, pool).then((res) => res[0]);
+  if (!res) return null;
+  const descriptions = await categoryDescriptionListQuery.run({
+    category_id: id,
+  }, pool);
+
+  return {
+    ...res,
+    descriptions,
+  };
 }
 
+export const categoryCreateQuery = sql<ICategoryCreateQueryQuery>`
+  INSERT INTO categories
+    (slug)
+  VALUES
+    ($slug!)
+  RETURNING id;
+`;
+export const categoryDescriptionUpsertQuery = sql<ICategoryDescriptionUpsertQueryQuery>`
+  INSERT INTO category_descriptions
+    (category_id, language_id, name)
+  VALUES
+    $$values(category_id!, language_id!, name!)
+  ON CONFLICT
+    (category_id, language_id)
+  DO
+    UPDATE
+    SET
+      name = EXCLUDED.name
+  RETURNING
+    *;
+`;
 type CreateCategoryProps = {
-  name: Translation;
-  description?: Translation;
+  descriptions: Array<{
+    name: string;
+    languageId: number;
+  }>;
 };
 export async function createCategory(pool: Pool, input: CreateCategoryProps) {
-  const slug = slugify(input.name.uk);
-  const res = await catalogQueries.category.create.run({
-    name: input.name,
-    description: input.description,
-    slug,
-  }, pool);
+  const name = input.descriptions && input.descriptions[0]?.name;
+  const slug = name ? slugify(name) : "";
 
-  return res[0];
+  return tx(pool, async (client) => {
+    const res = await categoryCreateQuery.run({
+      slug: slug,
+    }, client).then((res) => res[0]);
+    if (!res) throw new Error("Failed to create category");
+    const descriptions = await categoryDescriptionUpsertQuery.run({
+      values: input.descriptions.map((d) => ({
+        name: d.name,
+        language_id: d.languageId,
+        category_id: res.id,
+      })),
+    }, client);
+    return {
+      ...res,
+      descriptions,
+    };
+  });
 }
 
+export const categoryUpdateQuery = sql<ICategoryUpdateQueryQuery>`
+  UPDATE categories
+  SET
+    slug = COALESCE($slug, slug)
+  WHERE
+    id = $id!
+  RETURNING id;
+`;
 type UpdateCategoryProps = {
-  name?: Translation;
-  description?: Translation;
+  descriptions?: Array<{
+    name: string;
+    languageId: number;
+  }>;
 };
 export async function updateCategory(pool: Pool, id: number, input: UpdateCategoryProps) {
-  const slug = input.name ? slugify(input.name.uk) : undefined;
+  const name = input.descriptions && input.descriptions[0]?.name;
+  const slug = name ? slugify(name) : undefined;
 
-  return await catalogQueries.category.update.run({
-    name: input.name,
-    description: input.description,
-    slug,
-    id,
-  }, pool);
+  return tx(pool, async (client) => {
+    const res = await categoryUpdateQuery.run({
+      slug,
+      id,
+    }, pool);
+
+    if (input.descriptions) {
+      await categoryDescriptionUpsertQuery.run({
+        values: input.descriptions.map((d) => ({
+          name: d.name,
+          language_id: d.languageId,
+          category_id: id,
+        })),
+      }, client);
+    }
+    return res;
+  });
 }

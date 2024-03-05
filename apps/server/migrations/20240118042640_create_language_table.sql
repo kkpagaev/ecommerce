@@ -1,9 +1,12 @@
 -- +goose Up
 -- +goose StatementBegin
-ALTER TABLE products ALTER COLUMN category_id SET NOT NULL;
+CREATE TABLE languages (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-ALTER TABLE products ALTER COLUMN category_id DROP NOT NULL;
+DROP TABLE languages;
 -- +goose StatementEnd

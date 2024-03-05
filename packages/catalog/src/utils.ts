@@ -1,3 +1,4 @@
+// @deprecated
 export function filterUpsertEntries<
   T extends { id: any },
   ID extends T extends { id: infer I } ? I : never = T extends { id: infer I } ? I : never,

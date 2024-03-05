@@ -35,7 +35,7 @@ export async function testDB() {
     pool,
     client,
     async [Symbol.asyncDispose]() {
-      await dropTables(pool, tables);
+      // await dropTables(pool, tables);
       client.release();
       await pool.end();
     },

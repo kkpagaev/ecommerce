@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE inventory_locations (
+CREATE TABLE locations (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL
 );
@@ -8,5 +8,5 @@ CREATE TABLE inventory_locations (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE inventory_location;
+DROP TABLE locations;
 -- +goose StatementEnd
