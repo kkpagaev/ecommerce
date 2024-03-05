@@ -9,32 +9,39 @@ export default async ({ t, catalog }: FastifyZod) => ({
       z.object({
         page: z.number().default(1),
         limit: z.number().default(15),
+        languageId: z.number(),
       }),
     )
     .use(isAuthed)
     .query(async ({ input }) => {
-      const res = await catalog.products.listProducts(input);
+      const res = await catalog.products.listProducts({
+        page: input.page,
+        limit: input.limit,
+        languageId: input.languageId,
+      });
 
       return res;
     }),
   createProduct: t.procedure
     .input(z.object({
       name: translationSchema,
-      // 0.01
       price: z.number().positive()
         .multipleOf(0.01),
       categoryId: z.number(),
       attributes: z.array(z.number()).optional(),
-      description: translationSchema.optional(),
+      descriptions: z.array(z.object({
+        name: z.string(),
+        description: z.string(),
+        languageId: z.number(),
+      })),
     }))
     .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await catalog.products.createProduct({
-        name: input.name,
+        attributes: input.attributes || [],
         price: input.price,
         categoryId: input.categoryId,
-        attributes: input.attributes,
-        description: input.description,
+        descriptions: input.descriptions,
       });
 
       return res;
@@ -51,16 +58,19 @@ export default async ({ t, catalog }: FastifyZod) => ({
               .multipleOf(0.01),
             categoryId: z.number(),
             attributes: z.array(z.number()).optional(),
-            description: translationSchema.optional(),
+            descriptions: z.array(z.object({
+              name: z.string(),
+              description: z.string(),
+              languageId: z.number(),
+            })),
           }).partial()
         )
     )
     .mutation(async ({ input }) => {
       const res = await catalog.products.updateProduct(input.id, {
-        description: input.description,
         categoryId: input.categoryId,
         attributes: input.attributes,
-        name: input.name,
+        descriptions: input.descriptions,
         price: input.price,
       });
 
