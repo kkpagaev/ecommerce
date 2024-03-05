@@ -1,5 +1,34 @@
 /** Types generated for queries found in "src/attribute.ts" */
 
+/** 'AttributeDescriptionDeleteQuery' parameters type */
+export interface IAttributeDescriptionDeleteQueryParams {
+  attributeId: number;
+  languageId: number;
+}
+
+/** 'AttributeDescriptionDeleteQuery' return type */
+export type IAttributeDescriptionDeleteQueryResult = void;
+
+/** 'AttributeDescriptionDeleteQuery' query type */
+export interface IAttributeDescriptionDeleteQueryQuery {
+  params: IAttributeDescriptionDeleteQueryParams;
+  result: IAttributeDescriptionDeleteQueryResult;
+}
+
+/** 'AttributeDeletQuery' parameters type */
+export interface IAttributeDeletQueryParams {
+  id: number;
+}
+
+/** 'AttributeDeletQuery' return type */
+export type IAttributeDeletQueryResult = void;
+
+/** 'AttributeDeletQuery' query type */
+export interface IAttributeDeletQueryQuery {
+  params: IAttributeDeletQueryParams;
+  result: IAttributeDeletQueryResult;
+}
+
 /** 'AttributeCreateQuery' parameters type */
 export interface IAttributeCreateQueryParams {
   attributeGroupId: number;

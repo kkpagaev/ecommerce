@@ -1,16 +1,55 @@
-import { Pool, PoolClient } from "pg";
-import { catalogQueries as q } from "./queries";
-import { filterUpsertEntries } from "./utils";
+import { Pool } from "pg";
 import { tx } from "@repo/pool";
 import { sql } from "@pgtyped/runtime";
-import { IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./attribute.types";
+import { IAttributeDescriptionDeleteQueryQuery, IAttributeDeletQueryQuery, IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./attribute.types";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {
   return {
     createAttribute: createAttribute.bind(null, f.pool),
-    upsertAttributeValue: upsertAttributeValue.bind(null, f.pool),
+    deleteAttribute: deleteAttribute.bind(null, f.pool),
+    updateAttribute: updateAttribute.bind(null, f.pool),
+    deleteAttributeDescription: deleteAttributeDescription.bind(null, f.pool),
   };
+}
+
+export const attributeDescriptionDeleteQuery = sql<IAttributeDescriptionDeleteQueryQuery>`
+  DELETE FROM attribute_descriptions
+  WHERE language_id = $languageId!
+  AND attribute_id = $attributeId!;
+`;
+export async function deleteAttributeDescription(pool: Pool, input: { attributeId: number; languageId: number }) {
+  return await attributeDescriptionDeleteQuery.run(input, pool);
+}
+type UpdateAttributeProps = {
+  descriptions: Array<{
+    languageId: number;
+    name: string;
+  }>;
+};
+export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
+  return await tx(pool, async (client) => {
+    const descriptions = await attributeDescriptionUpsertQuery.run({
+      values: input.descriptions.map((d) => ({
+        name: d.name,
+        languageId: d.languageId,
+        attributeId: id,
+      })),
+    }, client);
+
+    return {
+      descriptions,
+    };
+  });
+}
+export const attributeDeletQuery = sql<IAttributeDeletQueryQuery>`
+  DELETE FROM attributes
+  WHERE id = $id!;
+`;
+export async function deleteAttribute(pool: Pool, id: number) {
+  return await attributeDeletQuery.run({
+    id: id,
+  }, pool);
 }
 
 export const attributeCreateQuery = sql<IAttributeCreateQueryQuery>`
@@ -60,43 +99,4 @@ export async function createAttribute(
       descriptions,
     };
   });
-}
-
-type UpsertAttributeValueProps = UpsertAttributeValue & { id?: number };
-export async function upsertAttributeValue(
-  pool: Pool,
-  attributeId: number,
-  input: UpsertAttributeValueProps[],
-) {
-  return tx(pool, async (client) => {
-    await upsertAttributeValueTransaction(client, attributeId, input);
-  });
-}
-
-export async function upsertAttributeValueTransaction(
-  client: PoolClient,
-  attributeId: number,
-  input: UpsertAttributeValueProps[],
-) {
-  const { toDelete, toUpsert } = filterUpsertEntries(
-    input,
-    await q.attributeValue.idList.run({
-      attributeId: attributeId,
-    }, client)
-  );
-
-  if (toDelete.length > 0) {
-    await q.attributeValue.deleteMany.run({
-      ids: toDelete,
-    }, client);
-  }
-  if (toUpsert.length > 0) {
-    await q.attributeValue.upsert.run({
-      values: toUpsert.map((i) => ({
-        id: i.id,
-        value: i.value,
-        attributeId: attributeId,
-      })),
-    }, client);
-  }
 }
