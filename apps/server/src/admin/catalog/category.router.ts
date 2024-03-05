@@ -6,7 +6,7 @@ export const translationSchema = z.object({
   uk: z.string(),
   ru: z.string(),
   en: z.string(),
-    }).strict();
+}).strict();
 
 export default async ({ t, catalog }: FastifyZod) => ({
   listCategories: t.procedure
@@ -14,11 +14,15 @@ export default async ({ t, catalog }: FastifyZod) => ({
       z.object({
         page: z.number().default(1),
         limit: z.number().default(15),
-        name: z.string().optional(),
+        languageId: z.number(),
       }),
     )
     .query(async ({ input }) => {
-      const res = await catalog.categories.listCategories(input);
+      const res = await catalog.categories.listCategories({
+        limit: input.limit,
+        languageId: input.languageId,
+        page: input.page,
+      });
 
       return res;
     }),
@@ -36,13 +40,16 @@ export default async ({ t, catalog }: FastifyZod) => ({
   createCategory: t.procedure
     .input(
       z.object({
-        name: translationSchema,
-        description: translationSchema.optional(),
+        descriptions: z.array(z.object({
+          name: z.string(),
+          languageId: z.number(),
+        })),
       }),
     )
     .mutation(async ({ input }) => {
-      const category = await catalog.categories.createCategory(input);
-      // ctx.user;
+      const category = await catalog.categories.createCategory({
+        descriptions: input.descriptions,
+      });
 
       return category;
     }),
@@ -55,15 +62,19 @@ export default async ({ t, catalog }: FastifyZod) => ({
         }
       ).and(
         z.object({
-          name: translationSchema,
-          description: translationSchema,
+          descriptions: z.array(z.object({
+            name: z.string(),
+            languageId: z.number(),
+          })),
         }).partial()
       )
     )
     .use(isAuthed)
     .mutation(async ({ input }) => {
       const id = input.id;
-      const foo = await catalog.categories.updateCategory(id, input);
+      const foo = await catalog.categories.updateCategory(id, {
+        descriptions: input.descriptions,
+      });
 
       return foo;
     }),
