@@ -1,18 +1,36 @@
 /** Types generated for queries found in "src/attribute.ts" */
 
-/** 'AttributeGroupCreateQuery' parameters type */
-export interface IAttributeGroupCreateQueryParams {
-  sort_order: number;
+/** 'AttributeCreateQuery' parameters type */
+export interface IAttributeCreateQueryParams {
+  attributeGroupId: number;
 }
 
-/** 'AttributeGroupCreateQuery' return type */
-export interface IAttributeGroupCreateQueryResult {
+/** 'AttributeCreateQuery' return type */
+export interface IAttributeCreateQueryResult {
   id: number;
 }
 
-/** 'AttributeGroupCreateQuery' query type */
-export interface IAttributeGroupCreateQueryQuery {
-  params: IAttributeGroupCreateQueryParams;
-  result: IAttributeGroupCreateQueryResult;
+/** 'AttributeCreateQuery' query type */
+export interface IAttributeCreateQueryQuery {
+  params: IAttributeCreateQueryParams;
+  result: IAttributeCreateQueryResult;
+}
+
+/** 'AttributeDescriptionUpsertQuery' parameters type */
+export interface IAttributeDescriptionUpsertQueryParams {
+  values: readonly ({
+    attributeId: number,
+    languageId: number,
+    name: string
+  })[];
+}
+
+/** 'AttributeDescriptionUpsertQuery' return type */
+export type IAttributeDescriptionUpsertQueryResult = void;
+
+/** 'AttributeDescriptionUpsertQuery' query type */
+export interface IAttributeDescriptionUpsertQueryQuery {
+  params: IAttributeDescriptionUpsertQueryParams;
+  result: IAttributeDescriptionUpsertQueryResult;
 }
 

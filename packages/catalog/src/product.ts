@@ -1,8 +1,8 @@
-import { Pool, PoolClient } from "pg";
-import { catalogQueries as q } from "./queries";
+import { Pool } from "pg";
 import slugify from "slugify";
 import { tx } from "@repo/pool";
-import { Translation } from "./i18n";
+import { sql } from "@pgtyped/runtime";
+import { IProductUpdateQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductAttributesUpsertQueryQuery, IProductDescriptionFindQueryQuery, IProductFindOneQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductDescriptionUpsertQueryQuery, IProductDeleteQueryQuery } from "./product.types";
 
 export type Products = ReturnType<typeof Products>;
 export function Products(f: { pool: Pool }) {
@@ -15,23 +15,57 @@ export function Products(f: { pool: Pool }) {
   };
 }
 
+export const productAttributesUpsertQuery = sql<IProductAttributesUpsertQueryQuery>`
+  INSERT INTO product_attributes
+    (product_id, attribute_id)
+  VALUES
+    $$values(product_id!, attribute_id!)
+  ON CONFLICT DO NOTHING;
+`;
+export const priceUpsertQuery = sql<IPriceUpsertQueryQuery>`
+  INSERT INTO prices (product_id, price, type)
+  VALUES $$values(product_id!, price!, type)
+  ON CONFLICT (product_id, type)
+  DO UPDATE SET price = EXCLUDED.price;
+`;
+export const productDescriptionUpsertQuery = sql<IProductDescriptionUpsertQueryQuery>`
+  INSERT INTO product_descriptions
+    (product_id, language_id, name, description)
+  VALUES
+    $$values(product_id!, language_id!, name!, description)
+  ON CONFLICT
+    (product_id, language_id)
+  DO UPDATE
+    SET
+      name = EXCLUDED.name,
+      description = EXCLUDED.description;
+`;
+export const productCreateQuery = sql<IProductCreateQueryQuery>`
+  INSERT INTO products
+  (category_id, slug)
+  VALUES
+  ($categoryId!, $slug!)
+  RETURNING id
+`;
+
 type CreateProductProps = {
   categoryId: number;
-  name: Translation;
   price: number;
-  attributes?: Array<number>;
-  description?: Translation;
+  attributes: Array<number>;
+  descriptions: Array<{
+    languageId: number;
+    name: string;
+    description?: string;
+  }>;
 };
 async function createProduct(
   pool: Pool,
   input: CreateProductProps,
 ) {
-  const slug = slugify(input.name.uk);
+  const slug = (input.descriptions[0]?.name && slugify(input.descriptions[0].name)) || "";
 
   return tx(pool, async (client) => {
-    const product = await q.product.create.run({
-      description: input.description,
-      name: input.name,
+    const product = await productCreateQuery.run({
       slug: slug,
       categoryId: input.categoryId,
     }, client).then((res) => res[0]);
@@ -39,7 +73,7 @@ async function createProduct(
       throw new Error("Failed to create product");
     }
 
-    await q.price.upsert.run({
+    const price = await priceUpsertQuery.run({
       values: [
         {
           price: input.price,
@@ -48,48 +82,69 @@ async function createProduct(
         },
       ],
     }, client);
+    const descriptions = await productDescriptionUpsertQuery.run({
+      values: input.descriptions.map((d) => ({
+        description: d.description,
+        product_id: product.id,
+        name: d.name,
+        language_id: d.languageId,
+      })),
+    }, client);
 
-    if (input.attributes) {
-      await upsertAttributes(client, product.id, input.attributes);
-    }
+    await productAttributesUpsertQuery.run({
+      values: input.attributes.map((a) => ({
+        product_id: product.id,
+        attribute_id: a,
+      })),
+    }, client);
 
-    return product;
+    return {
+      ...product,
+      price,
+      descriptions,
+    };
   });
 }
+
+export const productFindOneQuery = sql<IProductFindOneQueryQuery>`
+  SELECT * FROM products
+  WHERE id = COALESCE($id, id)
+  LIMIT 1;
+`;
+
+export const productDescriptionFindQuery = sql<IProductDescriptionFindQueryQuery>`
+  SELECT * FROM product_descriptions
+  WHERE product_id = $product_id!
+`;
 
 type FindOneProductProps = {
   id?: number;
 };
 export async function findOneProduct(pool: Pool, props: FindOneProductProps) {
-  const product = await q.product.findOne.run({
+  const product = await productFindOneQuery.run({
     id: props.id,
   }, pool).then((res) => res[0]);
   if (!product) {
     return null;
   }
-  const attributes = await q.productAttributeValue.list.run({
-    productId: product.id,
+  const descriptions = await productDescriptionFindQuery.run({
+    product_id: product.id,
   }, pool);
 
   return {
     ...product,
-    attributes,
+    descriptions,
   };
 }
 
-async function upsertAttributes(client: PoolClient, id: number, attributes: Array<number>) {
-  await q.productAttributeValue.delete.run({
-    product_id: id,
-  }, client);
-  if (attributes.length !== 0) {
-    await q.productAttributeValue.create.run({
-      values: attributes.map((attrId) => ({
-        attributeValueId: attrId,
-        productId: id,
-      })),
-    }, client);
-  }
-}
+export const productUpdateQuery = sql<IProductUpdateQueryQuery>`
+  UPDATE products
+  SET
+    slug = COALESCE($slug, slug),
+    category_id = COALESCE($categoryId, category_id)
+  WHERE
+    id = $id!;
+`;
 
 type UpdateProductProps = Partial<CreateProductProps>;
 async function updateProduct(
@@ -97,50 +152,72 @@ async function updateProduct(
   id: number,
   input: UpdateProductProps,
 ) {
-  const slug = input.name?.uk && slugify(input.name.uk);
-
   return tx(pool, async (client) => {
-    await q.product.update.run({
+    const name = input.descriptions && input.descriptions[0]?.name;
+    const slug = name && slugify(name);
+    await productUpdateQuery.run({
       id: id,
-      name: input.name,
-      description: input.description,
       slug: slug,
       categoryId: input.categoryId,
     }, client);
     if (input.price) {
-      await q.price.upsert.run({
+      await priceUpsertQuery.run({
         values: [
           { price: input.price, type: "default", product_id: id },
         ],
       }, client);
     }
     if (input.attributes) {
-      await upsertAttributes(client, id, input.attributes);
+      await productAttributesUpsertQuery.run({
+        values: input.attributes.map((a) => ({
+          attribute_id: a,
+          product_id: id,
+        })),
+      }, client);
     }
   });
 }
 
+export const productDeleteQuery = sql<IProductDeleteQueryQuery>`
+  DELETE FROM products
+  WHERE id = $id!
+  RETURNING id;
+`;
 type DeleteProductProps = {
   id: number;
 };
 export async function deleteProduct(
   pool: Pool, props: DeleteProductProps
 ): Promise<number | undefined> {
-  return q.product.delete.run({
+  return await productDeleteQuery.run({
     id: props.id,
   }, pool).then((res) => res[0]?.id);
 }
 
+export const productListQuery = sql<IProductListQueryQuery>`
+  SELECT p.id, p.category_id, p.slug, pd.name, pd.description FROM products p
+  JOIN product_descriptions pd ON p.id = pd.product_id
+  WHERE pd.language_id = $language_id!
+  ORDER BY p.id
+  LIMIT COALESCE($limit, 10)
+  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
+`;
+
+export const productListCountQuery = sql<IProductListCountQueryQuery>`
+  SELECT COUNT(*) FROM products
+`;
 type ListProductsProps = {
   limit?: number;
   page?: number;
+  languageId: number;
 };
 export async function listProducts(pool: Pool, input: ListProductsProps) {
-  const products = await q.product.list.run({
+  const products = await productListQuery.run({
     limit: input.limit,
     page: input.page,
+    language_id: input.languageId,
   }, pool);
-  const count = await q.product.listCount.run(undefined, pool)
+  const count = await productListCountQuery.run(undefined, pool)
     .then((res) => +(res[0]?.count ?? 0));
 
   return {
