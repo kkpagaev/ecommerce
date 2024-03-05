@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import slugify from "slugify";
-import { ICategoryDescriptionListQueryQuery, ICategoryFindOneQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, ICategoryUpdateQueryQuery, ICategoryDescriptionUpsertQueryQuery, ICategoryCreateQueryQuery } from "./category.types";
+import { ICategoryDescriptionListQueryQuery, ICategoryFindOneQueryQuery, ICategoryListCountQueryQuery, ICategoryListQueryQuery, ICategoryUpdateQueryQuery, ICategoryDescriptionUpsertQueryQuery, ICategoryCreateQueryQuery } from "./queries/category.types";
 import { sql } from "@pgtyped/runtime";
 import { tx } from "@repo/pool";
 

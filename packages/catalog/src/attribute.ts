@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { tx } from "@repo/pool";
 import { sql } from "@pgtyped/runtime";
-import { IAttributeDescriptionDeleteQueryQuery, IAttributeDeletQueryQuery, IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./attribute.types";
+import { IAttributeDescriptionDeleteQueryQuery, IAttributeDeletQueryQuery, IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./queries/attribute.types";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {

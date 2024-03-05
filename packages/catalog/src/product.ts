@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import slugify from "slugify";
 import { tx } from "@repo/pool";
 import { sql } from "@pgtyped/runtime";
-import { IProductUpdateQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductAttributesUpsertQueryQuery, IProductDescriptionFindQueryQuery, IProductFindOneQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductDescriptionUpsertQueryQuery, IProductDeleteQueryQuery } from "./product.types";
+import { IProductUpdateQueryQuery, IProductListCountQueryQuery, IProductListQueryQuery, IProductAttributesUpsertQueryQuery, IProductDescriptionFindQueryQuery, IProductFindOneQueryQuery, IProductCreateQueryQuery, IPriceUpsertQueryQuery, IProductDescriptionUpsertQueryQuery, IProductDeleteQueryQuery } from "./queries/product.types";
 
 export type Products = ReturnType<typeof Products>;
 export function Products(f: { pool: Pool }) {

@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { IAttributeGroupCreateQueryQuery, IAttributeGroupDescriptionListQueryQuery, IAttributeGroupDescriptionUpsertQueryQuery, IAttributeGroupFindOneQueryQuery, IAttributeGroupUpdateQueryQuery, IAttributeListQueryQuery } from "./attribute-group.types";
+import { IAttributeGroupCreateQueryQuery, IAttributeGroupDescriptionListQueryQuery, IAttributeGroupDescriptionUpsertQueryQuery, IAttributeGroupFindOneQueryQuery, IAttributeGroupUpdateQueryQuery, IAttributeListQueryQuery } from "./queries/attribute-group.types";
 import { sql } from "@pgtyped/runtime";
 import { tx } from "@repo/pool";
 
