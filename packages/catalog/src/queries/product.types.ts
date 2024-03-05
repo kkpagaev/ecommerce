@@ -79,11 +79,11 @@ export interface IProductFindOneQueryParams {
 
 /** 'ProductFindOneQuery' return type */
 export interface IProductFindOneQueryResult {
-  categoryId: number;
-  createdAt: Date;
+  category_id: number;
+  created_at: Date;
   id: number;
   slug: string;
-  updatedAt: Date;
+  updated_at: Date;
 }
 
 /** 'ProductFindOneQuery' query type */
@@ -100,9 +100,9 @@ export interface IProductDescriptionFindQueryParams {
 /** 'ProductDescriptionFindQuery' return type */
 export interface IProductDescriptionFindQueryResult {
   description: string | null;
-  languageId: number;
+  language_id: number;
   name: string;
-  productId: number;
+  product_id: number;
 }
 
 /** 'ProductDescriptionFindQuery' query type */
@@ -152,7 +152,7 @@ export interface IProductListQueryParams {
 
 /** 'ProductListQuery' return type */
 export interface IProductListQueryResult {
-  categoryId: number;
+  category_id: number;
   description: string | null;
   id: number;
   name: string;

@@ -9,9 +9,9 @@ export interface ICategoryListQueryParams {
 
 /** 'CategoryListQuery' return type */
 export interface ICategoryListQueryResult {
-  categoryId: number;
+  category_id: number;
   id: number;
-  languageId: number;
+  language_id: number;
   name: string;
   slug: string;
 }
@@ -61,8 +61,8 @@ export interface ICategoryDescriptionListQueryParams {
 
 /** 'CategoryDescriptionListQuery' return type */
 export interface ICategoryDescriptionListQueryResult {
-  categoryId: number;
-  languageId: number;
+  category_id: number;
+  language_id: number;
   name: string;
 }
 
@@ -99,8 +99,8 @@ export interface ICategoryDescriptionUpsertQueryParams {
 
 /** 'CategoryDescriptionUpsertQuery' return type */
 export interface ICategoryDescriptionUpsertQueryResult {
-  categoryId: number;
-  languageId: number;
+  category_id: number;
+  language_id: number;
   name: string;
 }
 

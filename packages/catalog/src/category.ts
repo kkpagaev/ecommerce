@@ -58,7 +58,7 @@ export const categoryFindOneQuery = sql<ICategoryFindOneQueryQuery>`
   AND slug = COALESCE($slug, slug);
 `;
 export const categoryDescriptionListQuery = sql<ICategoryDescriptionListQueryQuery>`
-  SELECT * FROM category_descriptions
+  SELECT category_id as "categoryId", language_id as "languageId", name FROM category_descriptions
   WHERE category_id = $category_id!
 `;
 
@@ -103,7 +103,8 @@ type CreateCategoryProps = {
   }>;
 };
 export async function createCategory(pool: Pool, input: CreateCategoryProps) {
-  const slug = slugify(input[0].name);
+  const name = input.descriptions && input.descriptions[0]?.name;
+  const slug = name ? slugify(name) : "";
 
   return tx(pool, async (client) => {
     const res = await categoryCreateQuery.run({
@@ -139,7 +140,8 @@ type UpdateCategoryProps = {
   }>;
 };
 export async function updateCategory(pool: Pool, id: number, input: UpdateCategoryProps) {
-  const slug = input[0] ? slugify(input[0].name) : undefined;
+  const name = input.descriptions && input.descriptions[0]?.name;
+  const slug = name ? slugify(name) : undefined;
 
   return tx(pool, async (client) => {
     const res = await categoryUpdateQuery.run({

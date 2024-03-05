@@ -8,7 +8,7 @@ export interface IAttributeGroupFindOneQueryParams {
 /** 'AttributeGroupFindOneQuery' return type */
 export interface IAttributeGroupFindOneQueryResult {
   id: number;
-  sortOrder: number;
+  sort_order: number;
 }
 
 /** 'AttributeGroupFindOneQuery' query type */
@@ -24,9 +24,9 @@ export interface IAttributeGroupDescriptionListQueryParams {
 
 /** 'AttributeGroupDescriptionListQuery' return type */
 export interface IAttributeGroupDescriptionListQueryResult {
-  attributeGroupId: number;
+  attribute_group_id: number;
   description: string | null;
-  languageId: number;
+  language_id: number;
   name: string;
 }
 
@@ -44,10 +44,10 @@ export interface IAttributeListQueryParams {
 
 /** 'AttributeListQuery' return type */
 export interface IAttributeListQueryResult {
-  attributeGroupId: number;
-  attributeId: number;
+  attribute_group_id: number;
+  attribute_id: number;
   id: number;
-  languageId: number;
+  language_id: number;
   name: string;
 }
 
@@ -86,9 +86,9 @@ export interface IAttributeGroupDescriptionUpsertQueryParams {
 
 /** 'AttributeGroupDescriptionUpsertQuery' return type */
 export interface IAttributeGroupDescriptionUpsertQueryResult {
-  attributeGroupId: number;
+  attribute_group_id: number;
   description: string | null;
-  languageId: number;
+  language_id: number;
   name: string;
 }
 

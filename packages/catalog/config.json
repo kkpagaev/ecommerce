@@ -13,7 +13,7 @@
   ],
   "srcDir": "./src/",
   "failOnError": false,
-  "camelCaseColumnNames": true,
+  "camelCaseColumnNames": false,
   "typesOverrides": {},
   "dbUrl": "postgres://user:user@localhost:1252/user"
 }

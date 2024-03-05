@@ -12,7 +12,8 @@ CREATE TABLE product_descriptions (
   product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   language_id INTEGER NOT NULL REFERENCES languages(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
-  description TEXT
+  description TEXT,
+  PRIMARY KEY (product_id, language_id)
 );
 
 CREATE TABLE product_attributes (
