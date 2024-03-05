@@ -3,19 +3,6 @@ import { IAttributeFindByIdQueryQuery, IAttributeFindOneQueryQuery, IAttributeVa
 import { PoolClient } from "pg";
 import { Translation } from "./i18n";
 
-export const attributeFindByIdQuery = sql<IAttributeFindByIdQueryQuery>`
- SELECT id, name, description 
- FROM attributes
- WHERE id = $id!
-`;
-
-export const attributeFindOneQuery = sql<IAttributeFindOneQueryQuery>`
- SELECT id, name, description
- FROM attributes
- WHERE id = COALESCE($id, id)
- LIMIT 1;
-`;
-
 export const attributeListCountQuery = sql<IAttributeListCountQueryQuery>`
  SELECT COUNT(*) FROM attributes;
 `;
@@ -28,33 +15,9 @@ export const attributeListQuery = sql<IAttributeListQueryQuery>`
  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
 
-export const attributeCreateQuery = sql<IAttributeCreateQueryQuery>`
-  INSERT INTO attributes
-    (name, description)
-  VALUES
-    $$values(name!, description)
-  RETURNING id;
-`;
-
-export const attributeUpdateQuery = sql<IAttributeUpdateQueryQuery>`
-  UPDATE attributes
-  SET
-    name = COALESCE($name, name),
-    description = COALESCE($description, description)
-  WHERE
-    id = $id!;
-`;
-
 export const attributeDeleteQuery = sql<IAttributeDeleteQueryQuery>`
   DELETE FROM attributes
   WHERE id = $id!;
-`;
-
-export const attributeValueListQuery = sql<IAttributeValueListQueryQuery>`
-  SELECT id, value, attribute_id
-  FROM attribute_values
-  WHERE attribute_id = $attribute_id
-  ORDER BY id;
 `;
 
 export const attributeValueIdListQuery = sql<IAttributeValueIdListQueryQuery>`

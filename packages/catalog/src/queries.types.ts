@@ -1,43 +1,5 @@
 /** Types generated for queries found in "src/queries.ts" */
-export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
-
 export type NumberOrString = number | string;
-
-/** 'AttributeFindByIdQuery' parameters type */
-export interface IAttributeFindByIdQueryParams {
-  id: number;
-}
-
-/** 'AttributeFindByIdQuery' return type */
-export interface IAttributeFindByIdQueryResult {
-  description: Json | null;
-  id: number;
-  name: Json;
-}
-
-/** 'AttributeFindByIdQuery' query type */
-export interface IAttributeFindByIdQueryQuery {
-  params: IAttributeFindByIdQueryParams;
-  result: IAttributeFindByIdQueryResult;
-}
-
-/** 'AttributeFindOneQuery' parameters type */
-export interface IAttributeFindOneQueryParams {
-  id?: number | null | void;
-}
-
-/** 'AttributeFindOneQuery' return type */
-export interface IAttributeFindOneQueryResult {
-  description: Json | null;
-  id: number;
-  name: Json;
-}
-
-/** 'AttributeFindOneQuery' query type */
-export interface IAttributeFindOneQueryQuery {
-  params: IAttributeFindOneQueryParams;
-  result: IAttributeFindOneQueryResult;
-}
 
 /** 'AttributeListCountQuery' parameters type */
 export type IAttributeListCountQueryParams = void;
@@ -53,59 +15,13 @@ export interface IAttributeListCountQueryQuery {
   result: IAttributeListCountQueryResult;
 }
 
-/** 'AttributeListQuery' parameters type */
-export interface IAttributeListQueryParams {
-  limit?: number | null | void;
-  page?: number | null | void;
-}
+/** Query 'AttributeListQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IAttributeListQueryResult = never;
 
-/** 'AttributeListQuery' return type */
-export interface IAttributeListQueryResult {
-  description: Json | null;
-  id: number;
-  name: Json;
-}
-
-/** 'AttributeListQuery' query type */
-export interface IAttributeListQueryQuery {
-  params: IAttributeListQueryParams;
-  result: IAttributeListQueryResult;
-}
-
-/** 'AttributeCreateQuery' parameters type */
-export interface IAttributeCreateQueryParams {
-  values: readonly ({
-    name: Json,
-    description: Json | null | void
-  })[];
-}
-
-/** 'AttributeCreateQuery' return type */
-export interface IAttributeCreateQueryResult {
-  id: number;
-}
-
-/** 'AttributeCreateQuery' query type */
-export interface IAttributeCreateQueryQuery {
-  params: IAttributeCreateQueryParams;
-  result: IAttributeCreateQueryResult;
-}
-
-/** 'AttributeUpdateQuery' parameters type */
-export interface IAttributeUpdateQueryParams {
-  description?: Json | null | void;
-  id: number;
-  name?: Json | null | void;
-}
-
-/** 'AttributeUpdateQuery' return type */
-export type IAttributeUpdateQueryResult = void;
-
-/** 'AttributeUpdateQuery' query type */
-export interface IAttributeUpdateQueryQuery {
-  params: IAttributeUpdateQueryParams;
-  result: IAttributeUpdateQueryResult;
-}
+/** Query 'AttributeListQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IAttributeListQueryParams = never;
 
 /** 'AttributeDeleteQuery' parameters type */
 export interface IAttributeDeleteQueryParams {
@@ -121,101 +37,45 @@ export interface IAttributeDeleteQueryQuery {
   result: IAttributeDeleteQueryResult;
 }
 
-/** 'AttributeValueListQuery' parameters type */
-export interface IAttributeValueListQueryParams {
-  attribute_id?: number | null | void;
-}
+/** Query 'AttributeValueIdListQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IAttributeValueIdListQueryResult = never;
 
-/** 'AttributeValueListQuery' return type */
-export interface IAttributeValueListQueryResult {
-  attribute_id: number | null;
-  id: number;
-  value: Json;
-}
+/** Query 'AttributeValueIdListQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IAttributeValueIdListQueryParams = never;
 
-/** 'AttributeValueListQuery' query type */
-export interface IAttributeValueListQueryQuery {
-  params: IAttributeValueListQueryParams;
-  result: IAttributeValueListQueryResult;
-}
+/** Query 'AttributeValueCreateQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IAttributeValueCreateQueryResult = never;
 
-/** 'AttributeValueIdListQuery' parameters type */
-export interface IAttributeValueIdListQueryParams {
-  attributeId: number;
-}
+/** Query 'AttributeValueCreateQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IAttributeValueCreateQueryParams = never;
 
-/** 'AttributeValueIdListQuery' return type */
-export interface IAttributeValueIdListQueryResult {
-  id: number;
-}
+/** Query 'AttributeValueUpdateQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IAttributeValueUpdateQueryResult = never;
 
-/** 'AttributeValueIdListQuery' query type */
-export interface IAttributeValueIdListQueryQuery {
-  params: IAttributeValueIdListQueryParams;
-  result: IAttributeValueIdListQueryResult;
-}
+/** Query 'AttributeValueUpdateQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IAttributeValueUpdateQueryParams = never;
 
-/** 'AttributeValueCreateQuery' parameters type */
-export interface IAttributeValueCreateQueryParams {
-  values: readonly ({
-    attributeId: number | null | void,
-    value: Json | null | void
-  })[];
-}
+/** Query 'AttributeValueDeleteQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IAttributeValueDeleteQueryResult = never;
 
-/** 'AttributeValueCreateQuery' return type */
-export interface IAttributeValueCreateQueryResult {
-  id: number;
-}
+/** Query 'AttributeValueDeleteQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IAttributeValueDeleteQueryParams = never;
 
-/** 'AttributeValueCreateQuery' query type */
-export interface IAttributeValueCreateQueryQuery {
-  params: IAttributeValueCreateQueryParams;
-  result: IAttributeValueCreateQueryResult;
-}
+/** Query 'AttributeValueDeleteManyQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IAttributeValueDeleteManyQueryResult = never;
 
-/** 'AttributeValueUpdateQuery' parameters type */
-export interface IAttributeValueUpdateQueryParams {
-  id: number;
-  value?: Json | null | void;
-}
-
-/** 'AttributeValueUpdateQuery' return type */
-export type IAttributeValueUpdateQueryResult = void;
-
-/** 'AttributeValueUpdateQuery' query type */
-export interface IAttributeValueUpdateQueryQuery {
-  params: IAttributeValueUpdateQueryParams;
-  result: IAttributeValueUpdateQueryResult;
-}
-
-/** 'AttributeValueDeleteQuery' parameters type */
-export interface IAttributeValueDeleteQueryParams {
-  id: number;
-}
-
-/** 'AttributeValueDeleteQuery' return type */
-export type IAttributeValueDeleteQueryResult = void;
-
-/** 'AttributeValueDeleteQuery' query type */
-export interface IAttributeValueDeleteQueryQuery {
-  params: IAttributeValueDeleteQueryParams;
-  result: IAttributeValueDeleteQueryResult;
-}
-
-/** 'AttributeValueDeleteManyQuery' parameters type */
-export interface IAttributeValueDeleteManyQueryParams {
-  ids: readonly (number | null | void)[];
-}
-
-/** 'AttributeValueDeleteManyQuery' return type */
-export type IAttributeValueDeleteManyQueryResult = void;
-
-/** 'AttributeValueDeleteManyQuery' query type */
-export interface IAttributeValueDeleteManyQueryQuery {
-  params: IAttributeValueDeleteManyQueryParams;
-  result: IAttributeValueDeleteManyQueryResult;
-}
+/** Query 'AttributeValueDeleteManyQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IAttributeValueDeleteManyQueryParams = never;
 
 /** 'CategoryListCountQuery' parameters type */
 export type ICategoryListCountQueryParams = void;
@@ -231,79 +91,37 @@ export interface ICategoryListCountQueryQuery {
   result: ICategoryListCountQueryResult;
 }
 
-/** 'CategoryListQuery' parameters type */
-export interface ICategoryListQueryParams {
-  limit?: number | null | void;
-  page?: number | null | void;
-}
+/** Query 'CategoryListQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type ICategoryListQueryResult = never;
 
-/** 'CategoryListQuery' return type */
-export interface ICategoryListQueryResult {
-  description: Json | null;
-  id: number;
-  name: Json | null;
-  slug: string;
-}
+/** Query 'CategoryListQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type ICategoryListQueryParams = never;
 
-/** 'CategoryListQuery' query type */
-export interface ICategoryListQueryQuery {
-  params: ICategoryListQueryParams;
-  result: ICategoryListQueryResult;
-}
+/** Query 'CategoryFindByIdQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type ICategoryFindByIdQueryResult = never;
 
-/** 'CategoryFindByIdQuery' parameters type */
-export interface ICategoryFindByIdQueryParams {
-  id?: number | null | void;
-}
+/** Query 'CategoryFindByIdQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type ICategoryFindByIdQueryParams = never;
 
-/** 'CategoryFindByIdQuery' return type */
-export interface ICategoryFindByIdQueryResult {
-  description: Json | null;
-  id: number;
-  name: Json | null;
-  slug: string;
-}
+/** Query 'CategoryCreateQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type ICategoryCreateQueryResult = never;
 
-/** 'CategoryFindByIdQuery' query type */
-export interface ICategoryFindByIdQueryQuery {
-  params: ICategoryFindByIdQueryParams;
-  result: ICategoryFindByIdQueryResult;
-}
+/** Query 'CategoryCreateQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type ICategoryCreateQueryParams = never;
 
-/** 'CategoryCreateQuery' parameters type */
-export interface ICategoryCreateQueryParams {
-  description?: Json | null | void;
-  name: Json;
-  slug: string;
-}
+/** Query 'CategoryUpdateQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type ICategoryUpdateQueryResult = never;
 
-/** 'CategoryCreateQuery' return type */
-export interface ICategoryCreateQueryResult {
-  id: number;
-}
-
-/** 'CategoryCreateQuery' query type */
-export interface ICategoryCreateQueryQuery {
-  params: ICategoryCreateQueryParams;
-  result: ICategoryCreateQueryResult;
-}
-
-/** 'CategoryUpdateQuery' parameters type */
-export interface ICategoryUpdateQueryParams {
-  description?: Json | null | void;
-  id: number;
-  name?: Json | null | void;
-  slug?: string | null | void;
-}
-
-/** 'CategoryUpdateQuery' return type */
-export type ICategoryUpdateQueryResult = void;
-
-/** 'CategoryUpdateQuery' query type */
-export interface ICategoryUpdateQueryQuery {
-  params: ICategoryUpdateQueryParams;
-  result: ICategoryUpdateQueryResult;
-}
+/** Query 'CategoryUpdateQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type ICategoryUpdateQueryParams = never;
 
 /** 'ProductListQuery' parameters type */
 export interface IProductListQueryParams {
@@ -313,13 +131,11 @@ export interface IProductListQueryParams {
 
 /** 'ProductListQuery' return type */
 export interface IProductListQueryResult {
-  category_id: number;
-  created_at: Date;
-  description: Json | null;
+  categoryId: number;
+  createdAt: Date;
   id: number;
-  name: Json;
   slug: string;
-  updated_at: Date;
+  updatedAt: Date;
 }
 
 /** 'ProductListQuery' query type */
@@ -335,13 +151,11 @@ export interface IProductFindOneQueryParams {
 
 /** 'ProductFindOneQuery' return type */
 export interface IProductFindOneQueryResult {
-  category_id: number;
-  created_at: Date;
-  description: Json | null;
+  categoryId: number;
+  createdAt: Date;
   id: number;
-  name: Json;
   slug: string;
-  updated_at: Date;
+  updatedAt: Date;
 }
 
 /** 'ProductFindOneQuery' query type */
@@ -366,61 +180,29 @@ export interface IProductDeleteQueryQuery {
   result: IProductDeleteQueryResult;
 }
 
-/** 'ProductCreateQuery' parameters type */
-export interface IProductCreateQueryParams {
-  categoryId: number;
-  description?: Json | null | void;
-  name: Json;
-  slug: string;
-}
+/** Query 'ProductCreateQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IProductCreateQueryResult = never;
 
-/** 'ProductCreateQuery' return type */
-export interface IProductCreateQueryResult {
-  id: number;
-}
+/** Query 'ProductCreateQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IProductCreateQueryParams = never;
 
-/** 'ProductCreateQuery' query type */
-export interface IProductCreateQueryQuery {
-  params: IProductCreateQueryParams;
-  result: IProductCreateQueryResult;
-}
+/** Query 'ProductUpdateQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IProductUpdateQueryResult = never;
 
-/** 'ProductUpdateQuery' parameters type */
-export interface IProductUpdateQueryParams {
-  categoryId?: number | null | void;
-  description?: Json | null | void;
-  id: number;
-  name?: Json | null | void;
-  slug?: string | null | void;
-}
+/** Query 'ProductUpdateQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IProductUpdateQueryParams = never;
 
-/** 'ProductUpdateQuery' return type */
-export type IProductUpdateQueryResult = void;
+/** Query 'ProductAttributeValueListQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IProductAttributeValueListQueryResult = never;
 
-/** 'ProductUpdateQuery' query type */
-export interface IProductUpdateQueryQuery {
-  params: IProductUpdateQueryParams;
-  result: IProductUpdateQueryResult;
-}
-
-/** 'ProductAttributeValueListQuery' parameters type */
-export interface IProductAttributeValueListQueryParams {
-  productId?: number | null | void;
-}
-
-/** 'ProductAttributeValueListQuery' return type */
-export interface IProductAttributeValueListQueryResult {
-  attribute_id: number | null;
-  attribute_name: Json;
-  id: number;
-  value: Json;
-}
-
-/** 'ProductAttributeValueListQuery' query type */
-export interface IProductAttributeValueListQueryQuery {
-  params: IProductAttributeValueListQueryParams;
-  result: IProductAttributeValueListQueryResult;
-}
+/** Query 'ProductAttributeValueListQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IProductAttributeValueListQueryParams = never;
 
 /** 'ProductAttributeValueDeleteQuery' parameters type */
 export interface IProductAttributeValueDeleteQueryParams {
@@ -436,22 +218,13 @@ export interface IProductAttributeValueDeleteQueryQuery {
   result: IProductAttributeValueDeleteQueryResult;
 }
 
-/** 'ProductAttributeVAlueInsertQuery' parameters type */
-export interface IProductAttributeVAlueInsertQueryParams {
-  values: readonly ({
-    productId: number,
-    attributeValueId: number
-  })[];
-}
+/** Query 'ProductAttributeVAlueInsertQuery' is invalid, so its result is assigned type 'never'.
+ *  */
+export type IProductAttributeVAlueInsertQueryResult = never;
 
-/** 'ProductAttributeVAlueInsertQuery' return type */
-export type IProductAttributeVAlueInsertQueryResult = void;
-
-/** 'ProductAttributeVAlueInsertQuery' query type */
-export interface IProductAttributeVAlueInsertQueryQuery {
-  params: IProductAttributeVAlueInsertQueryParams;
-  result: IProductAttributeVAlueInsertQueryResult;
-}
+/** Query 'ProductAttributeVAlueInsertQuery' is invalid, so its parameters are assigned type 'never'.
+ *  */
+export type IProductAttributeVAlueInsertQueryParams = never;
 
 /** 'ProductListCountQuery' parameters type */
 export type IProductListCountQueryParams = void;
@@ -474,13 +247,11 @@ export interface IProductFindByIdQueryParams {
 
 /** 'ProductFindByIdQuery' return type */
 export interface IProductFindByIdQueryResult {
-  category_id: number;
-  created_at: Date;
-  description: Json | null;
+  categoryId: number;
+  createdAt: Date;
   id: number;
-  name: Json;
   slug: string;
-  updated_at: Date;
+  updatedAt: Date;
 }
 
 /** 'ProductFindByIdQuery' query type */

@@ -8,58 +8,7 @@ export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {
   return {
     upsertAttributeValue: upsertAttributeValue.bind(null, f.pool),
-    createAttribute: createAttribute.bind(null, f.pool),
-    updateAttribute: updateAttribute.bind(null, f.pool),
-    findAttributeById: findAttributeById.bind(null, f.pool),
-    findOneAttribute: findOneAttribute.bind(null, f.pool),
   };
-}
-
-type CreateAttributeProps = {
-  name: Translation;
-  description?: Translation;
-  values?: Omit<CreateAttributeValue, "attributeId">[];
-};
-export async function createAttribute(pool: Pool, input: CreateAttributeProps) {
-  return tx(pool, async (client) => {
-    const att = await q.attribute.create.run({
-      values: [{
-        name: input.name,
-        description: input.description,
-      }],
-    }, pool).then((r) => r[0]);
-    if (!att) throw new Error("Failed to create attribute");
-    if (input.values) {
-      await upsertAttributeValueTransaction(
-        client,
-        att.id,
-        input.values.map((v) => ({
-          value: v.value,
-          attributeId: att.id,
-        }))
-      );
-    }
-    return att;
-  });
-}
-
-type UpdateAttributeProps = {
-  name?: Translation;
-  description?: Translation;
-  values?: UpsertAttributeValueProps[];
-};
-export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
-  return tx(pool, async (client) => {
-    const res = await q.attribute.update.run({
-      name: input.name,
-      description: input.description,
-      id,
-    }, pool);
-    if (input.values) {
-      await upsertAttributeValueTransaction(client, id, input.values);
-    }
-    return res;
-  });
 }
 
 type CreateAttributeValue = {
@@ -113,29 +62,4 @@ export async function upsertAttributeValueTransaction(
       })),
     }, client);
   }
-}
-
-export async function findAttributeById(pool: Pool, id: number) {
-  const res = await q.attribute.findById.run({ id }, pool);
-
-  return res;
-}
-
-type FindOneAttributeProps = {
-  id?: number;
-};
-export async function findOneAttribute(pool: Pool, props: FindOneAttributeProps) {
-  const attribute = await q.attribute.findOne.run({
-    id: props.id,
-  }, pool).then((res) => res[0]);
-  if (!attribute) return null;
-
-  const values = await q.attributeValue.list.run({
-    attribute_id: attribute.id,
-  }, pool);
-
-  return {
-    ...attribute,
-    values,
-  };
 }
