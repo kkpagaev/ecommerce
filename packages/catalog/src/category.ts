@@ -4,16 +4,14 @@ import { ICategoryDescriptionListQueryQuery, ICategoryFindOneQueryQuery, ICatego
 import { sql } from "@pgtyped/runtime";
 import { tx } from "@repo/pool";
 
-export type Categories = ReturnType<typeof Categories>;
-
-export function Categories(f: { pool: Pool }) {
-  return {
-    listCategories: listCategories.bind(null, f.pool),
-    findCategoryById: findCategoryById.bind(null, f.pool),
-    createCategory: createCategory.bind(null, f.pool),
-    updateCategory: updateCategory.bind(null, f.pool),
-  };
-}
+export const categoryUpdateQuery = sql<ICategoryUpdateQueryQuery>`
+  UPDATE categories
+  SET
+    slug = COALESCE($slug, slug)
+  WHERE
+    id = $id!
+  RETURNING id;
+`;
 
 export const categoryListQuery = sql<ICategoryListQueryQuery>`
   SELECT id, slug, cd.*
@@ -24,9 +22,54 @@ export const categoryListQuery = sql<ICategoryListQueryQuery>`
   LIMIT COALESCE($limit, 10)
   OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
+
 export const categoryListCountQuery = sql<ICategoryListCountQueryQuery>`
   SELECT COUNT(*) FROM categories;
 `;
+
+export const categoryFindOneQuery = sql<ICategoryFindOneQueryQuery>`
+  SELECT id, slug FROM categories
+  WHERE id = COALESCE($id, id)
+  AND slug = COALESCE($slug, slug);
+`;
+
+export const categoryDescriptionListQuery = sql<ICategoryDescriptionListQueryQuery>`
+  SELECT category_id, language_id, name FROM category_descriptions
+  WHERE category_id = $category_id!
+`;
+
+export const categoryCreateQuery = sql<ICategoryCreateQueryQuery>`
+  INSERT INTO categories
+    (slug)
+  VALUES
+    ($slug!)
+  RETURNING id;
+`;
+
+export const categoryDescriptionUpsertQuery = sql<ICategoryDescriptionUpsertQueryQuery>`
+  INSERT INTO category_descriptions
+    (category_id, language_id, name)
+  VALUES
+    $$values(category_id!, language_id!, name!)
+  ON CONFLICT
+    (category_id, language_id)
+  DO
+    UPDATE
+    SET
+      name = EXCLUDED.name
+  RETURNING
+    *;
+`;
+
+export type Categories = ReturnType<typeof Categories>;
+export function Categories(f: { pool: Pool }) {
+  return {
+    listCategories: listCategories.bind(null, f.pool),
+    findCategoryById: findCategoryById.bind(null, f.pool),
+    createCategory: createCategory.bind(null, f.pool),
+    updateCategory: updateCategory.bind(null, f.pool),
+  };
+}
 
 type ListCategoriesProps = {
   languageId: number;
@@ -52,16 +95,6 @@ export async function listCategories(pool: Pool, input: ListCategoriesProps) {
   };
 }
 
-export const categoryFindOneQuery = sql<ICategoryFindOneQueryQuery>`
-  SELECT id, slug FROM categories
-  WHERE id = COALESCE($id, id)
-  AND slug = COALESCE($slug, slug);
-`;
-export const categoryDescriptionListQuery = sql<ICategoryDescriptionListQueryQuery>`
-  SELECT category_id, language_id, name FROM category_descriptions
-  WHERE category_id = $category_id!
-`;
-
 export async function findCategoryById(pool: Pool, id: number) {
   const res = await categoryFindOneQuery.run({ id }, pool).then((res) => res[0]);
   if (!res) return null;
@@ -75,27 +108,6 @@ export async function findCategoryById(pool: Pool, id: number) {
   };
 }
 
-export const categoryCreateQuery = sql<ICategoryCreateQueryQuery>`
-  INSERT INTO categories
-    (slug)
-  VALUES
-    ($slug!)
-  RETURNING id;
-`;
-export const categoryDescriptionUpsertQuery = sql<ICategoryDescriptionUpsertQueryQuery>`
-  INSERT INTO category_descriptions
-    (category_id, language_id, name)
-  VALUES
-    $$values(category_id!, language_id!, name!)
-  ON CONFLICT
-    (category_id, language_id)
-  DO
-    UPDATE
-    SET
-      name = EXCLUDED.name
-  RETURNING
-    *;
-`;
 type CreateCategoryProps = {
   descriptions: Array<{
     name: string;
@@ -125,14 +137,6 @@ export async function createCategory(pool: Pool, input: CreateCategoryProps) {
   });
 }
 
-export const categoryUpdateQuery = sql<ICategoryUpdateQueryQuery>`
-  UPDATE categories
-  SET
-    slug = COALESCE($slug, slug)
-  WHERE
-    id = $id!
-  RETURNING id;
-`;
 type UpdateCategoryProps = {
   descriptions?: Array<{
     name: string;

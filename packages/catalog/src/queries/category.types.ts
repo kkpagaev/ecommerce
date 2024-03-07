@@ -1,5 +1,22 @@
 /** Types generated for queries found in "src/category.ts" */
 
+/** 'CategoryUpdateQuery' parameters type */
+export interface ICategoryUpdateQueryParams {
+  id: number;
+  slug?: string | null | void;
+}
+
+/** 'CategoryUpdateQuery' return type */
+export interface ICategoryUpdateQueryResult {
+  id: number;
+}
+
+/** 'CategoryUpdateQuery' query type */
+export interface ICategoryUpdateQueryQuery {
+  params: ICategoryUpdateQueryParams;
+  result: ICategoryUpdateQueryResult;
+}
+
 /** 'CategoryListQuery' parameters type */
 export interface ICategoryListQueryParams {
   language_id: number;
@@ -108,22 +125,5 @@ export interface ICategoryDescriptionUpsertQueryResult {
 export interface ICategoryDescriptionUpsertQueryQuery {
   params: ICategoryDescriptionUpsertQueryParams;
   result: ICategoryDescriptionUpsertQueryResult;
-}
-
-/** 'CategoryUpdateQuery' parameters type */
-export interface ICategoryUpdateQueryParams {
-  id: number;
-  slug?: string | null | void;
-}
-
-/** 'CategoryUpdateQuery' return type */
-export interface ICategoryUpdateQueryResult {
-  id: number;
-}
-
-/** 'CategoryUpdateQuery' query type */
-export interface ICategoryUpdateQueryQuery {
-  params: ICategoryUpdateQueryParams;
-  result: ICategoryUpdateQueryResult;
 }
 

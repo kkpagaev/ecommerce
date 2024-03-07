@@ -14,8 +14,6 @@
   "srcDir": "./src/",
   "failOnError": false,
   "camelCaseColumnNames": false,
-  "typesOverrides": {
-    "jsonb": "./i18n#Translation"
-  },
+  "typesOverrides": {},
   "dbUrl": "postgres://user:user@localhost:1252/user"
 }
