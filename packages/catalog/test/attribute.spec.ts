@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { Pool, PoolClient } from "pg";
+import { PoolClient } from "pg";
 import { Attributes } from "../src/attribute";
 import { testDB } from "@repo/test-utils";
 
 async function createAttributes() {
-  const db = await testDB(process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user");
-  const attributes = Attributes({ pool: db.pool });
+  const db = await testDB(
+    process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
+  );
+  const attributes = new Attributes({ pool: db.pool });
 
   return {
     attributes,
@@ -19,13 +21,22 @@ async function createAttributes() {
 // }
 describe("Attributes", () => {
   async function fixture(pool: PoolClient) {
-    const group: number = await pool.query("INSERT INTO attribute_groups (sort_order) VALUES (1) RETURNING id").then((res) => res.rows[0].id);
-    const uk: number = await pool.query(`INSERT INTO languages (name) VALUES ('uk') RETURNING id`).then((res) => res.rows[0].id);
-    const en: number = await pool.query(`INSERT INTO languages (name) VALUES ('en') RETURNING id`).then((res) => res.rows[0].id);
+    const group: number = await pool
+      .query(
+        "INSERT INTO attribute_groups (sort_order) VALUES (1) RETURNING id",
+      )
+      .then((res) => res.rows[0].id);
+    const uk: number = await pool
+      .query(`INSERT INTO languages (name) VALUES ('uk') RETURNING id`)
+      .then((res) => res.rows[0].id);
+    const en: number = await pool
+      .query(`INSERT INTO languages (name) VALUES ('en') RETURNING id`)
+      .then((res) => res.rows[0].id);
     return {
       group,
       languages: {
-        uk, en,
+        uk,
+        en,
       },
     };
   }
@@ -36,10 +47,12 @@ describe("Attributes", () => {
 
     const res = await a.attributes.createAttribute({
       groupId: fix.group,
-      descriptions: [{
-        name: "testuk",
-        languageId: fix.languages.uk,
-      }],
+      descriptions: [
+        {
+          name: "testuk",
+          languageId: fix.languages.uk,
+        },
+      ],
     });
 
     expect(res).toEqual({

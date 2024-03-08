@@ -1,38 +1,17 @@
-/** Types generated for queries found in "src/attribute.ts" */
+/** Types generated for queries found in "src/attribute.js" */
 
-/** 'AttributeFindOneQuery' parameters type */
-export interface IAttributeFindOneQueryParams {
+/** 'AttributeDeletQuery' parameters type */
+export interface IAttributeDeletQueryParams {
   id: number;
 }
 
-/** 'AttributeFindOneQuery' return type */
-export interface IAttributeFindOneQueryResult {
-  attribute_group_id: number;
-  id: number;
-}
+/** 'AttributeDeletQuery' return type */
+export type IAttributeDeletQueryResult = void;
 
-/** 'AttributeFindOneQuery' query type */
-export interface IAttributeFindOneQueryQuery {
-  params: IAttributeFindOneQueryParams;
-  result: IAttributeFindOneQueryResult;
-}
-
-/** 'AttributeDescriptionListQuery' parameters type */
-export interface IAttributeDescriptionListQueryParams {
-  attribute_id: number;
-}
-
-/** 'AttributeDescriptionListQuery' return type */
-export interface IAttributeDescriptionListQueryResult {
-  attribute_id: number;
-  language_id: number;
-  name: string;
-}
-
-/** 'AttributeDescriptionListQuery' query type */
-export interface IAttributeDescriptionListQueryQuery {
-  params: IAttributeDescriptionListQueryParams;
-  result: IAttributeDescriptionListQueryResult;
+/** 'AttributeDeletQuery' query type */
+export interface IAttributeDeletQueryQuery {
+  params: IAttributeDeletQueryParams;
+  result: IAttributeDeletQueryResult;
 }
 
 /** 'AttributeDescriptionDeleteQuery' parameters type */
@@ -48,20 +27,6 @@ export type IAttributeDescriptionDeleteQueryResult = void;
 export interface IAttributeDescriptionDeleteQueryQuery {
   params: IAttributeDescriptionDeleteQueryParams;
   result: IAttributeDescriptionDeleteQueryResult;
-}
-
-/** 'AttributeDeletQuery' parameters type */
-export interface IAttributeDeletQueryParams {
-  id: number;
-}
-
-/** 'AttributeDeletQuery' return type */
-export type IAttributeDeletQueryResult = void;
-
-/** 'AttributeDeletQuery' query type */
-export interface IAttributeDeletQueryQuery {
-  params: IAttributeDeletQueryParams;
-  result: IAttributeDeletQueryResult;
 }
 
 /** 'AttributeCreateQuery' parameters type */
@@ -96,5 +61,40 @@ export type IAttributeDescriptionUpsertQueryResult = void;
 export interface IAttributeDescriptionUpsertQueryQuery {
   params: IAttributeDescriptionUpsertQueryParams;
   result: IAttributeDescriptionUpsertQueryResult;
+}
+
+/** 'AttributeFindOneQuery' parameters type */
+export interface IAttributeFindOneQueryParams {
+  id: number;
+}
+
+/** 'AttributeFindOneQuery' return type */
+export interface IAttributeFindOneQueryResult {
+  attribute_group_id: number;
+  id: number;
+}
+
+/** 'AttributeFindOneQuery' query type */
+export interface IAttributeFindOneQueryQuery {
+  params: IAttributeFindOneQueryParams;
+  result: IAttributeFindOneQueryResult;
+}
+
+/** 'AttributeDescriptionListQuery' parameters type */
+export interface IAttributeDescriptionListQueryParams {
+  attribute_id: number;
+}
+
+/** 'AttributeDescriptionListQuery' return type */
+export interface IAttributeDescriptionListQueryResult {
+  attribute_id: number;
+  language_id: number;
+  name: string;
+}
+
+/** 'AttributeDescriptionListQuery' query type */
+export interface IAttributeDescriptionListQueryQuery {
+  params: IAttributeDescriptionListQueryParams;
+  result: IAttributeDescriptionListQueryResult;
 }
 

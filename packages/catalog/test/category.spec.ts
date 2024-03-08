@@ -5,7 +5,7 @@ import { Pool } from "pg";
 
 async function categories() {
   const db = await testDB();
-  const category = Categories({ pool: db.pool });
+  const category = new Categories({ pool: db.pool });
 
   return {
     db,
@@ -15,8 +15,12 @@ async function categories() {
 }
 
 async function fixture(pool: Pool) {
-  const uk: number = await pool.query(`INSERT INTO languages (name) VALUES ('uk') RETURNING id`).then((res) => res.rows[0].id);
-  const en: number = await pool.query(`INSERT INTO languages (name) VALUES ('en') RETURNING id`).then((res) => res.rows[0].id);
+  const uk: number = await pool
+    .query(`INSERT INTO languages (name) VALUES ('uk') RETURNING id`)
+    .then((res) => res.rows[0].id);
+  const en: number = await pool
+    .query(`INSERT INTO languages (name) VALUES ('en') RETURNING id`)
+    .then((res) => res.rows[0].id);
 
   return {
     languages: { uk, en },
@@ -28,10 +32,12 @@ describe("category", () => {
     await using s = await categories();
     const f = await fixture(s.db.pool);
     const category = await s.category.createCategory({
-      descriptions: [{
-        name: "тест",
-        languageId: f.languages.uk,
-      }],
+      descriptions: [
+        {
+          name: "тест",
+          languageId: f.languages.uk,
+        },
+      ],
     });
 
     expect(category).toHaveProperty("id");
@@ -42,11 +48,13 @@ describe("category", () => {
     expect(category2).toEqual({
       id,
       slug: "test",
-      descriptions: [{
-        categoryId: id,
-        languageId: f.languages.uk,
-        name: "тест",
-      }],
+      descriptions: [
+        {
+          category_id: id,
+          language_id: f.languages.uk,
+          name: "тест",
+        },
+      ],
     });
   });
 
@@ -54,17 +62,21 @@ describe("category", () => {
     await using s = await categories();
     const fix = await fixture(s.db.pool);
     const category = await s.category.createCategory({
-      descriptions: [{
-        languageId: fix.languages.uk,
-        name: "foo",
-      }],
+      descriptions: [
+        {
+          languageId: fix.languages.uk,
+          name: "foo",
+        },
+      ],
     });
     const id = category!.id;
     await s.category.updateCategory(id, {
-      descriptions: [{
-        languageId: fix.languages.uk,
-        name: "bar",
-      }],
+      descriptions: [
+        {
+          languageId: fix.languages.uk,
+          name: "bar",
+        },
+      ],
     });
 
     const updated = await s.category.findCategoryById(id);

@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/attribute-group.ts" */
+/** Types generated for queries found in "src/attribute-group.js" */
 
 /** 'AttributeGroupFindOneQuery' parameters type */
 export interface IAttributeGroupFindOneQueryParams {
@@ -57,6 +57,22 @@ export interface IAttributeListQueryQuery {
   result: IAttributeListQueryResult;
 }
 
+/** 'AttributeGroupCreateQuery' parameters type */
+export interface IAttributeGroupCreateQueryParams {
+  sort_order: number;
+}
+
+/** 'AttributeGroupCreateQuery' return type */
+export interface IAttributeGroupCreateQueryResult {
+  id: number;
+}
+
+/** 'AttributeGroupCreateQuery' query type */
+export interface IAttributeGroupCreateQueryQuery {
+  params: IAttributeGroupCreateQueryParams;
+  result: IAttributeGroupCreateQueryResult;
+}
+
 /** 'AttributeGroupUpdateQuery' parameters type */
 export interface IAttributeGroupUpdateQueryParams {
   id: number;
@@ -96,21 +112,5 @@ export interface IAttributeGroupDescriptionUpsertQueryResult {
 export interface IAttributeGroupDescriptionUpsertQueryQuery {
   params: IAttributeGroupDescriptionUpsertQueryParams;
   result: IAttributeGroupDescriptionUpsertQueryResult;
-}
-
-/** 'AttributeGroupCreateQuery' parameters type */
-export interface IAttributeGroupCreateQueryParams {
-  sort_order: number;
-}
-
-/** 'AttributeGroupCreateQuery' return type */
-export interface IAttributeGroupCreateQueryResult {
-  id: number;
-}
-
-/** 'AttributeGroupCreateQuery' query type */
-export interface IAttributeGroupCreateQueryQuery {
-  params: IAttributeGroupCreateQueryParams;
-  result: IAttributeGroupCreateQueryResult;
 }
 
