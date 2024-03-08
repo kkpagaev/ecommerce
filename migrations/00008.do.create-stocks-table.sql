@@ -1,5 +1,3 @@
--- +goose Up
--- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS stocks (
   product_id INTEGER NOT NULL REFERENCES products(id),
   attribute_id INTEGER NOT NULL REFERENCES attributes(id),
@@ -7,9 +5,3 @@ CREATE TABLE IF NOT EXISTS stocks (
   count INTEGER NOT NULL,
   PRIMARY KEY (product_id, attribute_id, location_id)
 );
--- +goose StatementEnd
-
--- +goose Down
--- +goose StatementBegin
-DROP TABLE IF EXISTS stocks;
--- +goose StatementEnd

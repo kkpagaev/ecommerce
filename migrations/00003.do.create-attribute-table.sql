@@ -1,5 +1,3 @@
--- +goose Up
--- +goose StatementBegin
 CREATE TABLE attribute_groups (
   id SERIAL PRIMARY KEY,
   sort_order INTEGER NOT NULL
@@ -24,12 +22,3 @@ CREATE TABLE attribute_descriptions (
   name VARCHAR(255) NOT NULL,
   PRIMARY KEY (attribute_id, language_id)
 );
--- +goose StatementEnd
-
--- +goose Down
--- +goose StatementBegin
-DROP TABLE attribute_descriptions;
-DROP TABLE attributes;
-DROP TABLE attribute_group_descriptions;
-DROP TABLE attribute_groups;
--- +goose StatementEnd
