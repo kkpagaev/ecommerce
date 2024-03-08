@@ -7,7 +7,7 @@ async function createAttributes() {
   const db = await testDB(
     process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
   );
-  const attributes = Attributes({ pool: db.pool });
+  const attributes = new Attributes({ pool: db.pool });
 
   return {
     attributes,
