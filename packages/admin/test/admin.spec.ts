@@ -6,7 +6,7 @@ async function usingAdmins() {
   const db = await testDB(
     process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
   );
-  const admins = Admins({ pool: db.pool });
+  const admins = new Admins({ pool: db.pool });
 
   return {
     db,

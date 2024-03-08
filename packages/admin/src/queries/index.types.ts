@@ -1,23 +1,4 @@
-/** Types generated for queries found in "src/index.ts" */
-
-/** 'AdminCreateQuery' parameters type */
-export interface IAdminCreateQueryParams {
-  email: string;
-  name?: string | null | void;
-  password: string;
-  surname?: string | null | void;
-}
-
-/** 'AdminCreateQuery' return type */
-export interface IAdminCreateQueryResult {
-  id: number;
-}
-
-/** 'AdminCreateQuery' query type */
-export interface IAdminCreateQueryQuery {
-  params: IAdminCreateQueryParams;
-  result: IAdminCreateQueryResult;
-}
+/** Types generated for queries found in "src/index.js" */
 
 /** 'AdminUpdateQuery' parameters type */
 export interface IAdminUpdateQueryParams {
@@ -61,6 +42,20 @@ export interface IAdminFindOneQueryQuery {
   result: IAdminFindOneQueryResult;
 }
 
+/** 'AdminListCountQuery' parameters type */
+export type IAdminListCountQueryParams = void;
+
+/** 'AdminListCountQuery' return type */
+export interface IAdminListCountQueryResult {
+  count: string | null;
+}
+
+/** 'AdminListCountQuery' query type */
+export interface IAdminListCountQueryQuery {
+  params: IAdminListCountQueryParams;
+  result: IAdminListCountQueryResult;
+}
+
 /** 'AdminDeleteQuery' parameters type */
 export interface IAdminDeleteQueryParams {
   id: number;
@@ -97,16 +92,22 @@ export interface IAdminListQueryQuery {
   result: IAdminListQueryResult;
 }
 
-/** 'AdminListCountQuery' parameters type */
-export type IAdminListCountQueryParams = void;
-
-/** 'AdminListCountQuery' return type */
-export interface IAdminListCountQueryResult {
-  count: string | null;
+/** 'AdminCreateQuery' parameters type */
+export interface IAdminCreateQueryParams {
+  email: string;
+  name?: string | null | void;
+  password: string;
+  surname?: string | null | void;
 }
 
-/** 'AdminListCountQuery' query type */
-export interface IAdminListCountQueryQuery {
-  params: IAdminListCountQueryParams;
-  result: IAdminListCountQueryResult;
+/** 'AdminCreateQuery' return type */
+export interface IAdminCreateQueryResult {
+  id: number;
 }
+
+/** 'AdminCreateQuery' query type */
+export interface IAdminCreateQueryQuery {
+  params: IAdminCreateQueryParams;
+  result: IAdminCreateQueryResult;
+}
+
