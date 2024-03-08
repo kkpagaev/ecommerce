@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/option-group.ts" */
+/** Types generated for queries found in "src/option-group.js" */
 export type option_type = 'color' | 'size' | 'text';
 
 /** 'OptionGroupCreateQuery' parameters type */

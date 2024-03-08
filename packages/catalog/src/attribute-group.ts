@@ -1,5 +1,12 @@
 import { Pool } from "pg";
-import { IAttributeGroupCreateQueryQuery, IAttributeGroupDescriptionListQueryQuery, IAttributeGroupDescriptionUpsertQueryQuery, IAttributeGroupFindOneQueryQuery, IAttributeGroupUpdateQueryQuery, IAttributeListQueryQuery } from "./queries/attribute-group.types";
+import {
+  IAttributeGroupCreateQueryQuery,
+  IAttributeGroupDescriptionListQueryQuery,
+  IAttributeGroupDescriptionUpsertQueryQuery,
+  IAttributeGroupFindOneQueryQuery,
+  IAttributeGroupUpdateQueryQuery,
+  IAttributeListQueryQuery,
+} from "./queries/attribute-group.types";
 import { sql } from "@pgtyped/runtime";
 import { tx } from "@repo/pool";
 
@@ -35,19 +42,33 @@ type FindOneAttributeGroupProps = {
   languageId: number;
   id?: number;
 };
-export async function findOneAttributeGroup(pool: Pool, props: FindOneAttributeGroupProps) {
-  const group = await attributeGroupFindOneQuery.run({
-    id: props.id,
-  }, pool).then((res) => res[0]);
+export async function findOneAttributeGroup(
+  pool: Pool,
+  props: FindOneAttributeGroupProps,
+) {
+  const group = await attributeGroupFindOneQuery
+    .run(
+      {
+        id: props.id,
+      },
+      pool,
+    )
+    .then((res) => res[0]);
   if (!group) return null;
 
-  const descriptions = await attributeGroupDescriptionListQuery.run({
-    attribute_group_id: group.id,
-  }, pool);
-  const attributes = await attributeListQuery.run({
-    attribute_group_id: group.id,
-    language_id: props.languageId,
-  }, pool);
+  const descriptions = await attributeGroupDescriptionListQuery.run(
+    {
+      attribute_group_id: group.id,
+    },
+    pool,
+  );
+  const attributes = await attributeListQuery.run(
+    {
+      attribute_group_id: group.id,
+      language_id: props.languageId,
+    },
+    pool,
+  );
 
   return {
     ...group,
@@ -87,21 +108,33 @@ type UpdateAttributeGroupProps = {
     description?: string;
   }>;
 };
-export async function updateAttributeGroup(pool: Pool, id: number, input: UpdateAttributeGroupProps) {
+export async function updateAttributeGroup(
+  pool: Pool,
+  id: number,
+  input: UpdateAttributeGroupProps,
+) {
   return tx(pool, async (client) => {
-    const group = await attributeGroupUpdateQuery.run({
-      sort_order: input.sortOrder,
-      id,
-    }, client).then((res) => res[0]);
+    const group = await attributeGroupUpdateQuery
+      .run(
+        {
+          sort_order: input.sortOrder,
+          id,
+        },
+        client,
+      )
+      .then((res) => res[0]);
     if (input.descriptions) {
-      await attributeGroupDescriptionUpsertQuery.run({
-        values: input.descriptions.map((d) => ({
-          name: d.name,
-          description: d.description,
-          language_id: d.languageId,
-          attribute_group_id: id,
-        })),
-      }, client);
+      await attributeGroupDescriptionUpsertQuery.run(
+        {
+          values: input.descriptions.map((d) => ({
+            name: d.name,
+            description: d.description,
+            language_id: d.languageId,
+            attribute_group_id: id,
+          })),
+        },
+        client,
+      );
     }
     return group;
   });
@@ -122,22 +155,33 @@ type CreateAttributeProps = {
     description?: string;
   }>;
 };
-export async function createAttributeGroup(pool: Pool, input: CreateAttributeProps) {
+export async function createAttributeGroup(
+  pool: Pool,
+  input: CreateAttributeProps,
+) {
   return tx(pool, async (client) => {
-    const group = await attributeGroupCreateQuery.run({
-      sort_order: input.sortOrder,
-    }, client).then((res) => res[0]);
+    const group = await attributeGroupCreateQuery
+      .run(
+        {
+          sort_order: input.sortOrder,
+        },
+        client,
+      )
+      .then((res) => res[0]);
     if (!group) {
       throw new Error("Failed to create attribute group");
     }
-    await attributeGroupDescriptionUpsertQuery.run({
-      values: input.descriptions.map((d) => ({
-        name: d.name,
-        description: d.description,
-        language_id: d.languageId,
-        attribute_group_id: group.id,
-      })),
-    }, client);
+    await attributeGroupDescriptionUpsertQuery.run(
+      {
+        values: input.descriptions.map((d) => ({
+          name: d.name,
+          description: d.description,
+          language_id: d.languageId,
+          attribute_group_id: group.id,
+        })),
+      },
+      client,
+    );
     return group;
   });
 }

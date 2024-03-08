@@ -5,6 +5,9 @@
       "src/*": ["./src/*"],
       "test/*": ["./test/*"]
     },
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
     "noEmit": false,
     "outDir": "dist"
   },

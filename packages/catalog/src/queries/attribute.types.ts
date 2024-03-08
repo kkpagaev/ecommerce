@@ -82,11 +82,11 @@ export interface IAttributeCreateQueryQuery {
 
 /** 'AttributeDescriptionUpsertQuery' parameters type */
 export interface IAttributeDescriptionUpsertQueryParams {
-  values: readonly ({
-    attributeId: number,
-    languageId: number,
-    name: string
-  })[];
+  values: readonly {
+    attributeId: number;
+    languageId: number;
+    name: string;
+  }[];
 }
 
 /** 'AttributeDescriptionUpsertQuery' return type */
@@ -97,4 +97,3 @@ export interface IAttributeDescriptionUpsertQueryQuery {
   params: IAttributeDescriptionUpsertQueryParams;
   result: IAttributeDescriptionUpsertQueryResult;
 }
-

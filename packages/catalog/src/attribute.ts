@@ -1,7 +1,14 @@
 import { Pool } from "pg";
 import { tx } from "@repo/pool";
 import { sql } from "@pgtyped/runtime";
-import { IAttributeFindOneQueryQuery, IAttributeDescriptionListQueryQuery, IAttributeDescriptionDeleteQueryQuery, IAttributeDeletQueryQuery, IAttributeCreateQueryQuery, IAttributeDescriptionUpsertQueryQuery } from "./queries/attribute.types";
+import {
+  IAttributeFindOneQueryQuery,
+  IAttributeDescriptionListQueryQuery,
+  IAttributeDescriptionDeleteQueryQuery,
+  IAttributeDeletQueryQuery,
+  IAttributeCreateQueryQuery,
+  IAttributeDescriptionUpsertQueryQuery,
+} from "./queries/attribute.types";
 
 export type Attributes = ReturnType<typeof Attributes>;
 export function Attributes(f: { pool: Pool }) {
@@ -27,12 +34,20 @@ export const attributeDescriptionListQuery = sql<IAttributeDescriptionListQueryQ
 type FindOneAttributeProps = {
   id: number;
 };
-export async function findOneAttribute(pool: Pool, props: FindOneAttributeProps) {
-  const attribute = await attributeFindOneQuery.run(props, pool).then((res) => res[0]);
+export async function findOneAttribute(
+  pool: Pool,
+  props: FindOneAttributeProps,
+) {
+  const attribute = await attributeFindOneQuery
+    .run(props, pool)
+    .then((res) => res[0]);
   if (!attribute) return null;
-  const descriptions = await attributeDescriptionListQuery.run({
-    attribute_id: attribute.id,
-  }, pool);
+  const descriptions = await attributeDescriptionListQuery.run(
+    {
+      attribute_id: attribute.id,
+    },
+    pool,
+  );
   return {
     ...attribute,
     descriptions,
@@ -44,7 +59,10 @@ export const attributeDescriptionDeleteQuery = sql<IAttributeDescriptionDeleteQu
   WHERE language_id = $languageId!
   AND attribute_id = $attributeId!;
 `;
-export async function deleteAttributeDescription(pool: Pool, input: { attributeId: number; languageId: number }) {
+export async function deleteAttributeDescription(
+  pool: Pool,
+  input: { attributeId: number; languageId: number },
+) {
   return await attributeDescriptionDeleteQuery.run(input, pool);
 }
 type UpdateAttributeProps = {
@@ -53,15 +71,22 @@ type UpdateAttributeProps = {
     name: string;
   }>;
 };
-export async function updateAttribute(pool: Pool, id: number, input: UpdateAttributeProps) {
+export async function updateAttribute(
+  pool: Pool,
+  id: number,
+  input: UpdateAttributeProps,
+) {
   return await tx(pool, async (client) => {
-    const descriptions = await attributeDescriptionUpsertQuery.run({
-      values: input.descriptions.map((d) => ({
-        name: d.name,
-        languageId: d.languageId,
-        attributeId: id,
-      })),
-    }, client);
+    const descriptions = await attributeDescriptionUpsertQuery.run(
+      {
+        values: input.descriptions.map((d) => ({
+          name: d.name,
+          languageId: d.languageId,
+          attributeId: id,
+        })),
+      },
+      client,
+    );
 
     return {
       descriptions,
@@ -73,9 +98,12 @@ export const attributeDeletQuery = sql<IAttributeDeletQueryQuery>`
   WHERE id = $id!;
 `;
 export async function deleteAttribute(pool: Pool, id: number) {
-  return await attributeDeletQuery.run({
-    id: id,
-  }, pool);
+  return await attributeDeletQuery.run(
+    {
+      id: id,
+    },
+    pool,
+  );
 }
 
 export const attributeCreateQuery = sql<IAttributeCreateQueryQuery>`
@@ -103,22 +131,27 @@ type CreateAttribute = {
     name: string;
   }>;
 };
-export async function createAttribute(
-  pool: Pool,
-  input: CreateAttribute,
-) {
+export async function createAttribute(pool: Pool, input: CreateAttribute) {
   return tx(pool, async (client) => {
-    const attribute = await attributeCreateQuery.run({
-      attributeGroupId: input.groupId,
-    }, pool).then((r) => r[0]);
+    const attribute = await attributeCreateQuery
+      .run(
+        {
+          attributeGroupId: input.groupId,
+        },
+        pool,
+      )
+      .then((r) => r[0]);
     if (!attribute) throw new Error("Failed to create attribute");
-    const descriptions = await attributeDescriptionUpsertQuery.run({
-      values: input.descriptions.map((d) => ({
-        name: d.name,
-        languageId: d.languageId,
-        attributeId: attribute.id,
-      })),
-    }, client);
+    const descriptions = await attributeDescriptionUpsertQuery.run(
+      {
+        values: input.descriptions.map((d) => ({
+          name: d.name,
+          languageId: d.languageId,
+          attributeId: attribute.id,
+        })),
+      },
+      client,
+    );
 
     return {
       ...attribute,

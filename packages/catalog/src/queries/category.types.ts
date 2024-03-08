@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/category.ts" */
+/** Types generated for queries found in "src/category.js" */
 
 /** 'CategoryUpdateQuery' parameters type */
 export interface ICategoryUpdateQueryParams {

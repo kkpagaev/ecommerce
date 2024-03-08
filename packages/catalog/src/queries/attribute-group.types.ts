@@ -76,12 +76,12 @@ export interface IAttributeGroupUpdateQueryQuery {
 
 /** 'AttributeGroupDescriptionUpsertQuery' parameters type */
 export interface IAttributeGroupDescriptionUpsertQueryParams {
-  values: readonly ({
-    attribute_group_id: number,
-    language_id: number,
-    name: string,
-    description: string | null | void
-  })[];
+  values: readonly {
+    attribute_group_id: number;
+    language_id: number;
+    name: string;
+    description: string | null | void;
+  }[];
 }
 
 /** 'AttributeGroupDescriptionUpsertQuery' return type */
@@ -113,4 +113,3 @@ export interface IAttributeGroupCreateQueryQuery {
   params: IAttributeGroupCreateQueryParams;
   result: IAttributeGroupCreateQueryResult;
 }
-

@@ -1,22 +1,23 @@
 const { resolve } = require("node:path");
 const project = resolve(process.cwd(), "tsconfig.json");
 
-const stylistic = require('@stylistic/eslint-plugin')
-
-const customized = stylistic.configs.customize({
-  // the following options are the default values
-  indent: 2,
-  quotes: 'double',
-  semi: true,
-  arrowParens: 'always',
-  // ...
-})
+// const stylistic = require('@stylistic/eslint-plugin')
+//
+// const customized = stylistic.configs.customize({
+//   // the following options are the default values
+//   indent: 2,
+//   quotes: 'double',
+//   semi: true,
+//   arrowParens: 'always',
+//   // ...
+// })
 
 module.exports = {
   plugins: ["only-warn", "@stylistic"],
   extends: [
     "eslint:recommended",
     "eslint-config-turbo",
+    "plugin:prettier/recommended",
   ],
   settings: {
     "import/resolver": {
@@ -43,7 +44,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     // "require-await": "error",
     // "@typescript-eslint/require-await": "warn",
-    ...customized.rules,
+    // ...customized.rules,
   },
   overrides: [
     {
