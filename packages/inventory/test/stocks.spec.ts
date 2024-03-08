@@ -13,7 +13,7 @@ async function usingStocks() {
   await pool.query(`CREATE TEMPORARY TABLE locations (LIKE locations INCLUDING ALL)`);
   await pool.query(`CREATE TEMPORARY TABLE stocks (LIKE stocks INCLUDING ALL)`);
 
-  const stocks = Stocks({ pool: pool });
+  const stocks = new Stocks({ pool: pool });
 
   return {
     pool,

@@ -1,4 +1,37 @@
-/** Types generated for queries found in "src/location.ts" */
+/** Types generated for queries found in "src/location.js" */
+
+/** 'LocationListQuery' parameters type */
+export type ILocationListQueryParams = void;
+
+/** 'LocationListQuery' return type */
+export interface ILocationListQueryResult {
+  id: number;
+  name: string;
+}
+
+/** 'LocationListQuery' query type */
+export interface ILocationListQueryQuery {
+  params: ILocationListQueryParams;
+  result: ILocationListQueryResult;
+}
+
+/** 'LocationFindOneQuery' parameters type */
+export interface ILocationFindOneQueryParams {
+  id?: number | null | void;
+  name?: string | null | void;
+}
+
+/** 'LocationFindOneQuery' return type */
+export interface ILocationFindOneQueryResult {
+  id: number;
+  name: string;
+}
+
+/** 'LocationFindOneQuery' query type */
+export interface ILocationFindOneQueryQuery {
+  params: ILocationFindOneQueryParams;
+  result: ILocationFindOneQueryResult;
+}
 
 /** 'LocationCreateQuery' parameters type */
 export interface ILocationCreateQueryParams {
@@ -31,21 +64,6 @@ export interface ILocationUpdateQueryQuery {
   result: ILocationUpdateQueryResult;
 }
 
-/** 'LocationListQuery' parameters type */
-export type ILocationListQueryParams = void;
-
-/** 'LocationListQuery' return type */
-export interface ILocationListQueryResult {
-  id: number;
-  name: string;
-}
-
-/** 'LocationListQuery' query type */
-export interface ILocationListQueryQuery {
-  params: ILocationListQueryParams;
-  result: ILocationListQueryResult;
-}
-
 /** 'LocationDeleteQuery' parameters type */
 export interface ILocationDeleteQueryParams {
   id: number;
@@ -60,20 +78,3 @@ export interface ILocationDeleteQueryQuery {
   result: ILocationDeleteQueryResult;
 }
 
-/** 'LocationFindOneQuery' parameters type */
-export interface ILocationFindOneQueryParams {
-  id?: number | null | void;
-  name?: string | null | void;
-}
-
-/** 'LocationFindOneQuery' return type */
-export interface ILocationFindOneQueryResult {
-  id: number;
-  name: string;
-}
-
-/** 'LocationFindOneQuery' query type */
-export interface ILocationFindOneQueryQuery {
-  params: ILocationFindOneQueryParams;
-  result: ILocationFindOneQueryResult;
-}

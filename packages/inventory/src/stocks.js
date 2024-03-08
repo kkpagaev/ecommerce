@@ -1,8 +1,14 @@
-import { sql } from "@pgtyped/runtime";
-import { IStockUpsertQueryQuery } from "./stocks.types";
+// eslint-disable-next-line no-unused-vars
+import { sql, TaggedQuery } from "@pgtyped/runtime";
+// eslint-disable-next-line no-unused-vars
 import { Pool } from "pg";
 
-export const stockUpsertQuery = sql<IStockUpsertQueryQuery>`
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/stocks.types").IStockUpsertQueryQuery
+ * >}
+ */
+export const stockUpsertQuery = sql`
   INSERT INTO stocks
     (product_id, attribute_id, location_id, count)
   VALUES
@@ -17,19 +23,22 @@ export const stockUpsertQuery = sql<IStockUpsertQueryQuery>`
 `;
 
 export class Stocks {
-  pool: Pool;
-  constructor(f: { pool: Pool }) {
+  /** @param {{ pool: Pool }} f */
+  constructor(f) {
     this.pool = f.pool;
   }
 
-  async upsertStocks(
-    params: Array<{
-      productId: number;
-      attributeValueId: number;
-      locationId: number;
-      count: number;
-    }>,
-  ) {
+  /**
+   * @typedef {{
+   *   productId: number;
+   *   attributeValueId: number;
+   *   locationId: number;
+   *   count: number;
+   * }} StockUpsertParams
+   */
+
+  /** @param {StockUpsertParams[]} params */
+  async upsertStocks(params) {
     const result = await stockUpsertQuery.run(
       {
         values: params.map((p) => ({

@@ -4,7 +4,7 @@ import { Locations } from "../src/location";
 
 async function usingLocations() {
   const db = await testDB(process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user");
-  const locations = Locations({ pool: db.pool });
+  const locations = new Locations({ pool: db.pool });
 
   return {
     db,
