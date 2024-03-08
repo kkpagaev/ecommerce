@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { Pool } from "pg";
 import slugify from "slugify";
 import { tx } from "@repo/pool";

@@ -1,5 +1,6 @@
 import { tx } from "@repo/pool";
-/** @typedef {import("pg").Pool} Pool * */
+// eslint-disable-next-line no-unused-vars
+import { Pool } from "pg";
 // eslint-disable-next-line no-unused-vars
 import { TaggedQuery, sql } from "@pgtyped/runtime";
 

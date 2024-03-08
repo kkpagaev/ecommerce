@@ -1,8 +1,9 @@
-/** @typedef {import("pg").Pool} Pool * */
 // eslint-disable-next-line no-unused-vars
 import { TaggedQuery, sql } from "@pgtyped/runtime";
 import slugify from "slugify";
 import { tx } from "@repo/pool";
+// eslint-disable-next-line no-unused-vars
+import { Pool } from "pg";
 
 /**
  * @type {TaggedQuery<
