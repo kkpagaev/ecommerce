@@ -1,5 +1,3 @@
--- +goose Up
--- +goose StatementBegin
 CREATE TABLE products (
   id SERIAL PRIMARY KEY,
   category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
@@ -21,11 +19,3 @@ CREATE TABLE product_attributes (
   attribute_id INTEGER NOT NULL REFERENCES attributes(id) ON DELETE CASCADE,
   PRIMARY KEY (product_id, attribute_id)
 );
--- +goose StatementEnd
-
--- +goose Down
--- +goose StatementBegin
-DROP TABLE product_attributes;
-DROP TABLE product_descriptions;
-DROP TABLE products;
--- +goose StatementEnd

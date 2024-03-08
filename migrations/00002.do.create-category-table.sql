@@ -1,5 +1,3 @@
--- +goose Up
--- +goose StatementBegin
 CREATE TABLE categories (
   id SERIAL PRIMARY KEY,
   slug VARCHAR(255) NOT NULL,
@@ -13,10 +11,3 @@ CREATE TABLE category_descriptions (
   name VARCHAR(255) NOT NULL,
   PRIMARY KEY (category_id, language_id)
 );
--- +goose StatementEnd
-
--- +goose Down
--- +goose StatementBegin
-DROP TABLE category_descriptions;
-DROP TABLE categories;
--- +goose StatementEnd

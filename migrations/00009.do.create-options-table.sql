@@ -1,5 +1,3 @@
--- +goose Up
--- +goose StatementBegin
 CREATE TYPE option_type as ENUM ('color', 'size', 'text');
 CREATE TABLE option_groups (
   id SERIAL PRIMARY KEY,
@@ -27,13 +25,3 @@ CREATE TABLE option_descriptions (
   name VARCHAR(255) NOT NULL,
   PRIMARY KEY (option_id, language_id)
 );
--- +goose StatementEnd
-
--- +goose Down
--- +goose StatementBegin
-DROP TABLE option_descriptions;
-DROP TABLE options;
-DROP TABLE option_group_descriptions;
-DROP TABLE option_groups;
-DROP TYPE option_type;
--- +goose StatementEnd
