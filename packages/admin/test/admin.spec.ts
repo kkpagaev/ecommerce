@@ -3,7 +3,9 @@ import { testDB } from "@repo/test-utils";
 import { Admins } from "../src";
 
 async function usingAdmins() {
-  const db = await testDB(process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user");
+  const db = await testDB(
+    process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
+  );
   const admins = Admins({ pool: db.pool });
 
   return {

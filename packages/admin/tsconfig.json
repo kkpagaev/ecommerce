@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/node.json",
+  "extends": "@repo/typescript-config/node-lib.json",
   "compilerOptions": {
     "rootDir": "./src",
     "paths": {

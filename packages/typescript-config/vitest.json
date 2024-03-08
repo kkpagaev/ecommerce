@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "strictNullChecks": true,
+    "allowJs": true,
+    "checkJs": true,
+    "rootDir": "../",
+    "baseUrl": ".."
+  }
+}

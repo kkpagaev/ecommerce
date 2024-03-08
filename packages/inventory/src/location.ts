@@ -1,5 +1,11 @@
 import { sql } from "@pgtyped/runtime";
-import { ILocationFindOneQueryQuery, ILocationDeleteQueryQuery, ILocationListQueryQuery, ILocationUpdateQueryQuery, ILocationCreateQueryQuery } from "./location.types";
+import {
+  ILocationFindOneQueryQuery,
+  ILocationDeleteQueryQuery,
+  ILocationListQueryQuery,
+  ILocationUpdateQueryQuery,
+  ILocationCreateQueryQuery,
+} from "./location.types";
 import { Pool } from "pg";
 
 export function Locations(f: { pool: Pool }) {
@@ -20,9 +26,14 @@ export type CreateLocationParams = {
   name: string;
 };
 export async function createLocation(pool: Pool, params: CreateLocationParams) {
-  const result = await locationCreateQuery.run({
-    name: params.name,
-  }, pool).then((r) => r[0]);
+  const result = await locationCreateQuery
+    .run(
+      {
+        name: params.name,
+      },
+      pool,
+    )
+    .then((r) => r[0]);
 
   return result;
 }
@@ -36,11 +47,18 @@ export const locationUpdateQuery = sql<ILocationUpdateQueryQuery>`
 `;
 
 export type UpdateLocationParams = Partial<CreateLocationParams>;
-export async function updateLocation(pool: Pool, id: number, params: UpdateLocationParams) {
-  const result = await locationUpdateQuery.run({
-    id: id,
-    name: params.name,
-  }, pool);
+export async function updateLocation(
+  pool: Pool,
+  id: number,
+  params: UpdateLocationParams,
+) {
+  const result = await locationUpdateQuery.run(
+    {
+      id: id,
+      name: params.name,
+    },
+    pool,
+  );
 
   return result;
 }
@@ -65,9 +83,12 @@ export const locationDeleteQuery = sql<ILocationDeleteQueryQuery>`
   WHERE id = $id!
 `;
 export async function deleteLocation(pool: Pool, id: number) {
-  const result = await locationDeleteQuery.run({
-    id: id,
-  }, pool);
+  const result = await locationDeleteQuery.run(
+    {
+      id: id,
+    },
+    pool,
+  );
 
   return result;
 }
@@ -87,7 +108,10 @@ export type FindOneLocationParams = {
   id?: number;
   name?: string;
 };
-export async function findOneLocation(pool: Pool, params: FindOneLocationParams) {
+export async function findOneLocation(
+  pool: Pool,
+  params: FindOneLocationParams,
+) {
   const res = await locationFindOneQuery.run(params, pool);
   return res[0];
 }

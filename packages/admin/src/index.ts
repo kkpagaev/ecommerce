@@ -1,7 +1,14 @@
 import { Pool } from "pg";
 import * as bcrypt from "bcrypt";
 import { sql } from "@pgtyped/runtime";
-import { IAdminCreateQueryQuery, IAdminUpdateQueryQuery, IAdminFindOneQueryQuery, IAdminListQueryQuery, IAdminListCountQueryQuery, IAdminDeleteQueryQuery } from "./index.types";
+import {
+  IAdminCreateQueryQuery,
+  IAdminUpdateQueryQuery,
+  IAdminFindOneQueryQuery,
+  IAdminListQueryQuery,
+  IAdminListCountQueryQuery,
+  IAdminDeleteQueryQuery,
+} from "./index.types";
 
 export type Admins = ReturnType<typeof Admins>;
 export function Admins(f: { pool: Pool }) {
@@ -36,12 +43,17 @@ type CreateAdmin = {
 };
 export async function createAdmin(pool: Pool, input: CreateAdmin) {
   const hashedPassword = await hashPassword(input.password);
-  return await adminCreateQuery.run({
-    name: input.name,
-    surname: input.surname,
-    email: input.email,
-    password: hashedPassword,
-  }, pool).then((res) => res[0]);
+  return await adminCreateQuery
+    .run(
+      {
+        name: input.name,
+        surname: input.surname,
+        email: input.email,
+        password: hashedPassword,
+      },
+      pool,
+    )
+    .then((res) => res[0]);
 }
 
 const adminUpdateQuery = sql<IAdminUpdateQueryQuery>`
@@ -58,15 +70,22 @@ const adminUpdateQuery = sql<IAdminUpdateQueryQuery>`
 
 type UpdateAdmin = Partial<CreateAdmin>;
 export async function updateAdmin(pool: Pool, id: number, input: UpdateAdmin) {
-  const hashedPassword = input.password ? await hashPassword(input.password) : undefined;
+  const hashedPassword = input.password
+    ? await hashPassword(input.password)
+    : undefined;
 
-  return await adminUpdateQuery.run({
-    id: id,
-    name: input.name,
-    surname: input.surname,
-    email: input.email,
-    password: hashedPassword,
-  }, pool).then((res) => res[0]);
+  return await adminUpdateQuery
+    .run(
+      {
+        id: id,
+        name: input.name,
+        surname: input.surname,
+        email: input.email,
+        password: hashedPassword,
+      },
+      pool,
+    )
+    .then((res) => res[0]);
 }
 
 const adminFindOneQuery = sql<IAdminFindOneQueryQuery>`
@@ -80,10 +99,15 @@ type GetOneAdmin = {
   email?: string;
 };
 export async function getOneAdmin(pool: Pool, input: GetOneAdmin) {
-  const admin = await adminFindOneQuery.run({
-    id: input.id,
-    email: input.email,
-  }, pool).then((res) => res[0]);
+  const admin = await adminFindOneQuery
+    .run(
+      {
+        id: input.id,
+        email: input.email,
+      },
+      pool,
+    )
+    .then((res) => res[0]);
   if (!admin) {
     return null;
   }
@@ -96,9 +120,12 @@ const adminDeleteQuery = sql<IAdminDeleteQueryQuery>`
 `;
 
 export async function deleteAdmin(pool: Pool, id: number) {
-  return await adminDeleteQuery.run({
-    id: id,
-  }, pool);
+  return await adminDeleteQuery.run(
+    {
+      id: id,
+    },
+    pool,
+  );
 }
 
 const adminListQuery = sql<IAdminListQueryQuery>`
@@ -114,12 +141,16 @@ type ListAdmins = {
   page?: number;
 };
 export async function listAdmins(pool: Pool, input: ListAdmins) {
-  const admins = await adminListQuery.run({
-    limit: input.limit,
-    page: input.page,
-  }, pool);
+  const admins = await adminListQuery.run(
+    {
+      limit: input.limit,
+      page: input.page,
+    },
+    pool,
+  );
 
-  const count = await adminListCountQuery.run(undefined, pool)
+  const count = await adminListCountQuery
+    .run(undefined, pool)
     .then((res) => +(res[0]?.count ?? 0));
 
   return {

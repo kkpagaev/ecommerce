@@ -2,12 +2,12 @@
 
 /** 'StockUpsertQuery' parameters type */
 export interface IStockUpsertQueryParams {
-  values: readonly ({
-    product_id: number,
-    attribute_id: number,
-    location_id: number,
-    count: number
-  })[];
+  values: readonly {
+    product_id: number;
+    attribute_id: number;
+    location_id: number;
+    count: number;
+  }[];
 }
 
 /** 'StockUpsertQuery' return type */
@@ -23,4 +23,3 @@ export interface IStockUpsertQueryQuery {
   params: IStockUpsertQueryParams;
   result: IStockUpsertQueryResult;
 }
-

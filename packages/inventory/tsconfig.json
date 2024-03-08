@@ -1,13 +1,12 @@
 {
-  "extends": "@repo/typescript-config/node.json",
+  "extends": "@repo/typescript-config/node-lib.json",
   "compilerOptions": {
-    "noUncheckedIndexedAccess": true,
-    "rootDir": "./",
+    "rootDir": "./src",
     "paths": {
       "src/*": ["./*"]
     },
     "outDir": "dist"
   },
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

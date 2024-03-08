@@ -77,4 +77,3 @@ export interface ILocationFindOneQueryQuery {
   params: ILocationFindOneQueryParams;
   result: ILocationFindOneQueryResult;
 }
-
