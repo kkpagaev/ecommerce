@@ -227,11 +227,12 @@ export class Options {
   }
 
   /**
-   * @typedef ListOptionsProps
-   * @property {number | undefined} groupId
-   * @property {number} languageId
-   * @property {number | undefined} page
-   * @property {number | undefined} limit
+   * @typedef {{
+   *   groupId?: number;
+   *   languageId: number;
+   *   page?: number;
+   *   limit?: number;
+   * }} ListOptionsProps
    */
   /** @param {ListOptionsProps} input */
   async listOptions(input) {

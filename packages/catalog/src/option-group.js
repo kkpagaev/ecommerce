@@ -137,11 +137,7 @@ export class OptionGroups {
     });
   }
 
-  /**
-   * @typedef FindOptionGroupProps
-   * @property {number | undefined} id
-   */
-
+  /** @typedef {{ id?: number }} FindOptionGroupProps */
   /** @param {FindOptionGroupProps} props */
   async findOptionGroup(props) {
     const group = await optionGroupFindOneQuery
