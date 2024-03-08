@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/attribute-group.ts" */
+/** Types generated for queries found in "src/attribute-group.js" */
 
 /** 'AttributeGroupFindOneQuery' parameters type */
 export interface IAttributeGroupFindOneQueryParams {
@@ -57,6 +57,22 @@ export interface IAttributeListQueryQuery {
   result: IAttributeListQueryResult;
 }
 
+/** 'AttributeGroupCreateQuery' parameters type */
+export interface IAttributeGroupCreateQueryParams {
+  sort_order: number;
+}
+
+/** 'AttributeGroupCreateQuery' return type */
+export interface IAttributeGroupCreateQueryResult {
+  id: number;
+}
+
+/** 'AttributeGroupCreateQuery' query type */
+export interface IAttributeGroupCreateQueryQuery {
+  params: IAttributeGroupCreateQueryParams;
+  result: IAttributeGroupCreateQueryResult;
+}
+
 /** 'AttributeGroupUpdateQuery' parameters type */
 export interface IAttributeGroupUpdateQueryParams {
   id: number;
@@ -76,12 +92,12 @@ export interface IAttributeGroupUpdateQueryQuery {
 
 /** 'AttributeGroupDescriptionUpsertQuery' parameters type */
 export interface IAttributeGroupDescriptionUpsertQueryParams {
-  values: readonly {
-    attribute_group_id: number;
-    language_id: number;
-    name: string;
-    description: string | null | void;
-  }[];
+  values: readonly ({
+    attribute_group_id: number,
+    language_id: number,
+    name: string,
+    description: string | null | void
+  })[];
 }
 
 /** 'AttributeGroupDescriptionUpsertQuery' return type */
@@ -98,18 +114,3 @@ export interface IAttributeGroupDescriptionUpsertQueryQuery {
   result: IAttributeGroupDescriptionUpsertQueryResult;
 }
 
-/** 'AttributeGroupCreateQuery' parameters type */
-export interface IAttributeGroupCreateQueryParams {
-  sort_order: number;
-}
-
-/** 'AttributeGroupCreateQuery' return type */
-export interface IAttributeGroupCreateQueryResult {
-  id: number;
-}
-
-/** 'AttributeGroupCreateQuery' query type */
-export interface IAttributeGroupCreateQueryQuery {
-  params: IAttributeGroupCreateQueryParams;
-  result: IAttributeGroupCreateQueryResult;
-}
