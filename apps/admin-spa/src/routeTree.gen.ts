@@ -6,6 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as LanguagesIndexImport } from './routes/languages/index'
 
 // Create Virtual Routes
 
@@ -23,6 +24,11 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LanguagesIndexRoute = LanguagesIndexImport.update({
+  path: '/languages/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -35,9 +41,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/languages/': {
+      preLoaderRoute: typeof LanguagesIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexRoute, AboutLazyRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexRoute,
+  AboutLazyRoute,
+  LanguagesIndexRoute,
+])

@@ -8,6 +8,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../server/src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

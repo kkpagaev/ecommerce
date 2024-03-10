@@ -11,6 +11,7 @@ export const Route = createFileRoute("/")({
   loaderDeps: ({ search: { page, limit } }) => ({ page, limit }),
   loader: ({ deps }) => {
     return api.admin.catalog.category.listCategories.query({
+      languageId: 1,
       page: deps.page,
       limit: deps.limit,
     });

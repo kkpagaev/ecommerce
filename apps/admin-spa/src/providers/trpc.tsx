@@ -18,6 +18,7 @@ export default function TrpcProvider({
       ],
     }),
   );
+
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
