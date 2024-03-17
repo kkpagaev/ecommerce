@@ -4,13 +4,16 @@ import { describe, it, expect } from "vitest";
 
 async function usingStocks() {
   const pool = new Pool({
-    connectionString: process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
+    connectionString:
+      process.env.DATABASE_URL || "postgresql://user:user@localhost:1252/user",
   });
   const client = await pool.connect();
 
   await pool.query(`CREATE TEMPORARY TABLE products (id serial primary key)`);
-  await pool.query(`CREATE TEMPORARY TABLE attribute_values (id serial primary key)`);
-  await pool.query(`CREATE TEMPORARY TABLE locations (LIKE locations INCLUDING ALL)`);
+  await pool.query(`CREATE TEMPORARY TABLE options (id serial primary key)`);
+  await pool.query(
+    `CREATE TEMPORARY TABLE locations (LIKE locations INCLUDING ALL)`,
+  );
   await pool.query(`CREATE TEMPORARY TABLE stocks (LIKE stocks INCLUDING ALL)`);
 
   const stocks = new Stocks({ pool: pool });
@@ -26,20 +29,32 @@ async function usingStocks() {
 }
 
 async function fixture(pool: Pool) {
-  const products: { id: number }[] = await pool.query(`
+  const products: { id: number }[] = await pool
+    .query(
+      `
     INSERT INTO products (id) VALUES (1), (2) RETURNING id
- `).then((res) => res.rows);
+ `,
+    )
+    .then((res) => res.rows);
 
-  const attributeValue: { id: number } = await pool.query(`
-    INSERT INTO attribute_values (id) VALUES (1) RETURNING id
- `).then((res) => res.rows[0]);
-  const location: { id: number; name: string } = await pool.query(`
+  const option: { id: number } = await pool
+    .query(
+      `
+    INSERT INTO options (id) VALUES (1) RETURNING id
+ `,
+    )
+    .then((res) => res.rows[0]);
+  const location: { id: number; name: string } = await pool
+    .query(
+      `
     INSERT INTO locations (id, name) VALUES (1, 'test') RETURNING id, name
-  `).then((res) => res.rows[0]);
+  `,
+    )
+    .then((res) => res.rows[0]);
 
   return {
     products,
-    attributeValue,
+    option,
     location,
   };
 }
@@ -54,7 +69,7 @@ describe("Stocks", () => {
         count: 1,
         productId: product.id,
         locationId: fix.location.id,
-        attributeValueId: fix.attributeValue.id,
+        optionId: fix.option.id,
       },
     ]);
 
@@ -70,7 +85,7 @@ describe("Stocks", () => {
         count: 1,
         productId: product.id,
         locationId: fix.location.id,
-        attributeValueId: fix.attributeValue.id,
+        optionId: fix.option.id,
       },
     ]);
     expect(inserted[0]).toBeDefined();
@@ -81,7 +96,7 @@ describe("Stocks", () => {
         count: 2,
         productId: product.id,
         locationId: fix.location.id,
-        attributeValueId: fix.attributeValue.id,
+        optionId: fix.option.id,
       },
     ]);
 
@@ -98,13 +113,13 @@ describe("Stocks", () => {
         count: 1,
         productId: product1!.id,
         locationId: fix.location.id,
-        attributeValueId: fix.attributeValue.id,
+        optionId: fix.option.id,
       },
       {
         count: 2,
         productId: product2!.id,
         locationId: fix.location.id,
-        attributeValueId: fix.attributeValue.id,
+        optionId: fix.option.id,
       },
     ]);
 
