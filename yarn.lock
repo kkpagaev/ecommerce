@@ -1821,6 +1821,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@repo/orders@workspace:packages/orders":
+  version: 0.0.0-use.local
+  resolution: "@repo/orders@workspace:packages/orders"
+  dependencies:
+    "@pgtyped/cli": ^2.3.0
+    "@pgtyped/runtime": ^2.3.0
+    "@repo/eslint-config": "*"
+    "@repo/pool": "*"
+    "@repo/test-utils": "*"
+    "@repo/typescript-config": "*"
+    "@types/pg": ^8.11.2
+    pg: ^8.11.3
+    typescript: ^5.3.3
+    vitest: ^1.3.1
+  languageName: unknown
+  linkType: soft
+
 "@repo/pool@*, @repo/pool@workspace:packages/pool":
   version: 0.0.0-use.local
   resolution: "@repo/pool@workspace:packages/pool"
