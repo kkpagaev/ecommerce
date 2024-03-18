@@ -22,6 +22,33 @@ export const stockUpsertQuery = sql`
     *;
 `;
 
+export const stockTotalStockQuery = {
+  /**
+   * @param {{ productId: number; optionId: number }[]} params
+   * @param {Pool} pool
+   * @returns {Promise<
+   *   { product_id: number; option_id: number; count: number }[]
+   * >}
+   */
+  run: async (params, pool) => {
+    const query = `
+      SELECT
+        product_id,
+        option_id,
+        SUM("count") AS count 
+      FROM stocks
+      WHERE
+        (product_id, option_id) 
+      IN (${params.map((_, i) => `($${i * 2 + 1}, $${i * 2 + 2})`).join(",")})
+      GROUP BY product_id, option_id;
+    `;
+
+    return await pool
+      .query(query, params.map((p) => [p.productId, p.optionId]).flat())
+      .then((r) => r.rows);
+  },
+};
+
 export class Stocks {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
@@ -52,5 +79,58 @@ export class Stocks {
     );
 
     return result;
+  }
+
+  /**
+   * @param {{
+   *   productId: number;
+   *   optionId: number;
+   * }[]} params
+   * @returns {Promise<
+   *   {
+   *     product_id: number;
+   *     option_id: number;
+   *     count: number;
+   *   }[]
+   * >}
+   */
+  async getStocks(params) {
+    const stocks = await stockTotalStockQuery.run(
+      params.map((p) => ({ productId: p.productId, optionId: p.optionId })),
+      this.pool,
+    );
+
+    return stocks;
+  }
+
+  /**
+   * @param {{
+   *   productId: number;
+   *   optionId: number;
+   *   count: number;
+   * }[]} params
+   * @returns {Promise<
+   *   {
+   *     productId: number;
+   *     optionId: number;
+   *     available: boolean;
+   *   }[]
+   * >}
+   */
+  async available(params) {
+    const currentStocks = await this.getStocks(params);
+
+    return params.map((p) => {
+      const current = currentStocks.find(
+        (c) => c.product_id === p.productId && c.option_id === p.optionId,
+      );
+      const available = current ? current?.count >= p.count ?? false : false;
+
+      return {
+        productId: p.productId,
+        optionId: p.optionId,
+        available: available,
+      };
+    });
   }
 }
