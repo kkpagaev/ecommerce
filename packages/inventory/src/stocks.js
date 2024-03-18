@@ -22,6 +22,33 @@ export const stockUpsertQuery = sql`
     *;
 `;
 
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/stocks.types").IStocksListQueryQuery
+ * >}
+ */
+export const stocksListQuery = sql`
+  SELECT
+    product_id,
+    option_id,
+    location_id,
+    count
+  FROM
+    stocks
+  WHERE
+    product_id = COALESCE($product_id, product_id)
+  AND
+    option_id = COALESCE($option_id, option_id)
+  AND
+    location_id = COALESCE($location_id, location_id)
+  ORDER BY
+    product_id,
+    option_id,
+    location_id
+  LIMIT COALESCE($limit, 10)
+  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
+`;
+
 export const stockTotalStockQuery = {
   /**
    * @param {{ productId: number; optionId: number }[]} params
@@ -83,6 +110,30 @@ export class Stocks {
 
   /**
    * @param {{
+   *   limit?: number;
+   *   page?: number;
+   *   productId?: number;
+   *   optionId?: number;
+   *   locationId?: number;
+   * }} params
+   */
+  async listStocks(params) {
+    const res = await stocksListQuery.run(
+      {
+        page: params.page,
+        limit: params.limit,
+        product_id: params.productId,
+        option_id: params.optionId,
+        location_id: params.locationId,
+      },
+      this.pool,
+    );
+
+    return res;
+  }
+
+  /**
+   * @param {{
    *   productId: number;
    *   optionId: number;
    * }[]} params
@@ -94,7 +145,7 @@ export class Stocks {
    *   }[]
    * >}
    */
-  async getStocks(params) {
+  async getProductStocks(params) {
     const stocks = await stockTotalStockQuery.run(
       params.map((p) => ({ productId: p.productId, optionId: p.optionId })),
       this.pool,
@@ -118,7 +169,7 @@ export class Stocks {
    * >}
    */
   async available(params) {
-    const currentStocks = await this.getStocks(params);
+    const currentStocks = await this.getProductStocks(params);
 
     return params.map((p) => {
       const current = currentStocks.find(

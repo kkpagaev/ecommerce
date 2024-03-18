@@ -24,3 +24,26 @@ export interface IStockUpsertQueryQuery {
   result: IStockUpsertQueryResult;
 }
 
+/** 'StocksListQuery' parameters type */
+export interface IStocksListQueryParams {
+  limit?: number | null | void;
+  location_id?: number | null | void;
+  option_id?: number | null | void;
+  page?: number | null | void;
+  product_id?: number | null | void;
+}
+
+/** 'StocksListQuery' return type */
+export interface IStocksListQueryResult {
+  count: number;
+  location_id: number;
+  option_id: number;
+  product_id: number;
+}
+
+/** 'StocksListQuery' query type */
+export interface IStocksListQueryQuery {
+  params: IStocksListQueryParams;
+  result: IStocksListQueryResult;
+}
+
