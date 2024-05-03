@@ -4,11 +4,12 @@ import {
   fastifyRequestHandler,
 } from "@trpc/server/adapters/fastify";
 import { WSSHandlerOptions, applyWSSHandler } from "@trpc/server/adapters/ws";
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyRequest } from "fastify";
 import { AppRouter, createAppRouter } from "../app.router";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { createContext, Context } from "./context";
 import { ZodSchema } from "zod";
+import { getAuth, User } from "@clerk/fastify";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -42,12 +43,17 @@ export async function fastifyTRPCPlugin<TRouter extends AnyTRPCRouter>(
   let prefix = opts.prefix ?? "";
 
   const appRouter = await createAppRouter(fastify.withTypeProvider<ZodTypeProvider>());
-  const jwt = fastify.jwt;
+  const clerkClient = fastify.clerkClient;
 
   const trpcOptions = {
     router: appRouter,
-    createContext: createContext.bind(null, async (s) => {
-      return jwt.parseAndVerify(s);
+    createContext: createContext.bind(null, async (req) => {
+      const auth = getAuth(req);
+
+      const userId = auth.userId;
+      const user = userId ? await clerkClient.users.getUser(auth.userId) : null;
+
+      return user;
     }),
     onError({ path, error }) {
       console.error(`Error in tRPC handler on path '${path}':`, error);

@@ -17,6 +17,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         languageId: z.number(),
       }),
     )
+    .use(isAuthed)
     .query(async ({ input }) => {
       const res = await catalog.categories.listCategories({
         limit: input.limit,

@@ -1,6 +1,9 @@
 import { updateRoutes } from "./router.gen";
 import { build } from "./app";
 import { AppRouter } from "./app.router";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 // process.env.NODE_ENV = "production";
 
