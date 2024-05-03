@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
@@ -42,14 +42,16 @@ export function DataTable<T>({ data, columns, page, limit }: Props<T>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const dataMemo = useMemo(() => data?.data ?? [], [data]);
 
   useEffect(() => {
     if (data) setCount(data.count);
   }, [data]);
+
   const pageCount = Math.ceil(count / 10);
 
   const table = useReactTable({
-    data: data?.data ?? [],
+    data: dataMemo,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
