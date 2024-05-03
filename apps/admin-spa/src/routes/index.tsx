@@ -14,15 +14,22 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { page, limit } = Route.useLoaderDeps();
-  const { data } = trpc.admin.catalog.category.listCategories.useQuery({
-    languageId: 1,
-    page: page,
-    limit: limit,
-  });
+  const { data, isLoading } =
+    trpc.admin.catalog.category.listCategories.useQuery({
+      languageId: 1,
+      page: page,
+      limit: limit,
+    });
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable data={data} columns={columns} page={page} limit={limit} />
+      <DataTable
+        data={data}
+        columns={columns}
+        page={page}
+        limit={limit}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

@@ -29,14 +29,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DataTablePagination } from "./pagination";
+import { cn } from "../lib/utils";
+import { LoadingSpinner } from "./ui/loading-spinner";
 
 type Props<T> = {
   data: { data: Array<T>; count: number } | undefined;
   columns: ColumnDef<T>[];
   page: number;
   limit: number;
+  isLoading: boolean;
 };
-export function DataTable<T>({ data, columns, page, limit }: Props<T>) {
+export function DataTable<T>({
+  data,
+  columns,
+  page,
+  limit,
+  isLoading,
+}: Props<T>) {
   const [count, setCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -69,6 +78,38 @@ export function DataTable<T>({ data, columns, page, limit }: Props<T>) {
     },
     pageCount: pageCount,
   });
+
+  function DataTableBody() {
+    if (isLoading) {
+      return (
+        <TableRow>
+          <TableCell colSpan={columns.length} className="h-96 text-center">
+            <LoadingSpinner className="mx-auto text-gray-300 h-64" />
+          </TableCell>
+        </TableRow>
+      );
+      // return table.getRowModel().rows.map((row) => (
+    }
+    if (table.getRowModel().rows?.length) {
+      return table.getRowModel().rows.map((row) => (
+        <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+          {row.getVisibleCells().map((cell) => (
+            <TableCell key={cell.id}>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </TableCell>
+          ))}
+        </TableRow>
+      ));
+    }
+
+    return (
+      <TableRow>
+        <TableCell colSpan={columns.length} className="h-24 text-center">
+          No results.
+        </TableCell>
+      </TableRow>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -121,32 +162,7 @@ export function DataTable<T>({ data, columns, page, limit }: Props<T>) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+            <DataTableBody />
           </TableBody>
         </Table>
       </div>

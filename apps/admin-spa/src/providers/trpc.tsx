@@ -11,7 +11,6 @@ export default function TrpcProvider({
 }) {
   const [queryClient] = useState(() => new QueryClient());
   const { getToken, isSignedIn } = useAuth();
-  console.log({ isSignedIn });
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
@@ -23,7 +22,6 @@ export default function TrpcProvider({
             }
 
             const token = await getToken();
-            console.log({ token });
 
             return {
               authorization: `Bearer ${token}`,
