@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
@@ -31,22 +31,25 @@ import {
 import { DataTablePagination } from "./pagination";
 
 type Props<T> = {
-  data: Array<T>;
+  data: { data: Array<T>; count: number } | undefined;
   columns: ColumnDef<T>[];
-  count: number;
   page: number;
   limit: number;
 };
-export function DataTable<T>({ data, columns, count, page, limit }: Props<T>) {
+export function DataTable<T>({ data, columns, page, limit }: Props<T>) {
+  const [count, setCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  useEffect(() => {
+    if (data) setCount(data.count);
+  }, [data]);
   const pageCount = Math.ceil(count / 10);
 
   const table = useReactTable({
-    data,
+    data: data?.data ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

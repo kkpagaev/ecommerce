@@ -43,21 +43,19 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "id",
     header: "Id",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div>{row.getValue("id")}</div>,
   },
   {
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => {
-      return (
-        <div className="capitalize">{row.getValue<Translation>("name").uk}</div>
-      );
+      return <div className="capitalize">{row.getValue("name")}</div>;
     },
   },
   {
     accessorKey: "slug",
     header: "Slug",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("slug")}</div>,
+    cell: ({ row }) => <div>{row.getValue("slug")}</div>,
   },
   {
     id: "actions",

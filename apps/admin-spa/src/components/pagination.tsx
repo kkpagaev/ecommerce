@@ -21,6 +21,7 @@ export function DataTablePagination({ page, count, limit }: Props) {
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
+            disabled={page === 1}
             aria-disabled={page === 1}
             search={{ page: page - 1 }}
           />
@@ -43,6 +44,7 @@ export function DataTablePagination({ page, count, limit }: Props) {
           <PaginationNext
             search={{ page: page + 1 }}
             aria-disabled={page === perPage}
+            disabled={page === perPage}
             isActive={false}
           />
         </PaginationItem>
