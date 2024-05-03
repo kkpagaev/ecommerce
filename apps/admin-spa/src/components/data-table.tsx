@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import {
+  CaretSortIcon,
+  ChevronDownIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,7 +17,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -29,23 +33,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DataTablePagination } from "./pagination";
-import { cn } from "../lib/utils";
-import { LoadingSpinner } from "./ui/loading-spinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type Props<T> = {
   data: { data: Array<T>; count: number } | undefined;
   columns: ColumnDef<T>[];
-  page: number;
-  limit: number;
   isLoading: boolean;
 };
-export function DataTable<T>({
-  data,
-  columns,
-  page,
-  limit,
-  isLoading,
-}: Props<T>) {
+export function DataTable<T>({ data, columns, isLoading }: Props<T>) {
   const [count, setCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -55,6 +56,10 @@ export function DataTable<T>({
 
   useEffect(() => {
     if (data) setCount(data.count);
+  }, [data]);
+
+  useEffect(() => {
+    setRowSelection({});
   }, [data]);
 
   const pageCount = Math.ceil(count / 10);
@@ -81,12 +86,22 @@ export function DataTable<T>({
 
   function DataTableBody() {
     if (isLoading) {
-      return (
-        <TableRow>
-          <TableCell colSpan={columns.length} className="h-96 text-center">
-            <LoadingSpinner className="mx-auto text-gray-300 h-64" />
-          </TableCell>
-        </TableRow>
+      return Array.from({ length: 10 }).map((_, i) =>
+        table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={i}>
+            {headerGroup.headers.map((header) => {
+              return (
+                <TableCell key={header.id} className="animate-pulse">
+                  <span className="bg-gray-200 rounded-md">
+                    <span className="opacity-0">
+                      {Math.random().toString(36).slice(4)}
+                    </span>
+                  </span>
+                </TableCell>
+              );
+            })}
+          </TableRow>
+        )),
       );
       // return table.getRowModel().rows.map((row) => (
     }
@@ -114,6 +129,22 @@ export function DataTable<T>({
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
+        <Select
+          onValueChange={(value) => {
+            table.setPageSize(Number(value));
+          }}
+        >
+          <SelectTrigger className="w-[70px]">
+            <SelectValue placeholder={table.getState().pagination.pageSize} />
+          </SelectTrigger>
+          <SelectContent>
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <SelectItem key={pageSize} value={"" + pageSize}>
+                {pageSize}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -147,14 +178,29 @@ export function DataTable<T>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  const inner = header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      );
+
+                  const column = header.column;
+                  if (!column.columnDef.enableSorting) {
+                    return <TableHead key={header.id}>{inner}</TableHead>;
+                  }
+
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                      >
+                        {inner}
+                        <CaretSortIcon className="ml-2 h-4 w-4" />
+                      </Button>
                     </TableHead>
                   );
                 })}
@@ -168,7 +214,13 @@ export function DataTable<T>({
       </div>
 
       <div className="flex items-center mt-10 justify-end space-x-2">
-        <DataTablePagination page={page} count={count} limit={limit} />
+        <DataTablePagination table={table} />
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+          </div>
+        </div>
       </div>
     </div>
   );

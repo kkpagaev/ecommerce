@@ -12,17 +12,13 @@ export default async ({ t, catalog }: FastifyZod) => ({
   listCategories: t.procedure
     .input(
       z.object({
-        page: z.number().default(1),
-        limit: z.number().default(15),
         languageId: z.number(),
       }),
     )
     .use(isAuthed)
     .query(async ({ input }) => {
       const res = await catalog.categories.listCategories({
-        limit: input.limit,
         languageId: input.languageId,
-        page: input.page,
       });
 
       return res;

@@ -1,6 +1,6 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -42,12 +42,12 @@ export const columns: ColumnDef<Category>[] = [
   },
   {
     accessorKey: "id",
-    header: "Id",
+    enableSorting: true,
     cell: ({ row }) => <div>{row.getValue("id")}</div>,
   },
   {
     accessorKey: "name",
-    header: "Name",
+    enableSorting: true,
     cell: ({ row }) => {
       return <div className="capitalize">{row.getValue("name")}</div>;
     },
@@ -55,12 +55,12 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "slug",
     header: "Slug",
+    enableSorting: true,
     cell: ({ row }) => <div>{row.getValue("slug")}</div>,
   },
   {
     id: "actions",
     enableHiding: false,
-    header: "Actions",
     cell: () => {
       return (
         <DropdownMenu>

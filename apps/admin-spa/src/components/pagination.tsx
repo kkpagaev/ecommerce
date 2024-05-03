@@ -6,15 +6,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { type Table as TableType } from "@tanstack/react-table";
 
-type Props = {
-  page: number;
-  count: number;
-  limit: number;
+type Props<TData> = {
+  table: TableType<TData>;
 };
 
-export function DataTablePagination({ page, count, limit }: Props) {
-  const perPage = Math.ceil(count / limit);
+export function DataTablePagination<T>({ table }: Props<T>) {
+  const perPage = table.getPageCount();
+  const page = table.getState().pagination.pageIndex + 1;
 
   return (
     <Pagination>
@@ -23,7 +23,7 @@ export function DataTablePagination({ page, count, limit }: Props) {
           <PaginationPrevious
             disabled={page === 1}
             aria-disabled={page === 1}
-            search={{ page: page - 1 }}
+            onClick={() => table.setPageIndex(0)}
           />
         </PaginationItem>
         {[...Array(perPage)].map((_, i) => (
@@ -31,10 +31,7 @@ export function DataTablePagination({ page, count, limit }: Props) {
             <PaginationLink
               aria-current={page === i + 1}
               isActive={page === i + 1}
-              search={(s: any) => ({
-                ...s,
-                page: i + 1,
-              })}
+              onClick={() => table.setPageIndex(i)}
             >
               {i + 1}
             </PaginationLink>
@@ -42,10 +39,10 @@ export function DataTablePagination({ page, count, limit }: Props) {
         ))}
         <PaginationItem>
           <PaginationNext
-            search={{ page: page + 1 }}
+            onClick={() => table.nextPage()}
             aria-disabled={page === perPage}
             disabled={page === perPage}
-            isActive={false}
+            isActive={page === perPage}
           />
         </PaginationItem>
       </PaginationContent>
