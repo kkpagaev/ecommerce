@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { api, trpc } from "../../utils/trpc";
+import { api } from "../../utils/trpc";
 
 export const Route = createFileRoute("/languages/")({
   loader: () => {

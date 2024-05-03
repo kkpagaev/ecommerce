@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import TrpcProvider from "./providers/trpc";
+import { ClerkProvider } from "@clerk/clerk-react";
 // import { trpc } from "./utils/trpc";
 
 export const router = createRouter({
@@ -22,14 +23,24 @@ declare module "@tanstack/react-router" {
   }
 }
 
+// Import your publishable key
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+console.log(import.meta.env);
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
+
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <TrpcProvider>
-        <RouterProvider router={router} />
-      </TrpcProvider>
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        <TrpcProvider>
+          <RouterProvider router={router} />
+        </TrpcProvider>
+      </ClerkProvider>
     </StrictMode>,
   );
 }
