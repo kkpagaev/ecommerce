@@ -3,6 +3,14 @@ import { AdminOutputs, trpc } from "../utils/trpc";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
 import { DeleteIcon, TrashIcon } from "lucide-react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "./ui/dialog";
+import { DialogHeader } from "./ui/dialog";
 
 function ImageUpload() {
   const utils = trpc.useUtils();
@@ -82,13 +90,25 @@ export function ImageManager() {
 
   return (
     <div>
-      <ImageUpload />
-      <div className="mt-4">Files</div>
-      <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {data?.map((file) => {
-          return <ImageCard key={file.id} file={file} />;
-        })}
-      </div>
+      <Dialog>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Files</DialogTitle>
+            <DialogDescription>
+              Here you can upload images and delete them
+            </DialogDescription>
+          </DialogHeader>
+
+          <ImageUpload />
+          <div className="mt-4">Files</div>
+          <div className="grid md:grid-cols-4 gap-4">
+            {data?.map((file) => {
+              return <ImageCard key={file.id} file={file} />;
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
