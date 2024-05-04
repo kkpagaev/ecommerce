@@ -2,11 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "../components/data-table";
 import { columns } from "../components/collumns";
 import { trpc } from "../utils/trpc";
+import { z } from "zod";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    languageId: Number(search?.languageId ?? 1),
-  }),
+  validateSearch: (search: Record<string, unknown>) => {
+    return z
+      .object({
+        languageId: z.number().optional(),
+      })
+      .parse(search);
+  },
   component: Index,
 });
 
