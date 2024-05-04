@@ -21,6 +21,7 @@
   "license": "ISC",
   "packageManager": "yarn@3.5.0",
   "dependencies": {
+    "@fastify/static": "^7.0.3",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0"
   },
