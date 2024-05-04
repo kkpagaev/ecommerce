@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Bell, Home, Menu, Package2, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { SignedIn, UserButton } from "@clerk/clerk-react";
+import { SignIn, SignedIn, UserButton, useAuth } from "@clerk/clerk-react";
 
 const pathes: Array<
   { name: string; icon: React.ReactNode } & Parameters<typeof Link>[0]
@@ -41,6 +41,18 @@ function NavBar() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { isSignedIn } = useAuth();
+
+  if (!isSignedIn) {
+    return (
+      <div className="container">
+        <div className="flex justify-center items-center py-20">
+          <SignIn />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
