@@ -2023,6 +2023,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@repo/file-upload@*, @repo/file-upload@workspace:packages/file-upload":
+  version: 0.0.0-use.local
+  resolution: "@repo/file-upload@workspace:packages/file-upload"
+  dependencies:
+    "@pgtyped/cli": ^2.3.0
+    "@pgtyped/runtime": ^2.3.0
+    "@repo/eslint-config": "*"
+    "@repo/pool": "*"
+    "@repo/typescript-config": "*"
+    "@types/pg": ^8.11.2
+    file-type: ^19.0.0
+    pg: ^8.11.3
+    typescript: ^5.3.3
+    vitest: ^1.3.1
+  languageName: unknown
+  linkType: soft
+
 "@repo/inventory@workspace:packages/inventory":
   version: 0.0.0-use.local
   resolution: "@repo/inventory@workspace:packages/inventory"
@@ -2564,6 +2581,13 @@ __metadata:
   version: 8.11.7
   resolution: "@tanstack/table-core@npm:8.11.7"
   checksum: 0db445806a85d2a226225c7a6b31dae0e8be477172c0cabb796ccb2766bfec4c6a8930ebbaa7b4d410de170e1c41f2005bb47762677c059aecba69d65d22e496
+  languageName: node
+  linkType: hard
+
+"@tokenizer/token@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@tokenizer/token@npm:0.3.0"
+  checksum: 1d575d02d2a9f0c5a4ca5180635ebd2ad59e0f18b42a65f3d04844148b49b3db35cf00b6012a1af2d59c2ab3caca59451c5689f747ba8667ee586ad717ee58e1
   languageName: node
   linkType: hard
 
@@ -5933,6 +5957,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-type@npm:^19.0.0":
+  version: 19.0.0
+  resolution: "file-type@npm:19.0.0"
+  dependencies:
+    readable-web-to-node-stream: ^3.0.2
+    strtok3: ^7.0.0
+    token-types: ^5.0.1
+  checksum: 03eec30a0b098f400436d5c578a0f2e8eaf58989fe7eae8762477348305181489c6108c4d560d78d6425fd0e16e99a302ea85fb33d1e046aa166c86884e109af
+  languageName: node
+  linkType: hard
+
 "fill-range@npm:^7.0.1":
   version: 7.0.1
   resolution: "fill-range@npm:7.0.1"
@@ -7147,6 +7182,13 @@ __metadata:
   version: 1.4.0
   resolution: "jju@npm:1.4.0"
   checksum: 3790481bd2b7827dd6336e6e3dc2dcc6d425679ba7ebde7b679f61dceb4457ea0cda330972494de608571f4973c6dfb5f70fab6f3c5037dbab19ac449a60424f
+  languageName: node
+  linkType: hard
+
+"js-base64@npm:^3.7.7":
+  version: 3.7.7
+  resolution: "js-base64@npm:3.7.7"
+  checksum: d1b02971db9dc0fd35baecfaf6ba499731fb44fe3373e7e1d6681fbd3ba665f29e8d9d17910254ef8104e2cb8b44117fe4202d3dc54c7cafe9ba300fe5433358
   languageName: node
   linkType: hard
 
@@ -8783,6 +8825,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"peek-readable@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "peek-readable@npm:5.0.0"
+  checksum: bef5ceb50586eb42e14efba274ac57ffe97f0ed272df9239ce029f688f495d9bf74b2886fa27847c706a9db33acda4b7d23bbd09a2d21eb4c2a54da915117414
+  languageName: node
+  linkType: hard
+
 "pg-cloudflare@npm:^1.1.1":
   version: 1.1.1
   resolution: "pg-cloudflare@npm:1.1.1"
@@ -9531,6 +9580,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"readable-web-to-node-stream@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "readable-web-to-node-stream@npm:3.0.2"
+  dependencies:
+    readable-stream: ^3.6.0
+  checksum: 8c56cc62c68513425ddfa721954875b382768f83fa20e6b31e365ee00cbe7a3d6296f66f7f1107b16cd3416d33aa9f1680475376400d62a081a88f81f0ea7f9c
+  languageName: node
+  linkType: hard
+
 "readdirp@npm:~3.6.0":
   version: 3.6.0
   resolution: "readdirp@npm:3.6.0"
@@ -9990,6 +10048,7 @@ __metadata:
     "@repo/admin": "*"
     "@repo/catalog": "*"
     "@repo/eslint-config": "*"
+    "@repo/file-upload": "*"
     "@repo/pool": "*"
     "@repo/typescript-config": "*"
     "@trpc/server": next
@@ -10002,6 +10061,7 @@ __metadata:
     fastify: ^4.25.2
     fastify-plugin: ^4.5.1
     fastify-type-provider-zod: ^1.1.9
+    js-base64: ^3.7.7
     jsonwebtoken: ^9.0.2
     pg: ^8.11.3
     slugify: ^1.6.6
@@ -10573,6 +10633,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"strtok3@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "strtok3@npm:7.0.0"
+  dependencies:
+    "@tokenizer/token": ^0.3.0
+    peek-readable: ^5.0.0
+  checksum: 2ebe7ad8f2aea611dec6742cf6a42e82764892a362907f7ce493faf334501bf981ce21c828dcc300457e6d460dc9c34d644ededb3b01dcb9e37559203cf1748c
+  languageName: node
+  linkType: hard
+
 "sucrase@npm:^3.32.0":
   version: 3.35.0
   resolution: "sucrase@npm:3.35.0"
@@ -10843,6 +10913,16 @@ __metadata:
   version: 3.7.0
   resolution: "toad-cache@npm:3.7.0"
   checksum: d0f2092ab2c0f3355d3537c41b13888a12996f38080e6c39907e715eb382d997ccf61baab9e8eda3f202b6c07e304728106be3631c9fe3b6c001aaf15b7bdb8f
+  languageName: node
+  linkType: hard
+
+"token-types@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "token-types@npm:5.0.1"
+  dependencies:
+    "@tokenizer/token": ^0.3.0
+    ieee754: ^1.2.1
+  checksum: 32780123bc6ce8b6a2231d860445c994a02a720abf38df5583ea957aa6626873cd1c4dd8af62314da4cf16ede00c379a765707a3b06f04b8808c38efdae1c785
   languageName: node
   linkType: hard
 

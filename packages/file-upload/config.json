@@ -1,0 +1,14 @@
+{
+  "transforms": [
+    {
+      "mode": "ts",
+      "include": "**/*.ts",
+      "emitTemplate": "{{dir}}/queries/{{name}}.types.ts"
+    }
+  ],
+  "srcDir": "./src/",
+  "failOnError": false,
+  "camelCaseColumnNames": false,
+  "typesOverrides": {},
+  "dbUrl": "postgres://user:user@localhost:1252/user"
+}
