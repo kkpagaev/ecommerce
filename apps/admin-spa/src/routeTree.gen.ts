@@ -7,7 +7,8 @@ import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as LanguagesIndexImport } from './routes/languages/index'
 import { Route as CategoriesIndexImport } from './routes/categories/index'
-import { Route as CategoriesCategoryIdImport } from './routes/categories/$categoryId'
+import { Route as CategoriesNewImport } from './routes/categories/new'
+import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 
 // Create/Update Routes
 
@@ -31,8 +32,13 @@ const CategoriesIndexRoute = CategoriesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CategoriesCategoryIdRoute = CategoriesCategoryIdImport.update({
-  path: '/categories/$categoryId',
+const CategoriesNewRoute = CategoriesNewImport.update({
+  path: '/categories/new',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CategoriesCategoryIdEditRoute = CategoriesCategoryIdEditImport.update({
+  path: '/categories/$categoryId/edit',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -48,8 +54,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
-    '/categories/$categoryId': {
-      preLoaderRoute: typeof CategoriesCategoryIdImport
+    '/categories/new': {
+      preLoaderRoute: typeof CategoriesNewImport
       parentRoute: typeof rootRoute
     }
     '/categories/': {
@@ -60,6 +66,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesIndexImport
       parentRoute: typeof rootRoute
     }
+    '/categories/$categoryId/edit': {
+      preLoaderRoute: typeof CategoriesCategoryIdEditImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -68,7 +78,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
-  CategoriesCategoryIdRoute,
+  CategoriesNewRoute,
   CategoriesIndexRoute,
   LanguagesIndexRoute,
+  CategoriesCategoryIdEditRoute,
 ])

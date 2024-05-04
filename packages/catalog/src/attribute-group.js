@@ -175,6 +175,10 @@ export class AttributeGroups {
     });
   }
 
+  async listCategoryAttributeGroups() {
+    return null;
+  }
+
   /**
    * @typedef {{
    *   sortOrder: number;

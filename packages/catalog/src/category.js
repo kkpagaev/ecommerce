@@ -61,7 +61,9 @@ export const categoryFindOneQuery = sql`
  * >}
  */
 export const categoryDescriptionListQuery = sql`
-  SELECT category_id, language_id, name FROM category_descriptions
+  SELECT cd.category_id, cd.language_id, cd.name, l.name as language_name
+  FROM category_descriptions cd
+  JOIN languages l ON cd.language_id = l.id
   WHERE category_id = $category_id!
 `;
 
