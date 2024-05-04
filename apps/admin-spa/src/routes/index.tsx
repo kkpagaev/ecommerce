@@ -1,9 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ImageManager } from "../components/image-manager";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: () => ({ getTitle: () => "Dashboard" }),
+  beforeLoad: ({ context }) => ({
+    ...context,
+    getTitle: () => "Dashboard",
+  }),
   component: Index,
 });
 function Index() {
-  return <div className="container mx-auto py-10">Dashboard</div>;
+  return (
+    <div className="container mx-auto py-10">
+      <ImageManager />
+    </div>
+  );
 }
