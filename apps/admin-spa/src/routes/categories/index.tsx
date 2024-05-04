@@ -29,19 +29,6 @@ import {
 } from "@/components/ui/select";
 import React from "react";
 
-export const Route = createFileRoute("/categories/")({
-  beforeLoad: () => ({ getTitle: () => "Categories" }),
-  validateSearch: (search: Record<string, unknown>) => {
-    return z
-      .object({
-        languageId: z.number().optional(),
-        name: z.string().optional(),
-      })
-      .parse(search);
-  },
-  component: Index,
-});
-
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -159,18 +146,36 @@ function Search() {
   );
 }
 
-function Index() {
-  const search = Route.useSearch();
-  const { data, isLoading } =
-    trpc.admin.catalog.category.listCategories.useQuery({
-      languageId: search.languageId || 1,
-      name: search.name,
+export const Route = createFileRoute("/categories/")({
+  beforeLoad: ({ context }) => ({ ...context, getTitle: () => "Categories" }),
+  validateSearch: (search: Record<string, unknown>) => {
+    return z
+      .object({
+        languageId: z.number().optional(),
+        name: z.string().optional(),
+      })
+      .parse(search);
+  },
+  loaderDeps: ({ search }) => ({
+    languageId: search.languageId || 1,
+    name: search.name,
+  }),
+  loader: async ({ context, deps }) => {
+    return await context.trpc.admin.catalog.category.listCategories.fetch({
+      name: deps.name,
+      languageId: deps.languageId,
     });
+  },
+  component: Index,
+});
+
+function Index() {
+  const data = Route.useLoaderData();
 
   return (
     <div className="container mx-auto py-10">
       <Search />
-      <DataTable data={data} columns={columns} isLoading={isLoading} />
+      <DataTable data={data} columns={columns} isLoading={false} />
     </div>
   );
 }
