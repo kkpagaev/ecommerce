@@ -10,6 +10,7 @@ export interface IFileUploadInsertQueryParams {
 
 /** 'FileUploadInsertQuery' return type */
 export interface IFileUploadInsertQueryResult {
+  created_at: Date | null;
   filename: string;
   id: string;
   mimetype: string;
@@ -21,3 +22,22 @@ export interface IFileUploadInsertQueryQuery {
   params: IFileUploadInsertQueryParams;
   result: IFileUploadInsertQueryResult;
 }
+
+/** 'FileUploadListQuery' parameters type */
+export type IFileUploadListQueryParams = void;
+
+/** 'FileUploadListQuery' return type */
+export interface IFileUploadListQueryResult {
+  created_at: Date | null;
+  filename: string;
+  id: string;
+  mimetype: string;
+  url: string;
+}
+
+/** 'FileUploadListQuery' query type */
+export interface IFileUploadListQueryQuery {
+  params: IFileUploadListQueryParams;
+  result: IFileUploadListQueryResult;
+}
+
