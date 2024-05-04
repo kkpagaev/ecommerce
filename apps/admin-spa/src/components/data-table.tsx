@@ -210,7 +210,7 @@ export function DataTable<T>({ data, columns, isLoading }: Props<T>) {
       </div>
 
       <div className="flex items-center mt-10 justify-end space-x-2">
-        <DataTablePagination table={table} />
+        {pageCount > 0 && <DataTablePagination table={table} />}
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
