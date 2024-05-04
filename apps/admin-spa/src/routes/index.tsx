@@ -5,7 +5,29 @@ import { trpc } from "../utils/trpc";
 import { z } from "zod";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { useForm } from "@tanstack/react-form";
+import { ControllerRenderProps, useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../components/ui/form";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "../components/ui/accordion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import React from "react";
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -19,55 +41,121 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+const LanguageSelect = ({
+  ...props
+}: ControllerRenderProps<
+  {
+    languageId: number;
+    name: string;
+  },
+  "languageId"
+>) => {
+  const languages = trpc.admin.language.list.useQuery();
+
+  return (
+    <Select
+      onValueChange={(v) => {
+        props.onChange(+v);
+      }}
+      value={"" + props.value}
+    >
+      <SelectTrigger className="w-[80px]">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent {...props}>
+        {languages.data?.map((lan) => (
+          <SelectItem key={lan.id} value={"" + lan.id}>
+            {lan.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
 function Search() {
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
+  const defaultValues = {
+    name: "",
+    languageId: 1,
+  };
   const form = useForm({
-    defaultValues: {
-      name: search.name || "",
-    },
-    onSubmit: (data) => {
-      navigate({
-        search: (old) => {
-          console.log({ data });
-          return {
-            ...old,
-            ...data.value,
-          };
-        },
-        replace: true,
-      });
-    },
+    defaultValues: defaultValues,
+    values: { ...defaultValues, ...search },
+  });
+
+  const onSubmit = form.handleSubmit((data) => {
+    console.log(data);
+    navigate({
+      search: (old) => {
+        return {
+          ...old,
+          ...data,
+        };
+      },
+      replace: true,
+    });
   });
 
   return (
-    <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
-        }}
-        className="flex items-center space-x-2"
-      >
-        <form.Field
-          name="name"
-          children={(field) => (
-            <>
-              <Input
-                placeholder="Name"
-                onChange={(e) => field.handleChange(e.target.value)}
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-              />
-            </>
-          )}
-        />
-        <Button type="submit">Search</Button>
-      </form>
-    </div>
+    <Accordion type="single" collapsible>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Filters</AccordionTrigger>
+        <AccordionContent>
+          <Form {...form}>
+            <form onSubmit={onSubmit} className="flex-row space-y-2">
+              <div>
+                <FormField
+                  control={form.control}
+                  name="languageId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Language</FormLabel>
+                      <FormControl>
+                        <LanguageSelect {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={
+                            field.name.toUpperCase()[0] + field.name.slice(1)
+                          }
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <Button type="submit">Search</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => form.reset(defaultValues)}
+                >
+                  Clear
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
 
