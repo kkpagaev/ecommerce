@@ -4,6 +4,7 @@ import { Link, useMatches, useRouter } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { SignIn, SignedIn, UserButton, useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
+import { PanelsTopLeft } from "lucide-react";
 
 const pathes: Array<
   { name: string; icon: React.ReactNode } & Parameters<typeof Link>[0]
@@ -13,6 +14,12 @@ const pathes: Array<
     search: {},
     name: "Home",
     icon: <Home className="h-4 w-4" />,
+  },
+  {
+    to: "/categories",
+    search: {},
+    name: "Categories",
+    icon: <PanelsTopLeft className="h-4 w-4" />,
   },
   {
     to: "/about",
