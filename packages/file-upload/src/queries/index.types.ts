@@ -41,3 +41,17 @@ export interface IFileUploadListQueryQuery {
   result: IFileUploadListQueryResult;
 }
 
+/** 'FileUploadDeleteQuery' parameters type */
+export interface IFileUploadDeleteQueryParams {
+  id: string;
+}
+
+/** 'FileUploadDeleteQuery' return type */
+export type IFileUploadDeleteQueryResult = void;
+
+/** 'FileUploadDeleteQuery' query type */
+export interface IFileUploadDeleteQueryQuery {
+  params: IFileUploadDeleteQueryParams;
+  result: IFileUploadDeleteQueryResult;
+}
+

@@ -7,6 +7,7 @@ import { sql } from "@pgtyped/runtime";
 import {
   IFileUploadListQueryQuery,
   type IFileUploadInsertQueryQuery,
+  IFileUploadDeleteQueryQuery,
 } from "./queries/index.types";
 
 const fileUploadInsertQuery = sql<IFileUploadInsertQueryQuery>`INSERT
@@ -20,6 +21,7 @@ const fileUploadListQuery = sql<IFileUploadListQueryQuery>`
   SELECT * FROM file_uploads
   ORDER BY created_at DESC
 `;
+const fileUploadDeleteQuery = sql<IFileUploadDeleteQueryQuery>`DELETE FROM file_uploads WHERE id = $id!`;
 
 export interface UploadedFile {
   id: string;
@@ -56,6 +58,17 @@ export class Files {
     const res = await fileUploadListQuery.run(undefined, this.pool);
 
     return res;
+  }
+
+  async delete(id: string) {
+    return await fileUploadDeleteQuery
+      .run(
+        {
+          id: id,
+        },
+        this.pool,
+      )
+      .then((r) => r[0]!);
   }
 }
 

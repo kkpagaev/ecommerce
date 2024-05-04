@@ -1,5 +1,8 @@
 import { Input } from "./ui/input";
-import { trpc } from "../utils/trpc";
+import { AdminOutputs, trpc } from "../utils/trpc";
+import { AspectRatio } from "./ui/aspect-ratio";
+import { Button } from "./ui/button";
+import { DeleteIcon, TrashIcon } from "lucide-react";
 
 function ImageUpload() {
   const utils = trpc.useUtils();
@@ -38,19 +41,54 @@ function ImageUpload() {
   );
 }
 
+function ImageCard({ file }: { file: ImageType }) {
+  const utils = trpc.useUtils();
+  const mutation = trpc.admin.files.deleteFile.useMutation({
+    onSuccess: () => {
+      utils.admin.files.listFiles.invalidate();
+    },
+  });
+
+  const onDelete = () => {
+    // are you sure alert?
+    const sure = confirm("Are you sure you want to delete this image?");
+
+    if (!sure) {
+      return;
+    }
+    mutation.mutate({ id: file.id });
+  };
+  return (
+    <div key={file.id}>
+      <AspectRatio
+        ratio={4 / 4}
+        className="relative rounded-md border-black border-2"
+      >
+        <img src={file.url} className="w-full h-full object-cover" />
+        <div className="absolute top-2 right-2">
+          <Button onClick={onDelete} className="text-sm">
+            <TrashIcon />
+          </Button>
+        </div>
+      </AspectRatio>
+    </div>
+  );
+}
+
+type ImageType = AdminOutputs["files"]["listFiles"][number];
+
 export function ImageManager() {
   const { data } = trpc.admin.files.listFiles.useQuery();
 
   return (
     <div>
       <ImageUpload />
-      {data?.map((file) => {
-        return (
-          <div>
-            <img src={file.url} />
-          </div>
-        );
-      })}
+      <div className="mt-4">Files</div>
+      <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {data?.map((file) => {
+          return <ImageCard key={file.id} file={file} />;
+        })}
+      </div>
     </div>
   );
 }

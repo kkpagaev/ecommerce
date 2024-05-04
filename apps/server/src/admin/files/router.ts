@@ -20,4 +20,15 @@ export default async ({ t, fileUpload }: FastifyZod) => ({
     .query(async ({ input }) => {
       return await fileUpload.list();
     }),
+
+  deleteFile: t.procedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .use(isAuthed)
+    .mutation(async ({ input }) => {
+      return await fileUpload.delete(input.id);
+    }),
 });
