@@ -30,6 +30,7 @@ import {
 import React from "react";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => ({ getTitle: () => "Home" }),
   validateSearch: (search: Record<string, unknown>) => {
     return z
       .object({

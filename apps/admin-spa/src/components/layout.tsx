@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Bell, Home, Menu, Package2, Users } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { SignIn, SignedIn, UserButton, useAuth } from "@clerk/clerk-react";
 
