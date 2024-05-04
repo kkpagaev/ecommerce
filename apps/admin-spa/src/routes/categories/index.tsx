@@ -89,7 +89,6 @@ function Search() {
   });
 
   const onSubmit = form.handleSubmit((data) => {
-    console.log(data);
     navigate({
       search: (old) => {
         return {

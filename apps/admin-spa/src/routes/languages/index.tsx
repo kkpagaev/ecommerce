@@ -18,11 +18,6 @@ import type { AdminOutputs } from "@/utils/trpc";
 
 type Language = AdminOutputs["language"]["list"][0];
 
-export const Route = createFileRoute("/languages/")({
-  beforeLoad: () => ({ getTitle: () => "Languages" }),
-  component: Index,
-});
-
 const columns: ColumnDef<Language>[] = [
   {
     id: "select",
@@ -82,17 +77,28 @@ const columns: ColumnDef<Language>[] = [
   },
 ];
 
+export const Route = createFileRoute("/languages/")({
+  component: Index,
+  beforeLoad: async ({ context }) => {
+    return {
+      ...context,
+      getTitle: () => "Languages",
+    };
+  },
+  loader: async ({ context }) => {
+    return await context.trpc.admin.language.list.fetch();
+  },
+});
+
 function Index() {
-  const data = trpc.admin.language.list.useQuery();
+  const data = Route.useLoaderData();
 
   return (
     <div className="container mx-auto py-10">
       <DataTable
-        data={
-          data.data ? { data: data.data, count: data.data.length } : undefined
-        }
+        data={data ? { data: data, count: data.length } : undefined}
         columns={columns}
-        isLoading={data.isLoading}
+        isLoading={false}
       />
     </div>
   );

@@ -7,6 +7,7 @@ import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as LanguagesIndexImport } from './routes/languages/index'
 import { Route as CategoriesIndexImport } from './routes/categories/index'
+import { Route as CategoriesCategoryIdImport } from './routes/categories/$categoryId'
 
 // Create/Update Routes
 
@@ -30,6 +31,11 @@ const CategoriesIndexRoute = CategoriesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const CategoriesCategoryIdRoute = CategoriesCategoryIdImport.update({
+  path: '/categories/$categoryId',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -40,6 +46,10 @@ declare module '@tanstack/react-router' {
     }
     '/about': {
       preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/categories/$categoryId': {
+      preLoaderRoute: typeof CategoriesCategoryIdImport
       parentRoute: typeof rootRoute
     }
     '/categories/': {
@@ -58,6 +68,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
+  CategoriesCategoryIdRoute,
   CategoriesIndexRoute,
   LanguagesIndexRoute,
 ])

@@ -5,16 +5,11 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import TrpcProvider from "./providers/trpc";
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { trpc } from "./utils/trpc";
 // import { trpc } from "./utils/trpc";
 
 export const router = createRouter({
   routeTree,
-  context: {
-    user: {
-      id: "123",
-      name: "John Doe",
-    },
-  },
 });
 
 declare module "@tanstack/react-router" {
@@ -40,6 +35,19 @@ function Auth({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+function InnerApp() {
+  const t = trpc.useUtils();
+
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        trpc: t,
+      }}
+    />
+  );
+}
+
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
@@ -47,7 +55,7 @@ if (!rootElement.innerHTML) {
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <Auth>
           <TrpcProvider>
-            <RouterProvider router={router} />
+            <InnerApp />
           </TrpcProvider>
         </Auth>
       </ClerkProvider>
