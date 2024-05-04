@@ -84,7 +84,6 @@ const columns: ColumnDef<Language>[] = [
 
 function Index() {
   const data = trpc.admin.language.list.useQuery();
-  console.log(data.data);
 
   return (
     <div className="container mx-auto py-10">

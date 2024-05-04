@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { Bell, Home, Menu, Package2, Users } from "lucide-react";
+import { Bell, Home, Menu, Package2, Languages, Users } from "lucide-react";
 import { Link, useMatches, useRouter } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { SignIn, SignedIn, UserButton, useAuth } from "@clerk/clerk-react";
@@ -18,6 +18,11 @@ const pathes: Array<
     to: "/about",
     name: "About",
     icon: <Users className="h-4 w-4" />,
+  },
+  {
+    to: "/languages",
+    name: "Languages",
+    icon: <Languages className="h-4 w-4" />,
   },
 ];
 
