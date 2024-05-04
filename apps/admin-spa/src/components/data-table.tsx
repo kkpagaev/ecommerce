@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
+import { CaretSortIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
   ColumnFiltersState,

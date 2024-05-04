@@ -4,16 +4,17 @@ import { columns } from "../components/collumns";
 import { trpc } from "../utils/trpc";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: { languageId?: string }) => ({
-    languageId: Number(search.languageId),
+  validateSearch: (search: Record<string, unknown>) => ({
+    languageId: Number(search?.languageId ?? 1),
   }),
   component: Index,
 });
 
 function Index() {
+  const search = Route.useSearch();
   const { data, isLoading } =
     trpc.admin.catalog.category.listCategories.useQuery({
-      languageId: 1,
+      languageId: search.languageId || 1,
     });
 
   return (

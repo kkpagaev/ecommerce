@@ -6,6 +6,7 @@ import {
 } from "@clerk/clerk-react";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { Layout } from "../components/layout";
 
 export const Route = createRootRoute({
   component: () => (
@@ -14,16 +15,9 @@ export const Route = createRootRoute({
         <SignedOut>
           <SignInButton />
         </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
       </header>
       <div className="p-2 flex gap-2">
-        <Link
-          to="/"
-          search={{ page: 1, limit: 10 }}
-          className="[&.active]:font-bold"
-        >
+        <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>
         <Link to="/about" className="[&.active]:font-bold">
@@ -31,8 +25,10 @@ export const Route = createRootRoute({
         </Link>
       </div>
       <hr />
-      <Outlet />
-      <TanStackRouterDevtools />
+      <Layout>
+        <Outlet />
+        <TanStackRouterDevtools />
+      </Layout>
     </>
   ),
 });
