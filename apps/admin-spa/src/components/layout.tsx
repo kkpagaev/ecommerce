@@ -1,8 +1,7 @@
 import { Button } from "./ui/button";
-import { Bell, Home, Menu, Package2, Search, Users } from "lucide-react";
+import { Bell, Home, Menu, Package2, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { Input } from "./ui/input";
 import { SignedIn, UserButton } from "@clerk/clerk-react";
 
 const pathes: Array<
@@ -49,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link to={"/"} className="flex items-center gap-2 font-semibold">
               <Package2 className="h-6 w-6" />
-              <span className="">Acme Inc</span>
+              <span className="">Ecommerce</span>
             </Link>
             <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
               <Bell className="h-4 w-4" />
@@ -78,18 +77,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <NavBar />
             </SheetContent>
           </Sheet>
-          <div className="w-full flex-1">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search products..."
-                  className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-                />
-              </div>
-            </form>
-          </div>
+          <div className="w-full flex-1"></div>
           <SignedIn>
             <UserButton />
           </SignedIn>

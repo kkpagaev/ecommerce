@@ -13,12 +13,15 @@ export default async ({ t, catalog }: FastifyZod) => ({
     .input(
       z.object({
         languageId: z.number(),
+        name: z.string().optional(),
       }),
     )
     .use(isAuthed)
     .query(async ({ input }) => {
+      console.log({ input });
       const res = await catalog.categories.listCategories({
         languageId: input.languageId,
+        name: input.name,
       });
 
       return res;

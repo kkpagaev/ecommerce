@@ -29,6 +29,7 @@ export const categoryListQuery = sql`
   FROM categories c
   JOIN category_descriptions cd ON c.id = cd.category_id
   WHERE cd.language_id = $language_id!
+  AND cd.name LIKE COALESCE(CONCAT('%', $name::text, '%'), cd.name)
   ORDER BY id;
 `;
 
@@ -38,7 +39,9 @@ export const categoryListQuery = sql`
  * >}
  */
 export const categoryListCountQuery = sql`
-  SELECT COUNT(*) FROM categories;
+  SELECT COUNT(*) FROM categories
+  JOIN category_descriptions cd ON id = cd.category_id
+  WHERE cd.name LIKE COALESCE(CONCAT('%', $name::text, '%'), cd.name)
 `;
 
 /**
@@ -104,6 +107,7 @@ export class Categories {
   /**
    * @typedef {{
    *   languageId: number;
+   *   name: string | undefined;
    * }} ListCategoriesProps
    */
   /** @param {ListCategoriesProps} input */
@@ -111,11 +115,12 @@ export class Categories {
     const res = await categoryListQuery.run(
       {
         language_id: input.languageId,
+        name: input.name,
       },
       this.pool,
     );
     const count = await categoryListCountQuery
-      .run(undefined, this.pool)
+      .run({ name: input.name }, this.pool)
       .then((res) => +(res[0]?.count ?? 0));
 
     return {

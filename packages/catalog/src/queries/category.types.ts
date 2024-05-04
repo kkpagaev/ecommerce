@@ -20,8 +20,7 @@ export interface ICategoryUpdateQueryQuery {
 /** 'CategoryListQuery' parameters type */
 export interface ICategoryListQueryParams {
   language_id: number;
-  limit?: number | null | void;
-  page?: number | null | void;
+  name?: string | null | void;
 }
 
 /** 'CategoryListQuery' return type */
@@ -40,7 +39,9 @@ export interface ICategoryListQueryQuery {
 }
 
 /** 'CategoryListCountQuery' parameters type */
-export type ICategoryListCountQueryParams = void;
+export interface ICategoryListCountQueryParams {
+  name?: string | null | void;
+}
 
 /** 'CategoryListCountQuery' return type */
 export interface ICategoryListCountQueryResult {

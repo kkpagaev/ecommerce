@@ -35,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useRouter, useSearch } from "@tanstack/react-router";
 
 type Props<T> = {
   data: { data: Array<T>; count: number } | undefined;
