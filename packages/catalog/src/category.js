@@ -29,9 +29,7 @@ export const categoryListQuery = sql`
   FROM categories c
   JOIN category_descriptions cd ON c.id = cd.category_id
   WHERE cd.language_id = $language_id!
-  ORDER BY id
-  LIMIT COALESCE($limit, 10)
-  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
+  ORDER BY id;
 `;
 
 /**
@@ -106,8 +104,6 @@ export class Categories {
   /**
    * @typedef {{
    *   languageId: number;
-   *   page: number;
-   *   limit: number;
    * }} ListCategoriesProps
    */
   /** @param {ListCategoriesProps} input */
@@ -115,8 +111,6 @@ export class Categories {
     const res = await categoryListQuery.run(
       {
         language_id: input.languageId,
-        page: input.page,
-        limit: input.limit,
       },
       this.pool,
     );
