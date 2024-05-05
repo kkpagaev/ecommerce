@@ -2,7 +2,7 @@ import { Input } from "./ui/input";
 import { AdminOutputs, trpc } from "../utils/trpc";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
-import { DeleteIcon, TrashIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import {
   Dialog,
   DialogTrigger,
@@ -12,6 +12,8 @@ import {
 } from "./ui/dialog";
 import { DialogHeader } from "./ui/dialog";
 import { toast } from "sonner";
+import { useState } from "react";
+import { cn } from "../lib/utils";
 
 function ImageUpload() {
   const utils = trpc.useUtils();
@@ -51,11 +53,21 @@ function ImageUpload() {
   );
 }
 
-function ImageCard({ file }: { file: ImageType }) {
+function ImageCard({
+  file,
+  selected,
+  ...props
+}: React.DOMAttributes<HTMLDivElement> & {
+  selected: boolean;
+  file: ImageType;
+}) {
   const utils = trpc.useUtils();
   const mutation = trpc.admin.files.deleteFile.useMutation({
     onSuccess: () => {
       utils.admin.files.listFiles.invalidate();
+    },
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 
@@ -72,9 +84,21 @@ function ImageCard({ file }: { file: ImageType }) {
     <div key={file.id}>
       <AspectRatio
         ratio={4 / 4}
-        className="relative rounded-md border-black border-2"
+        className={cn(
+          "relative rounded-md border-slate-200 border-2",
+          selected && "border-blue-500",
+        )}
       >
-        <img src={file.url} className="w-full h-full object-cover" />
+        <div className="w-full h-full" {...props}>
+          <div
+            className={cn(
+              "absolute inset-0 invisible opacity-0 duration-200 transition-all bg-slate-400/50",
+              selected && "visible opacity-100",
+            )}
+          />
+
+          <img src={file.url} className="w-full h-full object-cover" />
+        </div>
         <div className="absolute top-2 right-2">
           <Button onClick={onDelete} className="text-sm">
             <TrashIcon />
@@ -89,28 +113,50 @@ type ImageType = AdminOutputs["files"]["listFiles"][number];
 
 export function ImageManager() {
   const { data } = trpc.admin.files.listFiles.useQuery();
+  const [selected, setSelected] = useState<Array<string>>([]);
+
+  // useEffect(() => {
+  //   console.log(selected);
+  // }, [selected]);
+
+  const toggleSelected = (id: string) => {
+    if (selected.includes(id)) {
+      setSelected(selected.filter((i) => i !== id));
+    } else {
+      setSelected([...selected, id]);
+    }
+  };
 
   return (
-    <div>
-      <Dialog>
-        <DialogTrigger>Open</DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Files</DialogTitle>
-            <DialogDescription>
-              Here you can upload images and delete them
-            </DialogDescription>
-          </DialogHeader>
+    <Dialog>
+      <Button variant="outline" asChild>
+        <DialogTrigger>Upload Image</DialogTrigger>
+      </Button>
+      <DialogContent className="h-[90vh] max-h-[90vh] max-w-[90vw] sm:h-[90vh] sm:max-h-[90vh] sm:max-w-[90vw]">
+        <DialogHeader>
+          <DialogTitle>Files</DialogTitle>
+          <DialogDescription>
+            Here you can upload images and delete them
+          </DialogDescription>
+        </DialogHeader>
 
-          <ImageUpload />
-          <div className="mt-4">Files</div>
-          <div className="grid md:grid-cols-4 gap-4">
+        <ImageUpload />
+        <div className="mt-4">Files</div>
+        <div className="overflow-y-scroll">
+          <div className="grid md:grid-cols-5 gap-4">
             {data?.map((file) => {
-              return <ImageCard key={file.id} file={file} />;
+              return (
+                <ImageCard
+                  key={file.id}
+                  file={file}
+                  selected={selected.includes(file.id)}
+                  onClick={() => toggleSelected(file.id)}
+                />
+              );
             })}
           </div>
-        </DialogContent>
-      </Dialog>
-    </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
