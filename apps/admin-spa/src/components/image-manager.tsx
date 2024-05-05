@@ -113,9 +113,10 @@ type ImageType = AdminOutputs["files"]["listFiles"][number];
 
 type Props = {
   enableSelect?: boolean;
+  limit?: number;
   onSelectChange?: (selected: Array<ImageType>) => void;
 };
-export function ImageManager({ enableSelect, onSelectChange }: Props) {
+export function ImageManager({ enableSelect, limit, onSelectChange }: Props) {
   const { data } = trpc.admin.files.listFiles.useQuery();
   const [selected, setSelected] = useState<Array<string>>([]);
 
@@ -123,6 +124,10 @@ export function ImageManager({ enableSelect, onSelectChange }: Props) {
 
   const toggleSelected = (id: string) => {
     if (!enableSelect) {
+      return;
+    }
+    if (limit && selected.length >= limit && !selected.includes(id)) {
+      toast.error("You cannot select more than " + limit + " images");
       return;
     }
 
