@@ -12,7 +12,7 @@ import {
 } from "./ui/dialog";
 import { DialogHeader } from "./ui/dialog";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "../lib/utils";
 
 function ImageUpload() {
@@ -111,20 +111,30 @@ function ImageCard({
 
 type ImageType = AdminOutputs["files"]["listFiles"][number];
 
-export function ImageManager() {
+type Props = {
+  enableSelect?: boolean;
+  onSelectChange?: (selected: Array<ImageType>) => void;
+};
+export function ImageManager({ enableSelect, onSelectChange }: Props) {
   const { data } = trpc.admin.files.listFiles.useQuery();
   const [selected, setSelected] = useState<Array<string>>([]);
 
-  // useEffect(() => {
-  //   console.log(selected);
-  // }, [selected]);
+  useEffect(() => {}, [selected, data, onSelectChange]);
 
   const toggleSelected = (id: string) => {
-    if (selected.includes(id)) {
-      setSelected(selected.filter((i) => i !== id));
-    } else {
-      setSelected([...selected, id]);
+    if (!enableSelect) {
+      return;
     }
+
+    const newSelect = selected.includes(id)
+      ? selected.filter((i) => i !== id)
+      : [...selected, id];
+
+    if (onSelectChange) {
+      onSelectChange(data?.filter((file) => newSelect.includes(file.id)) || []);
+    }
+
+    setSelected(newSelect);
   };
 
   return (
