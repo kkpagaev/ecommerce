@@ -150,7 +150,24 @@ export function ImageManager({ enableSelect, limit, onSelectChange }: Props) {
   return (
     <Dialog>
       <Button variant="outline" asChild>
-        <DialogTrigger>Upload Image</DialogTrigger>
+        <DialogTrigger>
+          <div className="flex gap-2">
+            Images
+            {selected.map((i) => {
+              const file = data?.find((f) => f.id === i);
+              if (!file) {
+                return null;
+              }
+              return (
+                <img
+                  key={file.id}
+                  src={file.url}
+                  className="w-6 h-6 rounded-md"
+                />
+              );
+            })}
+          </div>
+        </DialogTrigger>
       </Button>
       <DialogContent className="h-[90vh] max-h-[90vh] max-w-[90vw] sm:h-[90vh] sm:max-h-[90vh] sm:max-w-[90vw]">
         <DialogHeader>
