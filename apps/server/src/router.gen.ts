@@ -79,13 +79,13 @@ function compileCreateAppRouterArgs(n: Node): string {
       delete newNode.router;
 
       return `t.mergeRouters(
-       withValidation(t.router(await ${routerName}(fastify))),
+       t.router(await ${routerName}(fastify)),
        ${compileCreateAppRouterArgs(newNode)}
     )
     `;
     }
     else {
-      return `withValidation(t.router(await ${n.router}(fastify)))`;
+      return `t.router(await ${n.router}(fastify))`;
     }
   }
   let code = "t.router({";

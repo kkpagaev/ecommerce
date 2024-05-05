@@ -12,6 +12,10 @@ import {
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { toast } from "sonner";
+import { parseErrorSchema } from "../../utils/resolver";
+import { useEffect } from "react";
+import { ZodError } from "zod";
+import { ErrorMessage } from "@hookform/error-message";
 
 type CategoryCreateInputs =
   AdminInputs["catalog"]["category"]["createCategory"];
@@ -21,9 +25,22 @@ type LanguageModel = AdminOutputs["language"]["list"][number];
 type CategoryFormProps = {
   languages: LanguageModel[];
   onSubmit: (data: CategoryCreateInputs) => void;
+  errorMessage?: string;
 };
-function CategoryForm({ languages, onSubmit }: CategoryFormProps) {
-  const { register, control, handleSubmit } = useForm<CategoryCreateInputs>({
+function CategoryForm({
+  languages,
+  onSubmit,
+  errorMessage,
+}: CategoryFormProps) {
+  const {
+    formState: { errors },
+    register,
+    control,
+    setError,
+    clearErrors,
+    handleSubmit,
+  } = useForm<CategoryCreateInputs>({
+    shouldFocusError: false,
     defaultValues: {
       imageId: undefined,
       descriptions: languages.map((lang) => {
@@ -34,6 +51,25 @@ function CategoryForm({ languages, onSubmit }: CategoryFormProps) {
       }),
     },
   });
+
+  useEffect(() => {
+    if (!errorMessage) return;
+    toast.error("Form validation error");
+    clearErrors();
+    const errors = parseErrorSchema(
+      new ZodError(JSON.parse(errorMessage)).errors,
+      false,
+    );
+    for (const [path, error] of Object.entries(errors)) {
+      type Path = Parameters<typeof setError>[0];
+
+      setError(path as Path, {
+        type: error.type,
+        message: error.message,
+      });
+    }
+  }, [errorMessage, clearErrors, setError]);
+
   const { fields } = useFieldArray({
     control,
     name: "descriptions",
@@ -41,7 +77,10 @@ function CategoryForm({ languages, onSubmit }: CategoryFormProps) {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit((data) => {
+        clearErrors();
+        onSubmit(data);
+      })}
       className="grid md:grid-cols-2 gap-16"
     >
       <Card>
@@ -59,26 +98,32 @@ function CategoryForm({ languages, onSubmit }: CategoryFormProps) {
                 {...register(`descriptions.${index}.name`)}
                 defaultValue={field.name}
               />
+              <ErrorMessage
+                errors={errors}
+                name={`descriptions.${index}.name`}
+              />
             </div>
           ))}
         </CardContent>
       </Card>
 
-      <ImageManager
-        enableSelect
-        limit={1}
-        onSelectChange={(images) => {
-          if (images.length > 0) {
-            register("imageId").onChange({
-              target: {
-                name: "imageId",
-                value: images[0].id,
-              },
-            });
-          }
-        }}
-      />
-
+      <div>
+        <ImageManager
+          enableSelect
+          limit={1}
+          onSelectChange={(images) => {
+            if (images.length > 0) {
+              register("imageId").onChange({
+                target: {
+                  name: "imageId",
+                  value: images[0].id,
+                },
+              });
+            }
+          }}
+        />
+        <ErrorMessage errors={errors} name={"imageId"} />
+      </div>
       <div className="md:col-span-2">
         <Button type="submit" variant="default" className="w-full md:w-fit">
           Save
@@ -115,7 +160,11 @@ function CategoryNewComponent() {
 
   return (
     <div className="container mx-auto py-10">
-      <CategoryForm languages={languages} onSubmit={onSubmit} />
+      <CategoryForm
+        languages={languages}
+        onSubmit={onSubmit}
+        errorMessage={mutation.error?.message}
+      />
     </div>
   );
 }

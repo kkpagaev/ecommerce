@@ -41,7 +41,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
       z.object({
         imageId: z.string().uuid().optional(),
         descriptions: z.array(z.object({
-          name: z.string(),
+          name: z.string().min(1),
           languageId: z.number(),
         })),
       }),
