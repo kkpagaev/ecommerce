@@ -12,3 +12,4 @@ export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
 export type RouterInputs = inferRouterInputs<AppRouter>;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type AdminOutputs = RouterOutputs["admin"];
+export type AdminInputs = RouterInputs["admin"];

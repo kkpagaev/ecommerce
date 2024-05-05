@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { DataTable } from "@/components/data-table";
 import { columns } from "@/components/collumns";
 import { trpc } from "@/utils/trpc";
@@ -88,61 +88,68 @@ function Search() {
   });
 
   return (
-    <Accordion type="single" collapsible>
-      <AccordionItem value="item-1">
-        <AccordionTrigger>Filters</AccordionTrigger>
-        <AccordionContent>
-          <Form {...form}>
-            <form onSubmit={onSubmit} className="flex-row space-y-2">
-              <div>
-                <FormField
-                  control={form.control}
-                  name="languageId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Language</FormLabel>
-                      <FormControl>
-                        <LanguageSelect {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={
-                            field.name.toUpperCase()[0] + field.name.slice(1)
-                          }
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
-                <Button type="submit">Search</Button>
-                <Button
-                  variant="outline"
-                  onClick={() => form.reset(defaultValues)}
-                >
-                  Clear
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <div className="w-full flex flex-row gap-10">
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Filters</AccordionTrigger>
+          <AccordionContent>
+            <Form {...form}>
+              <form onSubmit={onSubmit} className="flex-row space-y-2">
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="languageId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Language</FormLabel>
+                        <FormControl>
+                          <LanguageSelect {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={
+                              field.name.toUpperCase()[0] + field.name.slice(1)
+                            }
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div>
+                  <Button type="submit">Search</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate({ search: {}, replace: true })}
+                  >
+                    Clear
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      <div>
+        <Link to={"/categories/new"}>
+          <Button variant="default">New</Button>
+        </Link>
+      </div>
+    </div>
   );
 }
 

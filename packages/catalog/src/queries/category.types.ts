@@ -93,6 +93,7 @@ export interface ICategoryDescriptionListQueryQuery {
 
 /** 'CategoryCreateQuery' parameters type */
 export interface ICategoryCreateQueryParams {
+  image?: string | null | void;
   slug: string;
 }
 

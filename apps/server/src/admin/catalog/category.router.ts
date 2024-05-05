@@ -39,6 +39,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
   createCategory: t.procedure
     .input(
       z.object({
+        imageId: z.string().uuid().optional(),
         descriptions: z.array(z.object({
           name: z.string(),
           languageId: z.number(),
@@ -47,6 +48,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
     )
     .mutation(async ({ input }) => {
       const category = await catalog.categories.createCategory({
+        imageId: input.imageId,
         descriptions: input.descriptions,
       });
 

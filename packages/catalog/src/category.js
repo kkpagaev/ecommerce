@@ -74,9 +74,9 @@ export const categoryDescriptionListQuery = sql`
  */
 export const categoryCreateQuery = sql`
   INSERT INTO categories
-    (slug)
+    (slug, image)
   VALUES
-    ($slug!)
+    ($slug!, $image)
   RETURNING id;
 `;
 
@@ -152,6 +152,7 @@ export class Categories {
 
   /**
    * @typedef {{
+   *   imageId?: string;
    *   descriptions: {
    *     name: string;
    *     languageId: number;
@@ -168,6 +169,7 @@ export class Categories {
         .run(
           {
             slug: slug,
+            image: input.imageId,
           },
           client,
         )
