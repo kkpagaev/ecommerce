@@ -11,12 +11,14 @@ import {
   DialogDescription,
 } from "./ui/dialog";
 import { DialogHeader } from "./ui/dialog";
+import { toast } from "sonner";
 
 function ImageUpload() {
   const utils = trpc.useUtils();
   const mutation = trpc.admin.files.uploadFile.useMutation({
     onSuccess: () => {
       utils.admin.files.listFiles.invalidate();
+      toast.success("Image uploaded");
     },
   });
 

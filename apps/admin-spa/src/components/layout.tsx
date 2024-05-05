@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { SignIn, SignedIn, UserButton, useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import { PanelsTopLeft } from "lucide-react";
+import { Toaster } from "./ui/sonner";
 
 const pathes: Array<
   { name: string; icon: React.ReactNode } & Parameters<typeof Link>[0]
@@ -163,6 +164,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           {children}
         </main>
+        <Toaster />
       </div>
     </div>
   );
