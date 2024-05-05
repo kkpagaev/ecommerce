@@ -56,10 +56,12 @@ function ImageUpload() {
 function ImageCard({
   file,
   selected,
+  afterDelete,
   ...props
 }: React.DOMAttributes<HTMLDivElement> & {
   selected: boolean;
   file: ImageType;
+  afterDelete?: (file: ImageType) => void;
 }) {
   const utils = trpc.useUtils();
   const mutation = trpc.admin.files.deleteFile.useMutation({
@@ -79,6 +81,9 @@ function ImageCard({
       return;
     }
     mutation.mutate({ id: file.id });
+    if (afterDelete) {
+      afterDelete(file);
+    }
   };
   return (
     <div key={file.id}>
@@ -166,6 +171,11 @@ export function ImageManager({ enableSelect, limit, onSelectChange }: Props) {
                   file={file}
                   selected={selected.includes(file.id)}
                   onClick={() => toggleSelected(file.id)}
+                  afterDelete={(image) => {
+                    if (selected.includes(image.id)) {
+                      setSelected(selected.filter((i) => i !== image.id));
+                    }
+                  }}
                 />
               );
             })}
