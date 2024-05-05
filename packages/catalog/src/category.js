@@ -25,9 +25,10 @@ export const categoryUpdateQuery = sql`
  * >}
  */
 export const categoryListQuery = sql`
-  SELECT id, slug, cd.*
+  SELECT c.id, c.slug, f.url as image_url, cd.*
   FROM categories c
   JOIN category_descriptions cd ON c.id = cd.category_id
+  LEFT JOIN file_uploads f ON c.image = f.id
   WHERE cd.language_id = $language_id!
   AND cd.name LIKE COALESCE(CONCAT('%', $name::text, '%'), cd.name)
   ORDER BY id;
@@ -41,7 +42,8 @@ export const categoryListQuery = sql`
 export const categoryListCountQuery = sql`
   SELECT COUNT(*) FROM categories
   JOIN category_descriptions cd ON id = cd.category_id
-  WHERE cd.name LIKE COALESCE(CONCAT('%', $name::text, '%'), cd.name)
+  WHERE cd.language_id = $language_id!
+  AND cd.name LIKE COALESCE(CONCAT('%', $name::text, '%'), cd.name)
 `;
 
 /**
@@ -122,7 +124,7 @@ export class Categories {
       this.pool,
     );
     const count = await categoryListCountQuery
-      .run({ name: input.name }, this.pool)
+      .run({ name: input.name, language_id: input.languageId }, this.pool)
       .then((res) => +(res[0]?.count ?? 0));
 
     return {

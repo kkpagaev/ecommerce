@@ -2,7 +2,11 @@ import { Input } from "./ui/input";
 import { AdminOutputs, trpc } from "../utils/trpc";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
-import { TrashIcon } from "lucide-react";
+import {
+  GalleryHorizontalIcon,
+  GalleryVerticalIcon,
+  TrashIcon,
+} from "lucide-react";
 import {
   Dialog,
   DialogTrigger,
@@ -14,6 +18,13 @@ import { DialogHeader } from "./ui/dialog";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { cn } from "../lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "./ui/carousel";
 
 function ImageUpload() {
   const utils = trpc.useUtils();
@@ -148,57 +159,84 @@ export function ImageManager({ enableSelect, limit, onSelectChange }: Props) {
   };
 
   return (
-    <Dialog>
-      <Button variant="outline" asChild>
-        <DialogTrigger>
-          <div className="flex gap-2">
-            Images
-            {selected.map((i) => {
-              const file = data?.find((f) => f.id === i);
-              if (!file) {
+    <div>
+      <Dialog>
+        <Button variant="outline" asChild>
+          <DialogTrigger className="w-full">
+            <div className="flex gap-2 w-full">
+              <GalleryHorizontalIcon />
+              {limit === 1 ? "Image" : "Images"}
+            </div>
+          </DialogTrigger>
+        </Button>
+        <DialogContent className="h-[90vh] max-h-[90vh] max-w-[90vw] sm:h-[90vh] sm:max-h-[90vh] sm:max-w-[90vw]">
+          <DialogHeader>
+            <DialogTitle>Files</DialogTitle>
+            <DialogDescription>
+              Here you can upload images and delete them
+            </DialogDescription>
+          </DialogHeader>
+
+          <ImageUpload />
+          <div className="mt-4">Files</div>
+          <div className="overflow-y-scroll">
+            <div className="grid md:grid-cols-5 gap-4">
+              {data?.map((file) => {
+                return (
+                  <ImageCard
+                    key={file.id}
+                    file={file}
+                    selected={selected.includes(file.id)}
+                    onClick={() => toggleSelected(file.id)}
+                    afterDelete={(image) => {
+                      if (selected.includes(image.id)) {
+                        setSelected(selected.filter((i) => i !== image.id));
+                      }
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      {selected.length > 0 && (
+        <Carousel>
+          <CarouselContent>
+            {selected.map((file) => {
+              const image = data?.find((i) => i.id === file);
+              if (!image) {
                 return null;
               }
               return (
-                <img
-                  key={file.id}
-                  src={file.url}
-                  className="w-6 h-6 rounded-md"
-                />
-              );
-            })}
-          </div>
-        </DialogTrigger>
-      </Button>
-      <DialogContent className="h-[90vh] max-h-[90vh] max-w-[90vw] sm:h-[90vh] sm:max-h-[90vh] sm:max-w-[90vw]">
-        <DialogHeader>
-          <DialogTitle>Files</DialogTitle>
-          <DialogDescription>
-            Here you can upload images and delete them
-          </DialogDescription>
-        </DialogHeader>
+                <CarouselItem className="xl:basis-1/3" key={image.id}>
+                  <AspectRatio
+                    ratio={4 / 4}
+                    className={cn(
+                      "relative rounded-md border-slate-200 border-2",
+                    )}
+                  >
+                    <div className="w-full h-full">
+                      <div
+                        className={cn(
+                          "absolute inset-0 invisible opacity-0 duration-200 transition-all bg-slate-400/50",
+                        )}
+                      />
 
-        <ImageUpload />
-        <div className="mt-4">Files</div>
-        <div className="overflow-y-scroll">
-          <div className="grid md:grid-cols-5 gap-4">
-            {data?.map((file) => {
-              return (
-                <ImageCard
-                  key={file.id}
-                  file={file}
-                  selected={selected.includes(file.id)}
-                  onClick={() => toggleSelected(file.id)}
-                  afterDelete={(image) => {
-                    if (selected.includes(image.id)) {
-                      setSelected(selected.filter((i) => i !== image.id));
-                    }
-                  }}
-                />
+                      <img
+                        src={image.url}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </AspectRatio>
+                </CarouselItem>
               );
             })}
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      )}
+    </div>
   );
 }

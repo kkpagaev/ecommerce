@@ -27,6 +27,7 @@ export interface ICategoryListQueryParams {
 export interface ICategoryListQueryResult {
   category_id: number;
   id: number;
+  image_url: string;
   language_id: number;
   name: string;
   slug: string;
@@ -40,6 +41,7 @@ export interface ICategoryListQueryQuery {
 
 /** 'CategoryListCountQuery' parameters type */
 export interface ICategoryListCountQueryParams {
+  language_id: number;
   name?: string | null | void;
 }
 

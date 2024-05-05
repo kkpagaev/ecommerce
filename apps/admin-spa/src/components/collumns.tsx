@@ -12,6 +12,7 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { Link } from "@tanstack/react-router";
+import { AspectRatio } from "./ui/aspect-ratio";
 
 type Category =
   AdminOutputs["catalog"]["category"]["listCategories"]["data"][0];
@@ -45,18 +46,39 @@ export const columns: ColumnDef<Category>[] = [
     cell: ({ row }) => <div>{row.getValue("id")}</div>,
   },
   {
+    accessorKey: "image_url",
+    enableSorting: false,
+    cell: ({ row }) => {
+      const url = row.getValue("image_url");
+      if (!url) {
+        return null;
+      }
+      return (
+        <AspectRatio
+          ratio={4 / 4}
+          className={"w-fullrounded-md border-slate-200 border-2"}
+        >
+          <img
+            src={row.getValue("image_url")}
+            className="w-full h-full object-cover rounded-md"
+          />
+        </AspectRatio>
+      );
+    },
+  },
+  {
     accessorKey: "name",
     enableSorting: true,
     cell: ({ row }) => {
       return <div className="capitalize">{row.getValue("name")}</div>;
     },
   },
-  {
-    accessorKey: "slug",
-    header: "Slug",
-    enableSorting: true,
-    cell: ({ row }) => <div>{row.getValue("slug")}</div>,
-  },
+  // {
+  //   accessorKey: "slug",
+  //   header: "Slug",
+  //   enableSorting: true,
+  //   cell: ({ row }) => <div>{row.getValue("slug")}</div>,
+  // },
   {
     id: "actions",
     enableHiding: false,

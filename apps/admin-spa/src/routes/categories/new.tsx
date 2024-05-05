@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
 import { useForm, useFieldArray } from "react-hook-form";
 import { AdminInputs, AdminOutputs, trpc } from "../../utils/trpc";
@@ -10,14 +10,19 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { toast } from "sonner";
 
 type CategoryCreateInputs =
   AdminInputs["catalog"]["category"]["createCategory"];
 
 type LanguageModel = AdminOutputs["language"]["list"][number];
 
-function FieldArray({ languages }: { languages: LanguageModel[] }) {
-  // const mutation = trpc.admin.catalog.category.createCategory.useMutation();
+type CategoryFormProps = {
+  languages: LanguageModel[];
+  onSubmit: (data: CategoryCreateInputs) => void;
+};
+function CategoryForm({ languages, onSubmit }: CategoryFormProps) {
   const { register, control, handleSubmit } = useForm<CategoryCreateInputs>({
     defaultValues: {
       imageId: undefined,
@@ -35,7 +40,10 @@ function FieldArray({ languages }: { languages: LanguageModel[] }) {
   });
 
   return (
-    <form onSubmit={handleSubmit((data) => console.log(data))}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid md:grid-cols-2 gap-16"
+    >
       <Card>
         <CardHeader>
           <CardTitle>Name transtlation</CardTitle>
@@ -55,6 +63,27 @@ function FieldArray({ languages }: { languages: LanguageModel[] }) {
           ))}
         </CardContent>
       </Card>
+
+      <ImageManager
+        enableSelect
+        limit={1}
+        onSelectChange={(images) => {
+          if (images.length > 0) {
+            register("imageId").onChange({
+              target: {
+                name: "imageId",
+                value: images[0].id,
+              },
+            });
+          }
+        }}
+      />
+
+      <div className="md:col-span-2">
+        <Button type="submit" variant="default" className="w-full md:w-fit">
+          Save
+        </Button>
+      </div>
     </form>
   );
 }
@@ -66,19 +95,27 @@ export const Route = createFileRoute("/categories/new")({
 
     return { languages };
   },
-  component: CategoryEditComponent,
+  component: CategoryNewComponent,
 });
 
-function CategoryEditComponent() {
+function CategoryNewComponent() {
   const { languages } = Route.useLoaderData();
+  const navigate = useNavigate();
+  const mutation = trpc.admin.catalog.category.createCategory.useMutation({
+    onSuccess: async () => {
+      await utils.admin.catalog.category.listCategories.invalidate();
+      toast.success("Category created");
+      navigate({ to: "/categories" });
+    },
+  });
+  const utils = trpc.useUtils();
+  const onSubmit = async (data: CategoryCreateInputs) => {
+    mutation.mutate(data);
+  };
 
   return (
     <div className="container mx-auto py-10">
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="picture">Picture</Label>
-        <ImageManager enableSelect limit={1} />
-        <FieldArray languages={languages} />
-      </div>
+      <CategoryForm languages={languages} onSubmit={onSubmit} />
     </div>
   );
 }
