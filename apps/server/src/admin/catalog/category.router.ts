@@ -63,6 +63,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         }
       ).and(
         z.object({
+          imageId: z.string().uuid().optional(),
           descriptions: z.array(z.object({
             name: z.string(),
             languageId: z.number(),

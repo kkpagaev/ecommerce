@@ -52,9 +52,11 @@ export const categoryListCountQuery = sql`
  * >}
  */
 export const categoryFindOneQuery = sql`
-  SELECT id, slug FROM categories
-  WHERE id = COALESCE($id, id)
-  AND slug = COALESCE($slug, slug);
+  SELECT c.id, c.slug, f.url as image_url, f.id as image_id FROM categories c
+  LEFT JOIN file_uploads f ON image = f.id
+  WHERE c.id = COALESCE($id, c.id)
+  AND c.slug = COALESCE($slug, c.slug)
+  LIMIT 1;
 `;
 
 /**

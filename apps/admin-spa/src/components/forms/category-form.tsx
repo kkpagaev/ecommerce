@@ -11,18 +11,37 @@ import { useApiForm } from "../../utils/useApiForm";
 type CategoryCreateInputs =
   AdminInputs["catalog"]["category"]["createCategory"];
 
+type CategoryUpdateInputs = Omit<
+  AdminInputs["catalog"]["category"]["updateCategory"],
+  "id"
+>;
+
 type LanguageModel = AdminOutputs["language"]["list"][number];
+type CategoryModel = Exclude<
+  AdminOutputs["catalog"]["category"]["findCategoryById"],
+  null
+>;
 
 type CategoryFormProps = {
-  languages: LanguageModel[];
-  onSubmit: (data: CategoryCreateInputs) => void;
   errorMessage?: string;
-};
+  languages: LanguageModel[];
+  values?: CategoryModel;
+} & (
+  | {
+      edit?: false | undefined;
+      onSubmit: (data: CategoryCreateInputs) => void;
+    }
+  | {
+      edit: true;
+      onSubmit: (data: CategoryUpdateInputs) => void;
+    }
+);
 
 export function CategoryForm({
   languages,
   onSubmit,
   errorMessage,
+  values,
 }: CategoryFormProps) {
   const {
     control,
@@ -32,6 +51,16 @@ export function CategoryForm({
     formState: { errors },
   } = useApiForm({
     errorMessage,
+    values: values && {
+      imageId: values.image_id,
+      descriptions:
+        values.descriptions.map((d) => {
+          return {
+            languageId: d.language_id,
+            name: d.name,
+          };
+        }) || [],
+    },
     defaultValues: {
       imageId: undefined,
       descriptions: languages.map((lang) => {
@@ -69,7 +98,7 @@ export function CategoryForm({
 
               <Input
                 {...register(`descriptions.${index}.name`)}
-                defaultValue={field.name}
+                defaultValue={values?.descriptions[index]?.name}
               />
               <ErrorMessage
                 errors={errors}

@@ -65,6 +65,8 @@ export interface ICategoryFindOneQueryParams {
 /** 'CategoryFindOneQuery' return type */
 export interface ICategoryFindOneQueryResult {
   id: number;
+  image_id: string;
+  image_url: string;
   slug: string;
 }
 
