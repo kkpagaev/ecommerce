@@ -113,6 +113,7 @@ export function CategoryForm({
         <ImageManager
           enableSelect
           limit={1}
+          defaultSelected={values?.image_id ? [values.image_id] : []}
           onSelectChange={(images) => {
             if (images.length > 0) {
               register("imageId").onChange({

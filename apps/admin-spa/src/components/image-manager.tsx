@@ -130,11 +130,19 @@ type ImageType = AdminOutputs["files"]["listFiles"][number];
 type Props = {
   enableSelect?: boolean;
   limit?: number;
+  defaultSelected?: Array<string>;
   onSelectChange?: (selected: Array<ImageType>) => void;
 };
-export function ImageManager({ enableSelect, limit, onSelectChange }: Props) {
+export function ImageManager({
+  enableSelect,
+  defaultSelected,
+  limit,
+  onSelectChange,
+}: Props) {
   const { data } = trpc.admin.files.listFiles.useQuery();
-  const [selected, setSelected] = useState<Array<string>>([]);
+  const [selected, setSelected] = useState<Array<string>>(
+    defaultSelected || [],
+  );
 
   useEffect(() => {}, [selected, data, onSelectChange]);
 
