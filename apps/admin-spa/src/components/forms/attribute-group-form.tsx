@@ -90,46 +90,48 @@ export function AttributeGroupForm({
           <CardTitle>Translations</CardTitle>
         </CardHeader>
         <CardContent>
-          {fields.map((field, index) => (
-            <div key={index}>
-              <CardTitle>
-                {languages.find((lang) => lang.id === field.languageId)?.name}
-              </CardTitle>
-              <div key={field.id} className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor={`descriptions.${index}.name`}>Name</Label>
+          <div className="grid md:grid-cols-2 gap-4">
+            {fields.map((field, index) => (
+              <div key={index}>
+                <CardTitle>
+                  {languages.find((lang) => lang.id === field.languageId)?.name}
+                </CardTitle>
+                <div key={field.id} className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor={`descriptions.${index}.name`}>Name</Label>
 
-                  <Input
-                    {...register(`descriptions.${index}.name`)}
-                    defaultValue={values?.descriptions[index]?.name}
-                    placeholder="name"
-                  />
+                    <Input
+                      {...register(`descriptions.${index}.name`)}
+                      defaultValue={values?.descriptions[index]?.name}
+                      placeholder="name"
+                    />
 
-                  <ErrorMessage
-                    errors={errors}
-                    name={`descriptions.${index}.name`}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor={`descriptions.${index}.description`}>
-                    Description
-                  </Label>
-                  <Textarea
-                    {...register(`descriptions.${index}.description`)}
-                    placeholder="description"
-                    defaultValue={
-                      values?.descriptions[index]?.description || ""
-                    }
-                    rows={5}
-                  />
-                  <ErrorMessage
-                    errors={errors}
-                    name={`descriptions.${index}.description`}
-                  />
+                    <ErrorMessage
+                      errors={errors}
+                      name={`descriptions.${index}.name`}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`descriptions.${index}.description`}>
+                      Description
+                    </Label>
+                    <Textarea
+                      {...register(`descriptions.${index}.description`)}
+                      placeholder="description"
+                      defaultValue={
+                        values?.descriptions[index]?.description || ""
+                      }
+                      rows={5}
+                    />
+                    <ErrorMessage
+                      errors={errors}
+                      name={`descriptions.${index}.description`}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </CardContent>
       </Card>
       <div className="md:col-span-2">

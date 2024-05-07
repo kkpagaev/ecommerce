@@ -1,4 +1,4 @@
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "../../components/data-table";
 
 import { Pencil1Icon } from "@radix-ui/react-icons";
