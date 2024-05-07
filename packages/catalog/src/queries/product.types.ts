@@ -4,8 +4,6 @@ export type NumberOrString = number | string;
 /** 'ProductListQuery' parameters type */
 export interface IProductListQueryParams {
   language_id: number;
-  limit?: number | null | void;
-  page?: number | null | void;
 }
 
 /** 'ProductListQuery' return type */

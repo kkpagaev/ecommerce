@@ -7,7 +7,9 @@ import { Route as LanguagesImport } from './routes/languages'
 import { Route as CategoriesImport } from './routes/categories'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProductsIndexImport } from './routes/products/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
+import { Route as ProductsNewImport } from './routes/products/new'
 import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
@@ -40,8 +42,18 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProductsIndexRoute = ProductsIndexImport.update({
+  path: '/products/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AttributeGroupsIndexRoute = AttributeGroupsIndexImport.update({
   path: '/attribute-groups/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductsNewRoute = ProductsNewImport.update({
+  path: '/products/new',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -130,8 +142,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesNewImport
       parentRoute: typeof LanguagesImport
     }
+    '/products/new': {
+      preLoaderRoute: typeof ProductsNewImport
+      parentRoute: typeof rootRoute
+    }
     '/attribute-groups/': {
       preLoaderRoute: typeof AttributeGroupsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/products/': {
+      preLoaderRoute: typeof ProductsIndexImport
       parentRoute: typeof rootRoute
     }
     '/attribute-groups/$attributeGroupId/edit': {
@@ -173,5 +193,7 @@ export const routeTree = rootRoute.addChildren([
     AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute,
   ]),
   AttributeGroupsNewRoute,
+  ProductsNewRoute,
   AttributeGroupsIndexRoute,
+  ProductsIndexRoute,
 ])

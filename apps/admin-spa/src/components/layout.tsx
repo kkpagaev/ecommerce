@@ -15,42 +15,45 @@ import { useEffect } from "react";
 import { PanelsTopLeft } from "lucide-react";
 import { Toaster } from "./ui/sonner";
 
-const pathes: Array<
-  { name: string; icon: React.ReactNode } & Parameters<typeof Link>[0]
-> = [
-  {
-    to: "/",
-    search: {},
-    name: "Home",
-    icon: <Home className="h-4 w-4" />,
-  },
-  {
-    to: "/categories",
-    search: {},
-    name: "Categories",
-    icon: <PanelsTopLeft className="h-4 w-4" />,
-  },
-  {
-    to: "/about",
-    name: "About",
-    icon: <Users className="h-4 w-4" />,
-  },
-  {
-    to: "/languages",
-    name: "Languages",
-    icon: <Languages className="h-4 w-4" />,
-  },
-  {
-    to: "/attribute-groups",
-    name: "Attribute Groups",
-    icon: <GroupIcon className="h-4 w-4" />,
-  },
-];
-
 function NavBar() {
   return (
     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-      {pathes.map((item, i) => {
+      {(
+        [
+          {
+            to: "/",
+            search: {},
+            name: "Home",
+            icon: <Home className="h-4 w-4" />,
+          },
+          {
+            to: "/categories",
+            search: {},
+            name: "Categories",
+            icon: <PanelsTopLeft className="h-4 w-4" />,
+          },
+          {
+            to: "/about",
+            name: "About",
+            icon: <Users className="h-4 w-4" />,
+          },
+          {
+            to: "/languages",
+            name: "Languages",
+            icon: <Languages className="h-4 w-4" />,
+          },
+          {
+            to: "/attribute-groups",
+            name: "Attribute Groups",
+            icon: <GroupIcon className="h-4 w-4" />,
+          },
+          {
+            to: "/products",
+            name: "Products",
+            icon: <Package2 className="h-4 w-4" />,
+          },
+        ] as const
+      ).map((item, i) => {
         return (
           <Link
             key={i}

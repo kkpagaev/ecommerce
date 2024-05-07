@@ -14,9 +14,7 @@ export const productListQuery = sql`
   SELECT p.id, p.category_id, p.slug, pd.name, pd.description FROM products p
   JOIN product_descriptions pd ON p.id = pd.product_id
   WHERE pd.language_id = $language_id!
-  ORDER BY p.id
-  LIMIT COALESCE($limit, 10)
-  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
+  ORDER BY p.id;
 `;
 
 /**
@@ -245,8 +243,6 @@ export class Products {
 
   /**
    * @typedef {{
-   *   limit?: number;
-   *   page?: number;
    *   languageId: number;
    * }} ListProductsProps
    */
@@ -254,19 +250,17 @@ export class Products {
   async listProducts(input) {
     const products = await productListQuery.run(
       {
-        limit: input.limit,
-        page: input.page,
         language_id: input.languageId,
       },
       this.pool,
     );
-    const count = await productListCountQuery
-      .run(undefined, this.pool)
-      .then((res) => +(res[0]?.count ?? 0));
+    // const count = await productListCountQuery
+    //   .run(undefined, this.pool)
+    //   .then((res) => +(res[0]?.count ?? 0));
 
     return {
       data: products,
-      count: count,
+      count: products.length,
     };
   }
 
