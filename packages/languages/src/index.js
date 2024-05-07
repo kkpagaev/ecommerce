@@ -127,11 +127,13 @@ export class Languages {
 
   /** @param {number} id */
   async get(id) {
-    return await languageGetQuery.run(
-      {
-        id: id,
-      },
-      this.pool,
-    );
+    return await languageGetQuery
+      .run(
+        {
+          id: id,
+        },
+        this.pool,
+      )
+      .then((r) => r[0]);
   }
 }

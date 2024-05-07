@@ -7,7 +7,9 @@ import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as LanguagesIndexImport } from './routes/languages/index'
 import { Route as CategoriesIndexImport } from './routes/categories/index'
+import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
+import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 
 // Create/Update Routes
@@ -32,8 +34,18 @@ const CategoriesIndexRoute = CategoriesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LanguagesNewRoute = LanguagesNewImport.update({
+  path: '/languages/new',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CategoriesNewRoute = CategoriesNewImport.update({
   path: '/categories/new',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LanguagesLanguageIdEditRoute = LanguagesLanguageIdEditImport.update({
+  path: '/languages/$languageId/edit',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -58,6 +70,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesNewImport
       parentRoute: typeof rootRoute
     }
+    '/languages/new': {
+      preLoaderRoute: typeof LanguagesNewImport
+      parentRoute: typeof rootRoute
+    }
     '/categories/': {
       preLoaderRoute: typeof CategoriesIndexImport
       parentRoute: typeof rootRoute
@@ -70,6 +86,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesCategoryIdEditImport
       parentRoute: typeof rootRoute
     }
+    '/languages/$languageId/edit': {
+      preLoaderRoute: typeof LanguagesLanguageIdEditImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -79,7 +99,9 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
   CategoriesNewRoute,
+  LanguagesNewRoute,
   CategoriesIndexRoute,
   LanguagesIndexRoute,
   CategoriesCategoryIdEditRoute,
+  LanguagesLanguageIdEditRoute,
 ])
