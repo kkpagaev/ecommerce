@@ -21,12 +21,12 @@ function CategoryNewComponent() {
     onSuccess: async () => {
       await utils.admin.catalog.category.listCategories.invalidate();
       toast.success("Language created");
-      navigate({ to: "/categories" });
+      navigate({ to: "/languages" });
     },
   });
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <LanguageForm
         onSubmit={async (data) => {
           mutation.mutate(data);

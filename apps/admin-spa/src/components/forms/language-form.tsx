@@ -51,7 +51,7 @@ export function LanguageForm({
         clearErrors();
         onSubmit(data);
       })}
-      className="flex flew-row gap-16"
+      className="flex flex-col gap-4"
     >
       <Card>
         <CardHeader>
@@ -65,7 +65,7 @@ export function LanguageForm({
         </CardContent>
       </Card>
 
-      <div className="md:col-span-2">
+      <div>
         <Button type="submit" variant="default" className="w-full md:w-fit">
           Save
         </Button>

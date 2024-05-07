@@ -90,16 +90,15 @@ export function AttributeGroupForm({
           <CardTitle>Translations</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-8">
             {fields.map((field, index) => (
               <div key={index}>
                 <CardTitle>
                   {languages.find((lang) => lang.id === field.languageId)?.name}
                 </CardTitle>
-                <div key={field.id} className="grid md:grid-cols-2 gap-4">
+                <div key={field.id} className="flex flex-col gap-4">
                   <div>
                     <Label htmlFor={`descriptions.${index}.name`}>Name</Label>
-
                     <Input
                       {...register(`descriptions.${index}.name`)}
                       defaultValue={values?.descriptions[index]?.name}
@@ -134,7 +133,7 @@ export function AttributeGroupForm({
           </div>
         </CardContent>
       </Card>
-      <div className="md:col-span-2">
+      <div>
         <Button type="submit" variant="default" className="w-full md:w-fit">
           Save
         </Button>
