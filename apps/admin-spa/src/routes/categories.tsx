@@ -3,13 +3,14 @@ import { DataTable } from "@/components/data-table";
 import { columns } from "@/components/collumns";
 import { z } from "zod";
 import React from "react";
-import { SearchFilters } from "../../components/search-filters";
-import { Button } from "../../components/ui/button";
+import { SearchFilters } from "@/components/search-filters";
+import { Button } from "@/components/ui/button";
+import { OutletDialog } from "@/components/ui/dialog-outlet";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-export const Route = createFileRoute("/categories/")({
+export const Route = createFileRoute("/categories")({
   beforeLoad: ({ context }) => ({ ...context, getTitle: () => "Categories" }),
   validateSearch: (search: Record<string, unknown>) => {
     return z
@@ -53,6 +54,7 @@ function Index() {
         </div>
       </div>
       <DataTable data={data} columns={columns} isLoading={false} />
+      <OutletDialog path={Route.fullPath} />
     </div>
   );
 }

@@ -3,10 +3,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as CategoriesImport } from './routes/categories'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as LanguagesIndexImport } from './routes/languages/index'
-import { Route as CategoriesIndexImport } from './routes/categories/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
 import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
@@ -15,8 +15,14 @@ import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribu
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
+import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
 // Create/Update Routes
+
+const CategoriesRoute = CategoriesImport.update({
+  path: '/categories',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AboutRoute = AboutImport.update({
   path: '/about',
@@ -33,11 +39,6 @@ const LanguagesIndexRoute = LanguagesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CategoriesIndexRoute = CategoriesIndexImport.update({
-  path: '/categories/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AttributeGroupsIndexRoute = AttributeGroupsIndexImport.update({
   path: '/attribute-groups/',
   getParentRoute: () => rootRoute,
@@ -49,8 +50,8 @@ const LanguagesNewRoute = LanguagesNewImport.update({
 } as any)
 
 const CategoriesNewRoute = CategoriesNewImport.update({
-  path: '/categories/new',
-  getParentRoute: () => rootRoute,
+  path: '/new',
+  getParentRoute: () => CategoriesRoute,
 } as any)
 
 const AttributeGroupsNewRoute = AttributeGroupsNewImport.update({
@@ -70,13 +71,19 @@ const LanguagesLanguageIdEditRoute = LanguagesLanguageIdEditImport.update({
 } as any)
 
 const CategoriesCategoryIdEditRoute = CategoriesCategoryIdEditImport.update({
-  path: '/categories/$categoryId/edit',
-  getParentRoute: () => rootRoute,
+  path: '/$categoryId/edit',
+  getParentRoute: () => CategoriesRoute,
 } as any)
 
 const AttributeGroupsAttributeGroupIdEditRoute =
   AttributeGroupsAttributeGroupIdEditImport.update({
     path: '/edit',
+    getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
+  } as any)
+
+const AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute =
+  AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport.update({
+    path: '/attribute/$attributeId/edit',
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
   } as any)
 
@@ -92,6 +99,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/categories': {
+      preLoaderRoute: typeof CategoriesImport
+      parentRoute: typeof rootRoute
+    }
     '/attribute-groups/$attributeGroupId': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdImport
       parentRoute: typeof rootRoute
@@ -102,7 +113,7 @@ declare module '@tanstack/react-router' {
     }
     '/categories/new': {
       preLoaderRoute: typeof CategoriesNewImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CategoriesImport
     }
     '/languages/new': {
       preLoaderRoute: typeof LanguagesNewImport
@@ -110,10 +121,6 @@ declare module '@tanstack/react-router' {
     }
     '/attribute-groups/': {
       preLoaderRoute: typeof AttributeGroupsIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/categories/': {
-      preLoaderRoute: typeof CategoriesIndexImport
       parentRoute: typeof rootRoute
     }
     '/languages/': {
@@ -126,11 +133,15 @@ declare module '@tanstack/react-router' {
     }
     '/categories/$categoryId/edit': {
       preLoaderRoute: typeof CategoriesCategoryIdEditImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CategoriesImport
     }
     '/languages/$languageId/edit': {
       preLoaderRoute: typeof LanguagesLanguageIdEditImport
       parentRoute: typeof rootRoute
+    }
+    '/attribute-groups/$attributeGroupId/attribute/$attributeId/edit': {
+      preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport
+      parentRoute: typeof AttributeGroupsAttributeGroupIdImport
     }
   }
 }
@@ -140,15 +151,17 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
+  CategoriesRoute.addChildren([
+    CategoriesNewRoute,
+    CategoriesCategoryIdEditRoute,
+  ]),
   AttributeGroupsAttributeGroupIdRoute.addChildren([
     AttributeGroupsAttributeGroupIdEditRoute,
+    AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute,
   ]),
   AttributeGroupsNewRoute,
-  CategoriesNewRoute,
   LanguagesNewRoute,
   AttributeGroupsIndexRoute,
-  CategoriesIndexRoute,
   LanguagesIndexRoute,
-  CategoriesCategoryIdEditRoute,
   LanguagesLanguageIdEditRoute,
 ])

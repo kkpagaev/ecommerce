@@ -2,35 +2,31 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { trpc } from "../../utils/trpc";
 import { AttributeGroupForm } from "../../components/forms/attribute-group-form";
-import { Dialog, DialogContent } from "../../components/ui/dialog";
 
 export const Route = createFileRoute(
-  "/attribute-groups/$attributeGroupId/edit",
+  "/attribute-groups/$attributeGroupId/attribute/$attributeId/edit",
 )({
   beforeLoad: ({ context }) => ({
     ...context,
     getTitle: () => "Edit Attribute Group",
   }),
-
   loader: async ({ context, params }) => {
     const languages = await context.trpc.admin.language.list.fetch();
-    const attributeGroup =
-      await context.trpc.admin.catalog.attributeGroup.findOneAttributeGroup.fetch(
-        {
-          id: Number(params.attributeGroupId),
-        },
-      );
-    if (!attributeGroup) {
+    const attribute =
+      await context.trpc.admin.catalog.attribute.findOneAttribute.fetch({
+        id: Number(params.attributeId),
+      });
+    if (!attribute) {
       throw new Error("Category not found");
     }
 
-    return { attributeGroup, languages };
+    return { attribute, languages };
   },
   component: AttributeEdit,
 });
 
 function AttributeEdit() {
-  const { attributeGroup, languages } = Route.useLoaderData();
+  const { attribute, languages } = Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
 
@@ -47,11 +43,11 @@ function AttributeEdit() {
     <div className="container mx-auto py-10">
       <AttributeGroupForm
         edit
-        values={attributeGroup}
+        values={attribute as any}
         languages={languages}
         onSubmit={async (data) => {
           mutation.mutate({
-            id: attributeGroup.id,
+            id: attribute.id,
             ...data,
           });
         }}

@@ -290,6 +290,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.7.6":
+  version: 7.24.5
+  resolution: "@babel/runtime@npm:7.24.5"
+  dependencies:
+    regenerator-runtime: ^0.14.0
+  checksum: 755383192f3ac32ba4c62bd4f1ae92aed5b82d2c6665f39eb28fa94546777cf5c63493ea92dd03f1c2e621b17e860f190c056684b7f234270fdc91e29beda063
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.9.0":
   version: 7.23.9
   resolution: "@babel/runtime@npm:7.23.9"
@@ -2608,6 +2617,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-location@npm:^3.7.4":
+  version: 3.7.4
+  resolution: "@tanstack/react-location@npm:3.7.4"
+  dependencies:
+    "@babel/runtime": ^7.16.7
+    history: ^5.2.0
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 54dfa1c7d9f1be080ec63f392bb8f3e724ef194e8a6b3b044328efd1917913fbf27ce7e18af3e6a2eabd6fa7741e1242a4ea1fdd259aebee8ff8b9eaf6f2893e
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-query@npm:latest":
   version: 5.17.19
   resolution: "@tanstack/react-query@npm:5.17.19"
@@ -3442,6 +3464,7 @@ __metadata:
     "@repo/eslint-config": "*"
     "@repo/typescript-config": "*"
     "@tanstack/react-form": ^0.19.4
+    "@tanstack/react-location": ^3.7.4
     "@tanstack/react-query": latest
     "@tanstack/react-router": ^1.14.0
     "@tanstack/react-table": ^8.11.7
@@ -6749,6 +6772,15 @@ __metadata:
   dependencies:
     function-bind: ^1.1.2
   checksum: e8516f776a15149ca6c6ed2ae3110c417a00b62260e222590e54aa367cbcd6ed99122020b37b7fbdf05748df57b265e70095d7bf35a47660587619b15ffb93db
+  languageName: node
+  linkType: hard
+
+"history@npm:^5.2.0":
+  version: 5.3.0
+  resolution: "history@npm:5.3.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+  checksum: d73c35df49d19ac172f9547d30a21a26793e83f16a78386d99583b5bf1429cc980799fcf1827eb215d31816a6600684fba9686ce78104e23bd89ec239e7c726f
   languageName: node
   linkType: hard
 

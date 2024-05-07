@@ -3,6 +3,7 @@ import { trpc } from "../../utils/trpc";
 import { toast } from "sonner";
 import { CategoryForm } from "../../components/forms/category-form";
 import { AttributeGroupForm } from "../../components/forms/attribute-group-form";
+import { Dialog, DialogContent } from "../../components/ui/dialog";
 
 export const Route = createFileRoute("/attribute-groups/new")({
   beforeLoad: ({ context }) => ({

@@ -1,4 +1,9 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import {
+  Link,
+  createFileRoute,
+  useMatches,
+  useNavigate,
+} from "@tanstack/react-router";
 import { DataTable } from "../../components/data-table";
 
 import { Pencil1Icon } from "@radix-ui/react-icons";
@@ -9,6 +14,7 @@ import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
 import { SearchFilters } from "../../components/search-filters";
 import { TooltipLink } from "../../components/ui/tooltip-link";
+import { OutletDialog } from "../../components/ui/dialog-outlet";
 
 type Language = AdminOutputs["language"]["list"][0];
 
@@ -53,7 +59,7 @@ const columns: ColumnDef<Language>[] = [
     cell: ({ row }) => {
       return (
         <TooltipLink
-          to="/attribute-groups/$attributeGroupId/edit"
+          to="/attribute-groups/$attributeGroupId/"
           params={{ attributeGroupId: "" + row.getValue("id") }}
           text="Edit"
         >
@@ -87,6 +93,7 @@ export const Route = createFileRoute("/attribute-groups/")({
     name: search.name,
   }),
   loader: async ({ context, deps }) => {
+    console.log("i am here");
     return await context.trpc.admin.catalog.attributeGroup.listAttributeGroups.fetch(
       {
         languageId: deps.languageId,
@@ -99,6 +106,8 @@ export const Route = createFileRoute("/attribute-groups/")({
 function Index() {
   const data = Route.useLoaderData();
   const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+  const params = Route.useParams();
 
   return (
     <div className="container mx-auto py-10">
