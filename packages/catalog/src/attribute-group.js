@@ -26,19 +26,6 @@ export const attributeGroupDescriptionListQuery = sql`
   FROM attribute_group_descriptions
   WHERE attribute_group_id = $attribute_group_id!
 `;
-/**
- * @type {TaggedQuery<
- *   import("./queries/attribute-group.types").IAttributeListQueryQuery
- * >}
- */
-export const attributeListQuery = sql`
-  SELECT id, attribute_group_id, ad.*
-  FROM attributes a
-  JOIN attribute_descriptions ad
-    ON a.id = ad.attribute_id
-  WHERE ad.language_id = $language_id!
-  AND attribute_group_id = COALESCE($attribute_group_id, attribute_group_id)
-`;
 
 /**
  * @type {TaggedQuery<

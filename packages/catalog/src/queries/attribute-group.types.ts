@@ -36,27 +36,6 @@ export interface IAttributeGroupDescriptionListQueryQuery {
   result: IAttributeGroupDescriptionListQueryResult;
 }
 
-/** 'AttributeListQuery' parameters type */
-export interface IAttributeListQueryParams {
-  attribute_group_id?: number | null | void;
-  language_id: number;
-}
-
-/** 'AttributeListQuery' return type */
-export interface IAttributeListQueryResult {
-  attribute_group_id: number;
-  attribute_id: number;
-  id: number;
-  language_id: number;
-  name: string;
-}
-
-/** 'AttributeListQuery' query type */
-export interface IAttributeListQueryQuery {
-  params: IAttributeListQueryParams;
-  result: IAttributeListQueryResult;
-}
-
 /** 'AttributeGroupCreateQuery' parameters type */
 export interface IAttributeGroupCreateQueryParams {
   sort_order: number;

@@ -45,6 +45,21 @@ export default async ({ t, catalog }: FastifyZod) => ({
     .query(async ({ input }) => {
       return await catalog.attributes.findOneAttribute(input);
     }),
+  findAllGroupAttributes: t.procedure
+    .input(
+      z.object({
+        groupId: z.number(),
+        languageId: z.number(),
+      }))
+    .use(isAuthed)
+    .query(async ({ input }) => {
+      const res = await catalog.attributes.listGroupAttributes({
+        groupId: input.groupId,
+        languageId: input.languageId,
+      });
+
+      return res;
+    }),
   // listAttributes: t.procedure
   //   .input(z.object({
   //   }))

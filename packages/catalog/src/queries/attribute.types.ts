@@ -98,3 +98,24 @@ export interface IAttributeDescriptionListQueryQuery {
   result: IAttributeDescriptionListQueryResult;
 }
 
+/** 'AttributeListQuery' parameters type */
+export interface IAttributeListQueryParams {
+  attribute_group_id?: number | null | void;
+  language_id: number;
+}
+
+/** 'AttributeListQuery' return type */
+export interface IAttributeListQueryResult {
+  attribute_group_id: number;
+  attribute_id: number;
+  id: number;
+  language_id: number;
+  name: string;
+}
+
+/** 'AttributeListQuery' query type */
+export interface IAttributeListQueryQuery {
+  params: IAttributeListQueryParams;
+  result: IAttributeListQueryResult;
+}
+

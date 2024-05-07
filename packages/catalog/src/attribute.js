@@ -77,6 +77,20 @@ export const attributeDescriptionListQuery = sql`
     WHERE attribute_id = $attribute_id!
 `;
 
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/attribute.types").IAttributeListQueryQuery
+ * >}
+ */
+export const attributeListQuery = sql`
+  SELECT id, attribute_group_id, ad.*
+  FROM attributes a
+  JOIN attribute_descriptions ad
+    ON a.id = ad.attribute_id
+  WHERE ad.language_id = $language_id!
+  AND attribute_group_id = COALESCE($attribute_group_id, attribute_group_id)
+`;
+
 export class Attributes {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
@@ -189,5 +203,23 @@ export class Attributes {
         descriptions,
       };
     });
+  }
+
+  /**
+   * @param {{
+   *   groupId: number;
+   *   languageId: number;
+   * }} input
+   */
+  async listGroupAttributes(input) {
+    const res = await attributeListQuery.run(
+      {
+        language_id: input.languageId,
+        attribute_group_id: input.groupId,
+      },
+      this.pool,
+    );
+
+    return res;
   }
 }

@@ -35,7 +35,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useRouter, useSearch } from "@tanstack/react-router";
+
+// const columns = React.useMemo<ColumnDef<Attribute>[]>(
+//   () => [
+//     {
+//       id: "drag-handle",
+//       header: "Move",
+//       cell: ({ row }) => <RowDragHandleCell rowId={+row.id} />,
+//       size: 60,
+//     },
+//     {
+//       accessorKey: "id",
+//       cell: (info) => info.getValue(),
+//     },
+//     {
+//       accessorFn: (row) => row.name,
+//       id: "name",
+//       cell: (info) => info.getValue(),
+//       header: () => <span>Name</span>,
+//     },
+//   ],
+//   [],
+// );
 
 type Props<T> = {
   data: { data: Array<T>; count: number } | undefined;

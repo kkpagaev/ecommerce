@@ -34,9 +34,10 @@ type Props = {
   search: Record<string, unknown>;
   filters: SearchFilterProps[];
   fullPath: string;
+  title?: string;
 };
 
-export function SearchFilters({ search, fullPath, filters }: Props) {
+export function SearchFilters({ search, title, fullPath, filters }: Props) {
   const navigate = useNavigate({ from: fullPath });
   const form = useForm({
     values: { ...search },
@@ -58,7 +59,7 @@ export function SearchFilters({ search, fullPath, filters }: Props) {
   return (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item-1">
-        <AccordionTrigger>Filters</AccordionTrigger>
+        <AccordionTrigger>{title ?? "Filters"}</AccordionTrigger>
         <AccordionContent>
           <Form {...form}>
             <form onSubmit={onSubmit} className="flex-row space-y-2">
@@ -107,7 +108,7 @@ export function SearchFilters({ search, fullPath, filters }: Props) {
               ))}
 
               <div>
-                <Button type="submit">Search</Button>
+                <Button type="submit">Save</Button>
                 <Button
                   type="reset"
                   variant="outline"
