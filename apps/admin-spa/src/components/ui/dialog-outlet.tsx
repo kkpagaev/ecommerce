@@ -26,7 +26,6 @@ export const OutletDialog = ({ path }: Props) => {
   });
 
   const onBack = () => {
-    console.log("foo");
     router.history.go(-1);
   };
 
