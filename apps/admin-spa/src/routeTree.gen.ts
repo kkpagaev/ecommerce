@@ -15,6 +15,7 @@ import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribu
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
+import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
 // Create/Update Routes
@@ -81,6 +82,12 @@ const AttributeGroupsAttributeGroupIdEditRoute =
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
   } as any)
 
+const AttributeGroupsAttributeGroupIdAttributeNewRoute =
+  AttributeGroupsAttributeGroupIdAttributeNewImport.update({
+    path: '/attribute/new',
+    getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
+  } as any)
+
 const AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute =
   AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport.update({
     path: '/attribute/$attributeId/edit',
@@ -139,6 +146,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesLanguageIdEditImport
       parentRoute: typeof LanguagesImport
     }
+    '/attribute-groups/$attributeGroupId/attribute/new': {
+      preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeNewImport
+      parentRoute: typeof AttributeGroupsAttributeGroupIdImport
+    }
     '/attribute-groups/$attributeGroupId/attribute/$attributeId/edit': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport
       parentRoute: typeof AttributeGroupsAttributeGroupIdImport
@@ -158,6 +169,7 @@ export const routeTree = rootRoute.addChildren([
   LanguagesRoute.addChildren([LanguagesNewRoute, LanguagesLanguageIdEditRoute]),
   AttributeGroupsAttributeGroupIdRoute.addChildren([
     AttributeGroupsAttributeGroupIdEditRoute,
+    AttributeGroupsAttributeGroupIdAttributeNewRoute,
     AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute,
   ]),
   AttributeGroupsNewRoute,

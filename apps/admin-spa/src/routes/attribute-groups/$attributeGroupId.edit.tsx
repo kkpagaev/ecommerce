@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { trpc } from "../../utils/trpc";
 import { AttributeGroupForm } from "../../components/forms/attribute-group-form";
-import { Dialog, DialogContent } from "../../components/ui/dialog";
 
 export const Route = createFileRoute(
   "/attribute-groups/$attributeGroupId/edit",
@@ -44,19 +43,17 @@ function AttributeEdit() {
     });
 
   return (
-    <div className="container mx-auto py-10">
-      <AttributeGroupForm
-        edit
-        values={attributeGroup}
-        languages={languages}
-        onSubmit={async (data) => {
-          mutation.mutate({
-            id: attributeGroup.id,
-            ...data,
-          });
-        }}
-        errorMessage={mutation.error?.message}
-      />
-    </div>
+    <AttributeGroupForm
+      edit
+      values={attributeGroup}
+      languages={languages}
+      onSubmit={async (data) => {
+        mutation.mutate({
+          id: attributeGroup.id,
+          ...data,
+        });
+      }}
+      errorMessage={mutation.error?.message}
+    />
   );
 }
