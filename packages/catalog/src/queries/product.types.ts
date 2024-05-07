@@ -21,6 +21,22 @@ export interface IProductListQueryQuery {
   result: IProductListQueryResult;
 }
 
+/** 'ProductAttributeListQuery' parameters type */
+export interface IProductAttributeListQueryParams {
+  product_id: number;
+}
+
+/** 'ProductAttributeListQuery' return type */
+export interface IProductAttributeListQueryResult {
+  id: number;
+}
+
+/** 'ProductAttributeListQuery' query type */
+export interface IProductAttributeListQueryQuery {
+  params: IProductAttributeListQueryParams;
+  result: IProductAttributeListQueryResult;
+}
+
 /** 'ProductListCountQuery' parameters type */
 export type IProductListCountQueryParams = void;
 
@@ -77,6 +93,7 @@ export interface IProductFindOneQueryResult {
   category_id: number;
   created_at: Date;
   id: number;
+  price: string | null;
   slug: string;
   updated_at: Date;
 }

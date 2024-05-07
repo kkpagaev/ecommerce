@@ -2,12 +2,6 @@ import { z } from "zod";
 import { FastifyZod } from "fastify";
 import { isAuthed } from "../../core/trpc";
 
-export const translationSchema = z.object({
-  uk: z.string(),
-  ru: z.string(),
-  en: z.string(),
-}).strict();
-
 export default async ({ t, catalog }: FastifyZod) => ({
   listCategories: t.procedure
     .input(

@@ -1,7 +1,6 @@
 import { FastifyZod } from "fastify";
 import { z } from "zod";
 import { isAuthed } from "../../core/trpc";
-import { translationSchema } from "./category.router";
 
 export default async ({ t, catalog }: FastifyZod) => ({
   listProducts: t.procedure
@@ -20,7 +19,6 @@ export default async ({ t, catalog }: FastifyZod) => ({
     }),
   createProduct: t.procedure
     .input(z.object({
-      name: translationSchema,
       price: z.number().positive()
         .multipleOf(0.01),
       categoryId: z.number(),
@@ -49,7 +47,6 @@ export default async ({ t, catalog }: FastifyZod) => ({
       })
         .and(
           z.object({
-            name: translationSchema,
             price: z.number().positive()
               .multipleOf(0.01),
             categoryId: z.number(),

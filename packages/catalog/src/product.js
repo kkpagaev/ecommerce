@@ -19,6 +19,16 @@ export const productListQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductAttributeListQueryQuery
+ * >}
+ */
+export const productAttributeListQuery = sql`
+  SELECT attribute_id as id FROM product_attributes
+  WHERE product_id = $product_id!
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/product.types").IProductListCountQueryQuery
  * >} *
  */
@@ -56,8 +66,9 @@ export const productDeleteQuery = sql`
  * >} *
  */
 export const productFindOneQuery = sql`
-  SELECT * FROM products
-  WHERE id = COALESCE($id, id)
+  SELECT p.*, pr.price FROM products p
+  JOIN prices pr ON p.id = pr.product_id
+  WHERE p.id = COALESCE($id, p.id)
   LIMIT 1;
 `;
 
@@ -234,9 +245,19 @@ export class Products {
       },
       this.pool,
     );
+    const attributeIds = await productAttributeListQuery
+      .run(
+        {
+          product_id: product.id,
+        },
+        this.pool,
+      )
+      .then((res) => res.map(({ id }) => id));
 
     return {
       ...product,
+      price: Number(product),
+      attributes: attributeIds,
       descriptions,
     };
   }
