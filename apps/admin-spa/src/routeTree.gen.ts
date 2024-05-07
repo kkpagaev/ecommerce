@@ -7,10 +7,13 @@ import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as LanguagesIndexImport } from './routes/languages/index'
 import { Route as CategoriesIndexImport } from './routes/categories/index'
+import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
 import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
+import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
+import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
 
 // Create/Update Routes
 
@@ -34,6 +37,11 @@ const CategoriesIndexRoute = CategoriesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AttributeGroupsIndexRoute = AttributeGroupsIndexImport.update({
+  path: '/attribute-groups/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LanguagesNewRoute = LanguagesNewImport.update({
   path: '/languages/new',
   getParentRoute: () => rootRoute,
@@ -41,6 +49,11 @@ const LanguagesNewRoute = LanguagesNewImport.update({
 
 const CategoriesNewRoute = CategoriesNewImport.update({
   path: '/categories/new',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AttributeGroupsNewRoute = AttributeGroupsNewImport.update({
+  path: '/attribute-groups/new',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -54,6 +67,12 @@ const CategoriesCategoryIdEditRoute = CategoriesCategoryIdEditImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AttributeGroupsAttributeGroupIdEditRoute =
+  AttributeGroupsAttributeGroupIdEditImport.update({
+    path: '/attribute-groups/$attributeGroupId/edit',
+    getParentRoute: () => rootRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -66,6 +85,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/attribute-groups/new': {
+      preLoaderRoute: typeof AttributeGroupsNewImport
+      parentRoute: typeof rootRoute
+    }
     '/categories/new': {
       preLoaderRoute: typeof CategoriesNewImport
       parentRoute: typeof rootRoute
@@ -74,12 +97,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesNewImport
       parentRoute: typeof rootRoute
     }
+    '/attribute-groups/': {
+      preLoaderRoute: typeof AttributeGroupsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/categories/': {
       preLoaderRoute: typeof CategoriesIndexImport
       parentRoute: typeof rootRoute
     }
     '/languages/': {
       preLoaderRoute: typeof LanguagesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/attribute-groups/$attributeGroupId/edit': {
+      preLoaderRoute: typeof AttributeGroupsAttributeGroupIdEditImport
       parentRoute: typeof rootRoute
     }
     '/categories/$categoryId/edit': {
@@ -98,10 +129,13 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
+  AttributeGroupsNewRoute,
   CategoriesNewRoute,
   LanguagesNewRoute,
+  AttributeGroupsIndexRoute,
   CategoriesIndexRoute,
   LanguagesIndexRoute,
+  AttributeGroupsAttributeGroupIdEditRoute,
   CategoriesCategoryIdEditRoute,
   LanguagesLanguageIdEditRoute,
 ])

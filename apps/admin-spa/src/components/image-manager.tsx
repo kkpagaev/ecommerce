@@ -35,9 +35,6 @@ function ImageUpload() {
     },
   });
 
-  // const onLoad = (fileString: string) => {
-  //   console.log(fileString);
-  // };
   const getBase64 = (file: File) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);

@@ -20,49 +20,12 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import React from "react";
+import { LanguageSelect } from "../../components/language-select";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const LanguageSelect = ({
-  ...props
-}: ControllerRenderProps<
-  {
-    languageId: number;
-    name: string;
-  },
-  "languageId"
->) => {
-  const languages = trpc.admin.language.list.useQuery();
-
-  return (
-    <Select
-      onValueChange={(v) => {
-        props.onChange(+v);
-      }}
-      value={"" + props.value}
-    >
-      <SelectTrigger className="w-[80px]">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent {...props}>
-        {languages.data?.map((lan) => (
-          <SelectItem key={lan.id} value={"" + lan.id}>
-            {lan.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-};
 function Search() {
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();

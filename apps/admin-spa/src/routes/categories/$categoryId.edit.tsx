@@ -9,7 +9,6 @@ export const Route = createFileRoute("/categories/$categoryId/edit")({
     getTitle: () => "Edit Category",
   }),
   loader: async ({ context, params }) => {
-    console.log({ params });
     const languages = await context.trpc.admin.language.list.fetch();
     const category =
       await context.trpc.admin.catalog.category.findCategoryById.fetch({

@@ -87,6 +87,20 @@ export const attributeGroupDescriptionUpsertQuery = sql`
   RETURNING *;
 `;
 
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/attribute-group.types").IAttributeGroupListQueryQuery
+ * >}
+ */
+export const attributeGroupListQuery = sql`
+  SELECT g.id, d.name
+  FROM attribute_groups g
+  JOIN attribute_group_descriptions d
+    ON g.id = d.attribute_group_id
+  WHERE d.language_id = $language_id!
+  AND d.name LIKE COALESCE(CONCAT('%', $name::text, '%'), d.name)
+`;
+
 export class AttributeGroups {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
@@ -95,7 +109,6 @@ export class AttributeGroups {
 
   /**
    * @typedef {{
-   *   languageId: number;
    *   id?: number;
    * }} FindOneAttributeGroupProps
    */
@@ -118,18 +131,19 @@ export class AttributeGroups {
       },
       this.pool,
     );
-    const attributes = await attributeListQuery.run(
-      {
-        attribute_group_id: group.id,
-        language_id: props.languageId,
-      },
-      this.pool,
-    );
+
+    // const attributes = await attributeListQuery.run(
+    //   {
+    //     attribute_group_id: group.id,
+    //     language_id: props.languageId,
+    //   },
+    //   this.pool,
+    // );
 
     return {
       ...group,
       descriptions,
-      attributes,
+      // attributes,
     };
   }
 
@@ -139,7 +153,7 @@ export class AttributeGroups {
    *   descriptions?: {
    *     languageId: number;
    *     name: string;
-   *     description?: string;
+   *     description: string | null;
    *   }[];
    * }} UpdateAttributeGroupProps
    */
@@ -175,8 +189,22 @@ export class AttributeGroups {
     });
   }
 
-  async listCategoryAttributeGroups() {
-    return null;
+  /**
+   * @param {{
+   *   languageId: number;
+   *   name?: string;
+   * }} input
+   */
+  async listAttributeGroups(input) {
+    const res = await attributeGroupListQuery.run(
+      {
+        language_id: input.languageId,
+        name: input.name,
+      },
+      this.pool,
+    );
+
+    return res;
   }
 
   /**
@@ -185,7 +213,7 @@ export class AttributeGroups {
    *   descriptions: {
    *     languageId: number;
    *     name: string;
-   *     description?: string;
+   *     description: string | null;
    *   }[];
    * }} CreateAttributeProps
    */

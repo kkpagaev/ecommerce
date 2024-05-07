@@ -114,3 +114,21 @@ export interface IAttributeGroupDescriptionUpsertQueryQuery {
   result: IAttributeGroupDescriptionUpsertQueryResult;
 }
 
+/** 'AttributeGroupListQuery' parameters type */
+export interface IAttributeGroupListQueryParams {
+  language_id: number;
+  name?: string | null | void;
+}
+
+/** 'AttributeGroupListQuery' return type */
+export interface IAttributeGroupListQueryResult {
+  id: number;
+  name: string;
+}
+
+/** 'AttributeGroupListQuery' query type */
+export interface IAttributeGroupListQueryQuery {
+  params: IAttributeGroupListQueryParams;
+  result: IAttributeGroupListQueryResult;
+}
+

@@ -104,7 +104,6 @@ function compile(tree: RouteTree, json: string) {
   return `// this file is generated
 \`${json}\`
 import { FastifyZod } from "fastify";
-import { withValidation } from "./core/trpc";
 ${imps.map(([name, path]) => `import ${name} from "${path}";`).join("\n")}
 
 export async function createAppRouter(fastify: FastifyZod) {
