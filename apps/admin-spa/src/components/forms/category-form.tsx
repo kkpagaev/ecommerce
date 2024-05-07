@@ -53,13 +53,13 @@ export function CategoryForm({
     errorMessage,
     values: values && {
       imageId: values.image_id,
-      descriptions:
-        values.descriptions.map((d) => {
-          return {
-            languageId: d.language_id,
-            name: d.name,
-          };
-        }) || [],
+      descriptions: languages.map((lang) => {
+        const old = values.descriptions.find((d) => d.language_id === lang.id);
+        return {
+          languageId: lang.id,
+          name: old?.name || "",
+        };
+      }),
     },
     defaultValues: {
       imageId: undefined,
@@ -83,7 +83,7 @@ export function CategoryForm({
         clearErrors();
         onSubmit(data);
       })}
-      className="grid md:grid-cols-2 gap-16"
+      className="flex flex-col gap-16"
     >
       <Card>
         <CardHeader>
@@ -127,7 +127,7 @@ export function CategoryForm({
         />
         <ErrorMessage errors={errors} name={"imageId"} />
       </div>
-      <div className="md:col-span-2">
+      <div className="">
         <Button type="submit" variant="default" className="w-full md:w-fit">
           Save
         </Button>

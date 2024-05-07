@@ -1,12 +1,13 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { DataTable } from "../../components/data-table";
+import { DataTable } from "@/components/data-table";
 
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AdminOutputs } from "@/utils/trpc";
-import { TooltipLink } from "../../components/ui/tooltip-link";
+import { TooltipLink } from "@/components/ui/tooltip-link";
+import { OutletDialog } from "@/components/ui/dialog-outlet";
 
 type Language = AdminOutputs["language"]["list"][0];
 
@@ -64,7 +65,7 @@ const columns: ColumnDef<Language>[] = [
   },
 ];
 
-export const Route = createFileRoute("/languages/")({
+export const Route = createFileRoute("/languages")({
   component: Index,
   beforeLoad: async ({ context }) => {
     return {
@@ -92,6 +93,7 @@ function Index() {
         columns={columns}
         isLoading={false}
       />
+      <OutletDialog path={Route.fullPath} />
     </div>
   );
 }

@@ -51,7 +51,7 @@ export function LanguageForm({
         clearErrors();
         onSubmit(data);
       })}
-      className="grid md:grid-cols-2 gap-16"
+      className="flex flew-row gap-16"
     >
       <Card>
         <CardHeader>

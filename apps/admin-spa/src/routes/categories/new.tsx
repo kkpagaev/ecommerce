@@ -27,14 +27,12 @@ function CategoryNewComponent() {
   });
 
   return (
-    <div className="container mx-auto py-10">
-      <CategoryForm
-        languages={languages}
-        onSubmit={async (data) => {
-          mutation.mutate(data);
-        }}
-        errorMessage={mutation.error?.message}
-      />
-    </div>
+    <CategoryForm
+      languages={languages}
+      onSubmit={async (data) => {
+        mutation.mutate(data);
+      }}
+      errorMessage={mutation.error?.message}
+    />
   );
 }
