@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "@/components/data-table";
-import { columns } from "@/components/collumns";
+import { columns } from "@/components/columns";
 import { z } from "zod";
 import React from "react";
 import { SearchFilters } from "@/components/search-filters";
