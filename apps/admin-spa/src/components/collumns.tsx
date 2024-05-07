@@ -5,14 +5,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AdminOutputs } from "@/utils/trpc";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
-import { Link } from "@tanstack/react-router";
 import { AspectRatio } from "./ui/aspect-ratio";
+import { TooltipLink } from "./ui/tooltip-link";
 
 type Category =
   AdminOutputs["catalog"]["category"]["listCategories"]["data"][0];
@@ -84,23 +78,15 @@ export const columns: ColumnDef<Category>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                to="/categories/$categoryId/edit"
-                params={{ categoryId: "" + row.getValue("id") }}
-              >
-                <Button variant="default">
-                  <Pencil1Icon />
-                </Button>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Edit</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipLink
+          to="/categories/$categoryId/edit"
+          params={{ categoryId: "" + row.getValue("id") }}
+          text={"Edit"}
+        >
+          <Button variant="default">
+            <Pencil1Icon />
+          </Button>
+        </TooltipLink>
       );
     },
   },

@@ -6,14 +6,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AdminOutputs } from "@/utils/trpc";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../components/ui/tooltip";
 import { z } from "zod";
 import { SearchFilters } from "../../components/search-filters";
+import { TooltipLink } from "../../components/ui/tooltip-link";
 
 type Language = AdminOutputs["language"]["list"][0];
 
@@ -57,23 +52,15 @@ const columns: ColumnDef<Language>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                to="/attribute-groups/$attributeGroupId/edit"
-                params={{ attributeGroupId: "" + row.getValue("id") }}
-              >
-                <Button variant="default">
-                  <Pencil1Icon />
-                </Button>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Edit</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipLink
+          to="/attribute-groups/$attributeGroupId/edit"
+          params={{ attributeGroupId: "" + row.getValue("id") }}
+          text="Edit"
+        >
+          <Button variant="default">
+            <Pencil1Icon />
+          </Button>
+        </TooltipLink>
       );
     },
   },

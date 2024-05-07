@@ -11,6 +11,7 @@ import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/i
 import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
+import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
@@ -57,6 +58,12 @@ const AttributeGroupsNewRoute = AttributeGroupsNewImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AttributeGroupsAttributeGroupIdRoute =
+  AttributeGroupsAttributeGroupIdImport.update({
+    path: '/attribute-groups/$attributeGroupId',
+    getParentRoute: () => rootRoute,
+  } as any)
+
 const LanguagesLanguageIdEditRoute = LanguagesLanguageIdEditImport.update({
   path: '/languages/$languageId/edit',
   getParentRoute: () => rootRoute,
@@ -69,8 +76,8 @@ const CategoriesCategoryIdEditRoute = CategoriesCategoryIdEditImport.update({
 
 const AttributeGroupsAttributeGroupIdEditRoute =
   AttributeGroupsAttributeGroupIdEditImport.update({
-    path: '/attribute-groups/$attributeGroupId/edit',
-    getParentRoute: () => rootRoute,
+    path: '/edit',
+    getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -83,6 +90,10 @@ declare module '@tanstack/react-router' {
     }
     '/about': {
       preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/attribute-groups/$attributeGroupId': {
+      preLoaderRoute: typeof AttributeGroupsAttributeGroupIdImport
       parentRoute: typeof rootRoute
     }
     '/attribute-groups/new': {
@@ -111,7 +122,7 @@ declare module '@tanstack/react-router' {
     }
     '/attribute-groups/$attributeGroupId/edit': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdEditImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AttributeGroupsAttributeGroupIdImport
     }
     '/categories/$categoryId/edit': {
       preLoaderRoute: typeof CategoriesCategoryIdEditImport
@@ -129,13 +140,15 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
+  AttributeGroupsAttributeGroupIdRoute.addChildren([
+    AttributeGroupsAttributeGroupIdEditRoute,
+  ]),
   AttributeGroupsNewRoute,
   CategoriesNewRoute,
   LanguagesNewRoute,
   AttributeGroupsIndexRoute,
   CategoriesIndexRoute,
   LanguagesIndexRoute,
-  AttributeGroupsAttributeGroupIdEditRoute,
   CategoriesCategoryIdEditRoute,
   LanguagesLanguageIdEditRoute,
 ])
