@@ -1,120 +1,13 @@
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "@/components/data-table";
 import { columns } from "@/components/collumns";
-import { trpc } from "@/utils/trpc";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ControllerRenderProps, useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
 import React from "react";
-import { LanguageSelect } from "../../components/language-select";
+import { SearchFilters } from "../../components/search-filters";
+import { Button } from "../../components/ui/button";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
-
-function Search() {
-  const navigate = useNavigate({ from: Route.fullPath });
-  const search = Route.useSearch();
-  const defaultValues = {
-    name: "",
-    languageId: 1,
-  };
-  const form = useForm({
-    defaultValues: defaultValues,
-    values: { ...defaultValues, ...search },
-  });
-
-  const onSubmit = form.handleSubmit((data) => {
-    navigate({
-      search: (old) => {
-        return {
-          ...old,
-          ...data,
-        };
-      },
-      replace: true,
-    });
-  });
-
-  return (
-    <div className="w-full flex flex-row gap-10">
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>Filters</AccordionTrigger>
-          <AccordionContent>
-            <Form {...form}>
-              <form onSubmit={onSubmit} className="flex-row space-y-2">
-                <div>
-                  <FormField
-                    control={form.control}
-                    name="languageId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Language</FormLabel>
-                        <FormControl>
-                          <LanguageSelect {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div>
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={
-                              field.name.toUpperCase()[0] + field.name.slice(1)
-                            }
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div>
-                  <Button type="submit">Search</Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => navigate({ search: {}, replace: true })}
-                  >
-                    Clear
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-      <div>
-        <Link to={"/categories/new"}>
-          <Button variant="default">New</Button>
-        </Link>
-      </div>
-    </div>
-  );
-}
 
 export const Route = createFileRoute("/categories/")({
   beforeLoad: ({ context }) => ({ ...context, getTitle: () => "Categories" }),
@@ -144,7 +37,21 @@ function Index() {
 
   return (
     <div className="container mx-auto py-10">
-      <Search />
+      <div className="w-full flex flex-row gap-10">
+        <SearchFilters
+          search={Route.useSearch()}
+          fullPath={Route.fullPath}
+          filters={[
+            { name: "name", type: "string", label: "Name" },
+            { type: "languageId", name: "languageId" },
+          ]}
+        />
+        <div>
+          <Link to={"/categories/new"}>
+            <Button variant="default">New</Button>
+          </Link>
+        </div>
+      </div>
       <DataTable data={data} columns={columns} isLoading={false} />
     </div>
   );

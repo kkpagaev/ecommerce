@@ -11,6 +11,7 @@ module.exports = {
     project: true,
   },
   rules: {
+    "@typescript-eslint/no-explicit-any": "off",
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
