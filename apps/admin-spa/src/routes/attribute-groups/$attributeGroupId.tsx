@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SearchFilters } from "../../components/search-filters";
 import { z } from "zod";
 import { DataTable } from "../../components/data-table";

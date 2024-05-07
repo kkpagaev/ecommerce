@@ -90,7 +90,6 @@ export const Route = createFileRoute("/attribute-groups/")({
     name: search.name,
   }),
   loader: async ({ context, deps }) => {
-    console.log("i am here");
     return await context.trpc.admin.catalog.attributeGroup.listAttributeGroups.fetch(
       {
         languageId: deps.languageId,
