@@ -126,6 +126,20 @@ export interface IProductDescriptionFindQueryQuery {
   result: IProductDescriptionFindQueryResult;
 }
 
+/** 'ProductAttributesDeleteQuery' parameters type */
+export interface IProductAttributesDeleteQueryParams {
+  product_id: number;
+}
+
+/** 'ProductAttributesDeleteQuery' return type */
+export type IProductAttributesDeleteQueryResult = void;
+
+/** 'ProductAttributesDeleteQuery' query type */
+export interface IProductAttributesDeleteQueryQuery {
+  params: IProductAttributesDeleteQueryParams;
+  result: IProductAttributesDeleteQueryResult;
+}
+
 /** 'ProductAttributesUpsertQuery' parameters type */
 export interface IProductAttributesUpsertQueryParams {
   values: readonly ({

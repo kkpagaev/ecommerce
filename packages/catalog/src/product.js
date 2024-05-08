@@ -82,6 +82,17 @@ export const productDescriptionFindQuery = sql`
   SELECT * FROM product_descriptions
   WHERE product_id = $product_id!
 `;
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductAttributesDeleteQueryQuery
+ * >}
+ */
+export const productAttributesDeleteQuery = sql`
+  DELETE FROM product_attributes
+  WHERE product_id = $product_id!
+`;
+
 /**
  * @type {TaggedQuery<
  *   import("./queries/product.types").IProductAttributesUpsertQueryQuery
@@ -357,6 +368,12 @@ export class Products {
         );
       }
       if (input.attributes && input.attributes.length > 0) {
+        await productAttributesDeleteQuery.run(
+          {
+            product_id: id,
+          },
+          client,
+        );
         await productAttributesUpsertQuery.run(
           {
             values: input.attributes.map((a) => ({
