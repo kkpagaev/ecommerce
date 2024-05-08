@@ -31,7 +31,6 @@ export const Route = createFileRoute("/products/$productId/edit")({
       await context.trpc.admin.catalog.product.findOneProduct.fetch({
         id: Number(params.productId),
       });
-    console.log(product);
     if (!product) {
       throw new Error("Product not found");
     }

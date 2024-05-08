@@ -108,8 +108,6 @@ export function ProductForm({
           data.price = Number(data.price);
         }
         clearErrors();
-        console.log(data);
-
         onSubmit(data);
       })}
       className="flex flex-col gap-8"
@@ -218,7 +216,6 @@ export function ProductForm({
                   }))}
                   defaultValue={getValues("attributes").map((v) => "" + v)}
                   onSelect={(v) => {
-                    console.log(v);
                     clearErrors("attributes");
                     setValue(
                       "attributes",

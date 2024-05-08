@@ -43,7 +43,6 @@ export function Combobox({
   multi,
 }: Props) {
   const [open, setOpen] = React.useState(false);
-  console.log({ defaultValue });
   const [selected, setSelected] = React.useState(() => {
     return multi ? defaultValue ?? [] : defaultValue;
   });

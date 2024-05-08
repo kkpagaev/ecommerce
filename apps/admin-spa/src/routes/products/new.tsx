@@ -52,7 +52,6 @@ function ProductNewComponent() {
         categories={categories}
         languages={languages}
         onSubmit={async (data) => {
-          console.log(data);
           mutation.mutate(data);
         }}
         errorMessage={mutation.error?.message}
