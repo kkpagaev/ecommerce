@@ -3,7 +3,6 @@ export type option_type = 'color' | 'size' | 'text';
 
 /** 'OptionGroupCreateQuery' parameters type */
 export interface IOptionGroupCreateQueryParams {
-  sort_order: number;
   type: option_type;
 }
 
@@ -26,7 +25,6 @@ export interface IOptionGroupFindOneQueryParams {
 /** 'OptionGroupFindOneQuery' return type */
 export interface IOptionGroupFindOneQueryResult {
   id: number;
-  sort_order: number;
   type: option_type;
 }
 
@@ -58,7 +56,6 @@ export interface IOptionGroupDescriptionListQueryQuery {
 /** 'OptionGroupUpdateQuery' parameters type */
 export interface IOptionGroupUpdateQueryParams {
   id: number;
-  sort_order?: number | null | void;
   type?: option_type | null | void;
 }
 
@@ -95,5 +92,22 @@ export interface IOptionGroupDescriptionUpsertQueryResult {
 export interface IOptionGroupDescriptionUpsertQueryQuery {
   params: IOptionGroupDescriptionUpsertQueryParams;
   result: IOptionGroupDescriptionUpsertQueryResult;
+}
+
+/** 'OptionGroupListQuery' parameters type */
+export interface IOptionGroupListQueryParams {
+  language_id: number;
+}
+
+/** 'OptionGroupListQuery' return type */
+export interface IOptionGroupListQueryResult {
+  id: number;
+  type: option_type;
+}
+
+/** 'OptionGroupListQuery' query type */
+export interface IOptionGroupListQueryQuery {
+  params: IOptionGroupListQueryParams;
+  result: IOptionGroupListQueryResult;
 }
 

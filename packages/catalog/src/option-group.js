@@ -10,9 +10,9 @@ import { tx } from "@repo/pool";
  */
 export const optionGroupCreateQuery = sql`
   INSERT INTO option_groups
-    (sort_order, type)
+    (type)
   VALUES
-    ($sort_order!, $type!)
+    ($type!)
   RETURNING id
 `;
 
@@ -55,7 +55,6 @@ export const optionGroupDescriptionListQuery = sql`
 export const optionGroupUpdateQuery = sql`
   UPDATE option_groups
   SET
-    sort_order = COALESCE($sort_order, sort_order),
     type = COALESCE($type, type)
   WHERE
     id = $id!
@@ -82,6 +81,13 @@ export const optionGroupDescriptionUpsertQuery = sql`
   RETURNING *;
 `;
 
+export const optionGroupListQuery = sql`
+  SELECT g.* FROM option_groups g
+  JOIN option_group_descriptions od
+    ON g.id = od.option_group_id
+  WHERE od.language_id = $language_id!
+`;
+
 export class OptionGroups {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
@@ -91,7 +97,6 @@ export class OptionGroups {
   /**
    * @typedef CreateOptionGroupProps
    * @property {import("./queries/option-group.types").option_type} type
-   * @property {number} sortOrder
    * @property {{
    *   name: string;
    *   languageId: number;
@@ -108,7 +113,6 @@ export class OptionGroups {
       const group = await optionGroupCreateQuery
         .run(
           {
-            sort_order: input.sortOrder,
             type: input.type,
           },
           client,
@@ -177,7 +181,6 @@ export class OptionGroups {
           {
             id: id,
             type: input.type,
-            sort_order: input.sortOrder,
           },
           client,
         )
@@ -199,5 +202,23 @@ export class OptionGroups {
 
       return group;
     });
+  }
+
+  /**
+   * @param {{
+   *   languageId: number;
+   *   name?: string;
+   * }} input
+   */
+  async list(input) {
+    const res = await optionGroupListQuery.run(
+      {
+        language_id: input.languageId,
+        name: input.name,
+      },
+      this.pool,
+    );
+
+    return res;
   }
 }
