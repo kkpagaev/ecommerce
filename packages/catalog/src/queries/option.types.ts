@@ -7,8 +7,6 @@ export type Json = null | boolean | number | string | Json[] | { [key: string]: 
 export interface IOptionFindManyQueryParams {
   groupId?: number | null | void;
   languageId: number;
-  limit?: number | null | void;
-  page?: number | null | void;
 }
 
 /** 'OptionFindManyQuery' return type */

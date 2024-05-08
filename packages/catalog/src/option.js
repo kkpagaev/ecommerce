@@ -24,8 +24,6 @@ export const optionFindManyQuery = sql`
     o.option_group_id = COALESCE($groupId, o.option_group_id)
   ORDER BY
     o.id
-  LIMIT COALESCE($limit, 10)
-  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
 
 /**
@@ -230,8 +228,6 @@ export class Options {
    * @typedef {{
    *   groupId?: number;
    *   languageId: number;
-   *   page?: number;
-   *   limit?: number;
    * }} ListOptionsProps
    */
   /** @param {ListOptionsProps} input */
@@ -239,25 +235,11 @@ export class Options {
     const options = await optionFindManyQuery.run(
       {
         languageId: input.languageId,
-        page: input.page,
-        limit: input.limit,
         groupId: input.groupId,
       },
       this.pool,
     );
 
-    const count = await optionCountQuery
-      .run(
-        {
-          groupId: input.groupId,
-        },
-        this.pool,
-      )
-      .then((r) => +(r[0]?.count ?? 0));
-
-    return {
-      data: options,
-      count: count,
-    };
+    return options;
   }
 }

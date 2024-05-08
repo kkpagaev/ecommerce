@@ -51,8 +51,6 @@ export default async ({ t, catalog: { options } }: FastifyZod) => ({
   listOptions: t.procedure
     .input(
       z.object({
-        page: z.number().default(1),
-        limit: z.number().default(15),
         languageId: z.number(),
         groupId: z.number().optional(),
       })
@@ -60,8 +58,6 @@ export default async ({ t, catalog: { options } }: FastifyZod) => ({
     .use(isAuthed)
     .query(async ({ input }) => {
       const res = await options.listOptions({
-        page: input.page,
-        limit: input.limit,
         languageId: input.languageId,
         groupId: input.groupId,
       });

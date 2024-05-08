@@ -63,8 +63,8 @@ const columns: ColumnDef<OptionGroups>[] = [
     cell: ({ row }) => {
       return (
         <TooltipLink
-          to="/attribute-groups/$attributeGroupId/"
-          params={{ attributeGroupId: "" + row.getValue("id") }}
+          to="/option-groups/$optionGroupId/"
+          params={{ optionGroupId: "" + row.getValue("id") }}
           text="Edit"
         >
           <Button variant="default">
@@ -130,7 +130,7 @@ function Index() {
           ]}
         />
         <div>
-          <Link to={"/attribute-groups/new"}>
+          <Link to={"/option-groups/new"}>
             <Button variant="default">New</Button>
           </Link>
         </div>

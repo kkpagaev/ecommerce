@@ -12,11 +12,13 @@ import { Route as OptionGroupsIndexImport } from './routes/option-groups/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
 import { Route as ProductsNewImport } from './routes/products/new'
 import { Route as OptionGroupsNewImport } from './routes/option-groups/new'
+import { Route as OptionGroupsOptionGroupIdImport } from './routes/option-groups/$optionGroupId'
 import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
 import { Route as ProductsProductIdEditImport } from './routes/products/$productId.edit'
+import { Route as OptionGroupsOptionGroupIdEditImport } from './routes/option-groups/$optionGroupId.edit'
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
@@ -70,6 +72,11 @@ const OptionGroupsNewRoute = OptionGroupsNewImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const OptionGroupsOptionGroupIdRoute = OptionGroupsOptionGroupIdImport.update({
+  path: '/option-groups/$optionGroupId',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LanguagesNewRoute = LanguagesNewImport.update({
   path: '/new',
   getParentRoute: () => LanguagesRoute,
@@ -95,6 +102,12 @@ const ProductsProductIdEditRoute = ProductsProductIdEditImport.update({
   path: '/products/$productId/edit',
   getParentRoute: () => rootRoute,
 } as any)
+
+const OptionGroupsOptionGroupIdEditRoute =
+  OptionGroupsOptionGroupIdEditImport.update({
+    path: '/edit',
+    getParentRoute: () => OptionGroupsOptionGroupIdRoute,
+  } as any)
 
 const LanguagesLanguageIdEditRoute = LanguagesLanguageIdEditImport.update({
   path: '/$languageId/edit',
@@ -160,6 +173,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesNewImport
       parentRoute: typeof LanguagesImport
     }
+    '/option-groups/$optionGroupId': {
+      preLoaderRoute: typeof OptionGroupsOptionGroupIdImport
+      parentRoute: typeof rootRoute
+    }
     '/option-groups/new': {
       preLoaderRoute: typeof OptionGroupsNewImport
       parentRoute: typeof rootRoute
@@ -192,6 +209,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesLanguageIdEditImport
       parentRoute: typeof LanguagesImport
     }
+    '/option-groups/$optionGroupId/edit': {
+      preLoaderRoute: typeof OptionGroupsOptionGroupIdEditImport
+      parentRoute: typeof OptionGroupsOptionGroupIdImport
+    }
     '/products/$productId/edit': {
       preLoaderRoute: typeof ProductsProductIdEditImport
       parentRoute: typeof rootRoute
@@ -223,6 +244,9 @@ export const routeTree = rootRoute.addChildren([
     AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute,
   ]),
   AttributeGroupsNewRoute,
+  OptionGroupsOptionGroupIdRoute.addChildren([
+    OptionGroupsOptionGroupIdEditRoute,
+  ]),
   OptionGroupsNewRoute,
   ProductsNewRoute,
   AttributeGroupsIndexRoute,
