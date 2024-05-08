@@ -63,7 +63,7 @@ function CategoryComponent() {
 
         <div className="flex flex-row justify-end gap-1">
           <TooltipLink
-            to={"/option-groups/$attributeGroupId/attribute/new"}
+            to={"/option-groups/$optionGroupId/option/new"}
             className="ml-auto"
             text="Add option"
           >
@@ -141,7 +141,7 @@ function CategoryComponent() {
                 cell: ({ row }) => {
                   return (
                     <TooltipLink
-                      to={`/option-groups/$attributeGroupId/attribute/$attributeId/edit`}
+                      to={`/option-groups/$optionGroupId/option/$optionId/edit`}
                       params={{
                         optionId: +(row.getValue("id") as string),
                         optionGroupId: +params.optionGroupId,

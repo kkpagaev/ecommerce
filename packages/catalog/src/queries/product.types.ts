@@ -1,6 +1,4 @@
 /** Types generated for queries found in "src/product.js" */
-export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
-
 export type NumberOrString = number | string;
 
 /** 'ProductListQuery' parameters type */
@@ -13,7 +11,7 @@ export interface IProductListQueryResult {
   category_id: number;
   description: string | null;
   id: number;
-  images: Json | null;
+  images: string | string[] | Record<string, any> | null;
   name: string;
   slug: string;
 }
@@ -58,7 +56,7 @@ export interface IProductListCountQueryQuery {
 export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;
   id: number;
-  images?: Json | null | void;
+  images?: string | string[] | Record<string, any> | null | void;
   slug?: string | null | void;
 }
 
@@ -97,7 +95,7 @@ export interface IProductFindOneQueryResult {
   category_id: number;
   created_at: Date;
   id: number;
-  images: Json | null;
+  images: string | string[] | Record<string, any> | null;
   price: string | null;
   slug: string;
   updated_at: Date;
@@ -185,7 +183,7 @@ export interface IProductDescriptionUpsertQueryQuery {
 /** 'ProductCreateQuery' parameters type */
 export interface IProductCreateQueryParams {
   categoryId: number;
-  images: Json;
+  images: string | string[] | Record<string, any>;
   slug: string;
 }
 

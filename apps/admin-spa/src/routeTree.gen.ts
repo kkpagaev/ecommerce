@@ -22,7 +22,9 @@ import { Route as OptionGroupsOptionGroupIdEditImport } from './routes/option-gr
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
+import { Route as OptionGroupsOptionGroupIdOptionNewImport } from './routes/option-groups/$optionGroupId.option.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
+import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './routes/option-groups/$optionGroupId.option.$optionId.edit'
 import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
 // Create/Update Routes
@@ -125,10 +127,22 @@ const AttributeGroupsAttributeGroupIdEditRoute =
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
   } as any)
 
+const OptionGroupsOptionGroupIdOptionNewRoute =
+  OptionGroupsOptionGroupIdOptionNewImport.update({
+    path: '/option/new',
+    getParentRoute: () => OptionGroupsOptionGroupIdRoute,
+  } as any)
+
 const AttributeGroupsAttributeGroupIdAttributeNewRoute =
   AttributeGroupsAttributeGroupIdAttributeNewImport.update({
     path: '/attribute/new',
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
+  } as any)
+
+const OptionGroupsOptionGroupIdOptionOptionIdEditRoute =
+  OptionGroupsOptionGroupIdOptionOptionIdEditImport.update({
+    path: '/option/$optionId/edit',
+    getParentRoute: () => OptionGroupsOptionGroupIdRoute,
   } as any)
 
 const AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute =
@@ -221,9 +235,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeNewImport
       parentRoute: typeof AttributeGroupsAttributeGroupIdImport
     }
+    '/option-groups/$optionGroupId/option/new': {
+      preLoaderRoute: typeof OptionGroupsOptionGroupIdOptionNewImport
+      parentRoute: typeof OptionGroupsOptionGroupIdImport
+    }
     '/attribute-groups/$attributeGroupId/attribute/$attributeId/edit': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport
       parentRoute: typeof AttributeGroupsAttributeGroupIdImport
+    }
+    '/option-groups/$optionGroupId/option/$optionId/edit': {
+      preLoaderRoute: typeof OptionGroupsOptionGroupIdOptionOptionIdEditImport
+      parentRoute: typeof OptionGroupsOptionGroupIdImport
     }
   }
 }
@@ -246,6 +268,8 @@ export const routeTree = rootRoute.addChildren([
   AttributeGroupsNewRoute,
   OptionGroupsOptionGroupIdRoute.addChildren([
     OptionGroupsOptionGroupIdEditRoute,
+    OptionGroupsOptionGroupIdOptionNewRoute,
+    OptionGroupsOptionGroupIdOptionOptionIdEditRoute,
   ]),
   OptionGroupsNewRoute,
   ProductsNewRoute,

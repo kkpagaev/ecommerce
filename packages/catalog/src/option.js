@@ -72,6 +72,20 @@ export const optionFindOneQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/option.types").IOptionDescriptionListQueryQuery
+ * >}
+ */
+export const optionDescriptionListQuery = sql`
+  SELECT
+    od.option_id, od.language_id, od.name
+  FROM
+    option_descriptions od
+  WHERE
+    od.option_id = $optionId!
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/option.types").IOptionDescriptionUpsertQueryQuery
  * >}
  */
@@ -124,7 +138,7 @@ export class Options {
    */
   /**
    * @typedef CreateOptionProps
-   * @property {string} value
+   * @property {string[] | Record<string, any>} value
    * @property {number} groupId
    * @property {UpsertOptionDescriptionProps[]} descriptions
    */
@@ -216,12 +230,26 @@ export class Options {
    */
   /** @param {FindOneOptionProps} input */
   async findOneOption(input) {
-    return await optionFindOneQuery.run(
+    const option = await optionFindOneQuery
+      .run(
+        {
+          id: input.id,
+        },
+        this.pool,
+      )
+      .then((r) => r[0]);
+    if (!option) return null;
+    const descriptions = await optionDescriptionListQuery.run(
       {
-        id: input.id,
+        optionId: input.id,
       },
       this.pool,
     );
+
+    return {
+      ...option,
+      descriptions,
+    };
   }
 
   /**

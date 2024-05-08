@@ -1,8 +1,6 @@
 /** Types generated for queries found in "src/option.js" */
 export type option_type = 'color' | 'size' | 'text';
 
-export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
-
 /** 'OptionFindManyQuery' parameters type */
 export interface IOptionFindManyQueryParams {
   groupId?: number | null | void;
@@ -15,7 +13,7 @@ export interface IOptionFindManyQueryResult {
   name: string;
   option_group_id: number;
   type: option_type;
-  value: Json;
+  value: string | string[] | Record<string, any>;
 }
 
 /** 'OptionFindManyQuery' query type */
@@ -43,7 +41,7 @@ export interface IOptionCountQueryQuery {
 /** 'OptionCreateQuery' parameters type */
 export interface IOptionCreateQueryParams {
   groupId: number;
-  value: Json;
+  value: string | string[] | Record<string, any>;
 }
 
 /** 'OptionCreateQuery' return type */
@@ -67,13 +65,31 @@ export interface IOptionFindOneQueryResult {
   id: number;
   option_group_id: number;
   type: option_type;
-  value: Json;
+  value: string | string[] | Record<string, any>;
 }
 
 /** 'OptionFindOneQuery' query type */
 export interface IOptionFindOneQueryQuery {
   params: IOptionFindOneQueryParams;
   result: IOptionFindOneQueryResult;
+}
+
+/** 'OptionDescriptionListQuery' parameters type */
+export interface IOptionDescriptionListQueryParams {
+  optionId: number;
+}
+
+/** 'OptionDescriptionListQuery' return type */
+export interface IOptionDescriptionListQueryResult {
+  language_id: number;
+  name: string;
+  option_id: number;
+}
+
+/** 'OptionDescriptionListQuery' query type */
+export interface IOptionDescriptionListQueryQuery {
+  params: IOptionDescriptionListQueryParams;
+  result: IOptionDescriptionListQueryResult;
 }
 
 /** 'OptionDescriptionUpsertQuery' parameters type */
@@ -99,7 +115,7 @@ export interface IOptionDescriptionUpsertQueryQuery {
 /** 'OptionUpdateQuery' parameters type */
 export interface IOptionUpdateQueryParams {
   id: number;
-  value?: Json | null | void;
+  value?: string | string[] | Record<string, any> | null | void;
 }
 
 /** 'OptionUpdateQuery' return type */

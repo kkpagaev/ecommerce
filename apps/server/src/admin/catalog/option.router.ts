@@ -6,12 +6,13 @@ export default async ({ t, catalog: { options } }: FastifyZod) => ({
   createOption: t.procedure
     .use(isAuthed)
     .input(z.object({
+      type: z.enum(["color", "size", "text"]),
       groupId: z.number(),
       descriptions: z.array(z.object({
         name: z.string(),
         languageId: z.number(),
       })),
-      value: z.string(),
+      value: z.record(z.any()),
     })).mutation(async ({ input }) => {
       const option = await options.createOption({
         descriptions: input.descriptions,
@@ -29,12 +30,12 @@ export default async ({ t, catalog: { options } }: FastifyZod) => ({
         id: z.number(),
       }).and(
         z.object({
-          groupId: z.number(),
+          type: z.enum(["color", "size", "text"]),
           descriptions: z.array(z.object({
             name: z.string(),
             languageId: z.number(),
           })),
-          value: z.string(),
+          value: z.record(z.any()),
         }).partial()
       )
     )
@@ -42,7 +43,6 @@ export default async ({ t, catalog: { options } }: FastifyZod) => ({
       const option = await options.updateOption(input.id, {
         value: input.value,
         descriptions: input.descriptions,
-        groupId: input.groupId,
       });
 
       return option;
