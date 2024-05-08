@@ -134,14 +134,16 @@ export function ProductForm({
       </Card>
       <div>
         <Combobox
+          multi
           label="Select Category"
           values={categories.map((c) => ({ value: "" + c.id, label: c.name }))}
           defaultValue={
             typeof currentValues.categoryId === "number"
-              ? "" + currentValues.categoryId
+              ? ["" + currentValues.categoryId]
               : undefined
           }
           onSelect={(v) => {
+            console.log(v);
             clearErrors("categoryId");
             setValue("categoryId", +v);
           }}
