@@ -96,6 +96,7 @@ export interface IProductFindOneQueryResult {
   created_at: Date;
   id: number;
   images: string | string[] | Record<string, any> | null;
+  option_group_id: number | null;
   price: string | null;
   slug: string;
   updated_at: Date;
@@ -157,6 +158,37 @@ export interface IProductAttributesUpsertQueryQuery {
   result: IProductAttributesUpsertQueryResult;
 }
 
+/** 'ProductOptionsDeleteQuery' parameters type */
+export interface IProductOptionsDeleteQueryParams {
+  product_id: number;
+}
+
+/** 'ProductOptionsDeleteQuery' return type */
+export type IProductOptionsDeleteQueryResult = void;
+
+/** 'ProductOptionsDeleteQuery' query type */
+export interface IProductOptionsDeleteQueryQuery {
+  params: IProductOptionsDeleteQueryParams;
+  result: IProductOptionsDeleteQueryResult;
+}
+
+/** 'ProductOptionsUpsertQuery' parameters type */
+export interface IProductOptionsUpsertQueryParams {
+  values: readonly ({
+    product_id: number,
+    option_id: number
+  })[];
+}
+
+/** 'ProductOptionsUpsertQuery' return type */
+export type IProductOptionsUpsertQueryResult = void;
+
+/** 'ProductOptionsUpsertQuery' query type */
+export interface IProductOptionsUpsertQueryQuery {
+  params: IProductOptionsUpsertQueryParams;
+  result: IProductOptionsUpsertQueryResult;
+}
+
 /** 'PriceUpsertQuery' parameters type */
 export interface IPriceUpsertQueryParams {
   values: readonly ({
@@ -198,6 +230,7 @@ export interface IProductDescriptionUpsertQueryQuery {
 export interface IProductCreateQueryParams {
   categoryId: number;
   images: string | string[] | Record<string, any>;
+  option_group_id?: number | null | void;
   slug: string;
 }
 

@@ -108,6 +108,27 @@ export const productAttributesUpsertQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductOptionsDeleteQueryQuery
+ * >}
+ */
+export const productOptionsDeleteQuery = sql`
+  DELETE FROM product_options
+  WHERE product_id = $product_id!
+`;
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductOptionsUpsertQueryQuery
+ * >}
+ */
+export const productOptionsUpsertQuery = sql`
+  INSERT INTO product_options
+    (product_id, option_id)
+  VALUES
+    $$values(product_id!, option_id!)
+  ON CONFLICT DO NOTHING;
+`;
+/**
+ * @type {TaggedQuery<
  *   import("./queries/product.types").IPriceUpsertQueryQuery
  * >} *
  */
@@ -143,9 +164,9 @@ export const productDescriptionUpsertQuery = sql`
  */
 export const productCreateQuery = sql`
   INSERT INTO products
-  (category_id, slug, images)
+  (category_id, slug, images, option_group_id)
   VALUES
-  ($categoryId!, $slug!, $images!)
+  ($categoryId!, $slug!, $images!, $option_group_id)
   RETURNING id
 `;
 
@@ -161,6 +182,8 @@ export class Products {
    *   price: number;
    *   attributes: number[];
    *   images: string[];
+   *   option_group_id?: number;
+   *   options?: number[];
    *   descriptions: {
    *     languageId: number;
    *     name: string;
@@ -185,12 +208,25 @@ export class Products {
             images: JSON.stringify(input.images),
             slug: slug,
             categoryId: input.categoryId,
+            option_group_id: input.option_group_id,
           },
           client,
         )
         .then((res) => res[0]);
       if (!product) {
         throw new Error("Failed to create product");
+      }
+
+      if (input.options) {
+        await productOptionsUpsertQuery.run(
+          {
+            values: input.options.map((o) => ({
+              product_id: product.id,
+              option_id: o,
+            })),
+          },
+          client,
+        );
       }
 
       const price = await priceUpsertQuery.run(
@@ -350,6 +386,23 @@ export class Products {
         await priceUpsertQuery.run(
           {
             values: [{ price: input.price, type: "default", product_id: id }],
+          },
+          client,
+        );
+      }
+      if (input.options) {
+        await productOptionsDeleteQuery.run(
+          {
+            product_id: id,
+          },
+          client,
+        );
+        await productOptionsUpsertQuery.run(
+          {
+            values: input.options.map((o) => ({
+              product_id: id,
+              option_id: o,
+            })),
           },
           client,
         );
