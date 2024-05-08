@@ -22,16 +22,17 @@ import {
 type Props = {
   values: Array<{ value: string; label: string }>;
   onSelect: (value: string) => void;
+  defaultValue?: string;
 };
-export function Combobox({ values, onSelect }: Props) {
+export function Combobox({ values, onSelect, defaultValue }: Props) {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState("");
+  const [selected, setSelected] = React.useState(defaultValue);
 
   React.useEffect(() => {
     if (selected) {
       onSelect(selected);
     }
-  }, [selected, onSelect]);
+  }, [selected]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

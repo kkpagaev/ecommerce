@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { useApiForm } from "../../utils/useApiForm";
+import { Combobox } from "../combobox";
 
 type ProductCreateInputs = AdminInputs["catalog"]["product"]["createProduct"];
 
@@ -46,12 +47,15 @@ export function ProductForm({
   onSubmit,
   errorMessage,
   values,
+  categories,
 }: ProductFormProps) {
   const {
     control,
     handleSubmit,
     clearErrors,
     register,
+    getValues,
+    setValue,
     formState: { errors },
   } = useApiForm({
     errorMessage,
@@ -70,7 +74,7 @@ export function ProductForm({
     },
     defaultValues: {
       price: 0,
-      categoryId: 0,
+      categoryId: undefined as undefined | number,
       attributes: [],
       descriptions: languages.map((lang) => {
         return {
@@ -86,12 +90,14 @@ export function ProductForm({
     control,
     name: "descriptions",
   });
+  const currentValues = getValues();
 
   return (
     <form
       onSubmit={handleSubmit((data) => {
         clearErrors();
-        onSubmit(data);
+        console.log(data);
+        // onSubmit(data);
       })}
       className="flex flex-col gap-8"
     >
@@ -126,6 +132,20 @@ export function ProductForm({
           </div>
         </CardContent>
       </Card>
+      <div>
+        <Combobox
+          values={categories.map((c) => ({ value: "" + c.id, label: c.name }))}
+          defaultValue={
+            typeof currentValues.categoryId === "number"
+              ? "" + currentValues.categoryId
+              : undefined
+          }
+          onSelect={(v) => {
+            clearErrors("categoryId");
+            setValue("categoryId", +v);
+          }}
+        />
+      </div>
       <div>
         <Button type="submit" variant="default" className="w-full md:w-fit">
           Save
