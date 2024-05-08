@@ -23,6 +23,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         .multipleOf(0.01),
       categoryId: z.number(),
       attributes: z.array(z.number()).optional(),
+      images: z.array(z.string()),
       descriptions: z.array(z.object({
         name: z.string(),
         description: z.string(),
@@ -33,6 +34,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
     .mutation(async ({ input }) => {
       const res = await catalog.products.createProduct({
         attributes: input.attributes || [],
+        images: input.images,
         price: input.price,
         categoryId: input.categoryId,
         descriptions: input.descriptions,
@@ -49,6 +51,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
           z.object({
             price: z.number().positive()
               .multipleOf(0.01),
+            images: z.array(z.string()),
             categoryId: z.number(),
             attributes: z.array(z.number()).optional(),
             descriptions: z.array(z.object({
@@ -63,6 +66,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
       const res = await catalog.products.updateProduct(input.id, {
         categoryId: input.categoryId,
         attributes: input.attributes,
+        images: input.images,
         descriptions: input.descriptions,
         price: input.price,
       });

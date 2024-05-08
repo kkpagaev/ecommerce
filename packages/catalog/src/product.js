@@ -11,7 +11,7 @@ import { TaggedQuery, sql } from "@pgtyped/runtime";
  * >} *
  */
 export const productListQuery = sql`
-  SELECT p.id, p.category_id, p.slug, pd.name, pd.description FROM products p
+  SELECT p.id, p.category_id, p.images, p.slug, pd.name, pd.description FROM products p
   JOIN product_descriptions pd ON p.id = pd.product_id
   WHERE pd.language_id = $language_id!
   ORDER BY p.id;
@@ -45,7 +45,8 @@ export const productUpdateQuery = sql`
   UPDATE products
   SET
     slug = COALESCE($slug, slug),
-    category_id = COALESCE($categoryId, category_id)
+    category_id = COALESCE($categoryId, category_id),
+    images = COALESCE($images, images)
   WHERE
     id = $id!;
 `;
@@ -131,9 +132,9 @@ export const productDescriptionUpsertQuery = sql`
  */
 export const productCreateQuery = sql`
   INSERT INTO products
-  (category_id, slug)
+  (category_id, slug, images)
   VALUES
-  ($categoryId!, $slug!)
+  ($categoryId!, $slug!, $images!)
   RETURNING id
 `;
 
@@ -148,6 +149,7 @@ export class Products {
    *   categoryId: number;
    *   price: number;
    *   attributes: number[];
+   *   images: string[];
    *   descriptions: {
    *     languageId: number;
    *     name: string;
@@ -169,6 +171,7 @@ export class Products {
       const product = await productCreateQuery
         .run(
           {
+            images: input.images,
             slug: slug,
             categoryId: input.categoryId,
           },
@@ -254,8 +257,12 @@ export class Products {
       )
       .then((res) => res.map(({ id }) => id));
 
+    /** @type {string[]} */
+    const images = /** @type {any} */ (product.images);
+
     return {
       ...product,
+      images,
       price: Number(product),
       attributes: attributeIds,
       descriptions,
@@ -280,7 +287,15 @@ export class Products {
     //   .then((res) => +(res[0]?.count ?? 0));
 
     return {
-      data: products,
+      data: products.map((p) => {
+        /** @type {string[]} */
+        const images = /** @type {any} */ (p.images);
+
+        return {
+          ...p,
+          images: images,
+        };
+      }),
       count: products.length,
     };
   }
@@ -315,6 +330,7 @@ export class Products {
         {
           id: id,
           slug: slug,
+          images: input.images,
           categoryId: input.categoryId,
         },
         client,
