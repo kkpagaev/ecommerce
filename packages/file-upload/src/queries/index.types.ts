@@ -55,3 +55,23 @@ export interface IFileUploadDeleteQueryQuery {
   result: IFileUploadDeleteQueryResult;
 }
 
+/** 'FileFindByIdQuery' parameters type */
+export interface IFileFindByIdQueryParams {
+  id: string;
+}
+
+/** 'FileFindByIdQuery' return type */
+export interface IFileFindByIdQueryResult {
+  created_at: Date | null;
+  filename: string;
+  id: string;
+  mimetype: string;
+  url: string;
+}
+
+/** 'FileFindByIdQuery' query type */
+export interface IFileFindByIdQueryQuery {
+  params: IFileFindByIdQueryParams;
+  result: IFileFindByIdQueryResult;
+}
+

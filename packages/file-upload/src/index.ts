@@ -8,6 +8,7 @@ import {
   IFileUploadListQueryQuery,
   type IFileUploadInsertQueryQuery,
   IFileUploadDeleteQueryQuery,
+  IFileFindByIdQueryQuery,
 } from "./queries/index.types";
 
 const fileUploadInsertQuery = sql<IFileUploadInsertQueryQuery>`INSERT
@@ -22,6 +23,8 @@ const fileUploadListQuery = sql<IFileUploadListQueryQuery>`
   ORDER BY created_at DESC
 `;
 const fileUploadDeleteQuery = sql<IFileUploadDeleteQueryQuery>`DELETE FROM file_uploads WHERE id = $id!`;
+
+const fileFindByIdQuery = sql<IFileFindByIdQueryQuery>`SELECT * FROM file_uploads WHERE id = $id! LIMIT 1`;
 
 export interface UploadedFile {
   id: string;
@@ -58,6 +61,17 @@ export class Files {
     const res = await fileUploadListQuery.run(undefined, this.pool);
 
     return res;
+  }
+
+  async findById(id: string) {
+    const res = await fileFindByIdQuery.run(
+      {
+        id: id,
+      },
+      this.pool,
+    );
+
+    return res[0];
   }
 
   async delete(id: string) {
