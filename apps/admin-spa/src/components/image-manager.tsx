@@ -2,7 +2,12 @@ import { Input } from "./ui/input";
 import { AdminOutputs, trpc } from "../utils/trpc";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
-import { GalleryHorizontalIcon, TrashIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  GalleryHorizontalIcon,
+  TrashIcon,
+} from "lucide-react";
 import {
   Dialog,
   DialogTrigger,
@@ -21,6 +26,8 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "./ui/carousel";
+import { useDrag, DndContext, DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function ImageUpload() {
   const utils = trpc.useUtils();
@@ -122,6 +129,7 @@ type ImageType = AdminOutputs["files"]["listFiles"][number];
 
 type Props = {
   enableSelect?: boolean;
+  enableOrdering?: boolean;
   limit?: number;
   preview?: boolean;
   defaultSelected?: Array<string>;
@@ -133,13 +141,18 @@ export function ImageManager({
   defaultSelected,
   limit,
   onSelectChange,
+  enableOrdering,
 }: Props) {
   const { data } = trpc.admin.files.listFiles.useQuery();
   const [selected, setSelected] = useState<Array<string>>(
     defaultSelected || [],
   );
 
-  useEffect(() => {}, [selected, data, onSelectChange]);
+  useEffect(() => {
+    if (onSelectChange && data) {
+      onSelectChange(selected.map((id) => data.find((i) => i.id === id)!));
+    }
+  }, [selected, data]);
 
   const toggleSelected = (id: string) => {
     if (!enableSelect) {
@@ -154,15 +167,11 @@ export function ImageManager({
       ? selected.filter((i) => i !== id)
       : [...selected, id];
 
-    if (onSelectChange) {
-      onSelectChange(data?.filter((file) => newSelect.includes(file.id)) || []);
-    }
-
     setSelected(newSelect);
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <Dialog>
         <Button variant="outline" asChild>
           <DialogTrigger className="w-full">
@@ -203,7 +212,60 @@ export function ImageManager({
           </div>
         </DialogContent>
       </Dialog>
-      {preview && selected.length > 0 && (
+      {selected.length > 0 && enableOrdering && (
+        <div className="grid md:grid-cols-5 gap-4">
+          {selected.map((file) => {
+            const image = data?.find((i) => i.id === file);
+            if (!image) {
+              return null;
+            }
+
+            return (
+              <div key={image.id} className="transition-all">
+                <AspectRatio
+                  key={image.id}
+                  ratio={4 / 4}
+                  className={cn(
+                    "relative rounded-md border-slate-200 border-2",
+                  )}
+                >
+                  <img src={image.url} className="w-full h-full object-cover" />
+                </AspectRatio>
+                <div className="flex mx-auto justify-between p-4 ">
+                  <button
+                    onClick={() => {
+                      // shift array
+                      const index = selected.indexOf(file);
+                      if (index > 0) {
+                        const newSelected = [...selected];
+                        newSelected.splice(index, 1);
+                        newSelected.splice(index - 1, 0, file);
+                        setSelected(newSelected);
+                      }
+                    }}
+                  >
+                    <ArrowLeftIcon className="w-10 h-10" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      const index = selected.indexOf(file);
+                      if (index < selected.length - 1) {
+                        const newSelected = [...selected];
+                        newSelected.splice(index, 1);
+                        newSelected.splice(index + 1, 0, file);
+                        setSelected(newSelected);
+                      }
+                    }}
+                  >
+                    <ArrowRightIcon className="w-10 h-10" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {preview && selected.length > 0 && !enableOrdering && (
         <Carousel>
           <CarouselContent>
             {selected.map((file) => {
