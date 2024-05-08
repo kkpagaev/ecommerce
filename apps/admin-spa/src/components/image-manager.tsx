@@ -2,11 +2,7 @@ import { Input } from "./ui/input";
 import { AdminOutputs, trpc } from "../utils/trpc";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
-import {
-  GalleryHorizontalIcon,
-  GalleryVerticalIcon,
-  TrashIcon,
-} from "lucide-react";
+import { GalleryHorizontalIcon, TrashIcon } from "lucide-react";
 import {
   Dialog,
   DialogTrigger,
@@ -127,11 +123,13 @@ type ImageType = AdminOutputs["files"]["listFiles"][number];
 type Props = {
   enableSelect?: boolean;
   limit?: number;
+  preview?: boolean;
   defaultSelected?: Array<string>;
   onSelectChange?: (selected: Array<ImageType>) => void;
 };
 export function ImageManager({
   enableSelect,
+  preview,
   defaultSelected,
   limit,
   onSelectChange,
@@ -205,7 +203,7 @@ export function ImageManager({
           </div>
         </DialogContent>
       </Dialog>
-      {selected.length > 0 && (
+      {preview && selected.length > 0 && (
         <Carousel>
           <CarouselContent>
             {selected.map((file) => {

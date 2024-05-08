@@ -11,7 +11,12 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="container mx-auto py-10">
-      <ImageManager onSelectChange={console.log} limit={2} enableSelect />
+      <ImageManager
+        preview
+        onSelectChange={console.log}
+        limit={2}
+        enableSelect
+      />
     </div>
   );
 }

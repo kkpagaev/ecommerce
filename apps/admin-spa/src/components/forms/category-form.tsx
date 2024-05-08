@@ -111,6 +111,7 @@ export function CategoryForm({
 
       <div>
         <ImageManager
+          preview
           enableSelect
           limit={1}
           defaultSelected={values?.image_id ? [values.image_id] : []}
