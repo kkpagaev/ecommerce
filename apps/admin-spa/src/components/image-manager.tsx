@@ -26,8 +26,6 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "./ui/carousel";
-import { useDrag, DndContext, DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 function ImageUpload() {
   const utils = trpc.useUtils();

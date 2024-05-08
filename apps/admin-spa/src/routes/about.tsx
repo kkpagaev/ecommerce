@@ -2,7 +2,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/about")({
-  beforeLoad: () => ({ getTitle: () => "About" }),
+  beforeLoad: ({ context }) => ({ ...context, getTitle: () => "About" }),
   component: About,
 });
 
