@@ -1,5 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { CategoryForm } from "../../components/forms/category-form";
+import {
+  createFileRoute,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 import { toast } from "sonner";
 import { trpc } from "../../utils/trpc";
 import { ProductForm } from "../../components/forms/product-form";
@@ -44,13 +47,12 @@ function CategoryComponent() {
   const { languages, product, attributes, categories } = Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
+  const router = useRouter();
 
   const mutation = trpc.admin.catalog.product.updateProduct.useMutation({
     onSuccess: async () => {
+      router.invalidate();
       await utils.admin.catalog.product.listProducts.invalidate();
-      await utils.admin.catalog.product.findOneProduct.invalidate({
-        id: product.id,
-      });
       toast.success("Product updated");
       navigate({ to: "/products" });
     },

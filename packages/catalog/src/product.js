@@ -397,15 +397,17 @@ export class Products {
           },
           client,
         );
-        await productOptionsUpsertQuery.run(
-          {
-            values: input.options.map((o) => ({
-              product_id: id,
-              option_id: o,
-            })),
-          },
-          client,
-        );
+        if (input.options.length > 0) {
+          await productOptionsUpsertQuery.run(
+            {
+              values: input.options.map((o) => ({
+                product_id: id,
+                option_id: o,
+              })),
+            },
+            client,
+          );
+        }
       }
       if (input.descriptions) {
         await productDescriptionUpsertQuery.run(
@@ -420,22 +422,24 @@ export class Products {
           client,
         );
       }
-      if (input.attributes && input.attributes.length > 0) {
+      if (input.attributes) {
         await productAttributesDeleteQuery.run(
           {
             product_id: id,
           },
           client,
         );
-        await productAttributesUpsertQuery.run(
-          {
-            values: input.attributes.map((a) => ({
-              attribute_id: a,
-              product_id: id,
-            })),
-          },
-          client,
-        );
+        if (input.attributes.length > 0) {
+          await productAttributesUpsertQuery.run(
+            {
+              values: input.attributes.map((a) => ({
+                attribute_id: a,
+                product_id: id,
+              })),
+            },
+            client,
+          );
+        }
       }
     });
   }
