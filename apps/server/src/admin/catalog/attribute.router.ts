@@ -3,6 +3,16 @@ import { z } from "zod";
 import { isAuthed } from "../../core/trpc";
 
 export default async ({ t, catalog }: FastifyZod) => ({
+  listAll: t.procedure
+    .input(z.object({
+      languageId: z.number(),
+    }))
+    .use(isAuthed)
+    .query(async ({ input }) => {
+      const res = await catalog.attributes.listAll({ languageId: input.languageId });
+
+      return res;
+    }),
   createAttribue: t.procedure
     .input(z.object({
       groupId: z.number(),

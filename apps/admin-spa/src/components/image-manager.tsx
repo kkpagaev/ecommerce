@@ -233,7 +233,8 @@ export function ImageManager({
                 </AspectRatio>
                 <div className="flex mx-auto justify-between p-4 ">
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       // shift array
                       const index = selected.indexOf(file);
                       if (index > 0) {

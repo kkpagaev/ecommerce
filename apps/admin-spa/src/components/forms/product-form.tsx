@@ -27,12 +27,17 @@ type CategoryModel = {
   id: number;
   name: string;
 };
+type AttributeModel = {
+  id: number;
+  name: string;
+};
 
 type ProductFormProps = {
   errorMessage?: string;
   languages: LanguageModel[];
   values?: ProductModel;
   categories: CategoryModel[];
+  attributes: AttributeModel[];
 } & (
   | {
       edit?: false | undefined;
@@ -50,6 +55,7 @@ export function ProductForm({
   errorMessage,
   values,
   categories,
+  attributes,
 }: ProductFormProps) {
   const {
     control,
@@ -77,9 +83,9 @@ export function ProductForm({
     },
     defaultValues: {
       price: 0,
-      categoryId: undefined as undefined | number,
-      attributes: [],
-      images: [],
+      categoryId: 0,
+      attributes: [] as number[],
+      images: [] as string[],
       descriptions: languages.map((lang) => {
         return {
           languageId: lang.id,
@@ -94,25 +100,27 @@ export function ProductForm({
     control,
     name: "descriptions",
   });
-  const currentValues = getValues();
 
   return (
     <form
       onSubmit={handleSubmit((data) => {
+        if (data.price) {
+          data.price = Number(data.price);
+        }
         clearErrors();
-        console.log(data.images);
+        console.log(data);
 
-        // onSubmit(data);
+        onSubmit(data);
       })}
       className="flex flex-col gap-8"
     >
-      <Tabs defaultValue="account">
+      <Tabs defaultValue="general">
         <TabsList>
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Password</TabsTrigger>
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="relations">Relations</TabsTrigger>
           <TabsTrigger value="gallery">Gallery</TabsTrigger>
         </TabsList>
-        <TabsContent value="account">
+        <TabsContent value="general" className="flex flex-col gap-2">
           <Card>
             <CardHeader>
               <CardTitle>Translations</CardTitle>
@@ -149,31 +157,76 @@ export function ProductForm({
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-        <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle>Translations</CardTitle>
+              <CardTitle>Price</CardTitle>
             </CardHeader>
             <CardContent>
-              <Combobox
-                multi
-                label="Select Category"
-                values={categories.map((c) => ({
-                  value: "" + c.id,
-                  label: c.name,
-                }))}
-                defaultValue={
-                  typeof currentValues.categoryId === "number"
-                    ? ["" + currentValues.categoryId]
-                    : undefined
-                }
-                onSelect={(v) => {
-                  console.log(v);
-                  clearErrors("categoryId");
-                  setValue("categoryId", +v);
+              <Input
+                type="number"
+                {...register("price")}
+                defaultValue={values?.price}
+                step="0.01"
+                min="0.01"
+                max="1000000"
+                onKeyUp={(e) => {
+                  const val = e.currentTarget.value;
+                  if (val.includes(".") && val.split(".")[1].length > 2) {
+                    e.currentTarget.value =
+                      val.split(".")[0] + "." + val.split(".")[1].slice(0, 2);
+                    e.preventDefault();
+                  }
                 }}
               />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="relations">
+          <Card>
+            <CardHeader>
+              <CardTitle>Relations</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <div>
+                <Label htmlFor="categoryId">Category</Label>
+                <Combobox
+                  label="Select Category"
+                  values={categories.map((c) => ({
+                    value: "" + c.id,
+                    label: c.name,
+                  }))}
+                  defaultValue={
+                    getValues("categoryId") === 0
+                      ? undefined
+                      : "" + getValues("categoryId")
+                  }
+                  onSelect={(v) => {
+                    clearErrors("categoryId");
+                    setValue("categoryId", +v);
+                  }}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="attributes">Attributes</Label>
+                <Combobox
+                  multi
+                  label="Select Attibutes"
+                  values={attributes.map((c) => ({
+                    value: "" + c.id,
+                    label: c.name,
+                  }))}
+                  defaultValue={getValues("attributes").map((v) => "" + v)}
+                  onSelect={(v) => {
+                    console.log(v);
+                    clearErrors("attributes");
+                    setValue(
+                      "attributes",
+                      v.map((v) => +v),
+                    );
+                  }}
+                />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

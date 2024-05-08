@@ -171,7 +171,7 @@ export class Products {
       const product = await productCreateQuery
         .run(
           {
-            images: input.images,
+            images: JSON.stringify(input.images),
             slug: slug,
             categoryId: input.categoryId,
           },
@@ -263,7 +263,7 @@ export class Products {
     return {
       ...product,
       images,
-      price: Number(product),
+      price: Number(product.price),
       attributes: attributeIds,
       descriptions,
     };
@@ -330,7 +330,7 @@ export class Products {
         {
           id: id,
           slug: slug,
-          images: input.images,
+          images: JSON.stringify(input.images),
           categoryId: input.categoryId,
         },
         client,
@@ -343,7 +343,20 @@ export class Products {
           client,
         );
       }
-      if (input.attributes) {
+      if (input.descriptions) {
+        await productDescriptionUpsertQuery.run(
+          {
+            values: input.descriptions.map((d) => ({
+              description: d.description,
+              product_id: id,
+              name: d.name,
+              language_id: d.languageId,
+            })),
+          },
+          client,
+        );
+      }
+      if (input.attributes && input.attributes.length > 0) {
         await productAttributesUpsertQuery.run(
           {
             values: input.attributes.map((a) => ({

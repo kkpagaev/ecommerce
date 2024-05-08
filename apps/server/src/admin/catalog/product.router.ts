@@ -30,7 +30,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         languageId: z.number(),
       })),
     }))
-    .use(isAuthed)
+    // .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await catalog.products.createProduct({
         attributes: input.attributes || [],

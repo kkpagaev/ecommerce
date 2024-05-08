@@ -27,6 +27,25 @@ export const attributeDescriptionDeleteQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/attribute.types").IAttributeAllQueryQuery
+ * >}
+ */
+const attributeAllQuery = sql`
+  SELECT 
+    a.id,
+    agd.name as group_name,
+    ad.name as name,
+    ag.id as group_id
+  FROM attributes a
+  LEFT JOIN attribute_groups ag ON a.attribute_group_id = ag.id
+  LEFT JOIN attribute_group_descriptions agd ON ag.id = agd.attribute_group_id
+  LEFT JOIN attribute_descriptions ad ON a.id = ad.attribute_id
+  WHERE ad.language_id = $languageId!
+  AND agd.language_id = $languageId!
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/attribute.types").IAttributeCreateQueryQuery
  * >}
  */
@@ -100,6 +119,18 @@ export class Attributes {
   /** @param {{ attributeId: number; languageId: number }} input */
   async deleteAttributeDescription(input) {
     return await attributeDescriptionDeleteQuery.run(input, this.pool);
+  }
+
+  /** @param {{ languageId: number }} input */
+  async listAll(input) {
+    const res = await attributeAllQuery.run(
+      {
+        languageId: input.languageId,
+      },
+      this.pool,
+    );
+
+    return res;
   }
 
   /**

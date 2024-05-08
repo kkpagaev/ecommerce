@@ -29,6 +29,25 @@ export interface IAttributeDescriptionDeleteQueryQuery {
   result: IAttributeDescriptionDeleteQueryResult;
 }
 
+/** 'AttributeAllQuery' parameters type */
+export interface IAttributeAllQueryParams {
+  languageId: number;
+}
+
+/** 'AttributeAllQuery' return type */
+export interface IAttributeAllQueryResult {
+  group_id: number;
+  group_name: string;
+  id: number;
+  name: string;
+}
+
+/** 'AttributeAllQuery' query type */
+export interface IAttributeAllQueryQuery {
+  params: IAttributeAllQueryParams;
+  result: IAttributeAllQueryResult;
+}
+
 /** 'AttributeCreateQuery' parameters type */
 export interface IAttributeCreateQueryParams {
   attributeGroupId: number;

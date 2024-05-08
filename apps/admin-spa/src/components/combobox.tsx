@@ -43,14 +43,15 @@ export function Combobox({
   multi,
 }: Props) {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState(
-    multi ? defaultValue ?? [] : defaultValue,
-  );
+  console.log({ defaultValue });
+  const [selected, setSelected] = React.useState(() => {
+    return multi ? defaultValue ?? [] : defaultValue;
+  });
 
   React.useEffect(() => {
     if (multi === true && Array.isArray(selected)) {
       onSelect(selected);
-    } else if (multi === false && typeof selected === "string") {
+    } else if (!multi && typeof selected === "string") {
       onSelect(selected);
     }
   }, [selected]);
