@@ -22,9 +22,10 @@ import {
 type Props = {
   values: Array<{ value: string; label: string }>;
   onSelect: (value: string) => void;
+  label: string;
   defaultValue?: string;
 };
-export function Combobox({ values, onSelect, defaultValue }: Props) {
+export function Combobox({ values, onSelect, defaultValue, label }: Props) {
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(defaultValue);
 
@@ -43,9 +44,7 @@ export function Combobox({ values, onSelect, defaultValue }: Props) {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {selected
-            ? values.find((v) => v.value === selected)?.label
-            : "Select framework..."}
+          {selected ? values.find((v) => v.value === selected)?.label : label}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

@@ -134,6 +134,7 @@ export function ProductForm({
       </Card>
       <div>
         <Combobox
+          label="Select Category"
           values={categories.map((c) => ({ value: "" + c.id, label: c.name }))}
           defaultValue={
             typeof currentValues.categoryId === "number"
