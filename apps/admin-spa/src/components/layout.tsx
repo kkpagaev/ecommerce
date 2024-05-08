@@ -7,6 +7,8 @@ import {
   Languages,
   Users,
   GroupIcon,
+  ShapesIcon,
+  Package2Icon,
 } from "lucide-react";
 import { Link, useMatches, useRouter } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -50,7 +52,12 @@ function NavBar() {
           {
             to: "/products",
             name: "Products",
-            icon: <Package2 className="h-4 w-4" />,
+            icon: <Package2Icon className="h-4 w-4" />,
+          },
+          {
+            to: "/option-groups",
+            name: "Option groups",
+            icon: <ShapesIcon className="h-4 w-4" />,
           },
         ] as const
       ).map((item, i) => {

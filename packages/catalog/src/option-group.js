@@ -81,11 +81,17 @@ export const optionGroupDescriptionUpsertQuery = sql`
   RETURNING *;
 `;
 
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/option-group.types").IOptionGroupListQueryQuery
+ * >}
+ */
 export const optionGroupListQuery = sql`
-  SELECT g.* FROM option_groups g
+  SELECT g.*, od.name as name FROM option_groups g
   JOIN option_group_descriptions od
     ON g.id = od.option_group_id
   WHERE od.language_id = $language_id!
+  AND od.name LIKE COALESCE(CONCAT('%', $name::text, '%'), od.name)
 `;
 
 export class OptionGroups {

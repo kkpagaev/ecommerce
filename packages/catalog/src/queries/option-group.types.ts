@@ -97,11 +97,13 @@ export interface IOptionGroupDescriptionUpsertQueryQuery {
 /** 'OptionGroupListQuery' parameters type */
 export interface IOptionGroupListQueryParams {
   language_id: number;
+  name?: string | null | void;
 }
 
 /** 'OptionGroupListQuery' return type */
 export interface IOptionGroupListQueryResult {
   id: number;
+  name: string;
   type: option_type;
 }
 

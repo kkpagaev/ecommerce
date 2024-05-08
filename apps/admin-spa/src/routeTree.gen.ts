@@ -8,8 +8,10 @@ import { Route as CategoriesImport } from './routes/categories'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
+import { Route as OptionGroupsIndexImport } from './routes/option-groups/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
 import { Route as ProductsNewImport } from './routes/products/new'
+import { Route as OptionGroupsNewImport } from './routes/option-groups/new'
 import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
@@ -48,6 +50,11 @@ const ProductsIndexRoute = ProductsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const OptionGroupsIndexRoute = OptionGroupsIndexImport.update({
+  path: '/option-groups/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AttributeGroupsIndexRoute = AttributeGroupsIndexImport.update({
   path: '/attribute-groups/',
   getParentRoute: () => rootRoute,
@@ -55,6 +62,11 @@ const AttributeGroupsIndexRoute = AttributeGroupsIndexImport.update({
 
 const ProductsNewRoute = ProductsNewImport.update({
   path: '/products/new',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OptionGroupsNewRoute = OptionGroupsNewImport.update({
+  path: '/option-groups/new',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -148,12 +160,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesNewImport
       parentRoute: typeof LanguagesImport
     }
+    '/option-groups/new': {
+      preLoaderRoute: typeof OptionGroupsNewImport
+      parentRoute: typeof rootRoute
+    }
     '/products/new': {
       preLoaderRoute: typeof ProductsNewImport
       parentRoute: typeof rootRoute
     }
     '/attribute-groups/': {
       preLoaderRoute: typeof AttributeGroupsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/option-groups/': {
+      preLoaderRoute: typeof OptionGroupsIndexImport
       parentRoute: typeof rootRoute
     }
     '/products/': {
@@ -203,8 +223,10 @@ export const routeTree = rootRoute.addChildren([
     AttributeGroupsAttributeGroupIdAttributeAttributeIdEditRoute,
   ]),
   AttributeGroupsNewRoute,
+  OptionGroupsNewRoute,
   ProductsNewRoute,
   AttributeGroupsIndexRoute,
+  OptionGroupsIndexRoute,
   ProductsIndexRoute,
   ProductsProductIdEditRoute,
 ])
