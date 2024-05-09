@@ -10,6 +10,7 @@ import { Combobox } from "../combobox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ImageManager } from "../image-manager";
 import { useMemo } from "react";
+import { Textarea } from "../ui/textarea";
 
 type ProductCreateInputs = AdminInputs["catalog"]["product"]["createProduct"];
 
@@ -176,6 +177,21 @@ export function ProductForm({
                         <ErrorMessage
                           errors={errors}
                           name={`descriptions.${index}.name`}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`descriptions.${index}.description`}>
+                          Description
+                        </Label>
+                        <Textarea
+                          {...register(`descriptions.${index}.description`)}
+                          defaultValue={values?.descriptions[index]?.name}
+                          placeholder="description"
+                        />
+
+                        <ErrorMessage
+                          errors={errors}
+                          name={`descriptions.${index}.description`}
                         />
                       </div>
                     </div>
