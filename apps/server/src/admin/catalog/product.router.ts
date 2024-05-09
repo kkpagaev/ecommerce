@@ -25,6 +25,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
       attributes: z.array(z.number()).optional(),
       images: z.array(z.string()),
       optionGroupId: z.number().nullable(),
+      options: z.array(z.number()).optional(),
       descriptions: z.array(z.object({
         name: z.string(),
         description: z.string(),
@@ -34,6 +35,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
     // .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await catalog.products.createProduct({
+        options: input.options,
         attributes: input.attributes || [],
         images: input.images,
         optionGroupId: input.optionGroupId,
@@ -56,6 +58,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
             images: z.array(z.string()),
             categoryId: z.number(),
             attributes: z.array(z.number()).optional(),
+            options: z.array(z.number()).optional(),
             optionGroupId: z.number().nullable(),
             descriptions: z.array(z.object({
               name: z.string(),
@@ -71,6 +74,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         attributes: input.attributes,
         images: input.images,
         optionGroupId: input.optionGroupId,
+        options: input.options,
         descriptions: input.descriptions,
         price: input.price,
       });

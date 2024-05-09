@@ -52,6 +52,22 @@ export interface IProductListCountQueryQuery {
   result: IProductListCountQueryResult;
 }
 
+/** 'ProductOptionsListQuery' parameters type */
+export interface IProductOptionsListQueryParams {
+  product_id: number;
+}
+
+/** 'ProductOptionsListQuery' return type */
+export interface IProductOptionsListQueryResult {
+  id: number;
+}
+
+/** 'ProductOptionsListQuery' query type */
+export interface IProductOptionsListQueryQuery {
+  params: IProductOptionsListQueryParams;
+  result: IProductOptionsListQueryResult;
+}
+
 /** 'ProductUpdateQuery' parameters type */
 export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;

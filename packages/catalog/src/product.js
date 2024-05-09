@@ -38,6 +38,16 @@ export const productListCountQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductOptionsListQueryQuery
+ * >}
+ */
+export const productOptionsListQuery = sql`
+  SELECT option_id as id FROM product_options
+  WHERE product_id = $product_id!
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/product.types").IProductUpdateQueryQuery
  * >} *
  */
@@ -304,6 +314,14 @@ export class Products {
         this.pool,
       )
       .then((res) => res.map(({ id }) => id));
+    const optionIds = await productOptionsListQuery
+      .run(
+        {
+          product_id: product.id,
+        },
+        this.pool,
+      )
+      .then((r) => r.map((option) => option.id));
 
     /** @type {string[]} */
     const images = /** @type {any} */ (product.images);
@@ -313,6 +331,7 @@ export class Products {
       images,
       price: Number(product.price),
       attributes: attributeIds,
+      options: optionIds,
       descriptions,
     };
   }
