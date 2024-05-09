@@ -58,79 +58,97 @@ export function Combobox({
   // }, [defaultValue]);
 
   return (
-    <div className="flex flex-col space-y-1.5">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+    <div>
+      <div className="flex flex-row">
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="justify-between w-full"
+            >
+              {multi
+                ? label
+                : defaultValue
+                  ? values.find((v) => v.value === defaultValue)?.label
+                  : label}
+              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className=" p-0">
+            <Command
+              filter={(value, search, keywords = []) => {
+                const extendValue = value + " " + keywords.join(" ");
+                if (extendValue.toLowerCase().includes(search.toLowerCase())) {
+                  return 1;
+                }
+                return 0;
+              }}
+            >
+              <CommandInput placeholder="Search category..." className="h-9" />
+              <CommandEmpty>Not found.</CommandEmpty>
+              <CommandGroup>
+                <CommandList>
+                  {values
+                    .filter((v) => {
+                      if (!multi) return true;
+                      return !(defaultValue as string[]).includes(v.value);
+                    })
+                    .map((v) => (
+                      <CommandItem
+                        className={cn(
+                          "hover:bg-accent hover:text-accent-foreground",
+                        )}
+                        key={v.value}
+                        keywords={[v.label]}
+                        value={v.value}
+                        onSelect={(value) => {
+                          if (multi === true) {
+                            if (defaultValue?.includes(value)) {
+                              onSelect(defaultValue.filter((v) => v !== value));
+                            } else {
+                              onSelect([...(defaultValue || []), value]);
+                            }
+                          } else {
+                            onSelect(value);
+                          }
+                          if (!multi) setOpen(false);
+                        }}
+                      >
+                        {v.label}
+                        <CheckboxIcon
+                          className={cn(
+                            "ml-auto h-4 w-4",
+                            defaultValue === v.value
+                              ? "opacity-100"
+                              : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                </CommandList>
+              </CommandGroup>
+            </Command>
+          </PopoverContent>
+        </Popover>
+
+        {withReset && (
           <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="justify-between"
-          >
-            {multi
-              ? label
-              : defaultValue
-                ? values.find((v) => v.value === defaultValue)?.label
-                : label}
-            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className=" p-0">
-          <Command
-            filter={(value, search, keywords = []) => {
-              const extendValue = value + " " + keywords.join(" ");
-              if (extendValue.toLowerCase().includes(search.toLowerCase())) {
-                return 1;
+            type="button"
+            onClick={() => {
+              if (multi === true) {
+                onSelect([]);
+              } else {
+                onSelect(null);
               }
-              return 0;
             }}
           >
-            <CommandInput placeholder="Search category..." className="h-9" />
-            <CommandEmpty>Not found.</CommandEmpty>
-            <CommandGroup>
-              <CommandList>
-                {values
-                  .filter((v) => {
-                    if (!multi) return true;
-                    return !(defaultValue as string[]).includes(v.value);
-                  })
-                  .map((v) => (
-                    <CommandItem
-                      className={cn(
-                        "hover:bg-accent hover:text-accent-foreground",
-                      )}
-                      key={v.value}
-                      keywords={[v.label]}
-                      value={v.value}
-                      onSelect={(value) => {
-                        if (multi === true) {
-                          if (defaultValue?.includes(value)) {
-                            onSelect(defaultValue.filter((v) => v !== value));
-                          } else {
-                            onSelect([...(defaultValue || []), value]);
-                          }
-                        } else {
-                          onSelect(value);
-                        }
-                        if (!multi) setOpen(false);
-                      }}
-                    >
-                      {v.label}
-                      <CheckboxIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          defaultValue === v.value
-                            ? "opacity-100"
-                            : "opacity-0",
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
-              </CommandList>
-            </CommandGroup>
-          </Command>
-        </PopoverContent>
-      </Popover>
+            Reset
+          </Button>
+        )}
+      </div>
+
       {multi === true && (
         <div className="flex flex-wrap gap-1">
           {(defaultValue as string[])?.map((v) => (
@@ -147,20 +165,6 @@ export function Combobox({
             </Button>
           ))}
         </div>
-      )}
-      {withReset && (
-        <Button
-          type="button"
-          onClick={() => {
-            if (multi === true) {
-              onSelect([]);
-            } else {
-              onSelect(null);
-            }
-          }}
-        >
-          Reset
-        </Button>
       )}
     </div>
   );

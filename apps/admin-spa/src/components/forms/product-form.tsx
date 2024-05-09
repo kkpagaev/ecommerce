@@ -296,24 +296,27 @@ export function ProductForm({
                 />
               </div>
               {watchOptionGroupId && (
-                <Combobox
-                  multi
-                  label="Select Option"
-                  values={optionGroupOptions.map((o) => ({
-                    value: "" + o.id,
-                    label: o.name,
-                  }))}
-                  defaultValue={watchOptions?.map((v) => "" + v) || []}
-                  onSelect={(v) => {
-                    clearErrors("options");
-                    setValue(
-                      "options",
-                      v.map((v) => +v),
-                    );
-                  }}
-                />
+                <div>
+                  <Label htmlFor="options">Options</Label>
+
+                  <Combobox
+                    multi
+                    label="Select Option"
+                    values={optionGroupOptions.map((o) => ({
+                      value: "" + o.id,
+                      label: o.name,
+                    }))}
+                    defaultValue={watchOptions?.map((v) => "" + v) || []}
+                    onSelect={(v) => {
+                      clearErrors("options");
+                      setValue(
+                        "options",
+                        v.map((v) => +v),
+                      );
+                    }}
+                  />
+                </div>
               )}
-              <div></div>
             </CardContent>
           </Card>
         </TabsContent>
