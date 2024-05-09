@@ -1,7 +1,9 @@
 /** Types generated for queries found in "src/location.js" */
 
 /** 'LocationListQuery' parameters type */
-export type ILocationListQueryParams = void;
+export interface ILocationListQueryParams {
+  name?: string | null | void;
+}
 
 /** 'LocationListQuery' return type */
 export interface ILocationListQueryResult {

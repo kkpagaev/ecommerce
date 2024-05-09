@@ -1,1 +1,1 @@
-export * from "./location";
+export { Locations } from "./location";

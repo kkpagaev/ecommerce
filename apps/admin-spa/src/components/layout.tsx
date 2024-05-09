@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import {
+  MapPinIcon,
   Bell,
   Home,
   Menu,
@@ -48,6 +49,11 @@ function NavBar() {
             to: "/attribute-groups",
             name: "Attribute Groups",
             icon: <GroupIcon className="h-4 w-4" />,
+          },
+          {
+            to: "/locations",
+            name: "Locations",
+            icon: <MapPinIcon className="h-4 w-4" />,
           },
           {
             to: "/products",

@@ -14,6 +14,8 @@ export const locationListQuery = sql`
       name
   FROM
       locations
+  WHERE
+    name = COALESCE($name, name)
   ORDER BY
       id
 `;
@@ -109,8 +111,18 @@ export class Locations {
     return result;
   }
 
-  async listLocations() {
-    const res = await locationListQuery.run(undefined, this.pool);
+  /**
+   * @param {{
+   *   name?: string;
+   * }} input
+   */
+  async listLocations(input) {
+    const res = await locationListQuery.run(
+      {
+        name: input.name,
+      },
+      this.pool,
+    );
 
     return res;
   }
