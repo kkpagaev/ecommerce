@@ -27,12 +27,12 @@ type Props = {
   | {
       multi?: false;
       onSelect: (value: string | null) => void;
-      defaultValue?: string;
+      defaultValue: string | null;
     }
   | {
       multi: true;
       onSelect: (value: string[]) => void;
-      defaultValue?: string[];
+      defaultValue: string[];
     }
 );
 
@@ -45,20 +45,17 @@ export function Combobox({
   withReset,
 }: Props) {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState(() => {
-    return multi ? defaultValue ?? [] : defaultValue;
-  });
 
-  React.useEffect(() => {
-    console.log({ selected });
-    if (multi === true && Array.isArray(selected)) {
-      onSelect(selected);
-    } else if (!multi && typeof selected === "string") {
-      onSelect(selected);
-    } else if (!multi) {
-      onSelect(null);
-    }
-  }, [selected]);
+  // React.useEffect(() => {
+  //   console.log({ defaultValue });
+  //   if (multi === true && Array.isArray(defaultValue)) {
+  //     onSelect(defaultValue);
+  //   } else if (!multi && typeof defaultValue === "string") {
+  //     onSelect(defaultValue);
+  //   } else if (!multi) {
+  //     onSelect(null);
+  //   }
+  // }, [defaultValue]);
 
   return (
     <div className="flex flex-col space-y-1.5">
@@ -72,8 +69,8 @@ export function Combobox({
           >
             {multi
               ? label
-              : selected
-                ? values.find((v) => v.value === selected)?.label
+              : defaultValue
+                ? values.find((v) => v.value === defaultValue)?.label
                 : label}
             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -95,7 +92,7 @@ export function Combobox({
                 {values
                   .filter((v) => {
                     if (!multi) return true;
-                    return !(selected as string[]).includes(v.value);
+                    return !(defaultValue as string[]).includes(v.value);
                   })
                   .map((v) => (
                     <CommandItem
@@ -106,14 +103,14 @@ export function Combobox({
                       keywords={[v.label]}
                       value={v.value}
                       onSelect={(value) => {
-                        if (multi === true && Array.isArray(selected)) {
-                          if (selected?.includes(value)) {
-                            setSelected(selected.filter((v) => v !== value));
+                        if (multi === true) {
+                          if (defaultValue?.includes(value)) {
+                            onSelect(defaultValue.filter((v) => v !== value));
                           } else {
-                            setSelected([...(selected || []), value]);
+                            onSelect([...(defaultValue || []), value]);
                           }
                         } else {
-                          setSelected(value);
+                          onSelect(value);
                         }
                         if (!multi) setOpen(false);
                       }}
@@ -122,7 +119,9 @@ export function Combobox({
                       <CheckboxIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selected === v.value ? "opacity-100" : "opacity-0",
+                          defaultValue === v.value
+                            ? "opacity-100"
+                            : "opacity-0",
                         )}
                       />
                     </CommandItem>
@@ -134,13 +133,13 @@ export function Combobox({
       </Popover>
       {multi === true && (
         <div className="flex flex-wrap gap-1">
-          {(selected as string[])?.map((v) => (
+          {(defaultValue as string[])?.map((v) => (
             <Button
               key={v}
               variant="outline"
               onClick={() => {
-                setSelected(
-                  (selected as string[]).filter((value) => value !== v),
+                onSelect(
+                  (defaultValue as string[]).filter((value) => value !== v),
                 );
               }}
             >
@@ -153,7 +152,11 @@ export function Combobox({
         <Button
           type="button"
           onClick={() => {
-            setSelected(multi === true ? [] : undefined);
+            if (multi === true) {
+              onSelect([]);
+            } else {
+              onSelect(null);
+            }
           }}
         >
           Reset
