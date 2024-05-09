@@ -9,6 +9,7 @@ import { useApiForm } from "../../utils/useApiForm";
 import { Combobox } from "../combobox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ImageManager } from "../image-manager";
+import { useMemo } from "react";
 
 type ProductCreateInputs = AdminInputs["catalog"]["product"]["createProduct"];
 
@@ -35,6 +36,7 @@ type AttributeModel = {
 type OptionGroupModel = {
   id: number;
   name: string;
+  options: { id: number; name: string }[];
 };
 
 type ProductFormProps = {
@@ -69,6 +71,7 @@ export function ProductForm({
     price: values.price,
     categoryId: values.category_id,
     attributes: values.attributes || [],
+    options: values.options || [],
     images: values.images || [],
     descriptions: languages.map((lang) => {
       const old = values.descriptions.find((d) => d.language_id === lang.id);
@@ -101,12 +104,26 @@ export function ProductForm({
     register,
     getValues,
     setValue,
+    reset,
+    watch,
     formState: { errors },
   } = useApiForm({
     errorMessage,
     values: formValues,
     defaultValues: defaultValues,
   });
+  const watchCategoryId = watch("categoryId");
+  const watchAttributes = watch("attributes");
+  const watchOptionGroupId = watch("optionGroupId");
+  const watchOptions = watch("options");
+
+  const optionGroupOptions = useMemo(() => {
+    const optionGroup = optionGroups.find(
+      (optionGroup) => optionGroup.id === watchOptionGroupId,
+    );
+
+    return optionGroup ? optionGroup.options : [];
+  }, [watchOptionGroupId, optionGroups]);
 
   const { fields } = useFieldArray({
     control,
@@ -205,14 +222,10 @@ export function ProductForm({
                     value: "" + c.id,
                     label: c.name,
                   }))}
-                  defaultValue={
-                    getValues("categoryId") === 0
-                      ? undefined
-                      : "" + getValues("categoryId")
-                  }
+                  defaultValue={"" + watchCategoryId}
                   onSelect={(v) => {
                     clearErrors("categoryId");
-                    setValue("categoryId", +v);
+                    setValue("categoryId", v ? +v : 0);
                   }}
                 />
               </div>
@@ -226,7 +239,7 @@ export function ProductForm({
                     value: "" + c.id,
                     label: c.name,
                   }))}
-                  defaultValue={getValues("attributes")?.map((v) => "" + v)}
+                  defaultValue={watchAttributes?.map((v) => "" + v) || []}
                   onSelect={(v) => {
                     clearErrors("attributes");
                     setValue(
@@ -237,23 +250,53 @@ export function ProductForm({
                 />
               </div>
               <Label htmlFor="attributes">Option Group</Label>
-              <Combobox
-                label="Select Option Group"
-                values={optionGroups.map((c) => ({
-                  value: "" + c.id,
-                  label: c.name,
-                }))}
-                defaultValue={
-                  getValues("optionGroupId") === 0
-                    ? undefined
-                    : "" + getValues("optionGroupId")
-                }
-                onSelect={(v) => {
-                  clearErrors("optionGroupId");
-                  setValue("optionGroupId", +v);
-                }}
-              />
-
+              <div>
+                <Combobox
+                  withReset
+                  label="Select Option Group"
+                  values={optionGroups.map((c) => ({
+                    value: "" + c.id,
+                    label: c.name,
+                  }))}
+                  defaultValue={
+                    watchOptionGroupId === null ? null : "" + watchOptionGroupId
+                  }
+                  onSelect={(v) => {
+                    clearErrors("optionGroupId");
+                    if (v === null) {
+                      reset((prev) => ({
+                        ...prev,
+                        optionGroupId: null,
+                        options: [],
+                      }));
+                      return;
+                    }
+                    reset((prev) => ({
+                      ...prev,
+                      optionGroupId: +v,
+                      options: [],
+                    }));
+                  }}
+                />
+              </div>
+              {watchOptionGroupId && (
+                <Combobox
+                  multi
+                  label="Select Option"
+                  values={optionGroupOptions.map((o) => ({
+                    value: "" + o.id,
+                    label: o.name,
+                  }))}
+                  defaultValue={watchOptions?.map((v) => "" + v) || []}
+                  onSelect={(v) => {
+                    clearErrors("options");
+                    setValue(
+                      "options",
+                      v.map((v) => +v),
+                    );
+                  }}
+                />
+              )}
               <div></div>
             </CardContent>
           </Card>
