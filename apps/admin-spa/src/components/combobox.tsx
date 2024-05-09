@@ -22,10 +22,11 @@ import {
 type Props = {
   values: Array<{ value: string; label: string }>;
   label: string;
+  withReset?: boolean;
 } & (
   | {
       multi?: false;
-      onSelect: (value: string) => void;
+      onSelect: (value: string | null) => void;
       defaultValue?: string;
     }
   | {
@@ -41,6 +42,7 @@ export function Combobox({
   defaultValue,
   label,
   multi,
+  withReset,
 }: Props) {
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(() => {
@@ -48,10 +50,13 @@ export function Combobox({
   });
 
   React.useEffect(() => {
+    console.log({ selected });
     if (multi === true && Array.isArray(selected)) {
       onSelect(selected);
     } else if (!multi && typeof selected === "string") {
       onSelect(selected);
+    } else if (!multi) {
+      onSelect(null);
     }
   }, [selected]);
 
@@ -143,6 +148,16 @@ export function Combobox({
             </Button>
           ))}
         </div>
+      )}
+      {withReset && (
+        <Button
+          type="button"
+          onClick={() => {
+            setSelected(multi === true ? [] : undefined);
+          }}
+        >
+          Reset
+        </Button>
       )}
     </div>
   );
