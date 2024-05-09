@@ -26,14 +26,19 @@ export const Route = createFileRoute("/products/new")({
         languageId: 1,
       })
       .then(({ data }) => data);
+    const optionGroups =
+      await context.trpc.admin.catalog.optionGroups.listOptionGroups.fetch({
+        languageId: 1,
+      });
 
-    return { languages, categories, attributes };
+    return { languages, categories, attributes, optionGroups };
   },
   component: ProductNewComponent,
 });
 
 function ProductNewComponent() {
-  const { languages, categories, attributes } = Route.useLoaderData();
+  const { languages, categories, attributes, optionGroups } =
+    Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
 
@@ -51,6 +56,7 @@ function ProductNewComponent() {
         attributes={attributes}
         categories={categories}
         languages={languages}
+        optionGroups={optionGroups}
         onSubmit={async (data) => {
           mutation.mutate(data);
         }}

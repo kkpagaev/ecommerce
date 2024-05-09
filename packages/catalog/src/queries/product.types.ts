@@ -57,6 +57,7 @@ export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;
   id: number;
   images?: string | string[] | Record<string, any> | null | void;
+  option_group_id?: number | null | void;
   slug?: string | null | void;
 }
 

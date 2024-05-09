@@ -2,6 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import { TaggedQuery, sql } from "@pgtyped/runtime";
 import { tx } from "@repo/pool";
+import { optionFindManyQuery } from "./option";
 
 /**
  * @type {TaggedQuery<
@@ -217,14 +218,25 @@ export class OptionGroups {
    * }} input
    */
   async list(input) {
-    const res = await optionGroupListQuery.run(
+    const groups = await optionGroupListQuery.run(
       {
         language_id: input.languageId,
         name: input.name,
       },
       this.pool,
     );
+    const options = await optionFindManyQuery.run(
+      {
+        languageId: input.languageId,
+      },
+      this.pool,
+    );
 
-    return res;
+    return groups.map((g) => {
+      return {
+        ...g,
+        options: options.filter((o) => o.option_group_id === g.id),
+      };
+    });
   }
 }

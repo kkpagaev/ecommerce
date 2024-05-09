@@ -32,12 +32,18 @@ type AttributeModel = {
   name: string;
 };
 
+type OptionGroupModel = {
+  id: number;
+  name: string;
+};
+
 type ProductFormProps = {
   errorMessage?: string;
   languages: LanguageModel[];
   values?: ProductModel;
   categories: CategoryModel[];
   attributes: AttributeModel[];
+  optionGroups: OptionGroupModel[];
 } & (
   | {
       edit?: false | undefined;
@@ -56,7 +62,38 @@ export function ProductForm({
   values,
   categories,
   attributes,
+  optionGroups,
 }: ProductFormProps) {
+  const formValues: ProductCreateInputs | undefined = values && {
+    optionGroupId: values.option_group_id,
+    price: values.price,
+    categoryId: values.category_id,
+    attributes: values.attributes || [],
+    images: values.images || [],
+    descriptions: languages.map((lang) => {
+      const old = values.descriptions.find((d) => d.language_id === lang.id);
+      return {
+        languageId: lang.id,
+        name: old?.name || "",
+        description: old?.description || "",
+      };
+    }),
+  };
+  const defaultValues: ProductCreateInputs = {
+    price: 0,
+    categoryId: 0,
+    optionGroupId: null,
+    attributes: [] as number[],
+    images: [] as string[],
+    descriptions: languages.map((lang) => {
+      return {
+        languageId: lang.id,
+        name: "",
+        description: "",
+      };
+    }),
+  };
+
   const {
     control,
     handleSubmit,
@@ -67,33 +104,8 @@ export function ProductForm({
     formState: { errors },
   } = useApiForm({
     errorMessage,
-    values: values && {
-      price: values.price,
-      categoryId: values.category_id,
-      attributes: values.attributes || [],
-      images: values.images || [],
-      descriptions: languages.map((lang) => {
-        const old = values.descriptions.find((d) => d.language_id === lang.id);
-        return {
-          languageId: lang.id,
-          name: old?.name || "",
-          description: old?.description || "",
-        };
-      }),
-    },
-    defaultValues: {
-      price: 0,
-      categoryId: 0,
-      attributes: [] as number[],
-      images: [] as string[],
-      descriptions: languages.map((lang) => {
-        return {
-          languageId: lang.id,
-          name: "",
-          description: "",
-        };
-      }),
-    },
+    values: formValues,
+    defaultValues: defaultValues,
   });
 
   const { fields } = useFieldArray({
@@ -214,7 +226,7 @@ export function ProductForm({
                     value: "" + c.id,
                     label: c.name,
                   }))}
-                  defaultValue={getValues("attributes").map((v) => "" + v)}
+                  defaultValue={getValues("attributes")?.map((v) => "" + v)}
                   onSelect={(v) => {
                     clearErrors("attributes");
                     setValue(
@@ -224,6 +236,25 @@ export function ProductForm({
                   }}
                 />
               </div>
+              <Label htmlFor="attributes">Option Group</Label>
+              <Combobox
+                label="Select Option Group"
+                values={optionGroups.map((c) => ({
+                  value: "" + c.id,
+                  label: c.name,
+                }))}
+                defaultValue={
+                  getValues("optionGroupId") === 0
+                    ? undefined
+                    : "" + getValues("optionGroupId")
+                }
+                onSelect={(v) => {
+                  clearErrors("optionGroupId");
+                  setValue("optionGroupId", +v);
+                }}
+              />
+
+              <div></div>
             </CardContent>
           </Card>
         </TabsContent>

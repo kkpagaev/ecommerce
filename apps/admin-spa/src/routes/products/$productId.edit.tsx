@@ -10,7 +10,7 @@ import { ProductForm } from "../../components/forms/product-form";
 export const Route = createFileRoute("/products/$productId/edit")({
   beforeLoad: ({ context }) => ({
     ...context,
-    getTitle: () => "Edit Category",
+    getTitle: () => "Edit Product",
   }),
   loader: async ({ context, params }) => {
     const attributes = await context.trpc.admin.catalog.attribute.listAll
@@ -37,14 +37,19 @@ export const Route = createFileRoute("/products/$productId/edit")({
     if (!product) {
       throw new Error("Product not found");
     }
+    const optionGroups =
+      await context.trpc.admin.catalog.optionGroups.listOptionGroups.fetch({
+        languageId: 1,
+      });
 
-    return { languages, categories, attributes, product };
+    return { languages, categories, attributes, product, optionGroups };
   },
   component: CategoryComponent,
 });
 
 function CategoryComponent() {
-  const { languages, product, attributes, categories } = Route.useLoaderData();
+  const { languages, product, attributes, categories, optionGroups } =
+    Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
   const router = useRouter();
@@ -65,6 +70,7 @@ function CategoryComponent() {
         languages={languages}
         attributes={attributes}
         categories={categories}
+        optionGroups={optionGroups}
         values={product}
         onSubmit={async (data) => {
           mutation.mutate({

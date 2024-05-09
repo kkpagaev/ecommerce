@@ -46,7 +46,8 @@ export const productUpdateQuery = sql`
   SET
     slug = COALESCE($slug, slug),
     category_id = COALESCE($categoryId, category_id),
-    images = COALESCE($images, images)
+    images = COALESCE($images, images),
+    option_group_id = COALESCE($option_group_id, option_group_id)
   WHERE
     id = $id!;
 `;
@@ -182,7 +183,7 @@ export class Products {
    *   price: number;
    *   attributes: number[];
    *   images: string[];
-   *   option_group_id?: number;
+   *   optionGroupId: number | null;
    *   options?: number[];
    *   descriptions: {
    *     languageId: number;
@@ -208,7 +209,7 @@ export class Products {
             images: JSON.stringify(input.images),
             slug: slug,
             categoryId: input.categoryId,
-            option_group_id: input.option_group_id,
+            option_group_id: input.optionGroupId,
           },
           client,
         )
@@ -378,6 +379,7 @@ export class Products {
           id: id,
           slug: slug,
           images: JSON.stringify(input.images),
+          option_group_id: input.optionGroupId,
           categoryId: input.categoryId,
         },
         client,
