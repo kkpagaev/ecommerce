@@ -11,7 +11,7 @@ import { SearchFilters } from "../../components/search-filters";
 import { TooltipLink } from "../../components/ui/tooltip-link";
 
 type AttributeGroups = Exclude<
-  AdminOutputs["catalog"]["attributeGroup"]["findOneAttributeGroup"],
+  AdminOutputs["catalog"]["attributeGroup"]["listAttributeGroups"][0],
   null
 >;
 

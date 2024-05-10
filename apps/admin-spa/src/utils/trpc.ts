@@ -4,7 +4,7 @@ import {
   type inferReactQueryProcedureOptions,
 } from "@trpc/react-query";
 import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
-import type { AppRouter } from "../../../server/src/index";
+import type { AppRouter } from "@repo/server";
 
 export const trpc = createTRPCReact<AppRouter>();
 

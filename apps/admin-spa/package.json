@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
+    "@repo/server": "workspace:*",
     "@repo/typescript-config": "*",
     "@tanstack/router-devtools": "^1.14.0",
     "@tanstack/router-vite-plugin": "^1.12.16",
@@ -57,7 +58,6 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.33",
-    "server": "workspace:*",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
