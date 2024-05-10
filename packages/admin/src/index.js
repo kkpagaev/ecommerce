@@ -55,9 +55,10 @@ const adminDeleteQuery = sql`
  * >}
  */
 const adminListQuery = sql`
-  SELECT * FROM admins
-  LIMIT COALESCE($limit, 10)
-  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
+  SELECT * FROM admins a
+  WHERE a.email LIKE COALESCE(CONCAT('%', $email::text, '%'), a.email)
+  AND a.name LIKE COALESCE(CONCAT('%', $name::text, '%'), a.email)
+  ORDER BY id
 `;
 
 /**
@@ -156,27 +157,20 @@ export class Admins {
 
   /**
    * @typedef {{
-   *   limit?: number;
-   *   page?: number;
+   *   email?: string;
+   *   name?: string;
    * }} ListAdmins
    */
   /** @param {ListAdmins} input */
   async listAdmins(input) {
     const admins = await adminListQuery.run(
       {
-        limit: input.limit,
-        page: input.page,
+        name: input.name,
+        email: input.email,
       },
       this.pool,
     );
 
-    const count = await adminListCountQuery
-      .run(undefined, this.pool)
-      .then((res) => +(res[0]?.count ?? 0));
-
-    return {
-      data: admins,
-      count: count,
-    };
+    return admins;
   }
 }

@@ -70,8 +70,8 @@ export interface IAdminDeleteQueryQuery {
 
 /** 'AdminListQuery' parameters type */
 export interface IAdminListQueryParams {
-  limit?: number | null | void;
-  page?: number | null | void;
+  email?: string | null | void;
+  name?: string | null | void;
 }
 
 /** 'AdminListQuery' return type */
