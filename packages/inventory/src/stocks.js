@@ -79,10 +79,43 @@ export const stockTotalStockQuery = sql`
     product_variant_id
 `;
 
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/stocks.types").IProductVariantListStocksQueryQuery
+ * >}
+ */
+export const productVariantListStocksQuery = sql`
+  SELECT pv.id AS product_variant_id, 
+  s.location_id AS location_id ,
+  (SELECT COALESCE(SUM(ss.count), 0) AS count FROM stocks ss 
+    WHERE ss.product_variant_id = pv.id
+    AND ss.location_id = s.location_id
+  ) AS count
+  FROM product_variants pv CROSS JOIN stocks s 
+  WHERE pv.product_id = $product_id!
+  GROUP BY pv.id, s.location_id, pv.product_id
+`;
+
 export class Stocks {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
     this.pool = f.pool;
+  }
+
+  /**
+   * @param {{
+   *   productId: number;
+   * }} input
+   */
+  async productVariantListStocks(input) {
+    const res = await productVariantListStocksQuery.run(
+      {
+        product_id: input.productId,
+      },
+      this.pool,
+    );
+
+    return res.map((r) => ({ ...r, count: r.count === null ? 0 : +r.count }));
   }
 
   /**

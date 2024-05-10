@@ -3,6 +3,22 @@ import { z } from "zod";
 import { isAuthed } from "../../core/trpc";
 
 export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
+  listProductVariantsOptions: t.procedure
+    .input(
+      z.object({
+        languageId: z.number(),
+        productVariantIds: z.array(z.number()),
+      })
+    )
+    .use(isAuthed)
+    .query(async ({ input }) => {
+      const res = await productVariants.listProductVariantsOptions({
+        languageId: input.languageId,
+        productVariantIds: input.productVariantIds,
+      });
+
+      return res;
+    }),
   listProductVariants: t.procedure
     .input(
       z.object({

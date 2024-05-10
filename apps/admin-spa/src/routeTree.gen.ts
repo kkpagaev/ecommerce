@@ -3,12 +3,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as StocksImport } from './routes/stocks'
 import { Route as LocationsImport } from './routes/locations'
 import { Route as LanguagesImport } from './routes/languages'
 import { Route as CategoriesImport } from './routes/categories'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as StocksIndexImport } from './routes/stocks/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
 import { Route as OptionGroupsIndexImport } from './routes/option-groups/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
@@ -20,6 +20,7 @@ import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
+import { Route as StocksProductIdEditImport } from './routes/stocks/$productId.edit'
 import { Route as ProductsProductIdVariantsImport } from './routes/products/$productId.variants'
 import { Route as ProductsProductIdEditImport } from './routes/products/$productId.edit'
 import { Route as OptionGroupsOptionGroupIdEditImport } from './routes/option-groups/$optionGroupId.edit'
@@ -35,11 +36,6 @@ import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './ro
 import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
 // Create/Update Routes
-
-const StocksRoute = StocksImport.update({
-  path: '/stocks',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LocationsRoute = LocationsImport.update({
   path: '/locations',
@@ -63,6 +59,11 @@ const AboutRoute = AboutImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const StocksIndexRoute = StocksIndexImport.update({
+  path: '/stocks/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -121,6 +122,11 @@ const AttributeGroupsAttributeGroupIdRoute =
     path: '/attribute-groups/$attributeGroupId',
     getParentRoute: () => rootRoute,
   } as any)
+
+const StocksProductIdEditRoute = StocksProductIdEditImport.update({
+  path: '/stocks/$productId/edit',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ProductsProductIdVariantsRoute = ProductsProductIdVariantsImport.update({
   path: '/products/$productId/variants',
@@ -219,10 +225,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsImport
       parentRoute: typeof rootRoute
     }
-    '/stocks': {
-      preLoaderRoute: typeof StocksImport
-      parentRoute: typeof rootRoute
-    }
     '/attribute-groups/$attributeGroupId': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdImport
       parentRoute: typeof rootRoute
@@ -267,6 +269,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/stocks/': {
+      preLoaderRoute: typeof StocksIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/attribute-groups/$attributeGroupId/edit': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdEditImport
       parentRoute: typeof AttributeGroupsAttributeGroupIdImport
@@ -293,6 +299,10 @@ declare module '@tanstack/react-router' {
     }
     '/products/$productId/variants': {
       preLoaderRoute: typeof ProductsProductIdVariantsImport
+      parentRoute: typeof rootRoute
+    }
+    '/stocks/$productId/edit': {
+      preLoaderRoute: typeof StocksProductIdEditImport
       parentRoute: typeof rootRoute
     }
     '/attribute-groups/$attributeGroupId/attribute/new': {
@@ -333,7 +343,6 @@ export const routeTree = rootRoute.addChildren([
   ]),
   LanguagesRoute.addChildren([LanguagesNewRoute, LanguagesLanguageIdEditRoute]),
   LocationsRoute.addChildren([LocationsNewRoute, LocationsLocationIdEditRoute]),
-  StocksRoute,
   AttributeGroupsAttributeGroupIdRoute.addChildren([
     AttributeGroupsAttributeGroupIdEditRoute,
     AttributeGroupsAttributeGroupIdAttributeNewRoute,
@@ -350,9 +359,11 @@ export const routeTree = rootRoute.addChildren([
   AttributeGroupsIndexRoute,
   OptionGroupsIndexRoute,
   ProductsIndexRoute,
+  StocksIndexRoute,
   ProductsProductIdEditRoute,
   ProductsProductIdVariantsRoute.addChildren([
     ProductsProductIdVariantsNewRoute,
     ProductsProductIdVariantsProductVariantIdEditRoute,
   ]),
+  StocksProductIdEditRoute,
 ])

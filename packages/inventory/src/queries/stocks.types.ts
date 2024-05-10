@@ -79,3 +79,21 @@ export interface IStockTotalStockQueryQuery {
   result: IStockTotalStockQueryResult;
 }
 
+/** 'ProductVariantListStocksQuery' parameters type */
+export interface IProductVariantListStocksQueryParams {
+  product_id: number;
+}
+
+/** 'ProductVariantListStocksQuery' return type */
+export interface IProductVariantListStocksQueryResult {
+  count: string | null;
+  location_id: number;
+  product_variant_id: number;
+}
+
+/** 'ProductVariantListStocksQuery' query type */
+export interface IProductVariantListStocksQueryQuery {
+  params: IProductVariantListStocksQueryParams;
+  result: IProductVariantListStocksQueryResult;
+}
+

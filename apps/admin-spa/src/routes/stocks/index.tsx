@@ -19,7 +19,7 @@ type Product = Exclude<
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-export const Route = createFileRoute("/stocks")({
+export const Route = createFileRoute("/stocks/")({
   beforeLoad: ({ context }) => ({ ...context, getTitle: () => "Stocks" }),
   validateSearch: (search: Record<string, unknown>) => {
     return z

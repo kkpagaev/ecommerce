@@ -176,6 +176,24 @@ export class ProductVariants {
 
   /**
    * @param {{
+   *   productVariantIds: number[];
+   *   languageId: number;
+   * }} input
+   */
+  async listProductVariantsOptions(input) {
+    const options = await productVariantsOptionsListOptionsQuery.run(
+      {
+        product_variant_ids: input.productVariantIds,
+        language_id: input.languageId,
+      },
+      this.pool,
+    );
+
+    return options;
+  }
+
+  /**
+   * @param {{
    *   productId: number;
    *   languageId: number;
    * }} input
