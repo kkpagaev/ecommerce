@@ -15,8 +15,6 @@ function About() {
         Authorization: `Bearer ${r}`,
       },
     });
-
-    console.log(await res.json());
   });
 
   return <div className="p-2">Hello from About!</div>;

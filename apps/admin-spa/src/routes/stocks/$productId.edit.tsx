@@ -23,7 +23,7 @@ export const Route = createFileRoute("/stocks/$productId/edit")({
   loaderDeps: ({ search }) => ({
     languageId: search.languageId || 1,
   }),
-  loader: async ({ context, params, deps }) => {
+  loader: async ({ context, params, deps, navigate }) => {
     const product =
       await context.trpc.admin.catalog.product.findOneProduct.fetch({
         id: Number(params.productId),
@@ -36,17 +36,22 @@ export const Route = createFileRoute("/stocks/$productId/edit")({
         productId: product.id,
         languageId: deps.languageId,
       });
+    if (productVariantsStocks.length === 0) {
+      navigate({ to: "/stocks" });
+      return;
+    }
 
     const locations =
       await context.trpc.admin.inventory.location.listLocations.fetch({});
 
+    const productVariantIds = productVariantsStocks.map(
+      (s) => s.product_variant_id,
+    );
     const productVariationOptions =
       await context.trpc.admin.catalog.productVariant.listProductVariantsOptions.fetch(
         {
           languageId: deps.languageId,
-          productVariantIds: productVariantsStocks.map(
-            (s) => s.product_variant_id,
-          ),
+          productVariantIds: productVariantIds,
         },
       );
 
@@ -98,7 +103,6 @@ function CategoryComponent() {
           productVariations: productVariations,
         }}
         onSubmit={async (data) => {
-          console.log(data);
           mutation.mutate(
             data.map((d) => ({
               count: d.count,

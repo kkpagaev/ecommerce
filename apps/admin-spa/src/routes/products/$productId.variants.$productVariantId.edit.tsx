@@ -70,7 +70,6 @@ function ProductNewComponent() {
         optionGroups={optionGroups}
         values={variant}
         onSubmit={async (data) => {
-          console.log(data);
           mutation.mutate({
             id: variant.id,
             ...data,

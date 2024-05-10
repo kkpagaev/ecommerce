@@ -80,7 +80,6 @@ export function ProductVariantForm({
         )?.option_id || null,
       );
     }
-    console.log({ map });
     return map;
   });
 

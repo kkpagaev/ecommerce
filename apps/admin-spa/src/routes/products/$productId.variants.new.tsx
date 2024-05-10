@@ -55,7 +55,6 @@ function ProductNewComponent() {
       <ProductVariantForm
         optionGroups={optionGroups}
         onSubmit={async (data) => {
-          console.log(data);
           mutation.mutate({
             productId: Number(params.productId),
             ...data,

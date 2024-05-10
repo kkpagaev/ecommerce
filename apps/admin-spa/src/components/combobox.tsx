@@ -47,7 +47,6 @@ export function Combobox({
   const [open, setOpen] = React.useState(false);
 
   // React.useEffect(() => {
-  //   console.log({ defaultValue });
   //   if (multi === true && Array.isArray(defaultValue)) {
   //     onSelect(defaultValue);
   //   } else if (!multi && typeof defaultValue === "string") {

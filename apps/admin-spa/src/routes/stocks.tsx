@@ -10,6 +10,7 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { TooltipLink } from "@/components/ui/tooltip-link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { OutletDialog } from "@/components/ui/dialog-outlet";
 
 type Product = Exclude<
   AdminOutputs["inventory"]["stocks"]["productListStocks"][0],
@@ -19,7 +20,7 @@ type Product = Exclude<
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-export const Route = createFileRoute("/stocks/")({
+export const Route = createFileRoute("/stocks")({
   beforeLoad: ({ context }) => ({ ...context, getTitle: () => "Stocks" }),
   validateSearch: (search: Record<string, unknown>) => {
     return z
@@ -46,7 +47,6 @@ export const Route = createFileRoute("/stocks/")({
 
 function Index() {
   const { products } = Route.useLoaderData();
-  console.log(products);
 
   return (
     <div className="container mx-auto py-10">
@@ -114,7 +114,6 @@ function Index() {
               enableSorting: false,
               cell: ({ row }) => {
                 const ids = row.getValue<string[]>("images");
-                console.log({ ids });
                 if (!ids) {
                   return null;
                 }
@@ -139,7 +138,7 @@ function Index() {
               cell: ({ row }) => {
                 return (
                   <TooltipLink
-                    to="/products/$productId/edit"
+                    to="/stocks/$productId/edit"
                     params={{ productId: "" + row.getValue("id") }}
                     text="Edit"
                   >
@@ -154,6 +153,7 @@ function Index() {
         }
         isLoading={false}
       />
+      <OutletDialog path={Route.fullPath} />
     </div>
   );
 }
