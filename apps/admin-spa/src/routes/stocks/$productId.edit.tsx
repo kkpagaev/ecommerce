@@ -38,7 +38,8 @@ export const Route = createFileRoute("/stocks/$productId/edit")({
       });
     if (productVariantsStocks.length === 0) {
       navigate({ to: "/stocks" });
-      return;
+      toast.error("Product has no variants, try creating one first");
+      throw new Error("Product has no variants, try creating one first");
     }
 
     const locations =
