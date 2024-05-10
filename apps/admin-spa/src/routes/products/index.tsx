@@ -9,6 +9,7 @@ import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
 import { SearchFilters } from "@/components/search-filters";
 import { TooltipLink } from "@/components/ui/tooltip-link";
+import { AspectRatio } from "../../components/ui/aspect-ratio";
 
 type Product = Exclude<
   AdminOutputs["catalog"]["product"]["listProducts"]["data"][0],
@@ -48,6 +49,27 @@ const columns: ColumnDef<Product>[] = [
     enableSorting: true,
     cell: ({ row }) => {
       return <div className="capitalize">{row.getValue("name")}</div>;
+    },
+  },
+  {
+    accessorKey: "images",
+    enableSorting: false,
+    cell: ({ row }) => {
+      const ids = row.getValue<string[]>("images");
+      if (!ids) {
+        return null;
+      }
+      return (
+        <AspectRatio
+          ratio={4 / 4}
+          className={"w-fullrounded-md border-slate-200 border-2"}
+        >
+          <img
+            src={"http://localhost:3000/file-upload?imageId=" + ids[0]}
+            className="w-full h-full object-cover rounded-md"
+          />
+        </AspectRatio>
+      );
     },
   },
   {
