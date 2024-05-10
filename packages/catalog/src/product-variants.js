@@ -38,11 +38,17 @@ export const productVariantCreateQuery = sql`
  */
 export const productVariantsOptionsListOptionsQuery = sql`
   SELECT
-    pvo.*
+    pvo.*,
+    od.name
   FROM
     product_variant_options pvo
+  JOIN
+    option_descriptions od
+      ON pvo.option_id = od.option_id
   WHERE
     pvo.product_variant_id IN ($$product_variant_ids!)
+  AND
+    od.language_id = $language_id!
 `;
 
 /**
@@ -77,6 +83,20 @@ export const productVariantOptionsUpsertQuery = sql`
   VALUES
     $$values(product_variant_id!, option_id!)
   ON CONFLICT DO NOTHING;
+`;
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-variants.types").IProductVariantsFindOneQueryQuery
+ * >}
+ */
+export const productVariantsFindOneQuery = sql`
+  SELECT
+    pv.id
+  FROM
+    product_variants pv
+  WHERE
+    pv.id = $id!
 `;
 
 export class ProductVariants {
@@ -153,11 +173,16 @@ export class ProductVariants {
     });
   }
 
-  /** @param {number} productId */
-  async listProductVariants(productId) {
+  /**
+   * @param {{
+   *   productId: number;
+   *   languageId: number;
+   * }} input
+   */
+  async listProductVariants(input) {
     const productVariants = await productVariantsListQuery.run(
       {
-        product_id: productId,
+        product_id: input.productId,
       },
       this.pool,
     );
@@ -167,13 +192,14 @@ export class ProductVariants {
     const options = await productVariantsOptionsListOptionsQuery.run(
       {
         product_variant_ids: productVariants.map((pv) => pv.id),
+        language_id: input.languageId,
       },
       this.pool,
     );
     const result = productVariants.map((pv) => ({
       ...pv,
       options: options
-        ?.filter((o) => o.product_variant_id === pv.id)
+        .filter((o) => o.product_variant_id === pv.id)
         .map((o) => o.option_id),
     }));
 
@@ -190,5 +216,36 @@ export class ProductVariants {
         this.pool,
       )
       .then((r) => r[0]);
+  }
+
+  /**
+   * @param {{
+   *   variantId: number;
+   *   languageId: number;
+   * }} input
+   */
+  async findOneProductVariant(input) {
+    const productVariant = await productVariantsFindOneQuery
+      .run(
+        {
+          id: input.variantId,
+        },
+        this.pool,
+      )
+      .then((r) => r[0]);
+    if (!productVariant) {
+      return null;
+    }
+    const options = await productVariantsOptionsListOptionsQuery.run(
+      {
+        product_variant_ids: [productVariant.id],
+        language_id: input.languageId,
+      },
+      this.pool,
+    );
+    return {
+      ...productVariant,
+      options: options,
+    };
   }
 }

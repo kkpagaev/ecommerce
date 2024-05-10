@@ -1,5 +1,5 @@
 // this file is generated
-`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"admin":{"auth":{"router":"AdminAdminAuthRouter"},"router":"AdminAdminRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"attributeGroup":{"router":"AdminCatalogAttributeGroupRouter"},"category":{"router":"AdminCatalogCategoryRouter"},"option":{"router":"AdminCatalogOptionRouter"},"optionGroups":{"router":"AdminCatalogOptionGroupsRouter"},"product":{"router":"AdminCatalogProductRouter"}},"files":{"router":"AdminFilesRouter"},"inventory":{"location":{"router":"AdminInventoryLocationRouter"},"stocks":{"router":"AdminInventoryStocksRouter"}},"language":{"router":"AdminLanguageRouter"}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminAdminAuthRouter","./admin/admin/auth.router"],["AdminAdminRouter","./admin/admin/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogAttributeGroupRouter","./admin/catalog/attributeGroup.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["AdminCatalogOptionRouter","./admin/catalog/option.router"],["AdminCatalogOptionGroupsRouter","./admin/catalog/optionGroups.router"],["AdminCatalogProductRouter","./admin/catalog/product.router"],["AdminFilesRouter","./admin/files/router"],["AdminInventoryLocationRouter","./admin/inventory/location.router"],["AdminInventoryStocksRouter","./admin/inventory/stocks.router"],["AdminLanguageRouter","./admin/language/router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
+`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"admin":{"auth":{"router":"AdminAdminAuthRouter"},"router":"AdminAdminRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"attributeGroup":{"router":"AdminCatalogAttributeGroupRouter"},"category":{"router":"AdminCatalogCategoryRouter"},"option":{"router":"AdminCatalogOptionRouter"},"optionGroups":{"router":"AdminCatalogOptionGroupsRouter"},"product":{"router":"AdminCatalogProductRouter"},"productVariant":{"router":"AdminCatalogProductVariantRouter"}},"files":{"router":"AdminFilesRouter"},"inventory":{"location":{"router":"AdminInventoryLocationRouter"},"stocks":{"router":"AdminInventoryStocksRouter"}},"language":{"router":"AdminLanguageRouter"}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminAdminAuthRouter","./admin/admin/auth.router"],["AdminAdminRouter","./admin/admin/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogAttributeGroupRouter","./admin/catalog/attributeGroup.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["AdminCatalogOptionRouter","./admin/catalog/option.router"],["AdminCatalogOptionGroupsRouter","./admin/catalog/optionGroups.router"],["AdminCatalogProductRouter","./admin/catalog/product.router"],["AdminCatalogProductVariantRouter","./admin/catalog/productVariant.router"],["AdminFilesRouter","./admin/files/router"],["AdminInventoryLocationRouter","./admin/inventory/location.router"],["AdminInventoryStocksRouter","./admin/inventory/stocks.router"],["AdminLanguageRouter","./admin/language/router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
 import { FastifyZod } from "fastify";
 import AdminAccountDiscordRouter from "./admin/account/discord/router";
 import AdminAccountRouter from "./admin/account/router";
@@ -11,6 +11,7 @@ import AdminCatalogCategoryRouter from "./admin/catalog/category.router";
 import AdminCatalogOptionRouter from "./admin/catalog/option.router";
 import AdminCatalogOptionGroupsRouter from "./admin/catalog/optionGroups.router";
 import AdminCatalogProductRouter from "./admin/catalog/product.router";
+import AdminCatalogProductVariantRouter from "./admin/catalog/productVariant.router";
 import AdminFilesRouter from "./admin/files/router";
 import AdminInventoryLocationRouter from "./admin/inventory/location.router";
 import AdminInventoryStocksRouter from "./admin/inventory/stocks.router";
@@ -41,6 +42,9 @@ export async function createAppRouter(fastify: FastifyZod) {
         option: t.router(await AdminCatalogOptionRouter(fastify)),
         optionGroups: t.router(await AdminCatalogOptionGroupsRouter(fastify)),
         product: t.router(await AdminCatalogProductRouter(fastify)),
+        productVariant: t.router(
+          await AdminCatalogProductVariantRouter(fastify),
+        ),
       }),
       files: t.router(await AdminFilesRouter(fastify)),
       inventory: t.router({

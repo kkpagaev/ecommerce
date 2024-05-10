@@ -35,11 +35,13 @@ export interface IProductVariantCreateQueryQuery {
 
 /** 'ProductVariantsOptionsListOptionsQuery' parameters type */
 export interface IProductVariantsOptionsListOptionsQueryParams {
+  language_id: number;
   product_variant_ids: readonly (number)[];
 }
 
 /** 'ProductVariantsOptionsListOptionsQuery' return type */
 export interface IProductVariantsOptionsListOptionsQueryResult {
+  name: string;
   option_id: number;
   product_variant_id: number;
 }
@@ -95,5 +97,21 @@ export type IProductVariantOptionsUpsertQueryResult = void;
 export interface IProductVariantOptionsUpsertQueryQuery {
   params: IProductVariantOptionsUpsertQueryParams;
   result: IProductVariantOptionsUpsertQueryResult;
+}
+
+/** 'ProductVariantsFindOneQuery' parameters type */
+export interface IProductVariantsFindOneQueryParams {
+  id: number;
+}
+
+/** 'ProductVariantsFindOneQuery' return type */
+export interface IProductVariantsFindOneQueryResult {
+  id: number;
+}
+
+/** 'ProductVariantsFindOneQuery' query type */
+export interface IProductVariantsFindOneQueryQuery {
+  params: IProductVariantsFindOneQueryParams;
+  result: IProductVariantsFindOneQueryResult;
 }
 
