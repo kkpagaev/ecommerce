@@ -73,8 +73,14 @@ export function ProductVariantForm({
   >(() => {
     const map = new Map();
     for (const optionGroup of memoOptionGroups) {
-      map.set(optionGroup.id, values?.options.find((o) => o.option_id) || null);
+      map.set(
+        optionGroup.id,
+        values?.options.find((o) =>
+          optionGroup.options.find((o2) => o2.id === o.option_id),
+        )?.option_id || null,
+      );
     }
+    console.log({ map });
     return map;
   });
 
@@ -109,6 +115,7 @@ export function ProductVariantForm({
               <Label htmlFor="options">Options for - {optionGroup.name}</Label>
 
               <Select
+                value={selectedOptions.get(optionGroup.id)?.toString() || ""}
                 onValueChange={(v) => {
                   setSelectedOptions((prev) => {
                     const newMap = new Map(prev);

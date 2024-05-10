@@ -56,13 +56,13 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
       z.object({
         id: z.number(),
       }).and(z.object({
-        optionId: z.array(z.number()),
+        options: z.array(z.number()),
       }).partial())
     )
     .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await productVariants.updateProductVariant(input.id, {
-        options: input.optionId,
+        options: input.options,
       });
 
       return res;

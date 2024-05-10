@@ -29,6 +29,7 @@ import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/att
 import { Route as ProductsProductIdVariantsNewImport } from './routes/products/$productId.variants.new'
 import { Route as OptionGroupsOptionGroupIdOptionNewImport } from './routes/option-groups/$optionGroupId.option.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
+import { Route as ProductsProductIdVariantsProductVariantIdEditImport } from './routes/products/$productId.variants.$productVariantId.edit'
 import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './routes/option-groups/$optionGroupId.option.$optionId.edit'
 import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
@@ -170,6 +171,12 @@ const AttributeGroupsAttributeGroupIdAttributeNewRoute =
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
   } as any)
 
+const ProductsProductIdVariantsProductVariantIdEditRoute =
+  ProductsProductIdVariantsProductVariantIdEditImport.update({
+    path: '/$productVariantId/edit',
+    getParentRoute: () => ProductsProductIdVariantsRoute,
+  } as any)
+
 const OptionGroupsOptionGroupIdOptionOptionIdEditRoute =
   OptionGroupsOptionGroupIdOptionOptionIdEditImport.update({
     path: '/option/$optionId/edit',
@@ -298,6 +305,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OptionGroupsOptionGroupIdOptionOptionIdEditImport
       parentRoute: typeof OptionGroupsOptionGroupIdImport
     }
+    '/products/$productId/variants/$productVariantId/edit': {
+      preLoaderRoute: typeof ProductsProductIdVariantsProductVariantIdEditImport
+      parentRoute: typeof ProductsProductIdVariantsImport
+    }
   }
 }
 
@@ -331,5 +342,6 @@ export const routeTree = rootRoute.addChildren([
   ProductsProductIdEditRoute,
   ProductsProductIdVariantsRoute.addChildren([
     ProductsProductIdVariantsNewRoute,
+    ProductsProductIdVariantsProductVariantIdEditRoute,
   ]),
 ])

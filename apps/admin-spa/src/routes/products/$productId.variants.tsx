@@ -64,8 +64,11 @@ const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       return (
         <TooltipLink
-          to="/products/$productId/edit"
-          params={{ productId: "" + row.getValue("id") }}
+          to="/products/$productId/variants/$productVariantId/edit"
+          params={{
+            productId: "" + row.getValue("id"),
+            productVariantId: "" + row.getValue("id"),
+          }}
           text="Edit"
         >
           <Button variant="default">
