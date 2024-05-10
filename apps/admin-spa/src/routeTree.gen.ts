@@ -30,6 +30,7 @@ import { Route as LocationsLocationIdEditImport } from './routes/locations/$loca
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
+import { Route as AdminsAdminIdEditImport } from './routes/admins/$adminId.edit'
 import { Route as ProductsProductIdVariantsNewImport } from './routes/products/$productId.variants.new'
 import { Route as OptionGroupsOptionGroupIdOptionNewImport } from './routes/option-groups/$optionGroupId.option.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
@@ -177,6 +178,11 @@ const AttributeGroupsAttributeGroupIdEditRoute =
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
   } as any)
 
+const AdminsAdminIdEditRoute = AdminsAdminIdEditImport.update({
+  path: '/$adminId/edit',
+  getParentRoute: () => AdminsRoute,
+} as any)
+
 const ProductsProductIdVariantsNewRoute =
   ProductsProductIdVariantsNewImport.update({
     path: '/new',
@@ -293,6 +299,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/admins/$adminId/edit': {
+      preLoaderRoute: typeof AdminsAdminIdEditImport
+      parentRoute: typeof AdminsImport
+    }
     '/attribute-groups/$attributeGroupId/edit': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdEditImport
       parentRoute: typeof AttributeGroupsAttributeGroupIdImport
@@ -357,7 +367,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
-  AdminsRoute.addChildren([AdminsNewRoute]),
+  AdminsRoute.addChildren([AdminsNewRoute, AdminsAdminIdEditRoute]),
   CategoriesRoute.addChildren([
     CategoriesNewRoute,
     CategoriesCategoryIdEditRoute,

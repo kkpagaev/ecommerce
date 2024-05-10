@@ -60,8 +60,8 @@ const columns: ColumnDef<Admin>[] = [
     cell: ({ row }) => {
       return (
         <TooltipLink
-          to="/languages/$languageId/edit"
-          params={{ languageId: "" + row.getValue("id") }}
+          to="/admins/$adminId/edit"
+          params={{ adminId: "" + row.getValue("id") }}
           text="Edit"
         >
           <Button variant="default">
