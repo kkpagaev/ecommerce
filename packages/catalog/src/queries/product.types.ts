@@ -73,7 +73,6 @@ export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;
   id: number;
   images?: string | string[] | Record<string, any> | null | void;
-  option_group_id?: number | null | void;
   slug?: string | null | void;
 }
 
@@ -113,7 +112,6 @@ export interface IProductFindOneQueryResult {
   created_at: Date;
   id: number;
   images: string | string[] | Record<string, any> | null;
-  option_group_id: number | null;
   price: string | null;
   slug: string;
   updated_at: Date;
@@ -247,7 +245,6 @@ export interface IProductDescriptionUpsertQueryQuery {
 export interface IProductCreateQueryParams {
   categoryId: number;
   images: string | string[] | Record<string, any>;
-  option_group_id?: number | null | void;
   slug: string;
 }
 

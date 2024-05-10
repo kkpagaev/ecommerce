@@ -56,8 +56,7 @@ export const productUpdateQuery = sql`
   SET
     slug = COALESCE($slug, slug),
     category_id = COALESCE($categoryId, category_id),
-    images = COALESCE($images, images),
-    option_group_id = COALESCE($option_group_id, option_group_id)
+    images = COALESCE($images, images)
   WHERE
     id = $id!;
 `;
@@ -175,9 +174,9 @@ export const productDescriptionUpsertQuery = sql`
  */
 export const productCreateQuery = sql`
   INSERT INTO products
-  (category_id, slug, images, option_group_id)
+  (category_id, slug, images)
   VALUES
-  ($categoryId!, $slug!, $images!, $option_group_id)
+  ($categoryId!, $slug!, $images!)
   RETURNING id
 `;
 
@@ -219,7 +218,6 @@ export class Products {
             images: JSON.stringify(input.images),
             slug: slug,
             categoryId: input.categoryId,
-            option_group_id: input.optionGroupId,
           },
           client,
         )
@@ -398,7 +396,6 @@ export class Products {
           id: id,
           slug: slug,
           images: JSON.stringify(input.images),
-          option_group_id: input.optionGroupId,
           categoryId: input.categoryId,
         },
         client,
