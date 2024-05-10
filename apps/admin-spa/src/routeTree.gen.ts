@@ -25,6 +25,7 @@ import { Route as LocationsLocationIdEditImport } from './routes/locations/$loca
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
+import { Route as ProductsProductIdVariantNewImport } from './routes/products/$productId.variant.new'
 import { Route as OptionGroupsOptionGroupIdOptionNewImport } from './routes/option-groups/$optionGroupId.option.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
 import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './routes/option-groups/$optionGroupId.option.$optionId.edit'
@@ -143,6 +144,12 @@ const AttributeGroupsAttributeGroupIdEditRoute =
   AttributeGroupsAttributeGroupIdEditImport.update({
     path: '/edit',
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
+  } as any)
+
+const ProductsProductIdVariantNewRoute =
+  ProductsProductIdVariantNewImport.update({
+    path: '/products/$productId/variant/new',
+    getParentRoute: () => rootRoute,
   } as any)
 
 const OptionGroupsOptionGroupIdOptionNewRoute =
@@ -269,6 +276,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OptionGroupsOptionGroupIdOptionNewImport
       parentRoute: typeof OptionGroupsOptionGroupIdImport
     }
+    '/products/$productId/variant/new': {
+      preLoaderRoute: typeof ProductsProductIdVariantNewImport
+      parentRoute: typeof rootRoute
+    }
     '/attribute-groups/$attributeGroupId/attribute/$attributeId/edit': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport
       parentRoute: typeof AttributeGroupsAttributeGroupIdImport
@@ -308,4 +319,5 @@ export const routeTree = rootRoute.addChildren([
   OptionGroupsIndexRoute,
   ProductsIndexRoute,
   ProductsProductIdEditRoute,
+  ProductsProductIdVariantNewRoute,
 ])
