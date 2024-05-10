@@ -6,13 +6,13 @@ export default async ({ t, admins }: FastifyZod) => ({
   listAdmins: t.procedure
     .use(isAuthed)
     .input(z.object({
-      page: z.number().optional(),
-      limit: z.number().optional(),
+      name: z.string().optional(),
+      email: z.string().optional(),
     }).partial())
     .query(async ({ input }) => {
       const res = await admins.listAdmins({
-        page: input.page,
-        limit: input.limit,
+        name: input.name,
+        email: input.email,
       });
 
       return res;
@@ -37,14 +37,12 @@ export default async ({ t, admins }: FastifyZod) => ({
       name: z.string().optional(),
       surname: z.string().optional(),
       email: z.string().email(),
-      password: z.string(),
     }))
     .mutation(async ({ input }) => {
       const admin = await admins.createAdmin({
         email: input.email,
         name: input.name,
         surname: input.surname,
-        password: input.password,
       });
 
       return admin;
@@ -56,14 +54,12 @@ export default async ({ t, admins }: FastifyZod) => ({
       email: z.string().email(),
       name: z.string(),
       surname: z.string(),
-      password: z.string(),
     }))
     .mutation(async ({ input }) => {
       const res = await admins.updateAdmin(input.id, {
         email: input.email,
         name: input.name,
         surname: input.surname,
-        password: input.password,
       });
 
       return res;
