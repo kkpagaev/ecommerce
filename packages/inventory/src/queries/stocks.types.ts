@@ -3,8 +3,7 @@
 /** 'StockUpsertQuery' parameters type */
 export interface IStockUpsertQueryParams {
   values: readonly ({
-    product_id: number,
-    option_id: number,
+    product_variant_id: number,
     location_id: number,
     count: number
   })[];
@@ -14,8 +13,7 @@ export interface IStockUpsertQueryParams {
 export interface IStockUpsertQueryResult {
   count: number;
   location_id: number;
-  option_id: number;
-  product_id: number;
+  product_variant_id: number;
 }
 
 /** 'StockUpsertQuery' query type */
@@ -27,21 +25,38 @@ export interface IStockUpsertQueryQuery {
 /** 'StocksListQuery' parameters type */
 export interface IStocksListQueryParams {
   location_id?: number | null | void;
-  option_id?: number | null | void;
-  product_id?: number | null | void;
+  product_variant_id?: number | null | void;
 }
 
 /** 'StocksListQuery' return type */
 export interface IStocksListQueryResult {
   count: number;
   location_id: number;
-  option_id: number;
-  product_id: number;
+  product_variant_id: number;
 }
 
 /** 'StocksListQuery' query type */
 export interface IStocksListQueryQuery {
   params: IStocksListQueryParams;
   result: IStocksListQueryResult;
+}
+
+/** 'StockTotalStockQuery' parameters type */
+export interface IStockTotalStockQueryParams {
+  values: readonly ({
+    product_variant_id: number
+  })[];
+}
+
+/** 'StockTotalStockQuery' return type */
+export interface IStockTotalStockQueryResult {
+  count: number | null;
+  product_variant_id: number;
+}
+
+/** 'StockTotalStockQuery' query type */
+export interface IStockTotalStockQueryQuery {
+  params: IStockTotalStockQueryParams;
+  result: IStockTotalStockQueryResult;
 }
 
