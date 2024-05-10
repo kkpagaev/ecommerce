@@ -68,7 +68,7 @@ export function ProductForm({
   optionGroups,
 }: ProductFormProps) {
   const formValues: ProductCreateInputs | undefined = values && {
-    optionGroupId: values.option_group_id,
+    optionGroups: values.optionGroups,
     price: values.price,
     categoryId: values.category_id,
     attributes: values.attributes || [],
@@ -86,7 +86,7 @@ export function ProductForm({
   const defaultValues: ProductCreateInputs = {
     price: 0,
     categoryId: 0,
-    optionGroupId: null,
+    optionGroups: [] as number[],
     attributes: [] as number[],
     images: [] as string[],
     descriptions: languages.map((lang) => {
@@ -115,16 +115,12 @@ export function ProductForm({
   });
   const watchCategoryId = watch("categoryId");
   const watchAttributes = watch("attributes");
-  const watchOptionGroupId = watch("optionGroupId");
+  const watchOptionGroups = watch("optionGroups");
   const watchOptions = watch("options");
 
-  const optionGroupOptions = useMemo(() => {
-    const optionGroup = optionGroups.find(
-      (optionGroup) => optionGroup.id === watchOptionGroupId,
-    );
-
-    return optionGroup ? optionGroup.options : [];
-  }, [watchOptionGroupId, optionGroups]);
+  const filteredOptionGroups = useMemo(() => {
+    return optionGroups.filter((group) => watchOptionGroups.includes(group.id));
+  }, [watchOptionGroups, optionGroups]);
 
   const { fields } = useFieldArray({
     control,
@@ -268,41 +264,48 @@ export function ProductForm({
               <Label htmlFor="attributes">Option Group</Label>
               <div>
                 <Combobox
+                  multi
                   withReset
                   label="Select Option Group"
                   values={optionGroups.map((c) => ({
                     value: "" + c.id,
                     label: c.name,
                   }))}
-                  defaultValue={
-                    watchOptionGroupId === null ? null : "" + watchOptionGroupId
-                  }
+                  defaultValue={watchOptionGroups.map((v) => "" + v) || []}
                   onSelect={(v) => {
-                    clearErrors("optionGroupId");
-                    if (v === null) {
+                    clearErrors("optionGroups");
+                    if (v.length === 0) {
                       reset((prev) => ({
                         ...prev,
-                        optionGroupId: null,
+                        optionGroups: [],
                         options: [],
                       }));
                       return;
                     }
                     reset((prev) => ({
                       ...prev,
-                      optionGroupId: +v,
-                      options: [],
+                      optionGroups: v.map((v) => +v),
+                      options:
+                        prev.options?.filter((optionId) => {
+                          const optionGroup = filteredOptionGroups.find((g) =>
+                            g.options.map(({ id }) => id).includes(+optionId),
+                          );
+                          return !!optionGroup;
+                        }) || [],
                     }));
                   }}
                 />
               </div>
-              {watchOptionGroupId && (
+              {filteredOptionGroups.map((optionGroup) => (
                 <div>
-                  <Label htmlFor="options">Options</Label>
+                  <Label htmlFor="options">
+                    Options for - {optionGroup.name}
+                  </Label>
 
                   <Combobox
                     multi
                     label="Select Option"
-                    values={optionGroupOptions.map((o) => ({
+                    values={optionGroup.options.map((o) => ({
                       value: "" + o.id,
                       label: o.name,
                     }))}
@@ -316,7 +319,7 @@ export function ProductForm({
                     }}
                   />
                 </div>
-              )}
+              ))}
             </CardContent>
           </Card>
         </TabsContent>

@@ -151,19 +151,27 @@ export function Combobox({
 
       {multi === true && (
         <div className="flex flex-wrap gap-1">
-          {(defaultValue as string[])?.map((v) => (
-            <Button
-              key={v}
-              variant="outline"
-              onClick={() => {
-                onSelect(
-                  (defaultValue as string[]).filter((value) => value !== v),
-                );
-              }}
-            >
-              {values.find((value) => value.value === v)?.label}
-            </Button>
-          ))}
+          {Array.from({ length: (defaultValue as string[])?.length ?? 0 }).map(
+            (_, i) => {
+              const v = (defaultValue as string[])[i];
+              const label = values.find((value) => value.value === v)?.label;
+              if (!label) return null;
+
+              return (
+                <Button
+                  key={v}
+                  variant="outline"
+                  onClick={() => {
+                    onSelect(
+                      (defaultValue as string[]).filter((value) => value !== v),
+                    );
+                  }}
+                >
+                  {label}
+                </Button>
+              );
+            },
+          )}
         </div>
       )}
     </div>
