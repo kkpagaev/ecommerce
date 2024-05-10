@@ -7,6 +7,7 @@ import { Route as StocksImport } from './routes/stocks'
 import { Route as LocationsImport } from './routes/locations'
 import { Route as LanguagesImport } from './routes/languages'
 import { Route as CategoriesImport } from './routes/categories'
+import { Route as AdminsImport } from './routes/admins'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
@@ -54,6 +55,11 @@ const LanguagesRoute = LanguagesImport.update({
 
 const CategoriesRoute = CategoriesImport.update({
   path: '/categories',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminsRoute = AdminsImport.update({
+  path: '/admins',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -213,6 +219,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/admins': {
+      preLoaderRoute: typeof AdminsImport
+      parentRoute: typeof rootRoute
+    }
     '/categories': {
       preLoaderRoute: typeof CategoriesImport
       parentRoute: typeof rootRoute
@@ -337,6 +347,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
+  AdminsRoute,
   CategoriesRoute.addChildren([
     CategoriesNewRoute,
     CategoriesCategoryIdEditRoute,

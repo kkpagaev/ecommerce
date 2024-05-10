@@ -9,9 +9,9 @@ declare module "fastify" {
 }
 
 export default fp(async function (f: FastifyInstance) {
-  f.decorate("admins", new Admins({
-    pool: f.pool,
-  }));
+  const admins = new Admins({ pool: f.pool });
+
+  f.decorate("admins", admins);
 }, {
   name: "admin",
   dependencies: ["pool"],

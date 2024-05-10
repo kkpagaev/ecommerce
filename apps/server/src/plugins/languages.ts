@@ -13,6 +13,6 @@ export default fp(async function (f: FastifyInstance) {
     pool: f.pool,
   }));
 }, {
-  name: "admin",
+  name: "languages",
   dependencies: ["pool"],
 });
