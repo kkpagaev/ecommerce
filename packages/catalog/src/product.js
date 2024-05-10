@@ -87,7 +87,7 @@ export const productDeleteQuery = sql`
  */
 export const productFindOneQuery = sql`
   SELECT p.*, pr.price FROM products p
-  JOIN prices pr ON p.id = pr.product_id
+  LEFT JOIN prices pr ON p.id = pr.product_id
   WHERE p.id = COALESCE($id, p.id)
   LIMIT 1;
 `;
