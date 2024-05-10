@@ -81,7 +81,7 @@ export const Route = createFileRoute("/option-groups/")({
   beforeLoad: async ({ context }) => {
     return {
       ...context,
-      getTitle: () => "Attribute Groups",
+      getTitle: () => "Option Groups",
     };
   },
   validateSearch: (search: Record<string, unknown>) => {
