@@ -7,7 +7,7 @@ import { trpc } from "../../utils/trpc";
 import { toast } from "sonner";
 import { ProductVariantForm } from "../../components/forms/product-variant-form";
 
-export const Route = createFileRoute("/products/$productId/variant/new")({
+export const Route = createFileRoute("/products/$productId/variants/new")({
   beforeLoad: ({ context }) => ({
     ...context,
     getTitle: () => "New Product Variant Group",
@@ -45,13 +45,13 @@ function ProductNewComponent() {
       onSuccess: async () => {
         router.invalidate();
         await utils.admin.catalog.productVariant.listProductVariants.invalidate();
-        toast.success("Product created");
+        toast.success("Product variant created");
         navigate({ to: "/products" });
       },
     });
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <ProductVariantForm
         optionGroups={optionGroups}
         onSubmit={async (data) => {

@@ -19,13 +19,14 @@ import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
+import { Route as ProductsProductIdVariantsImport } from './routes/products/$productId.variants'
 import { Route as ProductsProductIdEditImport } from './routes/products/$productId.edit'
 import { Route as OptionGroupsOptionGroupIdEditImport } from './routes/option-groups/$optionGroupId.edit'
 import { Route as LocationsLocationIdEditImport } from './routes/locations/$locationId.edit'
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
-import { Route as ProductsProductIdVariantNewImport } from './routes/products/$productId.variant.new'
+import { Route as ProductsProductIdVariantsNewImport } from './routes/products/$productId.variants.new'
 import { Route as OptionGroupsOptionGroupIdOptionNewImport } from './routes/option-groups/$optionGroupId.option.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
 import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './routes/option-groups/$optionGroupId.option.$optionId.edit'
@@ -114,6 +115,11 @@ const AttributeGroupsAttributeGroupIdRoute =
     getParentRoute: () => rootRoute,
   } as any)
 
+const ProductsProductIdVariantsRoute = ProductsProductIdVariantsImport.update({
+  path: '/products/$productId/variants',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ProductsProductIdEditRoute = ProductsProductIdEditImport.update({
   path: '/products/$productId/edit',
   getParentRoute: () => rootRoute,
@@ -146,10 +152,10 @@ const AttributeGroupsAttributeGroupIdEditRoute =
     getParentRoute: () => AttributeGroupsAttributeGroupIdRoute,
   } as any)
 
-const ProductsProductIdVariantNewRoute =
-  ProductsProductIdVariantNewImport.update({
-    path: '/products/$productId/variant/new',
-    getParentRoute: () => rootRoute,
+const ProductsProductIdVariantsNewRoute =
+  ProductsProductIdVariantsNewImport.update({
+    path: '/new',
+    getParentRoute: () => ProductsProductIdVariantsRoute,
   } as any)
 
 const OptionGroupsOptionGroupIdOptionNewRoute =
@@ -268,6 +274,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsProductIdEditImport
       parentRoute: typeof rootRoute
     }
+    '/products/$productId/variants': {
+      preLoaderRoute: typeof ProductsProductIdVariantsImport
+      parentRoute: typeof rootRoute
+    }
     '/attribute-groups/$attributeGroupId/attribute/new': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeNewImport
       parentRoute: typeof AttributeGroupsAttributeGroupIdImport
@@ -276,9 +286,9 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OptionGroupsOptionGroupIdOptionNewImport
       parentRoute: typeof OptionGroupsOptionGroupIdImport
     }
-    '/products/$productId/variant/new': {
-      preLoaderRoute: typeof ProductsProductIdVariantNewImport
-      parentRoute: typeof rootRoute
+    '/products/$productId/variants/new': {
+      preLoaderRoute: typeof ProductsProductIdVariantsNewImport
+      parentRoute: typeof ProductsProductIdVariantsImport
     }
     '/attribute-groups/$attributeGroupId/attribute/$attributeId/edit': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport
@@ -319,5 +329,7 @@ export const routeTree = rootRoute.addChildren([
   OptionGroupsIndexRoute,
   ProductsIndexRoute,
   ProductsProductIdEditRoute,
-  ProductsProductIdVariantNewRoute,
+  ProductsProductIdVariantsRoute.addChildren([
+    ProductsProductIdVariantsNewRoute,
+  ]),
 ])

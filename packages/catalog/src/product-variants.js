@@ -46,7 +46,7 @@ export const productVariantsOptionsListOptionsQuery = sql`
     option_descriptions od
       ON pvo.option_id = od.option_id
   WHERE
-    pvo.product_variant_id IN ($$product_variant_ids!)
+    pvo.product_variant_id IN $$product_variant_ids!
   AND
     od.language_id = $language_id!
 `;
@@ -198,9 +198,7 @@ export class ProductVariants {
     );
     const result = productVariants.map((pv) => ({
       ...pv,
-      options: options
-        .filter((o) => o.product_variant_id === pv.id)
-        .map((o) => o.option_id),
+      options: options.filter((o) => o.product_variant_id === pv.id),
     }));
 
     return result;

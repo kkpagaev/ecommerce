@@ -105,7 +105,7 @@ export function ProductVariantForm({
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {memoOptionGroups.map((optionGroup) => (
-            <div key={optionGroup.id}>
+            <div key={optionGroup.id} className="flex flex-col gap-2">
               <Label htmlFor="options">Options for - {optionGroup.name}</Label>
 
               <Select
