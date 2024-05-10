@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 import { Pool } from "pg";
-import * as bcrypt from "bcrypt";
 // eslint-disable-next-line no-unused-vars
 import { TaggedQuery, sql } from "@pgtyped/runtime";
 
@@ -14,8 +13,7 @@ const adminUpdateQuery = sql`
   SET
     name = COALESCE($name, name),
     surname = COALESCE($surname, surname),
-    email = COALESCE($email, email),
-    password = COALESCE($password, password)
+    email = COALESCE($email, email)
   WHERE
     id = $id!
   RETURNING id
@@ -68,20 +66,14 @@ const adminListQuery = sql`
  * >}
  */
 export const adminCreateQuery = sql`
-  INSERT INTO admins (email, password, name, surname)
+  INSERT INTO admins (email, name, surname)
   VALUES (
     $email!,
-    $password!,
     $name,
     $surname
   )
   RETURNING id
 `;
-
-/** @param {string} password */
-async function hashPassword(password) {
-  return await bcrypt.hash(password, 10);
-}
 
 export class Admins {
   /** @param {{ pool: Pool }} f */
@@ -94,19 +86,16 @@ export class Admins {
    *   name?: string;
    *   surname?: string;
    *   email: string;
-   *   password: string;
    * }} CreateAdmin
    */
   /** @param {CreateAdmin} input */
   async createAdmin(input) {
-    const hashedPassword = await hashPassword(input.password);
     return await adminCreateQuery
       .run(
         {
           name: input.name,
           surname: input.surname,
           email: input.email,
-          password: hashedPassword,
         },
         this.pool,
       )
@@ -119,10 +108,6 @@ export class Admins {
    * @param {UpdateAdmin} input
    */
   async updateAdmin(id, input) {
-    const hashedPassword = input.password
-      ? await hashPassword(input.password)
-      : undefined;
-
     return await adminUpdateQuery
       .run(
         {
@@ -130,7 +115,6 @@ export class Admins {
           name: input.name,
           surname: input.surname,
           email: input.email,
-          password: hashedPassword,
         },
         this.pool,
       )

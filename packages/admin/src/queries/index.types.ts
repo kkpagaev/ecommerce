@@ -5,7 +5,6 @@ export interface IAdminUpdateQueryParams {
   email?: string | null | void;
   id: number;
   name?: string | null | void;
-  password?: string | null | void;
   surname?: string | null | void;
 }
 
@@ -32,7 +31,6 @@ export interface IAdminFindOneQueryResult {
   email: string;
   id: number;
   name: string | null;
-  password: string;
   surname: string | null;
 }
 
@@ -82,7 +80,6 @@ export interface IAdminListQueryResult {
   email: string;
   id: number;
   name: string | null;
-  password: string;
   surname: string | null;
 }
 
@@ -96,7 +93,6 @@ export interface IAdminListQueryQuery {
 export interface IAdminCreateQueryParams {
   email: string;
   name?: string | null | void;
-  password: string;
   surname?: string | null | void;
 }
 
