@@ -11,7 +11,8 @@ import { Pool } from "pg";
  */
 export const productVariantsListQuery = sql`
   SELECT
-    pv.id
+    pv.id,
+    pv.product_id
   FROM
     product_variants pv
   WHERE

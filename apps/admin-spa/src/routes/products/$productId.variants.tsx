@@ -16,70 +16,6 @@ type Product = Exclude<
   null
 >;
 
-const columns: ColumnDef<Product>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "id",
-    enableSorting: true,
-    cell: ({ row }) => <div>{row.getValue("id")}</div>,
-  },
-  {
-    accessorKey: "options",
-    enableSorting: true,
-    cell: ({ row }) => {
-      return (
-        <div>
-          {row
-            .getValue("options")
-            .map((o) => o.name)
-            .join(", ")}
-        </div>
-      );
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <TooltipLink
-          to="/products/$productId/variants/$productVariantId/edit"
-          params={{
-            productId: "" + row.getValue("id"),
-            productVariantId: "" + row.getValue("id"),
-          }}
-          text="Edit"
-        >
-          <Button variant="default">
-            <Pencil1Icon />
-          </Button>
-        </TooltipLink>
-      );
-    },
-  },
-];
-
 export const Route = createFileRoute("/products/$productId/variants")({
   component: Index,
   beforeLoad: async ({ context }) => {
@@ -120,6 +56,7 @@ export const Route = createFileRoute("/products/$productId/variants")({
 function Index() {
   const { product, productVariants } = Route.useLoaderData();
   const search = Route.useSearch();
+  const params = Route.useParams();
 
   return (
     <div className="container mx-auto py-10">
@@ -156,7 +93,74 @@ function Index() {
             ? { data: productVariants, count: productVariants.length }
             : undefined
         }
-        columns={columns}
+        columns={
+          [
+            {
+              id: "select",
+              header: ({ table }) => (
+                <Checkbox
+                  checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                  }
+                  onCheckedChange={(value) =>
+                    table.toggleAllPageRowsSelected(!!value)
+                  }
+                  aria-label="Select all"
+                />
+              ),
+              cell: ({ row }) => (
+                <Checkbox
+                  checked={row.getIsSelected()}
+                  onCheckedChange={(value) => row.toggleSelected(!!value)}
+                  aria-label="Select row"
+                />
+              ),
+              enableSorting: false,
+              enableHiding: false,
+            },
+            {
+              accessorKey: "id",
+              enableSorting: true,
+              cell: ({ row }) => <div>{row.getValue("id")}</div>,
+            },
+            {
+              accessorKey: "options",
+              enableSorting: true,
+              cell: ({ row }) => {
+                return (
+                  <div>
+                    {row
+                      .getValue<{ name: string }[]>("options")
+                      .map((o) => o.name)
+                      .join(", ")}
+                  </div>
+                );
+              },
+            },
+            {
+              id: "actions",
+              header: "Actions",
+              enableHiding: false,
+              cell: ({ row }) => {
+                return (
+                  <TooltipLink
+                    to="/products/$productId/variants/$productVariantId/edit"
+                    params={{
+                      productId: "" + params.productId,
+                      productVariantId: "" + row.getValue("id"),
+                    }}
+                    text="Edit"
+                  >
+                    <Button variant="default">
+                      <Pencil1Icon />
+                    </Button>
+                  </TooltipLink>
+                );
+              },
+            },
+          ] as ColumnDef<Product>[]
+        }
         isLoading={false}
       />
       <OutletDialog path={Route.fullPath} />

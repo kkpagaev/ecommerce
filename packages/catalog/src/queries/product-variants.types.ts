@@ -8,6 +8,7 @@ export interface IProductVariantsListQueryParams {
 /** 'ProductVariantsListQuery' return type */
 export interface IProductVariantsListQueryResult {
   id: number;
+  product_id: number;
 }
 
 /** 'ProductVariantsListQuery' query type */
