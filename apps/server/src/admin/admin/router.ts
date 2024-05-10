@@ -49,12 +49,17 @@ export default async ({ t, admins }: FastifyZod) => ({
     }),
   updateAdmin: t.procedure
     .use(isAuthed)
-    .input(z.object({
-      id: z.number().int(),
-      email: z.string().email(),
-      name: z.string(),
-      surname: z.string(),
-    }))
+    .input(
+      z.object({
+        id: z.number().int(),
+      }).and(
+        z.object({
+          email: z.string().email(),
+          name: z.string(),
+          surname: z.string(),
+        }).partial()
+      )
+    )
     .mutation(async ({ input }) => {
       const res = await admins.updateAdmin(input.id, {
         email: input.email,

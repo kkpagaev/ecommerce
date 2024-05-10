@@ -21,6 +21,7 @@ import { Route as LanguagesNewImport } from './routes/languages/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
+import { Route as AdminsNewImport } from './routes/admins/new'
 import { Route as StocksProductIdEditImport } from './routes/stocks/$productId.edit'
 import { Route as ProductsProductIdVariantsImport } from './routes/products/$productId.variants'
 import { Route as ProductsProductIdEditImport } from './routes/products/$productId.edit'
@@ -128,6 +129,11 @@ const AttributeGroupsAttributeGroupIdRoute =
     path: '/attribute-groups/$attributeGroupId',
     getParentRoute: () => rootRoute,
   } as any)
+
+const AdminsNewRoute = AdminsNewImport.update({
+  path: '/new',
+  getParentRoute: () => AdminsRoute,
+} as any)
 
 const StocksProductIdEditRoute = StocksProductIdEditImport.update({
   path: '/$productId/edit',
@@ -239,6 +245,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StocksImport
       parentRoute: typeof rootRoute
     }
+    '/admins/new': {
+      preLoaderRoute: typeof AdminsNewImport
+      parentRoute: typeof AdminsImport
+    }
     '/attribute-groups/$attributeGroupId': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdImport
       parentRoute: typeof rootRoute
@@ -347,7 +357,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutRoute,
-  AdminsRoute,
+  AdminsRoute.addChildren([AdminsNewRoute]),
   CategoriesRoute.addChildren([
     CategoriesNewRoute,
     CategoriesCategoryIdEditRoute,
