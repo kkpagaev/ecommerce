@@ -38,6 +38,7 @@ export const Route = createFileRoute("/stocks")({
     const products =
       await context.trpc.admin.inventory.stocks.productListStocks.fetch({
         languageId: deps.languageId,
+        name: deps.name,
       });
 
     return { products };

@@ -25,6 +25,7 @@ export interface IStockUpsertQueryQuery {
 /** 'ProductStocksListQuery' parameters type */
 export interface IProductStocksListQueryParams {
   language_id: number;
+  name?: string | null | void;
 }
 
 /** 'ProductStocksListQuery' return type */

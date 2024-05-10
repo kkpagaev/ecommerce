@@ -6,12 +6,14 @@ export default ({ t, inventory }: FastifyZod) => ({
   productListStocks: t.procedure
     .input(
       z.object({
+        name: z.string().optional(),
         languageId: z.number(),
       }),
     )
     .use(isAuthed)
     .query(async ({ input }) => {
       const res = await inventory.stocks.productListStocks({
+        name: input.name,
         languageId: input.languageId,
       });
 

@@ -38,6 +38,7 @@ export const productStocksListQuery = sql`
   LEFT JOIN product_descriptions pd ON pd.product_id = p.id
   LEFT JOIN stocks s ON s.product_variant_id = pv.id
   WHERE pd.language_id = $language_id!
+  AND pd.name LIKE COALESCE(CONCAT('%', $name::text, '%'), pd.name)
   group by p.id, pd.name
 `;
 
@@ -163,6 +164,7 @@ export class Stocks {
 
   /**
    * @param {{
+   *   name?: string;
    *   languageId: number;
    * }} params
    */
