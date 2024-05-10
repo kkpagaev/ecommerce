@@ -24,6 +24,25 @@ export const stockUpsertQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/stocks.types").IProductStocksListQueryQuery
+ * >}
+ */
+export const productStocksListQuery = sql`
+  SELECT 
+    p.id,
+    pd.name,
+    p.images,
+    COALESCE(SUM(s.count), 0) AS count
+  FROM products p
+  LEFT JOIN product_variants pv ON pv.product_id = p.id
+  LEFT JOIN product_descriptions pd ON pd.product_id = p.id
+  LEFT JOIN stocks s ON s.product_variant_id = pv.id
+  WHERE pd.language_id = $language_id!
+  group by p.id, pd.name
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/stocks.types").IStocksListQueryQuery
  * >}
  */
@@ -93,6 +112,7 @@ export class Stocks {
   /**
    * @param {{
    *   productVariantId?: number;
+   *   productId?: number;
    *   locationId?: number;
    * }} params
    */
@@ -101,6 +121,22 @@ export class Stocks {
       {
         product_variant_id: params.productVariantId,
         location_id: params.locationId,
+      },
+      this.pool,
+    );
+
+    return res;
+  }
+
+  /**
+   * @param {{
+   *   languageId: number;
+   * }} params
+   */
+  async productListStocks(params) {
+    const res = await productStocksListQuery.run(
+      {
+        language_id: params.languageId,
       },
       this.pool,
     );

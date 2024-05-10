@@ -3,6 +3,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as StocksImport } from './routes/stocks'
 import { Route as LocationsImport } from './routes/locations'
 import { Route as LanguagesImport } from './routes/languages'
 import { Route as CategoriesImport } from './routes/categories'
@@ -34,6 +35,11 @@ import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './ro
 import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
 // Create/Update Routes
+
+const StocksRoute = StocksImport.update({
+  path: '/stocks',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LocationsRoute = LocationsImport.update({
   path: '/locations',
@@ -213,6 +219,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsImport
       parentRoute: typeof rootRoute
     }
+    '/stocks': {
+      preLoaderRoute: typeof StocksImport
+      parentRoute: typeof rootRoute
+    }
     '/attribute-groups/$attributeGroupId': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdImport
       parentRoute: typeof rootRoute
@@ -323,6 +333,7 @@ export const routeTree = rootRoute.addChildren([
   ]),
   LanguagesRoute.addChildren([LanguagesNewRoute, LanguagesLanguageIdEditRoute]),
   LocationsRoute.addChildren([LocationsNewRoute, LocationsLocationIdEditRoute]),
+  StocksRoute,
   AttributeGroupsAttributeGroupIdRoute.addChildren([
     AttributeGroupsAttributeGroupIdEditRoute,
     AttributeGroupsAttributeGroupIdAttributeNewRoute,

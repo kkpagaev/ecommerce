@@ -14,6 +14,8 @@
   "srcDir": "./src/",
   "failOnError": false,
   "camelCaseColumnNames": false,
-  "typesOverrides": {},
+  "typesOverrides": {
+    "jsonb": "string[]"
+  },
   "dbUrl": "postgres://user:user@localhost:1252/user"
 }

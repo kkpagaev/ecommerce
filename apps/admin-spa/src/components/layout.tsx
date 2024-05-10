@@ -1,21 +1,21 @@
 import { Button } from "./ui/button";
 import {
+  HomeIcon,
   MapPinIcon,
-  Bell,
-  Home,
-  Menu,
-  Package2,
+  BellIcon,
+  MenuIcon,
   Languages,
-  Users,
   GroupIcon,
   ShapesIcon,
+  MonitorIcon,
   Package2Icon,
+  PanelsTopLeftIcon,
+  UsersIcon,
 } from "lucide-react";
 import { Link, useMatches, useRouter } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { SignIn, SignedIn, UserButton, useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
-import { PanelsTopLeft } from "lucide-react";
 import { Toaster } from "./ui/sonner";
 
 function NavBar() {
@@ -27,18 +27,18 @@ function NavBar() {
             to: "/",
             search: {},
             name: "Home",
-            icon: <Home className="h-4 w-4" />,
+            icon: <HomeIcon className="h-4 w-4" />,
           },
           {
             to: "/categories",
             search: {},
             name: "Categories",
-            icon: <PanelsTopLeft className="h-4 w-4" />,
+            icon: <PanelsTopLeftIcon className="h-4 w-4" />,
           },
           {
             to: "/about",
             name: "About",
-            icon: <Users className="h-4 w-4" />,
+            icon: <UsersIcon className="h-4 w-4" />,
           },
           {
             to: "/languages",
@@ -56,9 +56,14 @@ function NavBar() {
             icon: <MapPinIcon className="h-4 w-4" />,
           },
           {
+            to: "/stocks",
+            name: "Stocks",
+            icon: <Package2Icon className="h-4 w-4" />,
+          },
+          {
             to: "/products",
             name: "Products",
-            icon: <Package2Icon className="h-4 w-4" />,
+            icon: <MonitorIcon className="h-4 w-4" />,
           },
           {
             to: "/option-groups",
@@ -153,11 +158,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link to={"/"} className="flex items-center gap-2 font-semibold">
-              <Package2 className="h-6 w-6" />
+              <Package2Icon className="h-6 w-6" />
               <span className="">Ecommerce</span>
             </Link>
             <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-              <Bell className="h-4 w-4" />
+              <BellIcon className="h-4 w-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
@@ -175,7 +180,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 size="icon"
                 className="shrink-0 md:hidden"
               >
-                <Menu className="h-5 w-5" />
+                <MenuIcon className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>

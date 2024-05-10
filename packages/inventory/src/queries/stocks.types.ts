@@ -22,6 +22,25 @@ export interface IStockUpsertQueryQuery {
   result: IStockUpsertQueryResult;
 }
 
+/** 'ProductStocksListQuery' parameters type */
+export interface IProductStocksListQueryParams {
+  language_id: number;
+}
+
+/** 'ProductStocksListQuery' return type */
+export interface IProductStocksListQueryResult {
+  count: string | null;
+  id: number;
+  images: string[] | null;
+  name: string;
+}
+
+/** 'ProductStocksListQuery' query type */
+export interface IProductStocksListQueryQuery {
+  params: IProductStocksListQueryParams;
+  result: IProductStocksListQueryResult;
+}
+
 /** 'StocksListQuery' parameters type */
 export interface IStocksListQueryParams {
   location_id?: number | null | void;
