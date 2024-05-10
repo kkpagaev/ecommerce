@@ -1,5 +1,5 @@
 // this file is generated
-`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"admin":{"auth":{"router":"AdminAdminAuthRouter"},"router":"AdminAdminRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"attributeGroup":{"router":"AdminCatalogAttributeGroupRouter"},"category":{"router":"AdminCatalogCategoryRouter"},"option":{"router":"AdminCatalogOptionRouter"},"optionGroups":{"router":"AdminCatalogOptionGroupsRouter"},"product":{"router":"AdminCatalogProductRouter"}},"files":{"router":"AdminFilesRouter"},"inventory":{"location":{"router":"AdminInventoryLocationRouter"}},"language":{"router":"AdminLanguageRouter"}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminAdminAuthRouter","./admin/admin/auth.router"],["AdminAdminRouter","./admin/admin/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogAttributeGroupRouter","./admin/catalog/attributeGroup.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["AdminCatalogOptionRouter","./admin/catalog/option.router"],["AdminCatalogOptionGroupsRouter","./admin/catalog/optionGroups.router"],["AdminCatalogProductRouter","./admin/catalog/product.router"],["AdminFilesRouter","./admin/files/router"],["AdminInventoryLocationRouter","./admin/inventory/location.router"],["AdminLanguageRouter","./admin/language/router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
+`[{"admin":{"account":{"discord":{"router":"AdminAccountDiscordRouter"},"router":"AdminAccountRouter"},"admin":{"auth":{"router":"AdminAdminAuthRouter"},"router":"AdminAdminRouter"},"catalog":{"attribute":{"router":"AdminCatalogAttributeRouter"},"attributeGroup":{"router":"AdminCatalogAttributeGroupRouter"},"category":{"router":"AdminCatalogCategoryRouter"},"option":{"router":"AdminCatalogOptionRouter"},"optionGroups":{"router":"AdminCatalogOptionGroupsRouter"},"product":{"router":"AdminCatalogProductRouter"}},"files":{"router":"AdminFilesRouter"},"inventory":{"location":{"router":"AdminInventoryLocationRouter"},"stocks":{"router":"AdminInventoryStocksRouter"}},"language":{"router":"AdminLanguageRouter"}},"web":{"catalog":{"post":{"router":"WebCatalogPostRouter"}}}},[["AdminAccountDiscordRouter","./admin/account/discord/router"],["AdminAccountRouter","./admin/account/router"],["AdminAdminAuthRouter","./admin/admin/auth.router"],["AdminAdminRouter","./admin/admin/router"],["AdminCatalogAttributeRouter","./admin/catalog/attribute.router"],["AdminCatalogAttributeGroupRouter","./admin/catalog/attributeGroup.router"],["AdminCatalogCategoryRouter","./admin/catalog/category.router"],["AdminCatalogOptionRouter","./admin/catalog/option.router"],["AdminCatalogOptionGroupsRouter","./admin/catalog/optionGroups.router"],["AdminCatalogProductRouter","./admin/catalog/product.router"],["AdminFilesRouter","./admin/files/router"],["AdminInventoryLocationRouter","./admin/inventory/location.router"],["AdminInventoryStocksRouter","./admin/inventory/stocks.router"],["AdminLanguageRouter","./admin/language/router"],["WebCatalogPostRouter","./web/catalog/post/router"]]]`;
 import { FastifyZod } from "fastify";
 import AdminAccountDiscordRouter from "./admin/account/discord/router";
 import AdminAccountRouter from "./admin/account/router";
@@ -13,6 +13,7 @@ import AdminCatalogOptionGroupsRouter from "./admin/catalog/optionGroups.router"
 import AdminCatalogProductRouter from "./admin/catalog/product.router";
 import AdminFilesRouter from "./admin/files/router";
 import AdminInventoryLocationRouter from "./admin/inventory/location.router";
+import AdminInventoryStocksRouter from "./admin/inventory/stocks.router";
 import AdminLanguageRouter from "./admin/language/router";
 import WebCatalogPostRouter from "./web/catalog/post/router";
 
@@ -44,6 +45,7 @@ export async function createAppRouter(fastify: FastifyZod) {
       files: t.router(await AdminFilesRouter(fastify)),
       inventory: t.router({
         location: t.router(await AdminInventoryLocationRouter(fastify)),
+        stocks: t.router(await AdminInventoryStocksRouter(fastify)),
       }),
       language: t.router(await AdminLanguageRouter(fastify)),
     }),

@@ -45,8 +45,6 @@ export const stocksListQuery = sql`
     product_id,
     option_id,
     location_id
-  LIMIT COALESCE($limit, 10)
-  OFFSET (COALESCE($page, 1) - 1) * COALESCE($limit, 10);
 `;
 
 export const stockTotalStockQuery = {
@@ -110,8 +108,6 @@ export class Stocks {
 
   /**
    * @param {{
-   *   limit?: number;
-   *   page?: number;
    *   productId?: number;
    *   optionId?: number;
    *   locationId?: number;
@@ -120,8 +116,6 @@ export class Stocks {
   async listStocks(params) {
     const res = await stocksListQuery.run(
       {
-        page: params.page,
-        limit: params.limit,
         product_id: params.productId,
         option_id: params.optionId,
         location_id: params.locationId,

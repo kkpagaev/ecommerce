@@ -26,10 +26,8 @@ export interface IStockUpsertQueryQuery {
 
 /** 'StocksListQuery' parameters type */
 export interface IStocksListQueryParams {
-  limit?: number | null | void;
   location_id?: number | null | void;
   option_id?: number | null | void;
-  page?: number | null | void;
   product_id?: number | null | void;
 }
 

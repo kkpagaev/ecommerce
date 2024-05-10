@@ -1,9 +1,10 @@
 import { FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
-import { Locations } from "@repo/inventory";
+import { Locations, Stocks } from "@repo/inventory";
 
 type Inventory = {
   locations: Locations;
+  stocks: Stocks;
 };
 
 declare module "fastify" {
@@ -14,9 +15,11 @@ declare module "fastify" {
 
 export default fp(async function (f: FastifyInstance) {
   const locations = new Locations(f);
+  const stocks = new Stocks(f);
 
   f.decorate("inventory", {
     locations,
+    stocks,
   });
 }, {
   dependencies: ["pool"],
