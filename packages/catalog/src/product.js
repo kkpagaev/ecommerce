@@ -38,6 +38,15 @@ export const productListCountQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductOptionGroupsListQueryQuery
+ * >}
+ */
+export const productOptionGroupsListQuery = sql`
+  SELECT option_group_id as id FROM product_option_groups
+  WHERE product_id = $product_id!
+`;
+/**
+ * @type {TaggedQuery<
  *   import("./queries/product.types").IProductOptionsListQueryQuery
  * >}
  */
@@ -101,6 +110,29 @@ export const productDescriptionFindQuery = sql`
 export const productAttributesDeleteQuery = sql`
   DELETE FROM product_attributes
   WHERE product_id = $product_id!
+`;
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductOptionGroupsDeleteQueryQuery
+ * >}
+ */
+export const productOptionGroupsDeleteQuery = sql`
+  DELETE FROM product_option_groups
+  WHERE product_id = $product_id!
+`;
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductOptionGroupsUpsertQueryQuery
+ * >}
+ */
+export const productOptionGroupsUpsertQuery = sql`
+  INSERT INTO product_option_groups
+    (product_id, option_group_id)
+  VALUES
+    $$values(product_id!, option_group_id!)
+  ON CONFLICT DO NOTHING;
 `;
 
 /**
@@ -192,7 +224,7 @@ export class Products {
    *   price: number;
    *   attributes: number[];
    *   images: string[];
-   *   optionGroupId: number | null;
+   *   optionGroups?: number[];
    *   options?: number[];
    *   descriptions: {
    *     languageId: number;
@@ -224,6 +256,18 @@ export class Products {
         .then((res) => res[0]);
       if (!product) {
         throw new Error("Failed to create product");
+      }
+
+      if (input.optionGroups) {
+        await productOptionGroupsUpsertQuery.run(
+          {
+            values: input.optionGroups.map((o) => ({
+              product_id: product.id,
+              option_group_id: o,
+            })),
+          },
+          client,
+        );
       }
 
       if (input.options) {
@@ -312,6 +356,15 @@ export class Products {
         this.pool,
       )
       .then((res) => res.map(({ id }) => id));
+
+    const optionGroupsIds = await productOptionGroupsListQuery
+      .run(
+        {
+          product_id: product.id,
+        },
+        this.pool,
+      )
+      .then((r) => r.map((option) => option.id));
     const optionIds = await productOptionsListQuery
       .run(
         {
@@ -330,6 +383,7 @@ export class Products {
       price: Number(product.price),
       attributes: attributeIds,
       options: optionIds,
+      optionGroups: optionGroupsIds,
       descriptions,
     };
   }
@@ -408,6 +462,28 @@ export class Products {
           client,
         );
       }
+
+      if (input.optionGroups) {
+        await productOptionGroupsDeleteQuery.run(
+          {
+            product_id: id,
+          },
+          client,
+        );
+
+        if (input.optionGroups.length > 0) {
+          await productOptionGroupsUpsertQuery.run(
+            {
+              values: input.optionGroups.map((o) => ({
+                product_id: id,
+                option_group_id: o,
+              })),
+            },
+            client,
+          );
+        }
+      }
+
       if (input.options) {
         await productOptionsDeleteQuery.run(
           {

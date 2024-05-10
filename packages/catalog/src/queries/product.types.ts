@@ -52,6 +52,22 @@ export interface IProductListCountQueryQuery {
   result: IProductListCountQueryResult;
 }
 
+/** 'ProductOptionGroupsListQuery' parameters type */
+export interface IProductOptionGroupsListQueryParams {
+  product_id: number;
+}
+
+/** 'ProductOptionGroupsListQuery' return type */
+export interface IProductOptionGroupsListQueryResult {
+  id: number;
+}
+
+/** 'ProductOptionGroupsListQuery' query type */
+export interface IProductOptionGroupsListQueryQuery {
+  params: IProductOptionGroupsListQueryParams;
+  result: IProductOptionGroupsListQueryResult;
+}
+
 /** 'ProductOptionsListQuery' parameters type */
 export interface IProductOptionsListQueryParams {
   product_id: number;
@@ -154,6 +170,37 @@ export type IProductAttributesDeleteQueryResult = void;
 export interface IProductAttributesDeleteQueryQuery {
   params: IProductAttributesDeleteQueryParams;
   result: IProductAttributesDeleteQueryResult;
+}
+
+/** 'ProductOptionGroupsDeleteQuery' parameters type */
+export interface IProductOptionGroupsDeleteQueryParams {
+  product_id: number;
+}
+
+/** 'ProductOptionGroupsDeleteQuery' return type */
+export type IProductOptionGroupsDeleteQueryResult = void;
+
+/** 'ProductOptionGroupsDeleteQuery' query type */
+export interface IProductOptionGroupsDeleteQueryQuery {
+  params: IProductOptionGroupsDeleteQueryParams;
+  result: IProductOptionGroupsDeleteQueryResult;
+}
+
+/** 'ProductOptionGroupsUpsertQuery' parameters type */
+export interface IProductOptionGroupsUpsertQueryParams {
+  values: readonly ({
+    product_id: number,
+    option_group_id: number
+  })[];
+}
+
+/** 'ProductOptionGroupsUpsertQuery' return type */
+export type IProductOptionGroupsUpsertQueryResult = void;
+
+/** 'ProductOptionGroupsUpsertQuery' query type */
+export interface IProductOptionGroupsUpsertQueryQuery {
+  params: IProductOptionGroupsUpsertQueryParams;
+  result: IProductOptionGroupsUpsertQueryResult;
 }
 
 /** 'ProductAttributesUpsertQuery' parameters type */
