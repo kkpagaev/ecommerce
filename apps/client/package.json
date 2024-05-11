@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@trpc/client": "next",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
