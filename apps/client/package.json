@@ -1,0 +1,44 @@
+{
+  "name": "tanstack-router-react-example-basic-ssr-file-based",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "exit 0; vite build src/entry-client.tsx --outDir dist/client",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "serve": "NODE_ENV=production node server",
+    "debug": "node --inspect-brk server"
+  },
+  "dependencies": {
+    "@clerk/clerk-react": "^5.0.4",
+    "@tanstack/react-cross-context": "^1.26.10",
+    "@tanstack/react-router": "^1.32.0",
+    "@tanstack/router-devtools": "^1.4.0",
+    "@tanstack/router-vite-plugin": "^1.31.18",
+    "@trpc/client": "next",
+    "@trpc/react-query": "next",
+    "axios": "^1.6.5",
+    "get-port": "^7.0.0",
+    "jsesc": "^3.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/generator": "^7.23.6",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@types/express": "^4.17.21",
+    "@types/jsesc": "^3.0.3",
+    "@vitejs/plugin-react": "^4",
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "isbot": "^4.3.0",
+    "node-fetch": "^3.3.2",
+    "serve-static": "^1.15.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.0.13",
+    "vite-plugin-babel": "^1.2.0"
+  }
+}
