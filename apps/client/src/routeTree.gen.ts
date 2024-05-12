@@ -11,72 +11,62 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as PostsImport } from './routes/posts'
-import { Route as ErrorImport } from './routes/error'
-import { Route as AuthImport } from './routes/_auth'
-import { Route as IndexImport } from './routes/index'
-import { Route as PostsIndexImport } from './routes/posts/index'
-import { Route as PostsPostIdImport } from './routes/posts/$postId'
+import { Route as LnImport } from './routes/$ln'
+import { Route as LnPostsImport } from './routes/$ln/posts'
+import { Route as LnErrorImport } from './routes/$ln/error'
+import { Route as LnPostsIndexImport } from './routes/$ln/posts/index'
+import { Route as LnPostsPostIdImport } from './routes/$ln/posts/$postId'
 
 // Create/Update Routes
 
-const PostsRoute = PostsImport.update({
+const LnRoute = LnImport.update({
+  path: '/$ln',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LnPostsRoute = LnPostsImport.update({
   path: '/posts',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LnRoute,
 } as any)
 
-const ErrorRoute = ErrorImport.update({
+const LnErrorRoute = LnErrorImport.update({
   path: '/error',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LnRoute,
 } as any)
 
-const AuthRoute = AuthImport.update({
-  id: '/_auth',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const IndexRoute = IndexImport.update({
+const LnPostsIndexRoute = LnPostsIndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LnPostsRoute,
 } as any)
 
-const PostsIndexRoute = PostsIndexImport.update({
-  path: '/',
-  getParentRoute: () => PostsRoute,
-} as any)
-
-const PostsPostIdRoute = PostsPostIdImport.update({
+const LnPostsPostIdRoute = LnPostsPostIdImport.update({
   path: '/$postId',
-  getParentRoute: () => PostsRoute,
+  getParentRoute: () => LnPostsRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      preLoaderRoute: typeof IndexImport
+    '/$ln': {
+      preLoaderRoute: typeof LnImport
       parentRoute: typeof rootRoute
     }
-    '/_auth': {
-      preLoaderRoute: typeof AuthImport
-      parentRoute: typeof rootRoute
+    '/$ln/error': {
+      preLoaderRoute: typeof LnErrorImport
+      parentRoute: typeof LnImport
     }
-    '/error': {
-      preLoaderRoute: typeof ErrorImport
-      parentRoute: typeof rootRoute
+    '/$ln/posts': {
+      preLoaderRoute: typeof LnPostsImport
+      parentRoute: typeof LnImport
     }
-    '/posts': {
-      preLoaderRoute: typeof PostsImport
-      parentRoute: typeof rootRoute
+    '/$ln/posts/$postId': {
+      preLoaderRoute: typeof LnPostsPostIdImport
+      parentRoute: typeof LnPostsImport
     }
-    '/posts/$postId': {
-      preLoaderRoute: typeof PostsPostIdImport
-      parentRoute: typeof PostsImport
-    }
-    '/posts/': {
-      preLoaderRoute: typeof PostsIndexImport
-      parentRoute: typeof PostsImport
+    '/$ln/posts/': {
+      preLoaderRoute: typeof LnPostsIndexImport
+      parentRoute: typeof LnPostsImport
     }
   }
 }
@@ -84,9 +74,10 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  IndexRoute,
-  ErrorRoute,
-  PostsRoute.addChildren([PostsPostIdRoute, PostsIndexRoute]),
+  LnRoute.addChildren([
+    LnErrorRoute,
+    LnPostsRoute.addChildren([LnPostsPostIdRoute, LnPostsIndexRoute]),
+  ]),
 ])
 
 /* prettier-ignore-end */

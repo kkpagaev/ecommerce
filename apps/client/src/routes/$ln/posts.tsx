@@ -7,7 +7,7 @@ export type PostType = {
   body: string
 }
 
-export const Route = createFileRoute('/posts')({
+export const Route = createFileRoute('/$ln/posts')({
   loader: async () => {
     console.info('Fetching posts...')
     await new Promise((r) =>
@@ -22,7 +22,7 @@ export const Route = createFileRoute('/posts')({
 
 function PostsComponent() {
   const posts = Route.useLoaderData()
-  const context = Route.useRouteContext()
+  const params = Route.useParams()
 
   return (
     <div className="p-2 flex gap-2">
@@ -31,9 +31,10 @@ function PostsComponent() {
           return (
             <li key={post.id} className="whitespace-nowrap">
               <Link
-                to="/posts/$postId"
+                to="/$ln/posts/$postId"
                 params={{
                   postId: post.id,
+                  ln: params.ln,
                 }}
                 className="block py-1 text-blue-800 hover:text-blue-600"
                 activeProps={{ className: 'text-black font-bold' }}

@@ -113,7 +113,7 @@ export class Categories {
   /**
    * @typedef {{
    *   languageId: number;
-   *   name: string | undefined;
+   *   name?: string | undefined;
    * }} ListCategoriesProps
    */
   /** @param {ListCategoriesProps} input */

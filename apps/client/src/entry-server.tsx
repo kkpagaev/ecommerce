@@ -4,7 +4,6 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { ServerResponse } from 'http'
 import express from 'express'
 import { Context } from '@tanstack/react-cross-context'
-import { RouterProvider } from '@tanstack/react-router'
 import type { AnyRouter } from '@tanstack/react-router'
 import { createRouter } from './router'
 

@@ -43,6 +43,12 @@ export async function createServer(
   app.use('*', async (req, res) => {
     try {
       const url = req.originalUrl
+      console.log(url);
+
+      if (url === '/') {
+        res.redirect("/uk")
+        return;
+      }
 
       if (url.includes('.')) {
         console.warn(`${url} is not valid router path`)
@@ -71,6 +77,7 @@ export async function createServer(
           return import('./dist/server/entry-server.js')
         }
       })()
+      console.log(res.statusCode)
 
       console.info('Rendering: ', url, '...')
       entry.render({ req, res, url, head: viteHead })

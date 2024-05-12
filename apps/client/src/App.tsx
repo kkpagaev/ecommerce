@@ -1,5 +1,5 @@
-import { AnyRouter, RouterProvider, useRouter } from "@tanstack/react-router";
-import { ClerkProvider, useAuth } from "@clerk/clerk-react";
+import { AnyRouter, RouterProvider } from "@tanstack/react-router";
+import { ClerkProvider } from "@clerk/clerk-react";
 import TrpcProvider from "./providers/trpc";
 import { createRouter } from "./router";
 

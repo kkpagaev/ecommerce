@@ -44,22 +44,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
 })
 
-function Counter() {
-  const [count, setCount] = React.useState(0)
-
-  return (
-    <div>
-      <button
-        onClick={() => {
-          setCount(count + 1)
-        }}
-      >
-        {count}
-      </button>
-    </div>
-  )
-}
-
 function RootComponent() {
   return (
     <html lang="en">
@@ -86,26 +70,33 @@ function RootComponent() {
       </head>
       <body>
         <div className="p-2 flex gap-2 text-lg">
-          <Counter />
           <Link
-            to="/"
+            to="/$ln"
             activeProps={{
               className: 'font-bold',
             }}
-            activeOptions={{ exact: true }}
+            params={{
+                ln: 'uk',
+            }}
           >
             Home
-          </Link>{' '}
+          </Link>
           <Link
-            to="/posts"
+            to="/$ln/posts"
+            params={{
+                ln: 'uk',
+            }}
             activeProps={{
               className: 'font-bold',
             }}
           >
             Posts
-          </Link>{' '}
+          </Link>
           <Link
-            to="/error"
+            to="/$ln/error"
+            params={{
+                ln: 'uk',
+            }}
             activeProps={{
               className: 'font-bold',
             }}

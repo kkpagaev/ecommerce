@@ -1,11 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import * as React from 'react'
 import { PostType } from '../posts'
 
-export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params, context }) => {
-    console.log({c: context});
-
+export const Route = createFileRoute('/$ln/posts/$postId')({
+  loader: async ({ params }) => {
     console.info(`Fetching post with id ${params.postId}...`)
 
     await new Promise((r) => setTimeout(r, Math.round(Math.random() * 300)))
