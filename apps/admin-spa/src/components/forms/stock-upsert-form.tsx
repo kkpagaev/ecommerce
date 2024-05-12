@@ -61,7 +61,7 @@ export function StockUpsertForm({ values, errorMessage, onSubmit }: Props) {
     <form
       onSubmit={handleSubmit((data) => {
         clearErrors();
-        onSubmit(data.stocks);
+        onSubmit(data.stocks.map((s) => ({ ...s, count: +s.count })));
       })}
       className="flex flex-col gap-8"
     >
