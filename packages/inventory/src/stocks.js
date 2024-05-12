@@ -87,14 +87,14 @@ export const stockTotalStockQuery = sql`
  */
 export const productVariantListStocksQuery = sql`
   SELECT pv.id AS product_variant_id, 
-  s.location_id AS location_id ,
+  l.id AS location_id ,
   (SELECT COALESCE(SUM(ss.count), 0) AS count FROM stocks ss 
     WHERE ss.product_variant_id = pv.id
-    AND ss.location_id = s.location_id
+    AND ss.location_id = l.id
   ) AS count
-  FROM product_variants pv CROSS JOIN stocks s 
+  FROM product_variants pv CROSS JOIN locations l
   WHERE pv.product_id = $product_id!
-  GROUP BY pv.id, s.location_id, pv.product_id
+  GROUP BY pv.id, l.id, pv.product_id
 `;
 
 export class Stocks {
