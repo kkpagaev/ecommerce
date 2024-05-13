@@ -54,7 +54,6 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
     }),
   createProductVariant: t.procedure
     .input(z.object({
-      inStock: z.boolean(),
       price: z.number().positive()
         .multipleOf(0.01),
       oldPrice: z.number().positive()
@@ -68,11 +67,17 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
       slug: z.string(),
       productId: z.number(),
       options: z.array(z.number()),
+      stockStatus: z.enum(["in_stock", "out_of_stock", "preorder"]),
+      descriptions: z.array(z.object({
+        languageId: z.number(),
+        name: z.string(),
+        shortDescription: z.string(),
+      })),
     }))
-    .use(isAuthed)
+    // .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await productVariants.createProductVariant({
-        inStock: input.inStock,
+        stockStatus: input.stockStatus,
         price: input.price,
         oldPrice: input.oldPrice,
         article: input.article,
@@ -83,6 +88,7 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
         isActive: input.isActive,
         slug: input.slug,
         productId: input.productId,
+        descriptions: input.descriptions,
         options: input.options,
       });
 
@@ -94,7 +100,6 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
       z.object({
         id: z.number(),
       }).and(z.object({
-        inStock: z.boolean(),
         price: z.number().positive()
           .multipleOf(0.01),
         oldPrice: z.number().positive()
@@ -108,21 +113,28 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
         slug: z.string(),
         productId: z.number(),
         options: z.array(z.number()),
+        stockStatus: z.enum(["in_stock", "out_of_stock", "preorder"]),
+        descriptions: z.array(z.object({
+          languageId: z.number(),
+          name: z.string(),
+          shortDescription: z.string(),
+        })),
       }).partial())
     )
     .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await productVariants.updateProductVariant(input.id, {
-        inStock: input.inStock,
         price: input.price,
         oldPrice: input.oldPrice,
         article: input.article,
         discount: input.discount,
         popularity: input.popularity,
+        stockStatus: input.stockStatus,
         images: input.images,
         barcode: input.barcode,
         isActive: input.isActive,
         slug: input.slug,
+        descriptions: input.descriptions,
         options: input.options,
       });
 

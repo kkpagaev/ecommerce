@@ -26,12 +26,12 @@ export const productVariantsListQuery = sql`
  */
 export const productVariantCreateQuery = sql`
   INSERT INTO product_variants
-    (product_id, slug, in_stock, price, old_price, article, discount, popularity, images, barcode, is_active)
+    (product_id, slug, stock_status, price, old_price, article, discount, popularity, images, barcode, is_active)
   VALUES
     (
       $product_id!, 
       $slug!,
-      $in_stock!,
+      $stock_status!,
       $price!,
       $old_price!,
       $article!,
@@ -44,6 +44,32 @@ export const productVariantCreateQuery = sql`
   RETURNING *
 `;
 
+// | Column             | Type                   | Modifiers |
+// |--------------------|------------------------|-----------|
+// | product_variant_id | integer                |  not null |
+// | language_id        | integer                |  not null |
+// | name               | character varying(255) |  not null |
+// | short_description  | text                   |           |
+// Indexes:
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-variants.types").IProductVariantDescriptionsUpsertQueryQuery
+ * >}
+ */
+export const productVariantDescriptionsUpsertQuery = sql`
+  INSERT INTO product_variant_descriptions
+    (product_variant_id, language_id, name, short_description)
+  VALUES
+    $$values(product_variant_id!, language_id!, name!, short_description)
+  ON CONFLICT
+    (product_variant_id, language_id)
+  DO UPDATE
+    SET
+      name = EXCLUDED.name,
+      short_description = EXCLUDED.short_description;
+`;
+
 /**
  * @type {TaggedQuery<
  *   import("./queries/product-variants.types").IProductVariantUpdateQueryQuery
@@ -53,7 +79,7 @@ export const productVariantUpdateQuery = sql`
   UPDATE product_variants
   SET
     slug = COALESCE($slug, slug),
-    in_stock = COALESCE($in_stock, in_stock),
+    stock_status = COALESCE($stock_status, stock_status),
     price = COALESCE($price, price),
     old_price = COALESCE($old_price, old_price),
     article = COALESCE($article, article),
@@ -110,6 +136,16 @@ export const productVariantsOptionsDeleteQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/product-variants.types").IProductVariantsDescriptionsDeleteQueryQuery
+ * >}
+ */
+export const productVariantsDescriptionsDeleteQuery = sql`
+  DELETE FROM product_variant_descriptions
+  WHERE product_variant_id = $product_variant_id!
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/product-variants.types").IProductVariantOptionsUpsertQueryQuery
  * >}
  */
@@ -144,7 +180,6 @@ export class ProductVariants {
   /**
    * @typedef {{
    *   productId: number;
-   *   inStock: boolean;
    *   price: number;
    *   oldPrice: number;
    *   article: string;
@@ -155,22 +190,29 @@ export class ProductVariants {
    *   isActive: boolean;
    *   slug: string;
    *   options: number[];
+   *   stockStatus: import("./queries/product-variants.types").product_variant_stock_status;
+   *   descriptions: {
+   *     languageId: number;
+   *     name: string;
+   *     shortDescription?: string;
+   *   }[];
    * }} CreateProductVariant
    */
   /** @param {CreateProductVariant} input */
   async createProductVariant(input) {
     return tx(this.pool, async (client) => {
+      console.log(input);
       const productVariant = await productVariantCreateQuery
         .run(
           {
             slug: input.slug,
-            in_stock: input.inStock,
+            stock_status: input.stockStatus,
             price: input.price,
             old_price: input.oldPrice,
             article: input.article,
             discount: input.discount,
             popularity: input.popularity,
-            images: input.images,
+            images: JSON.stringify(input.images),
             barcode: input.barcode,
             is_active: input.isActive,
             product_id: input.productId,
@@ -181,7 +223,23 @@ export class ProductVariants {
       if (!productVariant) {
         throw new Error("Failed to create product variant");
       }
-      if (input.options) {
+
+      if (input.descriptions) {
+        await productVariantDescriptionsUpsertQuery.run(
+          {
+            values: input.descriptions.map((d) => ({
+              product_variant_id: productVariant.id,
+
+              name: d.name,
+              short_description: d.shortDescription,
+              language_id: d.languageId,
+            })),
+          },
+          client,
+        );
+      }
+
+      if (input.options.length > 0) {
         await productVariantOptionsUpsertQuery.run(
           {
             values: input.options.map((o) => ({
@@ -208,18 +266,43 @@ export class ProductVariants {
         {
           id: variantId,
           slug: input.slug,
-          in_stock: input.inStock,
+          stock_status: input.stockStatus,
           price: input.price,
           old_price: input.oldPrice,
           article: input.article,
           discount: input.discount,
           popularity: input.popularity,
-          images: input.images,
+          images: JSON.stringify(input.images),
           barcode: input.barcode,
           is_active: input.isActive,
         },
         client,
       );
+
+      if (input.descriptions) {
+        await productVariantsDescriptionsDeleteQuery
+          .run(
+            {
+              product_variant_id: variantId,
+            },
+            client,
+          )
+          .then((r) => r[0]);
+        if (input.descriptions.length > 0) {
+          await productVariantDescriptionsUpsertQuery.run(
+            {
+              values: input.descriptions.map((d) => ({
+                product_variant_id: variantId,
+
+                name: d.name,
+                short_description: d.shortDescription,
+                language_id: d.languageId,
+              })),
+            },
+            client,
+          );
+        }
+      }
       if (input.options) {
         await productVariantsOptionsDeleteQuery
           .run(
@@ -229,7 +312,7 @@ export class ProductVariants {
             client,
           )
           .then((r) => r[0]);
-        if (input.options) {
+        if (input.options.length > 0) {
           await productVariantOptionsUpsertQuery.run(
             {
               values: input.options.map((o) => ({

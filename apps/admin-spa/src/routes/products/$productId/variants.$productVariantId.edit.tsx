@@ -15,6 +15,7 @@ export const Route = createFileRoute(
     getTitle: () => "New Product Variant Group",
   }),
   loader: async ({ context, params }) => {
+    const languages = await context.trpc.admin.language.list.fetch();
     const variant =
       await context.trpc.admin.catalog.productVariant.findProductVariant.fetch({
         id: Number(params.productVariantId),
@@ -35,16 +36,16 @@ export const Route = createFileRoute(
         languageId: 1,
       });
     const filteredOptionGroups = optionGroups.filter((o) =>
-      product.options.includes(o.id),
+      product.optionGroups.includes(o.id),
     );
 
-    return { optionGroups: filteredOptionGroups, variant };
+    return { optionGroups: filteredOptionGroups, variant, languages };
   },
   component: ProductNewComponent,
 });
 
 function ProductNewComponent() {
-  const { optionGroups, variant } = Route.useLoaderData();
+  const { optionGroups, variant, languages } = Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
   const router = useRouter();
@@ -67,6 +68,7 @@ function ProductNewComponent() {
     <div>
       <ProductVariantForm
         edit
+        languages={languages}
         optionGroups={optionGroups}
         values={variant}
         onSubmit={async (data) => {

@@ -1,12 +1,14 @@
+CREATE TYPE product_variant_stock_status AS ENUM ('in_stock', 'out_of_stock', 'preorder');
+
 CREATE TABLE product_variants (
   id SERIAL PRIMARY KEY,
   slug varchar(255) NOT NULL UNIQUE,
   product_id INTEGER NOT NULL REFERENCES products(id),
-  in_stock BOOLEAN NOT NULL DEFAULT TRUE,
-  price INTEGER NOT NULL DEFAULT 0,
-  old_price INTEGER NOT NULL DEFAULT 0,
+  stock_status product_variant_stock_status NOT NULL DEFAULT 'in_stock',
+  price FLOAT NOT NULL DEFAULT 0,
+  old_price FLOAT NOT NULL DEFAULT 0,
   article varchar(255) NOT NULL,
-  discount INTEGER DEFAULT 0.0 NOT NULL,
+  discount FLOAT DEFAULT 0.0 NOT NULL,
   popularity INT DEFAULT 0 NOT NULL,
   images jsonb DEFAULT '[]'::jsonb NOT NULL,
   barcode varchar(255) NOT NULL,

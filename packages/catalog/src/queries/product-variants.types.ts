@@ -1,4 +1,5 @@
 /** Types generated for queries found in "src/product-variants.js" */
+export type product_variant_stock_status = 'in_stock' | 'out_of_stock' | 'preorder';
 
 /** 'ProductVariantsListQuery' parameters type */
 export interface IProductVariantsListQueryParams {
@@ -23,13 +24,13 @@ export interface IProductVariantCreateQueryParams {
   barcode: string;
   discount: number;
   images: string | string[] | Record<string, any>;
-  in_stock: boolean;
   is_active: boolean;
   old_price: number;
   popularity: number;
   price: number;
   product_id: number;
   slug: string;
+  stock_status: product_variant_stock_status;
 }
 
 /** 'ProductVariantCreateQuery' return type */
@@ -40,19 +41,38 @@ export interface IProductVariantCreateQueryResult {
   discount: number;
   id: number;
   images: string | string[] | Record<string, any>;
-  in_stock: boolean;
   is_active: boolean;
   old_price: number;
   popularity: number;
   price: number;
   product_id: number;
   slug: string;
+  stock_status: product_variant_stock_status;
 }
 
 /** 'ProductVariantCreateQuery' query type */
 export interface IProductVariantCreateQueryQuery {
   params: IProductVariantCreateQueryParams;
   result: IProductVariantCreateQueryResult;
+}
+
+/** 'ProductVariantDescriptionsUpsertQuery' parameters type */
+export interface IProductVariantDescriptionsUpsertQueryParams {
+  values: readonly ({
+    product_variant_id: number,
+    language_id: number,
+    name: string,
+    short_description: string | null | void
+  })[];
+}
+
+/** 'ProductVariantDescriptionsUpsertQuery' return type */
+export type IProductVariantDescriptionsUpsertQueryResult = void;
+
+/** 'ProductVariantDescriptionsUpsertQuery' query type */
+export interface IProductVariantDescriptionsUpsertQueryQuery {
+  params: IProductVariantDescriptionsUpsertQueryParams;
+  result: IProductVariantDescriptionsUpsertQueryResult;
 }
 
 /** 'ProductVariantUpdateQuery' parameters type */
@@ -62,12 +82,12 @@ export interface IProductVariantUpdateQueryParams {
   discount?: number | null | void;
   id: number;
   images?: string | string[] | Record<string, any> | null | void;
-  in_stock?: boolean | null | void;
   is_active?: boolean | null | void;
   old_price?: number | null | void;
   popularity?: number | null | void;
   price?: number | null | void;
   slug?: string | null | void;
+  stock_status?: product_variant_stock_status | null | void;
 }
 
 /** 'ProductVariantUpdateQuery' return type */
@@ -78,13 +98,13 @@ export interface IProductVariantUpdateQueryResult {
   discount: number;
   id: number;
   images: string | string[] | Record<string, any>;
-  in_stock: boolean;
   is_active: boolean;
   old_price: number;
   popularity: number;
   price: number;
   product_id: number;
   slug: string;
+  stock_status: product_variant_stock_status;
 }
 
 /** 'ProductVariantUpdateQuery' query type */
@@ -142,6 +162,20 @@ export interface IProductVariantsOptionsDeleteQueryQuery {
   result: IProductVariantsOptionsDeleteQueryResult;
 }
 
+/** 'ProductVariantsDescriptionsDeleteQuery' parameters type */
+export interface IProductVariantsDescriptionsDeleteQueryParams {
+  product_variant_id: number;
+}
+
+/** 'ProductVariantsDescriptionsDeleteQuery' return type */
+export type IProductVariantsDescriptionsDeleteQueryResult = void;
+
+/** 'ProductVariantsDescriptionsDeleteQuery' query type */
+export interface IProductVariantsDescriptionsDeleteQueryQuery {
+  params: IProductVariantsDescriptionsDeleteQueryParams;
+  result: IProductVariantsDescriptionsDeleteQueryResult;
+}
+
 /** 'ProductVariantOptionsUpsertQuery' parameters type */
 export interface IProductVariantOptionsUpsertQueryParams {
   values: readonly ({
@@ -172,13 +206,13 @@ export interface IProductVariantsFindOneQueryResult {
   discount: number;
   id: number;
   images: string | string[] | Record<string, any>;
-  in_stock: boolean;
   is_active: boolean;
   old_price: number;
   popularity: number;
   price: number;
   product_id: number;
   slug: string;
+  stock_status: product_variant_stock_status;
 }
 
 /** 'ProductVariantsFindOneQuery' query type */
