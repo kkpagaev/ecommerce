@@ -9,6 +9,7 @@ export { Options } from "./option";
 export { OptionGroups } from "./option-group";
 export { ProductVariants } from "./product-variants";
 export { ProductFiltering } from "./product-filtering";
+export { Vendors } from "./vendor";
 
 async function main() {
   const p = new Pool({

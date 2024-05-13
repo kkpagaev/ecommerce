@@ -1,8 +1,5 @@
 /** Types generated for queries found in "src/product-variants.js" */
-export type product_variant_stock_status =
-  | "in_stock"
-  | "out_of_stock"
-  | "preorder";
+export type product_variant_stock_status = 'in_stock' | 'out_of_stock' | 'preorder';
 
 /** 'ProductVariantsListQuery' parameters type */
 export interface IProductVariantsListQueryParams {
@@ -61,12 +58,12 @@ export interface IProductVariantCreateQueryQuery {
 
 /** 'ProductVariantDescriptionsUpsertQuery' parameters type */
 export interface IProductVariantDescriptionsUpsertQueryParams {
-  values: readonly {
-    product_variant_id: number;
-    language_id: number;
-    name: string;
-    short_description: string | null | void;
-  }[];
+  values: readonly ({
+    product_variant_id: number,
+    language_id: number,
+    name: string,
+    short_description: string | null | void
+  })[];
 }
 
 /** 'ProductVariantDescriptionsUpsertQuery' return type */
@@ -119,7 +116,7 @@ export interface IProductVariantUpdateQueryQuery {
 /** 'ProductVariantsOptionsListOptionsQuery' parameters type */
 export interface IProductVariantsOptionsListOptionsQueryParams {
   language_id: number;
-  product_variant_ids: readonly number[];
+  product_variant_ids: readonly (number)[];
 }
 
 /** 'ProductVariantsOptionsListOptionsQuery' return type */
@@ -181,10 +178,10 @@ export interface IProductVariantsDescriptionsDeleteQueryQuery {
 
 /** 'ProductVariantOptionsUpsertQuery' parameters type */
 export interface IProductVariantOptionsUpsertQueryParams {
-  values: readonly {
-    product_variant_id: number;
-    option_id: number;
-  }[];
+  values: readonly ({
+    product_variant_id: number,
+    option_id: number
+  })[];
 }
 
 /** 'ProductVariantOptionsUpsertQuery' return type */
@@ -233,6 +230,7 @@ export interface IProductVariantsListAllQueryParams {
 export interface IProductVariantsListAllQueryResult {
   article: string;
   barcode: string;
+  category: string;
   created_at: Date | null;
   discount: number;
   id: number;
@@ -252,3 +250,4 @@ export interface IProductVariantsListAllQueryQuery {
   params: IProductVariantsListAllQueryParams;
   result: IProductVariantsListAllQueryResult;
 }
+

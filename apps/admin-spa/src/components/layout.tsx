@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import {
   HomeIcon,
-  MapPinIcon,
+  Building2,
   BellIcon,
   MenuIcon,
   Languages,
@@ -54,6 +54,11 @@ function NavBar() {
             to: "/products",
             name: "Products",
             icon: <MonitorIcon className="h-4 w-4" />,
+          },
+          {
+            to: "/vendors",
+            name: "Vendors",
+            icon: <Building2 className="h-4 w-4" />,
           },
           {
             to: "/option-groups",

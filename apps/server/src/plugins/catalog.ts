@@ -1,9 +1,10 @@
 import { FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
-import { Categories, Products, ProductFiltering, Attributes, AttributeGroups, Options, OptionGroups, ProductVariants } from "@repo/catalog";
+import { Categories, Vendors, Products, ProductFiltering, Attributes, AttributeGroups, Options, OptionGroups, ProductVariants } from "@repo/catalog";
 
 type Catalog = {
   categories: Categories;
+  vendors: Vendors;
   products: Products;
   attributes: Attributes;
   attributeGroups: AttributeGroups;
@@ -28,6 +29,7 @@ export default fp(async function (f: FastifyInstance) {
   const optionGroups = new OptionGroups({ pool: f.pool });
   const productVariants = new ProductVariants({ pool: f.pool });
   const productFiltering = new ProductFiltering({ pool: f.pool });
+  const vendors = new Vendors({ pool: f.pool });
 
   f.decorate("catalog", {
     categories: categories,
@@ -35,6 +37,7 @@ export default fp(async function (f: FastifyInstance) {
     attributes: attributes,
     attributeGroups: attributeGroups,
     options: options,
+    vendors: vendors,
     optionGroups: optionGroups,
     productVariants: productVariants,
     productFiltering: productFiltering,

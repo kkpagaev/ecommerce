@@ -3,6 +3,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as VendorsImport } from './routes/vendors'
 import { Route as LanguagesImport } from './routes/languages'
 import { Route as CategoriesImport } from './routes/categories'
 import { Route as AdminsImport } from './routes/admins'
@@ -11,6 +12,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
 import { Route as OptionGroupsIndexImport } from './routes/option-groups/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
+import { Route as VendorsNewImport } from './routes/vendors/new'
 import { Route as ProductsNewImport } from './routes/products/new'
 import { Route as OptionGroupsNewImport } from './routes/option-groups/new'
 import { Route as OptionGroupsOptionGroupIdImport } from './routes/option-groups/$optionGroupId'
@@ -20,6 +22,7 @@ import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
 import { Route as AdminsNewImport } from './routes/admins/new'
 import { Route as ProductsProductIdIndexImport } from './routes/products/$productId/index'
+import { Route as VendorsVendorIdEditImport } from './routes/vendors/$vendorId.edit'
 import { Route as ProductsProductIdVariantsImport } from './routes/products/$productId/variants'
 import { Route as ProductsProductIdEditImport } from './routes/products/$productId/edit'
 import { Route as OptionGroupsOptionGroupIdEditImport } from './routes/option-groups/$optionGroupId.edit'
@@ -36,6 +39,11 @@ import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './ro
 import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
 // Create/Update Routes
+
+const VendorsRoute = VendorsImport.update({
+  path: '/vendors',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LanguagesRoute = LanguagesImport.update({
   path: '/languages',
@@ -75,6 +83,11 @@ const OptionGroupsIndexRoute = OptionGroupsIndexImport.update({
 const AttributeGroupsIndexRoute = AttributeGroupsIndexImport.update({
   path: '/attribute-groups/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const VendorsNewRoute = VendorsNewImport.update({
+  path: '/new',
+  getParentRoute: () => VendorsRoute,
 } as any)
 
 const ProductsNewRoute = ProductsNewImport.update({
@@ -121,6 +134,11 @@ const AdminsNewRoute = AdminsNewImport.update({
 const ProductsProductIdIndexRoute = ProductsProductIdIndexImport.update({
   path: '/products/$productId/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const VendorsVendorIdEditRoute = VendorsVendorIdEditImport.update({
+  path: '/$vendorId/edit',
+  getParentRoute: () => VendorsRoute,
 } as any)
 
 const ProductsProductIdVariantsRoute = ProductsProductIdVariantsImport.update({
@@ -226,6 +244,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesImport
       parentRoute: typeof rootRoute
     }
+    '/vendors': {
+      preLoaderRoute: typeof VendorsImport
+      parentRoute: typeof rootRoute
+    }
     '/admins/new': {
       preLoaderRoute: typeof AdminsNewImport
       parentRoute: typeof AdminsImport
@@ -257,6 +279,10 @@ declare module '@tanstack/react-router' {
     '/products/new': {
       preLoaderRoute: typeof ProductsNewImport
       parentRoute: typeof rootRoute
+    }
+    '/vendors/new': {
+      preLoaderRoute: typeof VendorsNewImport
+      parentRoute: typeof VendorsImport
     }
     '/attribute-groups/': {
       preLoaderRoute: typeof AttributeGroupsIndexImport
@@ -297,6 +323,10 @@ declare module '@tanstack/react-router' {
     '/products/$productId/variants': {
       preLoaderRoute: typeof ProductsProductIdVariantsImport
       parentRoute: typeof rootRoute
+    }
+    '/vendors/$vendorId/edit': {
+      preLoaderRoute: typeof VendorsVendorIdEditImport
+      parentRoute: typeof VendorsImport
     }
     '/products/$productId/': {
       preLoaderRoute: typeof ProductsProductIdIndexImport
@@ -344,6 +374,7 @@ export const routeTree = rootRoute.addChildren([
     CategoriesCategoryIdEditRoute,
   ]),
   LanguagesRoute.addChildren([LanguagesNewRoute, LanguagesLanguageIdEditRoute]),
+  VendorsRoute.addChildren([VendorsNewRoute, VendorsVendorIdEditRoute]),
   AttributeGroupsAttributeGroupIdRoute.addChildren([
     AttributeGroupsAttributeGroupIdEditRoute,
     AttributeGroupsAttributeGroupIdAttributeNewRoute,
