@@ -11,7 +11,6 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 export const Route = createFileRoute("/categories")({
-  beforeLoad: ({ context }) => ({ ...context, getTitle: () => "Categories" }),
   validateSearch: (search: Record<string, unknown>) => {
     return z
       .object({
@@ -24,12 +23,14 @@ export const Route = createFileRoute("/categories")({
     languageId: search.languageId || 1,
     name: search.name,
   }),
-  loader: async ({ context, deps }) => {
-    return await context.trpc.admin.catalog.category.listCategories.fetch({
-      name: deps.name,
-      languageId: deps.languageId,
-    });
+  beforeLoad: async ({ context, search }) => {
+    const categories =
+      await context.trpc.admin.catalog.category.listCategories.fetch({
+        languageId: search.languageId || 1,
+      });
+    return { ...context, categories, getTitle: () => "Categories" };
   },
+  loader: ({ context }) => context.categories,
   component: Index,
 });
 
@@ -42,10 +43,7 @@ function Index() {
         <SearchFilters
           search={Route.useSearch()}
           fullPath={Route.fullPath}
-          filters={[
-            { name: "name", type: "string", label: "Name" },
-            { type: "languageId", name: "languageId" },
-          ]}
+          filters={[{ type: "languageId", name: "languageId" }]}
         />
         <div>
           <Link to={"/categories/new"}>
@@ -53,7 +51,11 @@ function Index() {
           </Link>
         </div>
       </div>
-      <DataTable data={data} columns={columns} isLoading={false} />
+      <DataTable
+        data={{ data, count: data.length }}
+        columns={columns}
+        isLoading={false}
+      />
       <OutletDialog path={Route.fullPath} />
     </div>
   );

@@ -3,6 +3,8 @@
 /** 'CategoryUpdateQuery' parameters type */
 export interface ICategoryUpdateQueryParams {
   id: number;
+  image?: string | null | void;
+  parentId?: number | null | void;
   slug?: string | null | void;
 }
 
@@ -30,6 +32,7 @@ export interface ICategoryListQueryResult {
   image_url: string;
   language_id: number;
   name: string;
+  parent_id: number | null;
   slug: string;
 }
 
@@ -37,23 +40,6 @@ export interface ICategoryListQueryResult {
 export interface ICategoryListQueryQuery {
   params: ICategoryListQueryParams;
   result: ICategoryListQueryResult;
-}
-
-/** 'CategoryListCountQuery' parameters type */
-export interface ICategoryListCountQueryParams {
-  language_id: number;
-  name?: string | null | void;
-}
-
-/** 'CategoryListCountQuery' return type */
-export interface ICategoryListCountQueryResult {
-  count: string | null;
-}
-
-/** 'CategoryListCountQuery' query type */
-export interface ICategoryListCountQueryQuery {
-  params: ICategoryListCountQueryParams;
-  result: ICategoryListCountQueryResult;
 }
 
 /** 'CategoryFindOneQuery' parameters type */
@@ -67,6 +53,7 @@ export interface ICategoryFindOneQueryResult {
   id: number;
   image_id: string;
   image_url: string;
+  parent_id: number | null;
   slug: string;
 }
 
@@ -120,6 +107,7 @@ export interface ICategoryDescriptionListQueryQuery {
 /** 'CategoryCreateQuery' parameters type */
 export interface ICategoryCreateQueryParams {
   image?: string | null | void;
+  parentId?: number | null | void;
   slug: string;
 }
 

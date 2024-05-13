@@ -18,13 +18,13 @@ export const Route = createFileRoute("/categories/$categoryId/edit")({
       throw new Error("Category not found");
     }
 
-    return { languages, category };
+    return { languages, category, categories: context.categories };
   },
   component: CategoryComponent,
 });
 
 function CategoryComponent() {
-  const { languages, category } = Route.useLoaderData();
+  const { languages, category, categories } = Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
 
@@ -39,6 +39,7 @@ function CategoryComponent() {
   return (
     <div>
       <CategoryForm
+        categories={categories}
         languages={languages}
         edit
         onSubmit={async (data) => {

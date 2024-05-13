@@ -8,13 +8,14 @@ export const Route = createFileRoute("/categories/new")({
   loader: async ({ context }) => {
     const languages = await context.trpc.admin.language.list.fetch();
 
-    return { languages };
+    return { languages, categories: context.categories };
   },
   component: CategoryNewComponent,
 });
 
 function CategoryNewComponent() {
-  const { languages } = Route.useLoaderData();
+  const { languages, categories } = Route.useLoaderData();
+  console.log(categories);
   const navigate = useNavigate();
   const utils = trpc.useUtils();
 
@@ -29,6 +30,7 @@ function CategoryNewComponent() {
   return (
     <CategoryForm
       languages={languages}
+      categories={categories}
       onSubmit={async (data) => {
         mutation.mutate(data);
       }}

@@ -34,6 +34,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
     .input(
       z.object({
         imageId: z.string().uuid().optional(),
+        parentId: z.number().optional(),
         descriptions: z.array(z.object({
           name: z.string().min(1),
           languageId: z.number(),
@@ -42,6 +43,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
     )
     .mutation(async ({ input }) => {
       const category = await catalog.categories.createCategory({
+        parentId: input.parentId,
         imageId: input.imageId,
         descriptions: input.descriptions,
       });
@@ -57,6 +59,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         }
       ).and(
         z.object({
+          parentId: z.number().optional(),
           imageId: z.string().uuid().optional(),
           descriptions: z.array(z.object({
             name: z.string(),
@@ -70,6 +73,8 @@ export default async ({ t, catalog }: FastifyZod) => ({
       const id = input.id;
       const foo = await catalog.categories.updateCategory(id, {
         descriptions: input.descriptions,
+        parentId: input.parentId,
+        imageId: input.imageId,
       });
 
       return foo;

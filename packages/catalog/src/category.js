@@ -13,7 +13,9 @@ import { Pool } from "pg";
 export const categoryUpdateQuery = sql`
   UPDATE categories
   SET
-    slug = COALESCE($slug, slug)
+    slug = COALESCE($slug, slug),
+    parent_id = COALESCE($parentId, parent_id),
+    image = COALESCE($image, image)
   WHERE
     id = $id!
   RETURNING id;
@@ -25,7 +27,7 @@ export const categoryUpdateQuery = sql`
  * >}
  */
 export const categoryListQuery = sql`
-  SELECT c.id, c.slug, f.url as image_url, cd.*
+  SELECT c.id, c.slug, c.parent_id, f.url as image_url, cd.*
   FROM categories c
   JOIN category_descriptions cd ON c.id = cd.category_id
   LEFT JOIN file_uploads f ON c.image = f.id
@@ -36,23 +38,11 @@ export const categoryListQuery = sql`
 
 /**
  * @type {TaggedQuery<
- *   import("./queries/category.types").ICategoryListCountQueryQuery
- * >}
- */
-export const categoryListCountQuery = sql`
-  SELECT COUNT(*) FROM categories
-  JOIN category_descriptions cd ON id = cd.category_id
-  WHERE cd.language_id = $language_id!
-  AND cd.name LIKE COALESCE(CONCAT('%', $name::text, '%'), cd.name)
-`;
-
-/**
- * @type {TaggedQuery<
  *   import("./queries/category.types").ICategoryFindOneQueryQuery
  * >}
  */
 export const categoryFindOneQuery = sql`
-  SELECT c.id, c.slug, f.url as image_url, f.id as image_id FROM categories c
+  SELECT c.id, c.slug, c.parent_id, f.url as image_url, f.id as image_id FROM categories c
   LEFT JOIN file_uploads f ON image = f.id
   WHERE c.id = COALESCE($id, c.id)
   AND c.slug = COALESCE($slug, c.slug)
@@ -92,9 +82,9 @@ export const categoryDescriptionListQuery = sql`
  */
 export const categoryCreateQuery = sql`
   INSERT INTO categories
-    (slug, image)
+    (slug, image, parent_id)
   VALUES
-    ($slug!, $image)
+    ($slug!, $image, $parentId)
   RETURNING id;
 `;
 
@@ -139,14 +129,8 @@ export class Categories {
       },
       this.pool,
     );
-    const count = await categoryListCountQuery
-      .run({ name: input.name, language_id: input.languageId }, this.pool)
-      .then((res) => +(res[0]?.count ?? 0));
 
-    return {
-      data: res,
-      count: count,
-    };
+    return res;
   }
 
   /**
@@ -193,6 +177,7 @@ export class Categories {
   /**
    * @typedef {{
    *   imageId?: string;
+   *   parentId?: number;
    *   descriptions: {
    *     name: string;
    *     languageId: number;
@@ -209,6 +194,7 @@ export class Categories {
         .run(
           {
             slug: slug,
+            parentId: input.parentId,
             image: input.imageId,
           },
           client,
@@ -235,6 +221,8 @@ export class Categories {
 
   /**
    * @typedef {{
+   *   parentId?: number;
+   *   imageId?: string;
    *   descriptions?: {
    *     name: string;
    *     languageId: number;
@@ -248,11 +236,14 @@ export class Categories {
   async updateCategory(id, input) {
     const name = input.descriptions && input.descriptions[0]?.name;
     const slug = name ? slugify(name) : undefined;
+    console.log(input);
 
     return tx(this.pool, async (client) => {
       const res = await categoryUpdateQuery.run(
         {
           slug,
+          parentId: input.parentId,
+          image: input.imageId,
           id,
         },
         this.pool,
