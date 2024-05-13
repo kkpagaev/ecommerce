@@ -304,6 +304,7 @@ export interface IProductPaginateQueryParams {
 export interface IProductPaginateQueryResult {
   id: number;
   images: string | string[] | Record<string, any> | null;
+  in_stock: boolean | null;
   name: string;
   price: string | null;
   slug: string;

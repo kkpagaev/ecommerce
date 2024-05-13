@@ -4,6 +4,7 @@ import { trpcClient } from "@/utils/trpc";
 import { groupBy } from "lodash";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { cn } from "../../lib/utils";
 
 export const Route = createFileRoute("/$ln/category/$slug")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -42,6 +43,7 @@ export const Route = createFileRoute("/$ln/category/$slug")({
         attributes: deps.attributes,
       },
     );
+    console.log(data);
 
     return {
       attributes: groupBy(filters.attributes, (a) => a.group_name),
@@ -190,11 +192,14 @@ function Home() {
                           "http://localhost:3000/file-upload?imageId=" +
                           p.images[0]
                         }
-                        className="w-full block f-hull object-cover rounded-md z-auto"
+                        className={cn(
+                          "w-full block f-hull object-cover rounded-md z-auto",
+                          p.in_stock ? "" : "grayscale",
+                        )}
                       />
                     </AspectRatio>
                     <div>
-                      {p.slug} {p.id}
+                      {p.slug} {p.id} {}
                     </div>
                   </div>
                 </Card>

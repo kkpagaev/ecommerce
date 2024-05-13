@@ -54,6 +54,7 @@ export function ProductVariantForm({
   values,
   optionGroups,
 }: ProductFormProps) {
+  console.log(optionGroups);
   const formValues: ProductVariantCreateInputs | undefined = values && {
     options: values.options.map((o) => o.option_id) || [],
   };

@@ -138,15 +138,24 @@ function Index() {
               enableHiding: false,
               cell: ({ row }) => {
                 return (
-                  <TooltipLink
-                    to="/stocks/$productId/edit"
-                    params={{ productId: "" + row.getValue("id") }}
-                    text="Edit"
-                  >
-                    <Button variant="default">
-                      <Pencil1Icon />
-                    </Button>
-                  </TooltipLink>
+                  <div className="flex gap-2 flex-col">
+                    <Link
+                      to="/products/$productId/variants"
+                      params={{ productId: "" + row.getValue("id") }}
+                    >
+                      <Button variant="default" className="w-full">
+                        Edit variants
+                      </Button>
+                    </Link>
+                    <Link
+                      to="/stocks/$productId/edit"
+                      params={{ productId: "" + row.getValue("id") }}
+                    >
+                      <Button variant="default" className="w-full">
+                        Edit stocks
+                      </Button>
+                    </Link>
+                  </div>
                 );
               },
             },

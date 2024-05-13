@@ -78,10 +78,20 @@ function Index() {
             },
           ]}
         />
-        <div>
+        <div className="flex flex-col gap-2">
+          <Link
+            to="/stocks/$productId/edit"
+            params={{ productId: "" + product.id }}
+            className="w-full"
+          >
+            <Button variant="default" className="w-full">
+              Edit stocks
+            </Button>
+          </Link>
           <Link
             to={"/products/$productId/variants/new"}
             params={{ productId: "" + product.id }}
+            className="w-full"
           >
             <Button variant="default">New Variant</Button>
           </Link>

@@ -91,7 +91,7 @@ function CategoryComponent() {
       router.invalidate();
       await utils.admin.catalog.product.listProducts.invalidate();
       toast.success("Product updated");
-      navigate({ to: "/products" });
+      navigate({ to: "/stocks" });
     },
   });
 
