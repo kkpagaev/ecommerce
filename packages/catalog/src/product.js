@@ -201,6 +201,42 @@ export const productDescriptionUpsertQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductPaginateQueryQuery
+ * >}
+ */
+export const productPaginateQuery = sql`
+  SELECT
+    p.id, 
+    pd.name as name,
+    p.images, 
+    p.slug,
+    pr.price
+  FROM products p
+  JOIN product_descriptions pd ON p.id = pd.product_id
+  JOIN product_attributes pa ON p.id = pa.product_id
+  JOIN product_options po ON p.id = po.product_id
+  JOIN prices pr ON p.id = pr.product_id 
+  WHERE pd.language_id = $language_id!
+  AND
+    p.category_id = COALESCE($categoryId, p.category_id)
+  AND
+    CASE 
+      WHEN $attributes::integer[] is not null THEN pa.attribute_id = ANY($attributes::integer[])
+      ELSE TRUE
+    END
+  AND
+    CASE 
+      WHEN $options::integer[] is not null THEN po.option_id = ANY($options::integer[])
+      ELSE TRUE
+    END
+  GROUP BY p.id, pd.name, pr.price
+  ORDER BY p.id DESC
+  LIMIT COALESCE($limit, 10)
+  OFFSET COALESCE($offset, 0)
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/product.types").IProductCreateQueryQuery
  * >} *
  */
@@ -216,6 +252,32 @@ export class Products {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
     this.pool = f.pool;
+  }
+
+  /**
+   * @param {{
+   *   languageId: number;
+   *   categoryId?: number;
+   *   attributes: number[];
+   *   options: number[];
+   *   limit?: number;
+   *   offset?: number;
+   * }} input
+   */
+  async paginate(input) {
+    const res = await productPaginateQuery.run(
+      {
+        language_id: input.languageId,
+        categoryId: input.categoryId,
+        attributes: input.attributes.length > 0 ? input.attributes : undefined,
+        options: input.options.length > 0 ? input.options : undefined,
+        limit: input.limit,
+        offset: input.offset,
+      },
+      this.pool,
+    );
+
+    return res;
   }
 
   /**

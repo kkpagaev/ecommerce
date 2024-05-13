@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { trpcClient } from "../../utils/trpc";
-import { useState } from "react";
 
 export const Route = createFileRoute("/$ln/")({
   component: Home,
@@ -18,15 +17,19 @@ export const Route = createFileRoute("/$ln/")({
     attributes: search.attributes || [],
     options: search.options || [],
   }),
-  loader: async ({ deps }) => {
-    const productFilters = await trpcClient.web.catalog.product.filter.query({
-      options: deps.options,
-      attributes: deps.attributes,
-    });
+  loader: async ({ deps, context }) => {
+    const { filters, data } = await trpcClient.web.catalog.product.filter.query(
+      {
+        languageId: context.locale.id,
+        options: deps.options,
+        attributes: deps.attributes,
+      },
+    );
 
     return {
-      attributes: productFilters.attributes,
-      options: productFilters.options,
+      attributes: filters.attributes,
+      options: filters.options,
+      products: data,
       selected: {
         attributes: deps.attributes,
         options: deps.options,
@@ -90,6 +93,9 @@ function Home() {
             {o.option_name} - ({o.product_count})
           </div>
         );
+      })}
+      {data.products.map((p) => {
+        return <div key={p.id}>{p.slug} {p.id}</div>;
       })}
     </>
   );

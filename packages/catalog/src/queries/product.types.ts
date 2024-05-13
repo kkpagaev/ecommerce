@@ -1,6 +1,8 @@
 /** Types generated for queries found in "src/product.js" */
 export type NumberOrString = number | string;
 
+export type numberArray = (number)[];
+
 /** 'ProductListQuery' parameters type */
 export interface IProductListQueryParams {
   language_id: number;
@@ -286,6 +288,31 @@ export type IProductDescriptionUpsertQueryResult = void;
 export interface IProductDescriptionUpsertQueryQuery {
   params: IProductDescriptionUpsertQueryParams;
   result: IProductDescriptionUpsertQueryResult;
+}
+
+/** 'ProductPaginateQuery' parameters type */
+export interface IProductPaginateQueryParams {
+  attributes?: numberArray | null | void;
+  categoryId?: number | null | void;
+  language_id: number;
+  limit?: number | null | void;
+  offset?: number | null | void;
+  options?: numberArray | null | void;
+}
+
+/** 'ProductPaginateQuery' return type */
+export interface IProductPaginateQueryResult {
+  id: number;
+  images: string | string[] | Record<string, any> | null;
+  name: string;
+  price: string | null;
+  slug: string;
+}
+
+/** 'ProductPaginateQuery' query type */
+export interface IProductPaginateQueryQuery {
+  params: IProductPaginateQueryParams;
+  result: IProductPaginateQueryResult;
 }
 
 /** 'ProductCreateQuery' parameters type */
