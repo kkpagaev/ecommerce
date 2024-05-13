@@ -130,6 +130,7 @@ export interface IProductFindOneQueryResult {
   created_at: Date;
   id: number;
   images: string | string[] | Record<string, any> | null;
+  in_stock: boolean;
   price: string | null;
   slug: string;
   updated_at: Date;
@@ -297,14 +298,13 @@ export interface IProductPaginateQueryParams {
   language_id: number;
   limit?: number | null | void;
   offset?: number | null | void;
-  options?: numberArray | null | void;
 }
 
 /** 'ProductPaginateQuery' return type */
 export interface IProductPaginateQueryResult {
   id: number;
   images: string | string[] | Record<string, any> | null;
-  in_stock: boolean | null;
+  in_stock: boolean;
   name: string;
   price: string | null;
   slug: string;

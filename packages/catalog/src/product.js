@@ -205,43 +205,27 @@ export const productDescriptionUpsertQuery = sql`
  * >}
  */
 export const productPaginateQuery = sql`
-    WITH pvc as (
-    SELECT
-      pv.product_id,
-      sum(s."count") as "count"
-    FROM product_variants pv
-    JOIN stocks s ON s.product_variant_id = pv.id
-    JOIN product_variant_options pvo ON pv.id = pvo.product_variant_id
-    JOIN product_attributes pa ON pv.product_id = pa.product_id
-    WHERE
-      CASE 
-        WHEN $options::integer[] is not null THEN pvo.option_id = ANY($options::integer[])
-        ELSE TRUE
-      END
-    AND
-      CASE 
-        WHEN $attributes::integer[] is not null THEN pa.attribute_id = ANY($attributes::integer[])
-        ELSE TRUE
-    END
-    GROUP BY pv.product_id
-  )
   SELECT
     p.id, 
     pd.name as name,
     p.images, 
     p.slug,
     pr.price,
-    (pv."count" > 0) as in_stock
+    p.in_stock
   FROM products p
-  JOIN pvc pv ON p.id = pv.product_id
   JOIN product_descriptions pd ON p.id = pd.product_id
   JOIN product_attributes pa ON p.id = pa.product_id
   JOIN product_options po ON p.id = po.product_id
   JOIN prices pr ON p.id = pr.product_id 
   WHERE pd.language_id = $language_id!
+    AND
+      CASE 
+        WHEN $attributes::integer[] is not null THEN pa.attribute_id = ANY($attributes::integer[])
+        ELSE TRUE
+    END
   AND
     p.category_id = COALESCE($categoryId, p.category_id)
-  GROUP BY p.id, pd.name, pr.price, pv."count"
+  GROUP BY p.id, pd.name, pr.price
   ORDER BY in_stock DESC, pd.name
   LIMIT COALESCE($limit, 10)
   OFFSET COALESCE($offset, 0)
