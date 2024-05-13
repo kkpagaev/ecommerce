@@ -77,15 +77,22 @@ const columns: ColumnDef<Product>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       return (
-        <TooltipLink
-          to="/products/$productId/edit"
-          params={{ productId: "" + row.getValue("id") }}
-          text="Edit"
-        >
-          <Button variant="default">
-            <Pencil1Icon />
-          </Button>
-        </TooltipLink>
+        <div className="flex flex-col gap-2">
+          <Link
+            to="/products/$productId/edit"
+            params={{ productId: "" + row.getValue("id") }}
+          >
+            <Button variant="default">Edit</Button>
+          </Link>
+          <Link
+            to={"/products/$productId/variants"}
+            params={{
+              productId: "" + row.getValue("id"),
+            }}
+          >
+            <Button variant="default">Variants</Button>
+          </Link>
+        </div>
       );
     },
   },
@@ -121,6 +128,7 @@ export const Route = createFileRoute("/products/")({
 function Index() {
   const data = Route.useLoaderData();
   const search = Route.useSearch();
+  const params = Route.useParams();
 
   return (
     <div>
@@ -145,6 +153,7 @@ function Index() {
             <Button variant="default">New</Button>
           </Link>
         </div>
+        <div></div>
       </div>
       <DataTable
         data={data ? { data: data.data, count: data.count } : undefined}

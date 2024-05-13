@@ -66,27 +66,6 @@ function Index() {
             )?.name
           : product.descriptions[0].name}
       </h2>
-      <div className="w-full flex flex-row gap-10">
-        <SearchFilters
-          search={search}
-          fullPath={Route.fullPath}
-          filters={[
-            {
-              name: "languageId",
-              type: "languageId",
-            },
-          ]}
-        />
-        <div className="flex flex-col gap-2">
-          <Link
-            to={"/products/$productId/variants/new"}
-            params={{ productId: "" + product.id }}
-            className="w-full"
-          >
-            <Button variant="default">New Variant</Button>
-          </Link>
-        </div>
-      </div>
       <DataTable
         data={
           productVariants

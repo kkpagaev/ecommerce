@@ -1,6 +1,5 @@
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
 import { SearchFilters } from "@/components/search-filters";
 
