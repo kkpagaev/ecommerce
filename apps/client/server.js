@@ -77,7 +77,6 @@ export async function createServer(
           return import('./dist/server/entry-server.js')
         }
       })()
-      console.log(res.statusCode)
 
       console.info('Rendering: ', url, '...')
       entry.render({ req, res, url, head: viteHead })

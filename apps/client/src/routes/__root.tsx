@@ -1,6 +1,5 @@
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import {
-  Link,
   Outlet,
   createRootRouteWithContext,
   redirect,
@@ -11,6 +10,8 @@ import { useRouter } from '@tanstack/react-router'
 import jsesc from 'jsesc'
 import * as React from 'react'
 import { trpcClient } from '../utils/trpc'
+import { Toaster } from '@/components/ui/sonner'
+import { Header } from '@/components/header'
 
 export function DehydrateRouter() {
   const router = useRouter()
@@ -71,13 +72,14 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
     return {
       locale: context.locale,
+      locales: context.languages.map(l => l.name),
       categories
     }
   }
 })
 
 function RootComponent() {
-  const { locale } = Route.useLoaderData()
+  const { locale, locales } = Route.useLoaderData()
 
   return (
     <html lang="en">
@@ -103,45 +105,12 @@ function RootComponent() {
         <script type="module" src="/src/entry-client.tsx" />
       </head>
       <body>
-        <div className="p-2 flex gap-2 text-lg">
-          <Link
-            to="/$ln"
-            activeProps={{
-              className: 'font-bold',
-            }}
-            params={{
-                ln: locale.name,
-            }}
-          >
-            Home
-          </Link>
-          <Link
-            to="/$ln/posts"
-            params={{
-              ln: locale.name,
-            }}
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Posts
-          </Link>
-          <Link
-            to="/$ln/error"
-            params={{
-              ln: locale.name,
-            }}
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Error
-          </Link>
-        </div>
+        <Header locale={locale.name} locales={locales} />
         <hr />
         <Outlet />
         <TanStackRouterDevtools position="bottom-right" />
         <DehydrateRouter />
+        <Toaster />
       </body>
     </html>
   )
