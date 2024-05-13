@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootComponent() {
-  const { locale, locales } = Route.useLoaderData();
+  const { locale, locales, categories } = Route.useLoaderData();
 
   return (
     <html lang="en">
@@ -106,7 +106,11 @@ function RootComponent() {
         <script type="module" src="/src/entry-client.tsx" />
       </head>
       <body>
-        <Header locale={locale.name} locales={locales} />
+        <Header
+          locale={locale.name}
+          locales={locales}
+          categories={categories.data}
+        />
         <hr />
         <Outlet />
         <TanStackRouterDevtools position="bottom-right" />

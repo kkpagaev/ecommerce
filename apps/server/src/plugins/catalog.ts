@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
-import { Categories, Products, Attributes, AttributeGroups, Options, OptionGroups, ProductVariants } from "@repo/catalog";
+import { Categories, Products, ProductFiltering, Attributes, AttributeGroups, Options, OptionGroups, ProductVariants } from "@repo/catalog";
 
 type Catalog = {
   categories: Categories;
@@ -10,6 +10,7 @@ type Catalog = {
   options: Options;
   optionGroups: OptionGroups;
   productVariants: ProductVariants;
+  productFiltering: ProductFiltering;
 };
 
 declare module "fastify" {
@@ -26,6 +27,7 @@ export default fp(async function (f: FastifyInstance) {
   const options = new Options({ pool: f.pool });
   const optionGroups = new OptionGroups({ pool: f.pool });
   const productVariants = new ProductVariants({ pool: f.pool });
+  const productFiltering = new ProductFiltering({ pool: f.pool });
 
   f.decorate("catalog", {
     categories: categories,
@@ -35,6 +37,7 @@ export default fp(async function (f: FastifyInstance) {
     options: options,
     optionGroups: optionGroups,
     productVariants: productVariants,
+    productFiltering: productFiltering,
   });
 }, {
   dependencies: ["pool", "zod"],
