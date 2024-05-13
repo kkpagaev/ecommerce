@@ -25,7 +25,7 @@ export const Route = createFileRoute("/products/$productId/variants/new")({
         languageId: 1,
       });
     const filteredOptionGroups = optionGroups.filter((o) =>
-      product.options.includes(o.id),
+      product.optionGroups.includes(o.id),
     );
 
     return { optionGroups: filteredOptionGroups };
@@ -46,7 +46,10 @@ function ProductNewComponent() {
         router.invalidate();
         await utils.admin.catalog.productVariant.listProductVariants.invalidate();
         toast.success("Product variant created");
-        navigate({ to: "/products" });
+        navigate({
+          to: "/products/$productId/variants",
+          params: { productId: params.productId },
+        });
       },
     });
 
