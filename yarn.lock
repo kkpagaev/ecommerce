@@ -1824,6 +1824,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oozcitak/dom@npm:1.15.10":
+  version: 1.15.10
+  resolution: "@oozcitak/dom@npm:1.15.10"
+  dependencies:
+    "@oozcitak/infra": 1.0.8
+    "@oozcitak/url": 1.0.4
+    "@oozcitak/util": 8.3.8
+  checksum: c83f5dc778b12f8e52e35fac0aa741bfac074faf3f3b60345723de46cba4c8ef0dced2839379fb93e21007f52336f875cf9ddfff6c598020b0688cb7d6f03ec7
+  languageName: node
+  linkType: hard
+
+"@oozcitak/infra@npm:1.0.8":
+  version: 1.0.8
+  resolution: "@oozcitak/infra@npm:1.0.8"
+  dependencies:
+    "@oozcitak/util": 8.3.8
+  checksum: fc76a17187d67df39cf38ae8138ce1757d6b86e5d2ff3c90f5db12194380005b4e22fb6caec4bd40dce363fb8c89f6f945bb0577e6ecee59755773b7ff793164
+  languageName: node
+  linkType: hard
+
+"@oozcitak/url@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@oozcitak/url@npm:1.0.4"
+  dependencies:
+    "@oozcitak/infra": 1.0.8
+    "@oozcitak/util": 8.3.8
+  checksum: ab4a9726b447910e093c0efcb92c4486e1bc314e0c9375f1a4082d1f0b2cc80bbfd433cc6953641b1ddaf73df21bd7002bb5cf581d8ff104a9eac5d21633b781
+  languageName: node
+  linkType: hard
+
+"@oozcitak/util@npm:8.3.8":
+  version: 8.3.8
+  resolution: "@oozcitak/util@npm:8.3.8"
+  checksum: 3aaa936fb3ba5a8561b54f41ef55cbba633b52f7f95c74e9c4a8068e3cbe893dc30865a24483d3887a0d8a201ee4584daf51f0a177fb8e5997c0bdd289c4f559
+  languageName: node
+  linkType: hard
+
 "@pgtyped/cli@npm:^2.3.0":
   version: 2.3.0
   resolution: "@pgtyped/cli@npm:2.3.0"
@@ -2776,6 +2813,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@repo/exports@workspace:packages/exports":
+  version: 0.0.0-use.local
+  resolution: "@repo/exports@workspace:packages/exports"
+  dependencies:
+    "@pgtyped/cli": ^2.3.0
+    "@pgtyped/runtime": ^2.3.0
+    "@repo/eslint-config": "*"
+    "@repo/pool": "*"
+    "@repo/typescript-config": "*"
+    "@types/pg": ^8.11.2
+    pg: ^8.11.3
+    typescript: ^5.3.3
+    vitest: ^1.3.1
+    xmlbuilder2: ^3.1.1
+  languageName: unknown
+  linkType: soft
+
 "@repo/file-upload@*, @repo/file-upload@workspace:packages/file-upload":
   version: 0.0.0-use.local
   resolution: "@repo/file-upload@workspace:packages/file-upload"
@@ -2787,23 +2841,6 @@ __metadata:
     "@repo/typescript-config": "*"
     "@types/pg": ^8.11.2
     file-type: ^19.0.0
-    pg: ^8.11.3
-    typescript: ^5.3.3
-    vitest: ^1.3.1
-  languageName: unknown
-  linkType: soft
-
-"@repo/inventory@workspace:packages/inventory":
-  version: 0.0.0-use.local
-  resolution: "@repo/inventory@workspace:packages/inventory"
-  dependencies:
-    "@pgtyped/cli": ^2.3.0
-    "@pgtyped/runtime": ^2.3.0
-    "@repo/eslint-config": "*"
-    "@repo/pool": "*"
-    "@repo/test-utils": "*"
-    "@repo/typescript-config": "*"
-    "@types/pg": ^8.11.2
     pg: ^8.11.3
     typescript: ^5.3.3
     vitest: ^1.3.1
@@ -4734,6 +4771,15 @@ __metadata:
   version: 5.0.2
   resolution: "arg@npm:5.0.2"
   checksum: 6c69ada1a9943d332d9e5382393e897c500908d91d5cb735a01120d5f71daf1b339b7b8980cbeaba8fd1afc68e658a739746179e4315a26e8a28951ff9930078
+  languageName: node
+  linkType: hard
+
+"argparse@npm:^1.0.7":
+  version: 1.0.10
+  resolution: "argparse@npm:1.0.10"
+  dependencies:
+    sprintf-js: ~1.0.2
+  checksum: 7ca6e45583a28de7258e39e13d81e925cfa25d7d4aacbf806a382d3c02fcb13403a07fb8aeef949f10a7cfe4a62da0e2e807b348a5980554cc28ee573ef95945
   languageName: node
   linkType: hard
 
@@ -7272,6 +7318,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esprima@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "esprima@npm:4.0.1"
+  bin:
+    esparse: ./bin/esparse.js
+    esvalidate: ./bin/esvalidate.js
+  checksum: b45bc805a613dbea2835278c306b91aff6173c8d034223fa81498c77dcbce3b2931bf6006db816f62eacd9fd4ea975dfd85a5b7f3c6402cfd050d4ca3c13a628
+  languageName: node
+  linkType: hard
+
 "esquery@npm:^1.4.0, esquery@npm:^1.4.2, esquery@npm:^1.5.0":
   version: 1.5.0
   resolution: "esquery@npm:1.5.0"
@@ -8965,6 +9021,18 @@ __metadata:
   version: 8.0.3
   resolution: "js-tokens@npm:8.0.3"
   checksum: b749c808290ec1932fdf5486412074c64da6f48387a89d58f00e84058db89a7707f62d2a066fd673030dd6776bf656b50f6e0fa34135f9b3cacccde39a508977
+  languageName: node
+  linkType: hard
+
+"js-yaml@npm:3.14.1":
+  version: 3.14.1
+  resolution: "js-yaml@npm:3.14.1"
+  dependencies:
+    argparse: ^1.0.7
+    esprima: ^4.0.0
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: bef146085f472d44dee30ec34e5cf36bf89164f5d585435a3d3da89e52622dff0b188a580e4ad091c3341889e14cb88cac6e4deb16dc5b1e9623bb0601fc255c
   languageName: node
   linkType: hard
 
@@ -12435,6 +12503,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sprintf-js@npm:~1.0.2":
+  version: 1.0.3
+  resolution: "sprintf-js@npm:1.0.3"
+  checksum: 19d79aec211f09b99ec3099b5b2ae2f6e9cdefe50bc91ac4c69144b6d3928a640bb6ae5b3def70c2e85a2c3d9f5ec2719921e3a59d3ca3ef4b2fd1a4656a0df3
+  languageName: node
+  linkType: hard
+
 "ssri@npm:^10.0.0":
   version: 10.0.5
   resolution: "ssri@npm:10.0.5"
@@ -14038,6 +14113,18 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: feb3eecd2bae82fa8a8beef800290ce437d8b8063bdc69712725f21aef77c49cb2ff45c6e5e7fce622248f9c7abaee506bae0a9064067ffd6935460c7357321b
+  languageName: node
+  linkType: hard
+
+"xmlbuilder2@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "xmlbuilder2@npm:3.1.1"
+  dependencies:
+    "@oozcitak/dom": 1.15.10
+    "@oozcitak/infra": 1.0.8
+    "@oozcitak/util": 8.3.8
+    js-yaml: 3.14.1
+  checksum: fdcd38d271f1571972ec1facda5bb0d441c4d7d4fa0696cb591a1804549527c462479937194329a453ae5efcd5110c6d3a3d6cf98e210afa2c78bd0400fc6d3c
   languageName: node
   linkType: hard
 
