@@ -25,6 +25,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
       descriptions: z.array(z.object({
         name: z.string(),
         description: z.string(),
+        shortDescription: z.string(),
         languageId: z.number(),
       })),
     }))
@@ -50,6 +51,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
             optionGroups: z.array(z.number()).optional(),
             descriptions: z.array(z.object({
               name: z.string(),
+              shortDescription: z.string(),
               description: z.string(),
               languageId: z.number(),
             })),

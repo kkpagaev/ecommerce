@@ -203,7 +203,8 @@ export interface IProductDescriptionUpsertQueryParams {
     product_id: number,
     language_id: number,
     name: string,
-    description: string | null | void
+    description: string | null | void,
+    short_description: string | null | void
   })[];
 }
 

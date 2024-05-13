@@ -142,14 +142,15 @@ export const productAttributesUpsertQuery = sql`
  */
 export const productDescriptionUpsertQuery = sql`
   INSERT INTO product_descriptions
-    (product_id, language_id, name, description)
+    (product_id, language_id, name, description, short_description)
   VALUES
-    $$values(product_id!, language_id!, name!, description)
+    $$values(product_id!, language_id!, name!, description, short_description)
   ON CONFLICT
     (product_id, language_id)
   DO UPDATE
     SET
       name = EXCLUDED.name,
+      short_description = EXCLUDED.short_description,
       description = EXCLUDED.description;
 `;
 
@@ -232,6 +233,7 @@ export class Products {
    *     languageId: number;
    *     name: string;
    *     description?: string;
+   *     shortDescription?: string;
    *   }[];
    * }} CreateProductProps
    */
@@ -269,6 +271,7 @@ export class Products {
       const descriptions = await productDescriptionUpsertQuery.run(
         {
           values: input.descriptions.map((d) => ({
+            short_description: d.shortDescription,
             description: d.description,
             product_id: product.id,
             name: d.name,
@@ -426,6 +429,7 @@ export class Products {
         await productDescriptionUpsertQuery.run(
           {
             values: input.descriptions.map((d) => ({
+              short_description: d.shortDescription,
               description: d.description,
               product_id: id,
               name: d.name,

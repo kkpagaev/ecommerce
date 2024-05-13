@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { useApiForm } from "../../utils/useApiForm";
 import { Combobox } from "../combobox";
-import { useMemo } from "react";
 import { Textarea } from "../ui/textarea";
 
 type ProductCreateInputs = AdminInputs["catalog"]["product"]["createProduct"];
@@ -75,6 +74,7 @@ export function ProductForm({
         languageId: lang.id,
         name: old?.name || "",
         description: old?.description || "",
+        shortDescription: old?.short_description || "",
       };
     }),
   };
@@ -87,6 +87,7 @@ export function ProductForm({
         languageId: lang.id,
         name: "",
         description: "",
+        shortDescription: "",
       };
     }),
   };
@@ -145,6 +146,23 @@ export function ProductForm({
                     <ErrorMessage
                       errors={errors}
                       name={`descriptions.${index}.name`}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`descriptions.${index}.shortDescription`}>
+                      Short Description
+                    </Label>
+                    <Textarea
+                      {...register(`descriptions.${index}.shortDescription`)}
+                      defaultValue={
+                        values?.descriptions[index]?.short_description || ""
+                      }
+                      placeholder="Short Description"
+                    />
+
+                    <ErrorMessage
+                      errors={errors}
+                      name={`descriptions.${index}.shortDescription`}
                     />
                   </div>
                   <div>

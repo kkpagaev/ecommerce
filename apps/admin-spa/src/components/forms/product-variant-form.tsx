@@ -59,14 +59,14 @@ export function ProductVariantForm({
   console.log(optionGroups);
   const formValues: ProductVariantCreateInputs | undefined = values && {
     options: values.options.map((o) => o.option_id) || [],
-    slug: values.slug,
     price: values.price,
     oldPrice: values.old_price,
     inStock: values.in_stock,
-    article: values.article || "",
     discount: values.discount,
-    popularity: values.popularity,
     images: values.images as Array<string>,
+    slug: values.slug,
+    article: values.article || "",
+    popularity: values.popularity,
     barcode: values.barcode,
     isActive: values.is_active,
   };
@@ -129,6 +129,24 @@ export function ProductVariantForm({
       })}
       className="flex flex-col gap-8"
     >
+      <Card></Card>
+      <Card>
+        <CardHeader>Gallegry</CardHeader>
+        <CardContent>
+          <ImageManager
+            enableSelect
+            enableOrdering
+            limit={5}
+            defaultSelected={getValues("images")}
+            onSelectChange={(images) => {
+              setValue(
+                "images",
+                images.map((i) => i.id),
+              );
+            }}
+          />
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle>Product Variant</CardTitle>
@@ -137,42 +155,43 @@ export function ProductVariantForm({
           {memoOptionGroups.map((optionGroup) => (
             <div key={optionGroup.id} className="flex flex-col gap-2">
               <Label htmlFor="options">Options for - {optionGroup.name}</Label>
-
-              <Select
-                value={selectedOptions.get(optionGroup.id)?.toString() || ""}
-                onValueChange={(v) => {
-                  setSelectedOptions((prev) => {
-                    const newMap = new Map(prev);
-                    newMap.set(optionGroup.id, v);
-                    return newMap;
-                  });
-                }}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder={optionGroup.name} />
-                </SelectTrigger>
-                <SelectContent>
-                  {optionGroup.options.map((option) => (
-                    <SelectItem key={option.id} value={option.id.toString()}>
-                      {option.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                type="button"
-                variant="default"
-                className="w-full md:w-fit"
-                onClick={() => {
-                  setSelectedOptions((prev) => {
-                    const newMap = new Map(prev);
-                    newMap.set(optionGroup.id, null);
-                    return newMap;
-                  });
-                }}
-              >
-                Remove
-              </Button>
+              <div className="flex gap-2">
+                <Select
+                  value={selectedOptions.get(optionGroup.id)?.toString() || ""}
+                  onValueChange={(v) => {
+                    setSelectedOptions((prev) => {
+                      const newMap = new Map(prev);
+                      newMap.set(optionGroup.id, v);
+                      return newMap;
+                    });
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={optionGroup.name} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {optionGroup.options.map((option) => (
+                      <SelectItem key={option.id} value={option.id.toString()}>
+                        {option.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  type="button"
+                  variant="default"
+                  className="w-full md:w-fit"
+                  onClick={() => {
+                    setSelectedOptions((prev) => {
+                      const newMap = new Map(prev);
+                      newMap.set(optionGroup.id, null);
+                      return newMap;
+                    });
+                  }}
+                >
+                  Remove
+                </Button>
+              </div>
             </div>
           ))}
         </CardContent>
@@ -183,6 +202,7 @@ export function ProductVariantForm({
         </CardHeader>
         <CardContent>
           <div>
+            <Label htmlFor="price">Price</Label>
             <Input
               type="number"
               {...register("price")}
@@ -202,6 +222,7 @@ export function ProductVariantForm({
             />
           </div>
           <div>
+            <Label htmlFor="oldPrice">Old Price</Label>
             <Input
               type="number"
               {...register("oldPrice")}
@@ -220,23 +241,6 @@ export function ProductVariantForm({
               }}
             />
           </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>Gallegry</CardHeader>
-        <CardContent>
-          <ImageManager
-            enableSelect
-            enableOrdering
-            limit={5}
-            defaultSelected={getValues("images")}
-            onSelectChange={(images) => {
-              setValue(
-                "images",
-                images.map((i) => i.id),
-              );
-            }}
-          />
         </CardContent>
       </Card>
 

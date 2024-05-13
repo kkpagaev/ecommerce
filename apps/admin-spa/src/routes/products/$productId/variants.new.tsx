@@ -24,8 +24,9 @@ export const Route = createFileRoute("/products/$productId/variants/new")({
       await context.trpc.admin.catalog.optionGroups.listOptionGroups.fetch({
         languageId: 1,
       });
-    const filteredOptionGroups = optionGroups.filter((o) =>
-      product.optionGroups.includes(o.id),
+    console.log(optionGroups);
+    const filteredOptionGroups = optionGroups.filter((optionGroup) =>
+      product.optionGroups.includes(optionGroup.id),
     );
 
     return { optionGroups: filteredOptionGroups };
