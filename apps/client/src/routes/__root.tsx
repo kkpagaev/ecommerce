@@ -1,32 +1,32 @@
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import {
   Outlet,
   createRootRouteWithContext,
   redirect,
-} from '@tanstack/react-router'
-import { RouterContext } from '../routerContext'
-import { Context } from '@tanstack/react-cross-context'
-import { useRouter } from '@tanstack/react-router'
-import jsesc from 'jsesc'
-import * as React from 'react'
-import { trpcClient } from '../utils/trpc'
-import { Toaster } from '@/components/ui/sonner'
-import { Header } from '@/components/header'
+} from "@tanstack/react-router";
+import { RouterContext } from "../routerContext";
+import { Context } from "@tanstack/react-cross-context";
+import { useRouter } from "@tanstack/react-router";
+import jsesc from "jsesc";
+import * as React from "react";
+import { trpcClient } from "../utils/trpc";
+import { Toaster } from "@/components/ui/sonner";
+import { Header } from "@/components/header";
 
 export function DehydrateRouter() {
-  const router = useRouter()
+  const router = useRouter();
 
   const dehydratedCtx = React.useContext(
-    Context.get('TanStackRouterHydrationContext', {}),
-  )
+    Context.get("TanStackRouterHydrationContext", {}),
+  );
 
-  const dehydrated = router.dehydratedData || dehydratedCtx
+  const dehydrated = router.dehydratedData || dehydratedCtx;
 
   // Use jsesc to escape the stringified JSON for use in a script tag
   const stringified = jsesc(router.options.transformer.stringify(dehydrated), {
     isScriptContext: true,
     wrap: true,
-  })
+  });
 
   return (
     <script
@@ -40,46 +40,47 @@ export function DehydrateRouter() {
         `,
       }}
     />
-  )
+  );
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
-  beforeLoad: async ({ params })  =>{
-    const language = (params as { ln?: string }).ln
+  beforeLoad: async ({ params }) => {
+    const language = (params as { ln?: string }).ln;
     const languages = await trpcClient.web.languages.listLanguages.query();
 
-    const locale = languages.find(l => l.name === language)
+    const locale = languages.find((l) => l.name === language);
 
     if (!language || !locale) {
       throw redirect({
-        to: '/$ln',
+        to: "/$ln",
         params: {
-          ln: languages[0].name
-        }
-      })
+          ln: languages[0].name,
+        },
+      });
     }
 
     return {
       languages,
-      locale: locale
-    }
+      locale: locale,
+    };
   },
   loader: async ({ context }) => {
-    const categories = await trpcClient.web.catalog.category.listCategoriesForHeader.query({
-      languageId: context.locale.id
-    })
+    const categories =
+      await trpcClient.web.catalog.category.listCategoriesForHeader.query({
+        languageId: context.locale.id,
+      });
 
     return {
       locale: context.locale,
-      locales: context.languages.map(l => l.name),
-      categories
-    }
-  }
-})
+      locales: context.languages.map((l) => l.name),
+      categories,
+    };
+  },
+});
 
 function RootComponent() {
-  const { locale, locales } = Route.useLoaderData()
+  const { locale, locales } = Route.useLoaderData();
 
   return (
     <html lang="en">
@@ -113,5 +114,5 @@ function RootComponent() {
         <Toaster />
       </body>
     </html>
-  )
+  );
 }

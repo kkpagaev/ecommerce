@@ -18,9 +18,9 @@ function InnerApp({ router }: { router: AnyRouter }) {
         head: "",
       }}
     />
-  )
+  );
 }
-export function App({ router }: { router: ReturnType<typeof createRouter>}) {
+export function App({ router }: { router: ReturnType<typeof createRouter> }) {
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <TrpcProvider>

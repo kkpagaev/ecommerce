@@ -1,29 +1,29 @@
-import * as React from 'react'
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import * as React from "react";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 
 export type PostType = {
-  id: string
-  title: string
-  body: string
-}
+  id: string;
+  title: string;
+  body: string;
+};
 
-export const Route = createFileRoute('/$ln/posts')({
+export const Route = createFileRoute("/$ln/posts")({
   loader: async () => {
-    console.info('Fetching posts...')
+    console.info("Fetching posts...");
     await new Promise((r) =>
       setTimeout(r, 300 + Math.round(Math.random() * 300)),
-    )
-    return fetch('https://jsonplaceholder.typicode.com/posts')
+    );
+    return fetch("https://jsonplaceholder.typicode.com/posts")
       .then((d) => d.json() as Promise<PostType[]>)
-      .then((d) => d.slice(0, 10))
+      .then((d) => d.slice(0, 10));
   },
   component: PostsComponent,
-})
+});
 
 function PostsComponent() {
-  const posts = Route.useLoaderData()
-  const params = Route.useParams()
-  console.log({params});
+  const posts = Route.useLoaderData();
+  const params = Route.useParams();
+  console.log({ params });
 
   return (
     <div className="p-2 flex gap-2">
@@ -38,16 +38,16 @@ function PostsComponent() {
                   ln: params.ln,
                 }}
                 className="block py-1 text-blue-800 hover:text-blue-600"
-                activeProps={{ className: 'text-black font-bold' }}
+                activeProps={{ className: "text-black font-bold" }}
               >
                 <div>{post.title.substring(0, 20)}</div>
               </Link>
             </li>
-          )
+          );
         })}
       </ul>
       <hr />
       <Outlet />
     </div>
-  )
+  );
 }

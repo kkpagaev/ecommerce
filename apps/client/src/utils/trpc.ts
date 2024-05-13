@@ -24,9 +24,8 @@ export const trpcClient = createTRPCClient<AppRouter>({
         // };
       },
     }),
-  ]
-}
-                                                     );
+  ],
+});
 
 export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
 export type RouterInputs = inferRouterInputs<AppRouter>;
