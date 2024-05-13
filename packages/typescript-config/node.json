@@ -10,7 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "sourceMap": true,
-    "incremental": true,
     "strictNullChecks": true,
     "strict": true,
     "noImplicitAny": false,

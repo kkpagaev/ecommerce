@@ -97,8 +97,14 @@ export class ProductFiltering {
     );
 
     return {
-      options,
-      attributes,
+      options: options.map((o) => ({
+        ...o,
+        product_count: parseInt(o.product_count || "0"),
+      })),
+      attributes: attributes.map((a) => ({
+        ...a,
+        product_count: parseInt(a.product_count || "0"),
+      })),
     };
   }
 }
