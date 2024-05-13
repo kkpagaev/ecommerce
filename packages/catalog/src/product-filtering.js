@@ -14,8 +14,7 @@ export const getOptionsQuery = sql`
     ogd.name AS group_name,
     og.id AS group_id,
     od.name AS option_name,
-    o.id AS option_id,
-    COUNT(pv.id) AS product_count
+    o.id AS option_id
   FROM options o 
     JOIN option_groups og ON o.option_group_id = og.id
     JOIN product_variant_options pvo on pvo.option_id = o.id
@@ -23,14 +22,8 @@ export const getOptionsQuery = sql`
     JOIN option_descriptions od ON od.option_id = o.id 
     JOIN option_group_descriptions ogd ON ogd.option_group_id = og.id
     JOIN products p ON p.id = pv.product_id
-    JOIN product_attributes pa ON pa.product_id = p.id
   WHERE
-    p.category_id = COALESCE(null, p.category_id)
-  AND
-    CASE 
-      WHEN $attributes::integer[] is not null THEN pa.attribute_id = ANY($attributes::integer[])
-      ELSE TRUE
-    END
+    p.category_id = COALESCE($categoryId, p.category_id)
   GROUP BY ogd.name, og.id, od.name, o.id;
 `;
 
@@ -44,8 +37,7 @@ export const getAttributes = sql`
     agd.name AS group_name,
     ag.id AS group_id,
     ad.name AS attribute_name,
-    a.id AS attribute_id,
-    COUNT(pv.id) AS product_count
+    a.id AS attribute_id
   FROM attributes a 
   JOIN attribute_groups ag ON a.attribute_group_id = ag.id
   JOIN product_attributes pa on pa.attribute_id = a.id
@@ -53,15 +45,8 @@ export const getAttributes = sql`
   JOIN product_variants pv on pv.product_id = p.id
   JOIN attribute_descriptions ad ON ad.attribute_id = a.id 
   JOIN attribute_group_descriptions agd ON agd.attribute_group_id = ag.id
-  JOIN product_variant_options pvo on pvo.product_variant_id = pv.id
-  JOIN options o on o.id = pvo.option_id
   WHERE
-    p.category_id = COALESCE(null, p.category_id)
-  AND
-    CASE 
-      WHEN $options::integer[] is not null THEN o.id = ANY($options::integer[])
-      ELSE TRUE
-    END
+    p.category_id = COALESCE($categoryId, p.category_id)
   GROUP BY agd.name, ag.id, ad.name, a.id;
 `;
 
@@ -85,13 +70,13 @@ export class ProductFiltering {
   async getFilters(input) {
     const options = await getOptionsQuery.run(
       {
-        attributes: input.attributes.length > 0 ? input.attributes : undefined,
+        categoryId: input.category?.id,
       },
       this.pool,
     );
     const attributes = await getAttributes.run(
       {
-        options: input.options.length > 0 ? input.options : undefined,
+        categoryId: input.category?.id,
       },
       this.pool,
     );
@@ -99,11 +84,9 @@ export class ProductFiltering {
     return {
       options: options.map((o) => ({
         ...o,
-        product_count: parseInt(o.product_count || "0"),
       })),
       attributes: attributes.map((a) => ({
         ...a,
-        product_count: parseInt(a.product_count || "0"),
       })),
     };
   }

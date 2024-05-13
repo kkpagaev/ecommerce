@@ -11,15 +11,19 @@ export default async ({ t, catalog }: FastifyZod) => ({
     }))
     .query(async ({ input }) => {
       const filters = await catalog.productFiltering.getFilters({
+        category: {
+          id: input.categoryId,
+        },
         languageId: input.languageId,
         options: input.options || [],
         attributes: input.attributes || [],
       });
       const products = await catalog.products.paginate({
+        categoryId: input.categoryId,
         options: input.options || [],
         attributes: input.attributes || [],
         languageId: input.languageId,
-      })
+      });
 
       return {
         filters,
