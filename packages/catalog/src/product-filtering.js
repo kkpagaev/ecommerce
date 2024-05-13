@@ -3,23 +3,30 @@ import { TaggedQuery, sql } from "@pgtyped/runtime";
 import { tx } from "@repo/pool";
 // eslint-disable-next-line no-unused-vars
 import { Pool } from "pg";
+import { groupBy } from "lodash";
 
-// export const getOptionsQuery = sql`
-// SELECT
-//     ogd.name AS group_name,
-//     og.id AS group_id,
-//     od.name AS option_name,
-//     o.id AS option_id
-//   FROM categories c
-//   JOIN products p on p.category_id = c.id
-//   JOIN options o on o.id = po.option_id
-//   JOIN option_groups og ON og.id = o.option_group_id
-//   JOIN option_descriptions od ON od.option_id = o.id
-//   JOIN option_group_descriptions ogd ON ogd.option_group_id = og.id
-//   WHERE
-//     p.category_id = COALESCE($categoryId, p.category_id)
-//   GROUP BY ogd.name, og.id, od.name, o.id;
-// `;
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-filtering.types").IGetOptionsQueryQuery
+ * >}
+ */
+export const getOptionsQuery = sql`
+  SELECT
+    o.id,
+    o.option_group_id,
+    od.name,
+    ogd.name AS option_group_name
+  FROM options o
+  JOIN product_variant_options pov ON pov.option_id = o.id
+  JOIN product_variants pv ON pv.id = pov.product_variant_id
+  JOIN option_descriptions od ON od.option_id = o.id
+  JOIN products p ON p.id = pv.product_id
+  JOIN option_group_descriptions ogd ON ogd.option_group_id = o.option_group_id
+  WHERE p.category_id = COALESCE($categoryId, p.category_id)
+  AND od.language_id = COALESCE($languageId, od.language_id)
+  AND ogd.language_id = COALESCE($languageId, ogd.language_id)
+  GROUP BY o.id, od.name, ogd.name
+`;
 
 /**
  * @type {TaggedQuery<
@@ -28,20 +35,19 @@ import { Pool } from "pg";
  */
 export const getAttributes = sql`
   SELECT
-    agd.name AS group_name,
-    ag.id AS group_id,
-    ad.name AS attribute_name,
-    a.id AS attribute_id
-  FROM categories c
-  JOIN products p on p.category_id = c.id
-  JOIN product_attributes pa on pa.product_id = p.id
-  JOIN attributes a on a.id = pa.attribute_id
-  JOIN attribute_groups ag ON ag.id = a.attribute_group_id
+    a.id,
+    a.attribute_group_id,
+    ad.name as name,
+    agd.name as group_name
+  FROM attributes a
   JOIN attribute_descriptions ad ON ad.attribute_id = a.id
-  JOIN attribute_group_descriptions agd ON agd.attribute_group_id = ag.id
-  WHERE
-    p.category_id = COALESCE($categoryId, p.category_id)
-  GROUP BY agd.name, ag.id, ad.name, a.id;
+  JOIN attribute_group_descriptions agd ON agd.attribute_group_id = a.attribute_group_id
+  JOIN product_attributes pa ON pa.attribute_id = a.id
+  JOIN products p ON p.id = pa.product_id
+  WHERE p.category_id = COALESCE($categoryId, p.category_id)
+  AND ad.language_id = COALESCE($languageId, ad.language_id)
+  AND agd.language_id = COALESCE($languageId, agd.language_id)
+  GROUP BY a.id, ad.name, agd.name
 `;
 
 export class ProductFiltering {
@@ -57,27 +63,27 @@ export class ProductFiltering {
    *     id?: number;
    *   };
    *   languageId?: number;
-   *   attributes: number[];
-   *   options: number[];
    * }} input
    */
   async getFilters(input) {
-    // const options = await getOptionsQuery.run(
-    //   {
-    //     categoryId: input.category?.id,
-    //   },
-    //   this.pool,
-    // );
-    // const attributes = await getAttributes.run(
-    //   {
-    //     categoryId: input.category?.id,
-    //   },
-    //   this.pool,
-    // );
+    const options = await getOptionsQuery.run(
+      {
+        categoryId: input.category?.id,
+        languageId: input.languageId,
+      },
+      this.pool,
+    );
+    const attributes = await getAttributes.run(
+      {
+        categoryId: input.category?.id,
+        languageId: input.languageId,
+      },
+      this.pool,
+    );
 
     return {
-      options: [],
-      attributes: [],
+      options: groupBy(options, (o) => o.option_group_name),
+      attributes: groupBy(attributes, (a) => a.group_name),
     };
   }
 }

@@ -16,12 +16,7 @@ async function main() {
     connectionString: "postgres://user:user@localhost:1252/user",
   });
   const c = new ProductFiltering({ pool: p });
-  console.log(
-    await c.getFilters({
-      attributes: [],
-      options: [],
-    }),
-  );
+  // console.debug((await c.getFilters({ category: 1 })).options);
 
   // const result = await db.query(sql, params);
   //   console.log(

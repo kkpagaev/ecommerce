@@ -2789,6 +2789,7 @@ __metadata:
     "@repo/pool": "*"
     "@repo/typescript-config": "*"
     "@types/pg": ^8.11.2
+    lodash: ^4.17.21
     pg: ^8.11.3
     slugify: ^1.6.6
     typescript: ^5.3.3
