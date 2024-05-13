@@ -419,4 +419,38 @@ export class ProductVariants {
       options: options,
     };
   }
+
+  /**
+   * @param {{
+   *   languageId: number;
+   * }} input
+   */
+  async listAll(input) {
+    const productVariants = await productVariantsListAllQuery.run(
+      {
+        language_id: input.languageId,
+      },
+      this.pool,
+    );
+
+    return productVariants;
+  }
 }
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-variants.types").IProductVariantsListAllQueryQuery
+ * >}
+ */
+export const productVariantsListAllQuery = sql`
+  SELECT pv.*, pd.name, cd.name as category FROM product_variants pv
+  JOIN product_descriptions pd
+    ON pv.product_id = pd.product_id
+  JOIN products p
+    ON pv.product_id = p.id
+  JOIN category_descriptions cd
+    ON p.category_id = cd.category_id
+  WHERE pd.language_id = $language_id!
+  AND   cd.language_id = $language_id!
+  ORDER BY pd.name
+`;

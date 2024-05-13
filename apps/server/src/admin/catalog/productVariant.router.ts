@@ -19,6 +19,21 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
 
       return res;
     }),
+  listAll:
+    t.procedure
+      .input(
+        z.object({
+          languageId: z.number(),
+        })
+      )
+      // .use(isAuthed)
+      .query(async ({ input }) => {
+        const res = await productVariants.listAll({
+          languageId: input.languageId,
+        });
+
+        return res;
+      }),
   listProductVariants: t.procedure
     .input(
       z.object({
