@@ -47,7 +47,7 @@ export const optionCountQuery = sql`
  */
 export const optionCreateQuery = sql`
   INSERT INTO options
-    (value, option_group_id)
+    ("value", "option_group_id")
   VALUES
     ($value!, $groupId!)
   RETURNING id
@@ -109,7 +109,7 @@ export const optionDescriptionUpsertQuery = sql`
 export const optionUpdateQuery = sql`
   UPDATE options
   SET
-    value = COALESCE($value, value)
+    value = COALESCE($value, "value")
   WHERE
     id = $id!
   RETURNING id;
