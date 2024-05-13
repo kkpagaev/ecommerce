@@ -51,7 +51,7 @@ function ProductNewComponent() {
   });
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <ProductForm
         attributes={attributes}
         categories={categories}

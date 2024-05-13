@@ -54,12 +54,34 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
     }),
   createProductVariant: t.procedure
     .input(z.object({
+      inStock: z.boolean(),
+      price: z.number().positive()
+        .multipleOf(0.01),
+      oldPrice: z.number().positive()
+        .multipleOf(0.01),
+      article: z.string(),
+      discount: z.number(),
+      popularity: z.number(),
+      images: z.array(z.string()),
+      barcode: z.string(),
+      isActive: z.boolean(),
+      slug: z.string(),
       productId: z.number(),
       options: z.array(z.number()),
     }))
     .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await productVariants.createProductVariant({
+        inStock: input.inStock,
+        price: input.price,
+        oldPrice: input.oldPrice,
+        article: input.article,
+        discount: input.discount,
+        popularity: input.popularity,
+        images: input.images,
+        barcode: input.barcode,
+        isActive: input.isActive,
+        slug: input.slug,
         productId: input.productId,
         options: input.options,
       });
@@ -72,12 +94,35 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
       z.object({
         id: z.number(),
       }).and(z.object({
+        inStock: z.boolean(),
+        price: z.number().positive()
+          .multipleOf(0.01),
+        oldPrice: z.number().positive()
+          .multipleOf(0.01),
+        article: z.string(),
+        discount: z.number(),
+        popularity: z.number(),
+        images: z.array(z.string()),
+        barcode: z.string(),
+        isActive: z.boolean(),
+        slug: z.string(),
+        productId: z.number(),
         options: z.array(z.number()),
       }).partial())
     )
     .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await productVariants.updateProductVariant(input.id, {
+        inStock: input.inStock,
+        price: input.price,
+        oldPrice: input.oldPrice,
+        article: input.article,
+        discount: input.discount,
+        popularity: input.popularity,
+        images: input.images,
+        barcode: input.barcode,
+        isActive: input.isActive,
+        slug: input.slug,
         options: input.options,
       });
 

@@ -51,16 +51,6 @@ function NavBar() {
             icon: <GroupIcon className="h-4 w-4" />,
           },
           {
-            to: "/locations",
-            name: "Locations",
-            icon: <MapPinIcon className="h-4 w-4" />,
-          },
-          {
-            to: "/stocks",
-            name: "Stocks",
-            icon: <Package2Icon className="h-4 w-4" />,
-          },
-          {
             to: "/products",
             name: "Products",
             icon: <MonitorIcon className="h-4 w-4" />,

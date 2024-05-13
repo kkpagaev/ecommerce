@@ -9,14 +9,13 @@ import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
 import { SearchFilters } from "@/components/search-filters";
 import { TooltipLink } from "@/components/ui/tooltip-link";
-import { OutletDialog } from "../../components/ui/dialog-outlet";
 
 type Product = Exclude<
   AdminOutputs["catalog"]["productVariant"]["listProductVariants"][0],
   null
 >;
 
-export const Route = createFileRoute("/products/$productId/variants")({
+export const Route = createFileRoute("/products/$productId/variants/")({
   component: Index,
   beforeLoad: async ({ context }) => {
     return {
@@ -59,7 +58,7 @@ function Index() {
   const params = Route.useParams();
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <h2>
         {search.languageId
           ? product.descriptions.find(
@@ -79,15 +78,6 @@ function Index() {
           ]}
         />
         <div className="flex flex-col gap-2">
-          <Link
-            to="/stocks/$productId/edit"
-            params={{ productId: "" + product.id }}
-            className="w-full"
-          >
-            <Button variant="default" className="w-full">
-              Edit stocks
-            </Button>
-          </Link>
           <Link
             to={"/products/$productId/variants/new"}
             params={{ productId: "" + product.id }}
@@ -173,7 +163,6 @@ function Index() {
         }
         isLoading={false}
       />
-      <OutletDialog path={Route.fullPath} />
     </div>
   );
 }

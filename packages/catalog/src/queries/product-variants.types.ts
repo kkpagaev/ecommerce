@@ -19,19 +19,78 @@ export interface IProductVariantsListQueryQuery {
 
 /** 'ProductVariantCreateQuery' parameters type */
 export interface IProductVariantCreateQueryParams {
+  article: string;
+  barcode: string;
+  discount: number;
+  images: string | string[] | Record<string, any>;
+  in_stock: boolean;
+  is_active: boolean;
+  old_price: number;
+  popularity: number;
+  price: number;
   product_id: number;
+  slug: string;
 }
 
 /** 'ProductVariantCreateQuery' return type */
 export interface IProductVariantCreateQueryResult {
+  article: string;
+  barcode: string;
+  created_at: Date | null;
+  discount: number;
   id: number;
+  images: string | string[] | Record<string, any>;
+  in_stock: boolean;
+  is_active: boolean;
+  old_price: number;
+  popularity: number;
+  price: number;
   product_id: number;
+  slug: string;
 }
 
 /** 'ProductVariantCreateQuery' query type */
 export interface IProductVariantCreateQueryQuery {
   params: IProductVariantCreateQueryParams;
   result: IProductVariantCreateQueryResult;
+}
+
+/** 'ProductVariantUpdateQuery' parameters type */
+export interface IProductVariantUpdateQueryParams {
+  article?: string | null | void;
+  barcode?: string | null | void;
+  discount?: number | null | void;
+  id: number;
+  images?: string | string[] | Record<string, any> | null | void;
+  in_stock?: boolean | null | void;
+  is_active?: boolean | null | void;
+  old_price?: number | null | void;
+  popularity?: number | null | void;
+  price?: number | null | void;
+  slug?: string | null | void;
+}
+
+/** 'ProductVariantUpdateQuery' return type */
+export interface IProductVariantUpdateQueryResult {
+  article: string;
+  barcode: string;
+  created_at: Date | null;
+  discount: number;
+  id: number;
+  images: string | string[] | Record<string, any>;
+  in_stock: boolean;
+  is_active: boolean;
+  old_price: number;
+  popularity: number;
+  price: number;
+  product_id: number;
+  slug: string;
+}
+
+/** 'ProductVariantUpdateQuery' query type */
+export interface IProductVariantUpdateQueryQuery {
+  params: IProductVariantUpdateQueryParams;
+  result: IProductVariantUpdateQueryResult;
 }
 
 /** 'ProductVariantsOptionsListOptionsQuery' parameters type */
@@ -107,7 +166,19 @@ export interface IProductVariantsFindOneQueryParams {
 
 /** 'ProductVariantsFindOneQuery' return type */
 export interface IProductVariantsFindOneQueryResult {
+  article: string;
+  barcode: string;
+  created_at: Date | null;
+  discount: number;
   id: number;
+  images: string | string[] | Record<string, any>;
+  in_stock: boolean;
+  is_active: boolean;
+  old_price: number;
+  popularity: number;
+  price: number;
+  product_id: number;
+  slug: string;
 }
 
 /** 'ProductVariantsFindOneQuery' query type */

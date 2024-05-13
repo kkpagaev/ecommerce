@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { ProductFiltering, getOptionsQuery } from "./product-filtering";
+import { ProductFiltering } from "./product-filtering";
 
 export { Products } from "./product";
 export { Attributes } from "./attribute";

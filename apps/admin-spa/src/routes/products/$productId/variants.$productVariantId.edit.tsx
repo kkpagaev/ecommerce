@@ -3,9 +3,9 @@ import {
   useNavigate,
   useRouter,
 } from "@tanstack/react-router";
-import { trpc } from "../../utils/trpc";
+import { trpc } from "@/utils/trpc";
 import { toast } from "sonner";
-import { ProductVariantForm } from "../../components/forms/product-variant-form";
+import { ProductVariantForm } from "@/components/forms/product-variant-form";
 
 export const Route = createFileRoute(
   "/products/$productId/variants/$productVariantId/edit",

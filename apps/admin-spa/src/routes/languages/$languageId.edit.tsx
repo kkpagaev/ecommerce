@@ -35,7 +35,7 @@ function CategoryComponent() {
   });
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <LanguageForm
         edit
         values={language}

@@ -123,7 +123,7 @@ function Index() {
   const search = Route.useSearch();
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <div className="w-full flex flex-row gap-10">
         <SearchFilters
           search={search}

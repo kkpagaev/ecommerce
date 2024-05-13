@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
 });
 function Index() {
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <ImageManager
         preview
         onSelectChange={console.log}

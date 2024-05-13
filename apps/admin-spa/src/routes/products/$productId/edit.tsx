@@ -4,8 +4,8 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { trpc } from "../../utils/trpc";
-import { ProductForm } from "../../components/forms/product-form";
+import { trpc } from "@/utils/trpc";
+import { ProductForm } from "@/components/forms/product-form";
 
 export const Route = createFileRoute("/products/$productId/edit")({
   beforeLoad: ({ context }) => ({
@@ -64,7 +64,7 @@ function CategoryComponent() {
   });
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <ProductForm
         edit
         languages={languages}

@@ -4,28 +4,22 @@ import { tx } from "@repo/pool";
 // eslint-disable-next-line no-unused-vars
 import { Pool } from "pg";
 
-/**
- * @type {TaggedQuery<
- *   import("./queries/product-filtering.types").IGetOptionsQueryQuery
- * >}
- */
-export const getOptionsQuery = sql`
-SELECT
-    ogd.name AS group_name,
-    og.id AS group_id,
-    od.name AS option_name,
-    o.id AS option_id
-  FROM categories c
-  JOIN products p on p.category_id = c.id
-  JOIN product_options po on po.product_id = p.id
-  JOIN options o on o.id = po.option_id
-  JOIN option_groups og ON og.id = o.option_group_id
-  JOIN option_descriptions od ON od.option_id = o.id
-  JOIN option_group_descriptions ogd ON ogd.option_group_id = og.id
-  WHERE
-    p.category_id = COALESCE($categoryId, p.category_id)
-  GROUP BY ogd.name, og.id, od.name, o.id;
-`;
+// export const getOptionsQuery = sql`
+// SELECT
+//     ogd.name AS group_name,
+//     og.id AS group_id,
+//     od.name AS option_name,
+//     o.id AS option_id
+//   FROM categories c
+//   JOIN products p on p.category_id = c.id
+//   JOIN options o on o.id = po.option_id
+//   JOIN option_groups og ON og.id = o.option_group_id
+//   JOIN option_descriptions od ON od.option_id = o.id
+//   JOIN option_group_descriptions ogd ON ogd.option_group_id = og.id
+//   WHERE
+//     p.category_id = COALESCE($categoryId, p.category_id)
+//   GROUP BY ogd.name, og.id, od.name, o.id;
+// `;
 
 /**
  * @type {TaggedQuery<
@@ -68,26 +62,22 @@ export class ProductFiltering {
    * }} input
    */
   async getFilters(input) {
-    const options = await getOptionsQuery.run(
-      {
-        categoryId: input.category?.id,
-      },
-      this.pool,
-    );
-    const attributes = await getAttributes.run(
-      {
-        categoryId: input.category?.id,
-      },
-      this.pool,
-    );
+    // const options = await getOptionsQuery.run(
+    //   {
+    //     categoryId: input.category?.id,
+    //   },
+    //   this.pool,
+    // );
+    // const attributes = await getAttributes.run(
+    //   {
+    //     categoryId: input.category?.id,
+    //   },
+    //   this.pool,
+    // );
 
     return {
-      options: options.map((o) => ({
-        ...o,
-      })),
-      attributes: attributes.map((a) => ({
-        ...a,
-      })),
+      options: [],
+      attributes: [],
     };
   }
 }

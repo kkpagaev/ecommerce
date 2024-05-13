@@ -6,13 +6,17 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AdminOutputs } from "@/utils/trpc";
-import { TooltipLink } from "@/components/ui/tooltip-link";
-import { OutletDialog } from "@/components/ui/dialog-outlet";
 import { z } from "zod";
+import { SearchFilters } from "@/components/search-filters";
+import { TooltipLink } from "@/components/ui/tooltip-link";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-type Location = AdminOutputs["inventory"]["location"]["listLocations"][0];
+type Product = Exclude<
+  AdminOutputs["catalog"]["product"]["listProducts"]["data"][0],
+  null
+>;
 
-const columns: ColumnDef<Location>[] = [
+const columns: ColumnDef<Product>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -48,13 +52,34 @@ const columns: ColumnDef<Location>[] = [
     },
   },
   {
+    accessorKey: "images",
+    enableSorting: false,
+    cell: ({ row }) => {
+      const ids = row.getValue<string[]>("images");
+      if (!ids) {
+        return null;
+      }
+      return (
+        <AspectRatio
+          ratio={4 / 4}
+          className={"w-fullrounded-md border-slate-200 border-2"}
+        >
+          <img
+            src={"http://localhost:3000/file-upload?imageId=" + ids[0]}
+            className="w-full h-full object-cover rounded-md"
+          />
+        </AspectRatio>
+      );
+    },
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       return (
         <TooltipLink
-          to="/locations/$locationId/edit"
-          params={{ locationId: "" + row.getValue("id") }}
+          to="/products/$productId/edit"
+          params={{ productId: "" + row.getValue("id") }}
           text="Edit"
         >
           <Button variant="default">
@@ -66,47 +91,66 @@ const columns: ColumnDef<Location>[] = [
   },
 ];
 
-export const Route = createFileRoute("/locations")({
+export const Route = createFileRoute("/products/$productId/")({
   component: Index,
   beforeLoad: async ({ context }) => {
     return {
       ...context,
-      getTitle: () => "Locations",
+      getTitle: () => "Product",
     };
   },
   validateSearch: (search: Record<string, unknown>) => {
     return z
       .object({
+        languageId: z.number().optional(),
         name: z.string().optional(),
       })
       .parse(search);
   },
   loaderDeps: ({ search }) => ({
+    languageId: search.languageId || 1,
     name: search.name,
   }),
   loader: async ({ context, deps }) => {
-    return await context.trpc.admin.inventory.location.listLocations.fetch({
-      name: deps.name,
+    return await context.trpc.admin.catalog.product.listProducts.fetch({
+      languageId: deps.languageId,
     });
   },
 });
 
 function Index() {
   const data = Route.useLoaderData();
+  const search = Route.useSearch();
 
   return (
-    <div className="container mx-auto py-10">
-      <div>
-        <Link to={"/locations/new"}>
-          <Button variant="default">New</Button>
-        </Link>
+    <div>
+      <div className="w-full flex flex-row gap-10">
+        <SearchFilters
+          search={search}
+          fullPath={Route.fullPath}
+          filters={[
+            {
+              name: "name",
+              type: "string",
+              label: "Name",
+            },
+            {
+              name: "languageId",
+              type: "languageId",
+            },
+          ]}
+        />
+        <div>
+          <Link to={"/products/new"}>
+            <Button variant="default">New</Button>
+          </Link>
+        </div>
       </div>
       <DataTable
-        data={data ? { data: data, count: data.length } : undefined}
+        data={data ? { data: data.data, count: data.count } : undefined}
         columns={columns}
         isLoading={false}
       />
-      <OutletDialog path={Route.fullPath} />
     </div>
   );
 }

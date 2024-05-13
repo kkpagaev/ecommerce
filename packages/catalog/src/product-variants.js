@@ -26,9 +26,44 @@ export const productVariantsListQuery = sql`
  */
 export const productVariantCreateQuery = sql`
   INSERT INTO product_variants
-    (product_id)
+    (product_id, slug, in_stock, price, old_price, article, discount, popularity, images, barcode, is_active)
   VALUES
-    ($product_id!)
+    (
+      $product_id!, 
+      $slug!,
+      $in_stock!,
+      $price!,
+      $old_price!,
+      $article!,
+      $discount!,
+      $popularity!,
+      $images!,
+      $barcode!,
+      $is_active!
+    )
+  RETURNING *
+`;
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-variants.types").IProductVariantUpdateQueryQuery
+ * >}
+ */
+export const productVariantUpdateQuery = sql`
+  UPDATE product_variants
+  SET
+    slug = COALESCE($slug, slug),
+    in_stock = COALESCE($in_stock, in_stock),
+    price = COALESCE($price, price),
+    old_price = COALESCE($old_price, old_price),
+    article = COALESCE($article, article),
+    discount = COALESCE($discount, discount),
+    popularity = COALESCE($popularity, popularity),
+    images = COALESCE($images, images),
+    barcode = COALESCE($barcode, barcode),
+    is_active = COALESCE($is_active, is_active)
+  WHERE
+    id = $id!
   RETURNING *
 `;
 
@@ -93,7 +128,7 @@ export const productVariantOptionsUpsertQuery = sql`
  */
 export const productVariantsFindOneQuery = sql`
   SELECT
-    pv.id
+    pv.*
   FROM
     product_variants pv
   WHERE
@@ -109,6 +144,16 @@ export class ProductVariants {
   /**
    * @typedef {{
    *   productId: number;
+   *   inStock: boolean;
+   *   price: number;
+   *   oldPrice: number;
+   *   article: string;
+   *   discount: number;
+   *   popularity: number;
+   *   images: string[];
+   *   barcode: string;
+   *   isActive: boolean;
+   *   slug: string;
    *   options: number[];
    * }} CreateProductVariant
    */
@@ -118,6 +163,16 @@ export class ProductVariants {
       const productVariant = await productVariantCreateQuery
         .run(
           {
+            slug: input.slug,
+            in_stock: input.inStock,
+            price: input.price,
+            old_price: input.oldPrice,
+            article: input.article,
+            discount: input.discount,
+            popularity: input.popularity,
+            images: input.images,
+            barcode: input.barcode,
+            is_active: input.isActive,
             product_id: input.productId,
           },
           client,
@@ -149,6 +204,22 @@ export class ProductVariants {
    */
   async updateProductVariant(variantId, input) {
     return tx(this.pool, async (client) => {
+      await productVariantUpdateQuery.run(
+        {
+          id: variantId,
+          slug: input.slug,
+          in_stock: input.inStock,
+          price: input.price,
+          old_price: input.oldPrice,
+          article: input.article,
+          discount: input.discount,
+          popularity: input.popularity,
+          images: input.images,
+          barcode: input.barcode,
+          is_active: input.isActive,
+        },
+        client,
+      );
       if (input.options) {
         await productVariantsOptionsDeleteQuery
           .run(
