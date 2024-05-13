@@ -1,3 +1,4 @@
+import "./index.css";
 import { AnyRouter, RouterProvider } from "@tanstack/react-router";
 import { ClerkProvider } from "@clerk/clerk-react";
 import TrpcProvider from "./providers/trpc";

@@ -11,7 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LnImport } from './routes/$ln'
+import { Route as LnIndexImport } from './routes/$ln/index'
 import { Route as LnPostsImport } from './routes/$ln/posts'
 import { Route as LnErrorImport } from './routes/$ln/error'
 import { Route as LnPostsIndexImport } from './routes/$ln/posts/index'
@@ -19,19 +19,19 @@ import { Route as LnPostsPostIdImport } from './routes/$ln/posts/$postId'
 
 // Create/Update Routes
 
-const LnRoute = LnImport.update({
-  path: '/$ln',
+const LnIndexRoute = LnIndexImport.update({
+  path: '/$ln/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const LnPostsRoute = LnPostsImport.update({
-  path: '/posts',
-  getParentRoute: () => LnRoute,
+  path: '/$ln/posts',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const LnErrorRoute = LnErrorImport.update({
-  path: '/error',
-  getParentRoute: () => LnRoute,
+  path: '/$ln/error',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const LnPostsIndexRoute = LnPostsIndexImport.update({
@@ -48,17 +48,17 @@ const LnPostsPostIdRoute = LnPostsPostIdImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/$ln': {
-      preLoaderRoute: typeof LnImport
-      parentRoute: typeof rootRoute
-    }
     '/$ln/error': {
       preLoaderRoute: typeof LnErrorImport
-      parentRoute: typeof LnImport
+      parentRoute: typeof rootRoute
     }
     '/$ln/posts': {
       preLoaderRoute: typeof LnPostsImport
-      parentRoute: typeof LnImport
+      parentRoute: typeof rootRoute
+    }
+    '/$ln/': {
+      preLoaderRoute: typeof LnIndexImport
+      parentRoute: typeof rootRoute
     }
     '/$ln/posts/$postId': {
       preLoaderRoute: typeof LnPostsPostIdImport
@@ -74,10 +74,9 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  LnRoute.addChildren([
-    LnErrorRoute,
-    LnPostsRoute.addChildren([LnPostsPostIdRoute, LnPostsIndexRoute]),
-  ]),
+  LnErrorRoute,
+  LnPostsRoute.addChildren([LnPostsPostIdRoute, LnPostsIndexRoute]),
+  LnIndexRoute,
 ])
 
 /* prettier-ignore-end */

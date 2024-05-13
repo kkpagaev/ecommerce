@@ -3,12 +3,14 @@ import {
   Link,
   Outlet,
   createRootRouteWithContext,
+  redirect,
 } from '@tanstack/react-router'
 import { RouterContext } from '../routerContext'
 import { Context } from '@tanstack/react-cross-context'
 import { useRouter } from '@tanstack/react-router'
 import jsesc from 'jsesc'
 import * as React from 'react'
+import { trpcClient } from '../utils/trpc'
 
 export function DehydrateRouter() {
   const router = useRouter()
@@ -42,9 +44,41 @@ export function DehydrateRouter() {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
+  beforeLoad: async ({ params })  =>{
+    const language = (params as { ln?: string }).ln
+    const languages = await trpcClient.web.languages.listLanguages.query();
+
+    const locale = languages.find(l => l.name === language)
+
+    if (!language || !locale) {
+      throw redirect({
+        to: '/$ln',
+        params: {
+          ln: languages[0].name
+        }
+      })
+    }
+
+    return {
+      languages,
+      locale: locale
+    }
+  },
+  loader: async ({ context }) => {
+    const categories = await trpcClient.web.catalog.category.listCategoriesForHeader.query({
+      languageId: context.locale.id
+    })
+
+    return {
+      locale: context.locale,
+      categories
+    }
+  }
 })
 
 function RootComponent() {
+  const { locale } = Route.useLoaderData()
+
   return (
     <html lang="en">
       <head>
@@ -76,7 +110,7 @@ function RootComponent() {
               className: 'font-bold',
             }}
             params={{
-                ln: 'uk',
+                ln: locale.name,
             }}
           >
             Home
@@ -84,7 +118,7 @@ function RootComponent() {
           <Link
             to="/$ln/posts"
             params={{
-                ln: 'uk',
+              ln: locale.name,
             }}
             activeProps={{
               className: 'font-bold',
@@ -95,7 +129,7 @@ function RootComponent() {
           <Link
             to="/$ln/error"
             params={{
-                ln: 'uk',
+              ln: locale.name,
             }}
             activeProps={{
               className: 'font-bold',
