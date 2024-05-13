@@ -95,7 +95,11 @@ function Home() {
         );
       })}
       {data.products.map((p) => {
-        return <div key={p.id}>{p.slug} {p.id}</div>;
+        return (
+          <div key={p.id}>
+            {p.slug} {p.id}
+          </div>
+        );
       })}
     </>
   );
