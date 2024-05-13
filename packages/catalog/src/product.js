@@ -208,7 +208,7 @@ export const productPaginateQuery = sql`
     WITH pvc as (
     SELECT
       pv.product_id,
-      (COALESCE(sum(s."count"), 0) > 0) as in_stock
+      sum(s."count") as "count"
     FROM product_variants pv
     JOIN stocks s ON s.product_variant_id = pv.id
     JOIN product_variant_options pvo ON pv.id = pvo.product_variant_id
@@ -224,7 +224,6 @@ export const productPaginateQuery = sql`
         ELSE TRUE
     END
     GROUP BY pv.product_id
-    HAVING sum(s."count") > 0
   )
   SELECT
     p.id, 
@@ -232,9 +231,9 @@ export const productPaginateQuery = sql`
     p.images, 
     p.slug,
     pr.price,
-    pv.in_stock
+    (pv."count" > 0) as in_stock
   FROM products p
-  LEFT JOIN pvc pv ON p.id = pv.product_id
+  JOIN pvc pv ON p.id = pv.product_id
   JOIN product_descriptions pd ON p.id = pd.product_id
   JOIN product_attributes pa ON p.id = pa.product_id
   JOIN product_options po ON p.id = po.product_id
@@ -242,8 +241,8 @@ export const productPaginateQuery = sql`
   WHERE pd.language_id = $language_id!
   AND
     p.category_id = COALESCE($categoryId, p.category_id)
-  GROUP BY p.id, pd.name, pr.price, pv.in_stock
-  ORDER BY p.id DESC
+  GROUP BY p.id, pd.name, pr.price, pv."count"
+  ORDER BY in_stock DESC, pd.name
   LIMIT COALESCE($limit, 10)
   OFFSET COALESCE($offset, 0)
 `;
