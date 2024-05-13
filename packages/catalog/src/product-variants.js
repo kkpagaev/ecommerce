@@ -443,13 +443,16 @@ export class ProductVariants {
  * >}
  */
 export const productVariantsListAllQuery = sql`
-  SELECT pv.*, pd.name, cd.name as category FROM product_variants pv
+  SELECT pv.*, pd.name, cd.name as category, v.name 
+    AS vendor FROM product_variants pv
   JOIN product_descriptions pd
     ON pv.product_id = pd.product_id
   JOIN products p
     ON pv.product_id = p.id
   JOIN category_descriptions cd
     ON p.category_id = cd.category_id
+  JOIN vendors v
+    ON p.vendor_id = v.id
   WHERE pd.language_id = $language_id!
   AND   cd.language_id = $language_id!
   ORDER BY pd.name

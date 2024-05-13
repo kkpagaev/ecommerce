@@ -243,6 +243,7 @@ export interface IProductVariantsListAllQueryResult {
   product_id: number;
   slug: string;
   stock_status: product_variant_stock_status;
+  vendor: string;
 }
 
 /** 'ProductVariantsListAllQuery' query type */
