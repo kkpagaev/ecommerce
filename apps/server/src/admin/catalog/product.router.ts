@@ -20,6 +20,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
   createProduct: t.procedure
     .input(z.object({
       categoryId: z.number(),
+      vendorId: z.number(),
       attributes: z.array(z.number()).optional(),
       optionGroups: z.array(z.number()).optional(),
       descriptions: z.array(z.object({
@@ -35,6 +36,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         attributes: input.attributes || [],
         categoryId: input.categoryId,
         descriptions: input.descriptions,
+        vendorId: input.vendorId,
       });
 
       return res;
@@ -48,6 +50,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
           z.object({
             categoryId: z.number(),
             attributes: z.array(z.number()).optional(),
+            vendorId: z.number().optional(),
             optionGroups: z.array(z.number()).optional(),
             descriptions: z.array(z.object({
               name: z.string(),
@@ -64,6 +67,7 @@ export default async ({ t, catalog }: FastifyZod) => ({
         attributes: input.attributes,
         optionGroups: input.optionGroups,
         descriptions: input.descriptions,
+        vendorId: input.vendorId,
       });
 
       return res;

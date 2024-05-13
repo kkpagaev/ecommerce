@@ -21,6 +21,7 @@ export const Route = createFileRoute("/products/new")({
         }));
       });
 
+    const vendors = await context.trpc.admin.vendor.list.fetch();
     const categories = await context.trpc.admin.catalog.category.listCategories
       .fetch({
         languageId: 1,
@@ -31,13 +32,13 @@ export const Route = createFileRoute("/products/new")({
         languageId: 1,
       });
 
-    return { languages, categories, attributes, optionGroups };
+    return { languages, categories, attributes, optionGroups, vendors };
   },
   component: ProductNewComponent,
 });
 
 function ProductNewComponent() {
-  const { languages, categories, attributes, optionGroups } =
+  const { languages, categories, attributes, optionGroups, vendors } =
     Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
@@ -53,6 +54,7 @@ function ProductNewComponent() {
   return (
     <div>
       <ProductForm
+        vendors={vendors}
         attributes={attributes}
         categories={categories}
         languages={languages}

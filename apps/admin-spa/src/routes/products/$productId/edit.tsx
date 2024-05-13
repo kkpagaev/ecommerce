@@ -30,6 +30,7 @@ export const Route = createFileRoute("/products/$productId/edit")({
       .then(({ data }) => data);
     const languages = await context.trpc.admin.language.list.fetch();
 
+    const vendors = await context.trpc.admin.vendor.list.fetch();
     const product =
       await context.trpc.admin.catalog.product.findOneProduct.fetch({
         id: Number(params.productId),
@@ -42,13 +43,20 @@ export const Route = createFileRoute("/products/$productId/edit")({
         languageId: 1,
       });
 
-    return { languages, categories, attributes, product, optionGroups };
+    return {
+      languages,
+      categories,
+      attributes,
+      product,
+      optionGroups,
+      vendors,
+    };
   },
   component: CategoryComponent,
 });
 
 function CategoryComponent() {
-  const { languages, product, attributes, categories, optionGroups } =
+  const { languages, product, attributes, categories, optionGroups, vendors } =
     Route.useLoaderData();
   const navigate = useNavigate();
   const utils = trpc.useUtils();
@@ -67,6 +75,7 @@ function CategoryComponent() {
     <div>
       <ProductForm
         edit
+        vendors={vendors}
         languages={languages}
         attributes={attributes}
         categories={categories}

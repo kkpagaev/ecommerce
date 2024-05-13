@@ -1,14 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "@/components/data-table";
 
-import { Pencil1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
 import { SearchFilters } from "@/components/search-filters";
-import { TooltipLink } from "@/components/ui/tooltip-link";
 import { AspectRatio } from "../../components/ui/aspect-ratio";
 
 type Product = Exclude<
@@ -52,26 +50,33 @@ const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "images",
-    enableSorting: false,
+    accessorKey: "category",
+    enableSorting: true,
     cell: ({ row }) => {
-      const ids = row.getValue<string[]>("images");
-      if (!ids) {
-        return null;
-      }
-      return (
-        <AspectRatio
-          ratio={4 / 4}
-          className={"w-fullrounded-md border-slate-200 border-2"}
-        >
-          <img
-            src={"http://localhost:3000/file-upload?imageId=" + ids[0]}
-            className="w-full h-full object-cover rounded-md"
-          />
-        </AspectRatio>
-      );
+      return <div className="capitalize">{row.getValue("category")}</div>;
     },
   },
+  // {
+  //   accessorKey: "images",
+  //   enableSorting: false,
+  //   cell: ({ row }) => {
+  //     const ids = row.getValue<string[]>("images");
+  //     if (!ids) {
+  //       return null;
+  //     }
+  //     return (
+  //       <AspectRatio
+  //         ratio={4 / 4}
+  //         className={"w-fullrounded-md border-slate-200 border-2"}
+  //       >
+  //         <img
+  //           src={"http://localhost:3000/file-upload?imageId=" + ids[0]}
+  //           className="w-full h-full object-cover rounded-md"
+  //         />
+  //       </AspectRatio>
+  //     );
+  //   },
+  // },
   {
     id: "actions",
     enableHiding: false,
@@ -128,7 +133,6 @@ export const Route = createFileRoute("/products/")({
 function Index() {
   const data = Route.useLoaderData();
   const search = Route.useSearch();
-  const params = Route.useParams();
 
   return (
     <div>

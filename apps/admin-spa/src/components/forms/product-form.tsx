@@ -8,6 +8,13 @@ import { Input } from "../ui/input";
 import { useApiForm } from "../../utils/useApiForm";
 import { Combobox } from "../combobox";
 import { Textarea } from "../ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type ProductCreateInputs = AdminInputs["catalog"]["product"]["createProduct"];
 
@@ -37,7 +44,13 @@ type OptionGroupModel = {
   options: { id: number; name: string }[];
 };
 
+type VendorModel = {
+  id: number;
+  name: string;
+};
+
 type ProductFormProps = {
+  vendors: VendorModel[];
   errorMessage?: string;
   languages: LanguageModel[];
   values?: ProductModel;
@@ -62,11 +75,13 @@ export function ProductForm({
   values,
   categories,
   attributes,
+  vendors,
   optionGroups,
 }: ProductFormProps) {
   const formValues: ProductCreateInputs | undefined = values && {
     optionGroups: values.optionGroups,
     categoryId: values.category_id,
+    vendorId: values.vendor_id,
     attributes: values.attributes || [],
     descriptions: languages.map((lang) => {
       const old = values.descriptions.find((d) => d.language_id === lang.id);
@@ -80,6 +95,7 @@ export function ProductForm({
   };
   const defaultValues: ProductCreateInputs = {
     categoryId: 0,
+    vendorId: vendors[0].id || 1,
     optionGroups: [] as number[],
     attributes: [] as number[],
     descriptions: languages.map((lang) => {
@@ -205,6 +221,31 @@ export function ProductForm({
                 setValue("categoryId", v ? +v : 0);
               }}
             />
+          </div>
+
+          <div>
+            <Label htmlFor="vendorId">Vendor</Label>
+            <Select
+              defaultValue={
+                formValues?.["vendorId"]
+                  ? "" + formValues?.["vendorId"]
+                  : undefined
+              }
+              onValueChange={(v) => {
+                setValue("vendorId", +v);
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue id="vendorId" placeholder={"Vendor"} />
+              </SelectTrigger>
+              <SelectContent>
+                {vendors.map((v) => (
+                  <SelectItem key={v.id} value={"" + v.id}>
+                    {v.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div>

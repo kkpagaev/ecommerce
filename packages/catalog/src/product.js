@@ -10,9 +10,12 @@ import { TaggedQuery, sql } from "@pgtyped/runtime";
  * >} *
  */
 export const productListQuery = sql`
-  SELECT p.id, p.category_id, pd.name, pd.description FROM products p
+  SELECT p.id, p.category_id, pd.name, pd.description, cd.name as category FROM products p
   JOIN product_descriptions pd ON p.id = pd.product_id
+  JOIN categories c ON p.category_id = c.id
+  JOIN category_descriptions cd ON c.id = cd.category_id
   WHERE pd.language_id = $language_id!
+  AND   cd.language_id = $language_id!
   ORDER BY p.id;
 `;
 
@@ -53,7 +56,8 @@ export const productOptionGroupsListQuery = sql`
 export const productUpdateQuery = sql`
   UPDATE products
   SET
-    category_id = COALESCE($categoryId, category_id)
+    category_id = COALESCE($categoryId, category_id),
+    vendor_id = COALESCE($vendorId, vendor_id)
   WHERE
     id = $id!;
 `;
@@ -185,9 +189,9 @@ export const productDescriptionUpsertQuery = sql`
  */
 export const productCreateQuery = sql`
   INSERT INTO products
-  (category_id)
+  (category_id, vendor_id)
   VALUES
-  ($categoryId!)
+  ($categoryId!, $vendorId!)
   RETURNING id
 `;
 
@@ -229,6 +233,7 @@ export class Products {
    *   categoryId: number;
    *   attributes: number[];
    *   optionGroups?: number[];
+   *   vendorId: number;
    *   descriptions: {
    *     languageId: number;
    *     name: string;
@@ -247,6 +252,7 @@ export class Products {
       const product = await productCreateQuery
         .run(
           {
+            vendorId: input.vendorId,
             categoryId: input.categoryId,
           },
           client,

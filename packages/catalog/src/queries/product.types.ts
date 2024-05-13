@@ -7,6 +7,7 @@ export interface IProductListQueryParams {
 
 /** 'ProductListQuery' return type */
 export interface IProductListQueryResult {
+  category: string;
   category_id: number;
   description: string | null;
   id: number;
@@ -69,6 +70,7 @@ export interface IProductOptionGroupsListQueryQuery {
 export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;
   id: number;
+  vendorId?: number | null | void;
 }
 
 /** 'ProductUpdateQuery' return type */
@@ -107,6 +109,7 @@ export interface IProductFindOneQueryResult {
   created_at: Date;
   id: number;
   updated_at: Date;
+  vendor_id: number;
 }
 
 /** 'ProductFindOneQuery' query type */
@@ -220,6 +223,7 @@ export interface IProductDescriptionUpsertQueryQuery {
 /** 'ProductCreateQuery' parameters type */
 export interface IProductCreateQueryParams {
   categoryId: number;
+  vendorId: number;
 }
 
 /** 'ProductCreateQuery' return type */
