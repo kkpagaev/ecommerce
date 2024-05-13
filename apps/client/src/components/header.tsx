@@ -17,9 +17,9 @@ function Nav({
 }: {
   locale: string;
   categories: Array<{
-    name: string;
-    slug: string;
     id: number;
+    slug: string;
+    name: string;
   }>;
 }) {
   return (
@@ -63,6 +63,7 @@ function Nav({
       </Link>
       {categories.map((category) => (
         <Link
+          key={category.id}
           to="/$ln/category/$slug"
           className="text-muted-foreground transition-colors hover:text-foreground"
           params={{
@@ -85,7 +86,7 @@ export function Header({
   locale: string;
   locales: string[];
   categories: Array<{
-    id: string;
+    id: number;
     slug: string;
     name: string;
   }>;

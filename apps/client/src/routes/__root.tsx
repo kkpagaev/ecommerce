@@ -77,6 +77,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       categories,
     };
   },
+  notFoundComponent: () => <div>Not found</div>,
 });
 
 function RootComponent() {

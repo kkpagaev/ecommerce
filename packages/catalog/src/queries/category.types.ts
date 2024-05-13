@@ -76,6 +76,28 @@ export interface ICategoryFindOneQueryQuery {
   result: ICategoryFindOneQueryResult;
 }
 
+/** 'CategoryFindOneWithDescriptionQuery' parameters type */
+export interface ICategoryFindOneWithDescriptionQueryParams {
+  id?: number | null | void;
+  language_id: number;
+  slug?: string | null | void;
+}
+
+/** 'CategoryFindOneWithDescriptionQuery' return type */
+export interface ICategoryFindOneWithDescriptionQueryResult {
+  id: number;
+  image_id: string;
+  image_url: string;
+  name: string;
+  slug: string;
+}
+
+/** 'CategoryFindOneWithDescriptionQuery' query type */
+export interface ICategoryFindOneWithDescriptionQueryQuery {
+  params: ICategoryFindOneWithDescriptionQueryParams;
+  result: ICategoryFindOneWithDescriptionQueryResult;
+}
+
 /** 'CategoryDescriptionListQuery' parameters type */
 export interface ICategoryDescriptionListQueryParams {
   category_id: number;

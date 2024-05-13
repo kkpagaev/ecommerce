@@ -61,6 +61,20 @@ export const categoryFindOneQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/category.types").ICategoryFindOneWithDescriptionQueryQuery
+ * >}
+ */
+export const categoryFindOneWithDescriptionQuery = sql`
+  SELECT c.id, c.slug, cd.name, f.url as image_url, f.id as image_id FROM categories c
+  LEFT JOIN file_uploads f ON image = f.id
+  JOIN category_descriptions cd ON c.id = cd.category_id
+  WHERE cd.language_id = $language_id!
+  AND c.id = COALESCE($id, c.id)
+  AND c.slug = COALESCE($slug, c.slug)
+  LIMIT 1;
+`;
+/**
+ * @type {TaggedQuery<
  *   import("./queries/category.types").ICategoryDescriptionListQueryQuery
  * >}
  */
@@ -133,6 +147,28 @@ export class Categories {
       data: res,
       count: count,
     };
+  }
+
+  /**
+   * @param {{
+   *   slug: string;
+   *   languageId: number;
+   * }} input
+   */
+  async findCategoryBySlug(input) {
+    const res = await categoryFindOneWithDescriptionQuery
+      .run(
+        {
+          slug: input.slug,
+          language_id: input.languageId,
+        },
+        this.pool,
+      )
+      .then((res) => res[0]);
+
+    if (!res) return null;
+
+    return res;
   }
 
   /** @param {number} id */

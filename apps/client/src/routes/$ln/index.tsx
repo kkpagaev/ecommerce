@@ -17,7 +17,7 @@ export const Route = createFileRoute("/$ln/")({
     attributes: search.attributes || [],
     options: search.options || [],
   }),
-  loader: async ({ deps, context }) => {
+  loader: async ({ deps, context, params }) => {
     const { filters, data } = await trpcClient.web.catalog.product.filter.query(
       {
         languageId: context.locale.id,
