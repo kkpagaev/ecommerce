@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import {
+  UserX,
   HomeIcon,
   Building2,
   BellIcon,
@@ -39,6 +40,11 @@ function NavBar() {
             to: "/about",
             name: "About",
             icon: <UsersIcon className="h-4 w-4" />,
+          },
+          {
+            to: "/admins",
+            name: "Admins",
+            icon: <UserX className="h-4 w-4" />,
           },
           {
             to: "/languages",

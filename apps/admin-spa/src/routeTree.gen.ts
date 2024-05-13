@@ -13,6 +13,7 @@ import { Route as ProductsIndexImport } from './routes/products/index'
 import { Route as OptionGroupsIndexImport } from './routes/option-groups/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
 import { Route as VendorsNewImport } from './routes/vendors/new'
+import { Route as VariantsVariantsImport } from './routes/variants/variants'
 import { Route as ProductsNewImport } from './routes/products/new'
 import { Route as OptionGroupsNewImport } from './routes/option-groups/new'
 import { Route as OptionGroupsOptionGroupIdImport } from './routes/option-groups/$optionGroupId'
@@ -21,8 +22,10 @@ import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
 import { Route as AdminsNewImport } from './routes/admins/new'
+import { Route as VariantsVariantsIndexImport } from './routes/variants/variants.index'
 import { Route as ProductsProductIdIndexImport } from './routes/products/$productId/index'
 import { Route as VendorsVendorIdEditImport } from './routes/vendors/$vendorId.edit'
+import { Route as VariantsVariantsNewImport } from './routes/variants/variants.new'
 import { Route as ProductsProductIdVariantsImport } from './routes/products/$productId/variants'
 import { Route as ProductsProductIdEditImport } from './routes/products/$productId/edit'
 import { Route as OptionGroupsOptionGroupIdEditImport } from './routes/option-groups/$optionGroupId.edit'
@@ -31,6 +34,7 @@ import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$ca
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
 import { Route as AdminsAdminIdEditImport } from './routes/admins/$adminId.edit'
 import { Route as ProductsProductIdVariantsIndexImport } from './routes/products/$productId/variants.index'
+import { Route as VariantsVariantsProductVariantIdEditImport } from './routes/variants/variants.$productVariantId.edit'
 import { Route as ProductsProductIdVariantsNewImport } from './routes/products/$productId/variants.new'
 import { Route as OptionGroupsOptionGroupIdOptionNewImport } from './routes/option-groups/$optionGroupId.option.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
@@ -90,6 +94,11 @@ const VendorsNewRoute = VendorsNewImport.update({
   getParentRoute: () => VendorsRoute,
 } as any)
 
+const VariantsVariantsRoute = VariantsVariantsImport.update({
+  path: '/variants/variants',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ProductsNewRoute = ProductsNewImport.update({
   path: '/products/new',
   getParentRoute: () => rootRoute,
@@ -131,6 +140,11 @@ const AdminsNewRoute = AdminsNewImport.update({
   getParentRoute: () => AdminsRoute,
 } as any)
 
+const VariantsVariantsIndexRoute = VariantsVariantsIndexImport.update({
+  path: '/',
+  getParentRoute: () => VariantsVariantsRoute,
+} as any)
+
 const ProductsProductIdIndexRoute = ProductsProductIdIndexImport.update({
   path: '/products/$productId/',
   getParentRoute: () => rootRoute,
@@ -139,6 +153,11 @@ const ProductsProductIdIndexRoute = ProductsProductIdIndexImport.update({
 const VendorsVendorIdEditRoute = VendorsVendorIdEditImport.update({
   path: '/$vendorId/edit',
   getParentRoute: () => VendorsRoute,
+} as any)
+
+const VariantsVariantsNewRoute = VariantsVariantsNewImport.update({
+  path: '/new',
+  getParentRoute: () => VariantsVariantsRoute,
 } as any)
 
 const ProductsProductIdVariantsRoute = ProductsProductIdVariantsImport.update({
@@ -182,6 +201,12 @@ const ProductsProductIdVariantsIndexRoute =
   ProductsProductIdVariantsIndexImport.update({
     path: '/',
     getParentRoute: () => ProductsProductIdVariantsRoute,
+  } as any)
+
+const VariantsVariantsProductVariantIdEditRoute =
+  VariantsVariantsProductVariantIdEditImport.update({
+    path: '/$productVariantId/edit',
+    getParentRoute: () => VariantsVariantsRoute,
   } as any)
 
 const ProductsProductIdVariantsNewRoute =
@@ -280,6 +305,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsNewImport
       parentRoute: typeof rootRoute
     }
+    '/variants/variants': {
+      preLoaderRoute: typeof VariantsVariantsImport
+      parentRoute: typeof rootRoute
+    }
     '/vendors/new': {
       preLoaderRoute: typeof VendorsNewImport
       parentRoute: typeof VendorsImport
@@ -324,6 +353,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsProductIdVariantsImport
       parentRoute: typeof rootRoute
     }
+    '/variants/variants/new': {
+      preLoaderRoute: typeof VariantsVariantsNewImport
+      parentRoute: typeof VariantsVariantsImport
+    }
     '/vendors/$vendorId/edit': {
       preLoaderRoute: typeof VendorsVendorIdEditImport
       parentRoute: typeof VendorsImport
@@ -331,6 +364,10 @@ declare module '@tanstack/react-router' {
     '/products/$productId/': {
       preLoaderRoute: typeof ProductsProductIdIndexImport
       parentRoute: typeof rootRoute
+    }
+    '/variants/variants/': {
+      preLoaderRoute: typeof VariantsVariantsIndexImport
+      parentRoute: typeof VariantsVariantsImport
     }
     '/attribute-groups/$attributeGroupId/attribute/new': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeNewImport
@@ -343,6 +380,10 @@ declare module '@tanstack/react-router' {
     '/products/$productId/variants/new': {
       preLoaderRoute: typeof ProductsProductIdVariantsNewImport
       parentRoute: typeof ProductsProductIdVariantsImport
+    }
+    '/variants/variants/$productVariantId/edit': {
+      preLoaderRoute: typeof VariantsVariantsProductVariantIdEditImport
+      parentRoute: typeof VariantsVariantsImport
     }
     '/products/$productId/variants/': {
       preLoaderRoute: typeof ProductsProductIdVariantsIndexImport
@@ -388,6 +429,11 @@ export const routeTree = rootRoute.addChildren([
   ]),
   OptionGroupsNewRoute,
   ProductsNewRoute,
+  VariantsVariantsRoute.addChildren([
+    VariantsVariantsNewRoute,
+    VariantsVariantsIndexRoute,
+    VariantsVariantsProductVariantIdEditRoute,
+  ]),
   AttributeGroupsIndexRoute,
   OptionGroupsIndexRoute,
   ProductsIndexRoute,

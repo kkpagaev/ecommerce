@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { trpc } from "../../utils/trpc";
-import { VendorForm } from "../../components/forms/vendor-form";
+import { trpc } from "@/utils/trpc";
+import { VendorForm } from "@/components/forms/vendor-form";
 
 export const Route = createFileRoute("/vendors/$vendorId/edit")({
   beforeLoad: ({ context }) => ({
