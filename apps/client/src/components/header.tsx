@@ -77,6 +77,32 @@ function Nav({
     </nav>
   );
 }
+function Breadcrumbs() {
+  const router = useRouter();
+  const breadcrumbs = router.state.matches.map((match) => {
+    const { routeContext } = match;
+    console.log(match);
+    return {
+      title: routeContext.getTitle?.(),
+      path: match.pathname,
+    };
+  });
+
+  return breadcrumbs.map((breadcrumb, i) => {
+    if (i === breadcrumbs.length - 1) {
+      return (
+        <div key={i} className="text-sm font-medium">
+          {breadcrumb.title}
+        </div>
+      );
+    }
+    return (
+      <Link to={breadcrumb.path} key={i} className="text-sm font-medium">
+        {breadcrumb.title}
+      </Link>
+    );
+  });
+}
 
 export function Header({
   locale,
