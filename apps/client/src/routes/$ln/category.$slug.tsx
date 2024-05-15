@@ -6,6 +6,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "../../lib/utils";
 import { Filters } from "../../components/filters";
 import { RoutePagination } from "../../components/route-pagination";
+import { AddToCartButton } from "../../components/add-to-cart-button";
 
 export const Route = createFileRoute("/$ln/category/$slug")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -100,7 +101,7 @@ function Home() {
                   key={p.id}
                   className="p-2 hover:shadow-md w-full transition-shadow"
                 >
-                  <div className="h-full flex flex-col gap-4">
+                  <div className="h-full flex flex-col gap-4 justify-between">
                     <div className="rounded-sm overflow-hidden">
                       <AspectRatio ratio={7 / 8}>
                         <Link
@@ -168,6 +169,12 @@ function Home() {
                           </div>
                         </>
                       )}
+                    </div>
+                    <div className="text-center">
+                      <AddToCartButton
+                        stockStatus={p.stock_status}
+                        productId={p.id}
+                      />
                     </div>
                   </div>
                 </Card>
