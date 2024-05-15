@@ -4,6 +4,7 @@ import { trpcClient } from "@/utils/trpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "../../lib/utils";
+import { Filters } from "../../components/filters";
 
 export const Route = createFileRoute("/$ln/category/$slug")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -59,108 +60,9 @@ export const Route = createFileRoute("/$ln/category/$slug")({
   component: Home,
 });
 
-type FiltersProps = {
-  attributes: Record<
-    string,
-    Array<{
-      id: number;
-      name: string;
-    }>
-  >;
-  // (property) options: Record<string | number, {
-  //     id: number;
-  //     name: string;
-  //     option_group_id: number;
-  //     option_group_name: string;
-  // }[]>
-  options: Record<
-    string | number,
-    Array<{
-      id: number;
-      name: string;
-    }>
-  >;
-  selected: {
-    attributes: number[];
-    options: number[];
-  };
-};
-
-function Filters({ attributes, options, selected }: FiltersProps) {
-  const navigate = useNavigate({ from: Route.fullPath });
-
-  return (
-    <div>
-      {Object.entries(attributes).map(([key, attributes]) => {
-        return (
-          <div key={key}>
-            <h2>{key}</h2>
-            {attributes.map((a, i) => {
-              const isSelected = selected.attributes.includes(a.id);
-
-              return (
-                <div
-                  key={i}
-                  style={{
-                    paddingLeft: "1em",
-                    backgroundColor: isSelected ? "red" : "",
-                  }}
-                  onClick={() => {
-                    navigate({
-                      search: (prev) => ({
-                        ...prev,
-                        attributes: isSelected
-                          ? prev.attributes?.filter((id) => id !== a.id)
-                          : [...(prev.attributes || []), a.id],
-                      }),
-                    });
-                  }}
-                >
-                  {a.name}
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-      {Object.entries(options).map(([group, options], i) => {
-        return (
-          <div key={i}>
-            <h2>{group}</h2>
-            {options.map((o) => {
-              const isSelected = selected.options.includes(o.id);
-
-              return (
-                <div
-                  key={o.id}
-                  style={{
-                    paddingLeft: "1em",
-                    backgroundColor: isSelected ? "red" : "",
-                  }}
-                  onClick={() => {
-                    navigate({
-                      search: (prev) => ({
-                        ...prev,
-                        options: isSelected
-                          ? prev.options?.filter((id) => id !== o.id)
-                          : [...(prev.options || []), o.id],
-                      }),
-                    });
-                  }}
-                >
-                  {o.name}
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 function Home() {
   const data = Route.useLoaderData();
+  console.log(data.products);
 
   return (
     <div className="container mx-auto">
@@ -173,6 +75,7 @@ function Home() {
             </CardHeader>
             <CardContent>
               <Filters
+                path={Route.fullPath}
                 options={data.options}
                 attributes={data.attributes}
                 selected={data.selected}

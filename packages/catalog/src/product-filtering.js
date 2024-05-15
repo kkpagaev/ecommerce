@@ -144,8 +144,8 @@ export class ProductFiltering {
         offset: input.offset,
         categoryId: input.categoryId,
         languageId: input.languageId,
-        options: input.options,
-        attributes: input.attributes,
+        options: input.options.length > 0 ? input.options : null,
+        attributes: input.attributes.length > 0 ? input.attributes : null,
       },
       this.pool,
     );
