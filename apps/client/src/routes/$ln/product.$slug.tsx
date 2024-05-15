@@ -114,8 +114,13 @@ function ProductComponent() {
           <div className="text-2xl font-bold mb-8">
             <div className="flex gap-2">
               <AddToCartButton
+                withCountPicker
                 stockStatus={product.stock_status}
-                productId={product.id}
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  image: product.images[0],
+                }}
               />
             </div>
           </div>

@@ -4,6 +4,7 @@ import type {} from "@redux-devtools/extension"; // required for devtools typing
 
 interface CartItem {
   id: number;
+  image: string;
   name: string;
   quantity: number;
 }

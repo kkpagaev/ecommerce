@@ -74,7 +74,7 @@ function Home() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-3xl font-bold">{data.category.name}</h1>
+      <h1 className="text-3xl font-bold mb-4">{data.category.name}</h1>
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-3">
           <Card>
@@ -173,7 +173,12 @@ function Home() {
                     <div className="text-center">
                       <AddToCartButton
                         stockStatus={p.stock_status}
-                        productId={p.id}
+                        product={{
+                          id: p.id,
+                          name: p.name,
+                          image: p.images[0],
+                          quantity: 1,
+                        }}
                       />
                     </div>
                   </div>
