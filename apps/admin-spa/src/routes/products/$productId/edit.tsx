@@ -23,11 +23,10 @@ export const Route = createFileRoute("/products/$productId/edit")({
           name: a.group_name + " - " + a.name,
         }));
       });
-    const categories = await context.trpc.admin.catalog.category.listCategories
-      .fetch({
+    const categories =
+      await context.trpc.admin.catalog.category.listCategories.fetch({
         languageId: 1,
-      })
-      .then(({ data }) => data);
+      });
     const languages = await context.trpc.admin.language.list.fetch();
 
     const vendors = await context.trpc.admin.vendor.list.fetch();

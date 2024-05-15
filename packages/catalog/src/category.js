@@ -23,6 +23,27 @@ export const categoryUpdateQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/category.types").ICategoryHierarchyQueryQuery
+ * >}
+ */
+export const categoryHierarchyQuery = sql`
+  WITH RECURSIVE category_hierarchy AS (
+      SELECT id, parent_id
+      FROM categories
+      WHERE id = $categoryId!
+      
+      UNION ALL
+      
+      SELECT c.id, c.parent_id
+      FROM categories c
+      JOIN category_hierarchy ch ON c.id = ch.parent_id
+  )
+  SELECT * FROM category_hierarchy
+  JOIN category_descriptions cd ON cd.category_id = category_hierarchy.id
+`;
+
+/**
+ * @type {TaggedQuery<
  *   import("./queries/category.types").ICategoryListQueryQuery
  * >}
  */
@@ -263,5 +284,19 @@ export class Categories {
       }
       return res;
     });
+  }
+
+  /**
+   * @param {number} id
+   * @returns
+   */
+  async getCategoryHierarchy(id) {
+    const res = await categoryHierarchyQuery.run(
+      {
+        categoryId: id,
+      },
+      this.pool,
+    );
+    return res;
   }
 }

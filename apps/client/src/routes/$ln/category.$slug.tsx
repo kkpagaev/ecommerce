@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { z } from "zod";
 import { trpcClient } from "@/utils/trpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -103,20 +103,36 @@ function Home() {
                   <div className="h-full flex flex-col gap-4">
                     <div className="rounded-sm overflow-hidden">
                       <AspectRatio ratio={7 / 8}>
-                        <img
-                          src={
-                            "http://localhost:3000/file-upload?imageId=" +
-                            p.images[0]
-                          }
-                          className={cn(
-                            "object-cover w-full h-full",
-                            p.stock_status === "in_stock" ? "" : "grayscale",
-                          )}
-                        />
+                        <Link
+                          to="/$ln/product/$slug"
+                          params={(current: any) => ({
+                            ln: current.ln,
+                            slug: p.slug,
+                          })}
+                        >
+                          <img
+                            src={
+                              "http://localhost:3000/file-upload?imageId=" +
+                              p.images[0]
+                            }
+                            className={cn(
+                              "object-cover w-full h-full",
+                              p.stock_status === "in_stock" ? "" : "grayscale",
+                            )}
+                          />
+                        </Link>
                       </AspectRatio>
                     </div>
                     <div>
-                      <h3 className="text-xl text-center">{p.name}</h3>
+                      <Link
+                        to="/$ln/product/$slug"
+                        params={(current: any) => ({
+                          ln: current.ln,
+                          slug: p.slug,
+                        })}
+                      >
+                        <h3 className="text-xl text-center">{p.name}</h3>
+                      </Link>
                     </div>
                     {p.stock_status === "in_stock" ? (
                       <>

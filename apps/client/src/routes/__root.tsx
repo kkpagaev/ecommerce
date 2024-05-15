@@ -1,6 +1,5 @@
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import {
-  Link,
   Outlet,
   createRootRouteWithContext,
   redirect,
@@ -129,12 +128,14 @@ function RootComponent() {
         <script type="module" src="/src/entry-client.tsx" />
       </head>
       <body>
-        <Header
-          locale={locale.name}
-          locales={locales}
-          categories={categories}
-        />
-        <div className="container mx-auto">
+        <div>
+          <Header
+            locale={locale.name}
+            locales={locales}
+            categories={categories}
+          />
+        </div>
+        <div className="container mx-auto pt-4">
           <Breadcrumbs />
           <Outlet />
         </div>

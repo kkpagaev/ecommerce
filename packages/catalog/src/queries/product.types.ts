@@ -20,6 +20,26 @@ export interface IProductListQueryQuery {
   result: IProductListQueryResult;
 }
 
+/** 'ProductAttributeViewQuery' parameters type */
+export interface IProductAttributeViewQueryParams {
+  language_id: number;
+  product_id: number;
+}
+
+/** 'ProductAttributeViewQuery' return type */
+export interface IProductAttributeViewQueryResult {
+  attribute_group_id: number;
+  group: string;
+  id: number;
+  name: string;
+}
+
+/** 'ProductAttributeViewQuery' query type */
+export interface IProductAttributeViewQueryQuery {
+  params: IProductAttributeViewQueryParams;
+  result: IProductAttributeViewQueryResult;
+}
+
 /** 'ProductAttributeListQuery' parameters type */
 export interface IProductAttributeListQueryParams {
   product_id: number;

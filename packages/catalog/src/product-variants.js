@@ -1,8 +1,13 @@
 // eslint-disable-next-line no-unused-vars
 import { TaggedQuery, sql } from "@pgtyped/runtime";
 import { tx } from "@repo/pool";
+import { groupBy } from "lodash";
 // eslint-disable-next-line no-unused-vars
 import { Pool } from "pg";
+import {
+  productAttributeListQuery,
+  productAttributeViewQuery,
+} from "./product";
 
 /**
  * @type {TaggedQuery<
@@ -101,12 +106,18 @@ export const productVariantUpdateQuery = sql`
 export const productVariantsOptionsListOptionsQuery = sql`
   SELECT
     pvo.*,
-    od.name
+    od.name,
+    o.option_group_id,
+    ogd.name as option_group_name
   FROM
     product_variant_options pvo
   JOIN
     option_descriptions od
       ON pvo.option_id = od.option_id
+  JOIN options o
+    ON o.id = pvo.option_id
+  JOIN option_group_descriptions ogd
+    ON o.option_group_id = ogd.option_group_id
   WHERE
     pvo.product_variant_id IN $$product_variant_ids!
   AND
@@ -168,7 +179,78 @@ export const productVariantsFindOneQuery = sql`
   FROM
     product_variants pv
   WHERE
-    pv.id = $id!
+    pv.id = COALESCE($id, pv.id)
+  AND
+    pv.slug = COALESCE($slug, pv.slug)
+  LIMIT 1
+`;
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-variants.types").IProductVariantViewQueryQuery
+ * >}
+ */
+export const productVariantViewQuery = sql`
+  SELECT
+    pv.id,
+    pv.slug,
+    pv.product_id,
+    pv.stock_status,
+    pv.price,
+    pv.old_price,
+    pv.article,
+    pv.discount,
+    pv.images,
+    pvd.name,
+    pvd.short_description,
+    pd.description,
+    v.name as vendor
+  FROM
+    product_variants pv
+  JOIN product_variant_descriptions pvd ON pvd.product_variant_id = pv.id
+  JOIN product_descriptions pd ON pd.product_id = pv.product_id
+  JOIN products p ON p.id = pv.product_id
+  JOIN vendors v ON v.id = p.vendor_id
+  WHERE
+    pv.id = COALESCE($id, pv.id)
+  AND
+    pv.slug = COALESCE($slug, pv.slug)
+  AND
+    pvd.language_id = $language_id!
+  AND
+    pd.language_id = $language_id!
+  LIMIT 1
+`;
+
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-variants.types").IProductVariantRelatedVariantsQueryQuery
+ * >}
+ */
+export const productVariantRelatedVariantsQuery = sql`
+  SELECT 
+    pv.id as product_variant_id,
+    pv.slug,
+    pv.product_id,
+    pvo.option_id,
+    pv.stock_status,
+    od.name as option_name, 
+    og.id as option_group_id,
+    ogd.name as option_group_name
+  FROM product_variants pv 
+  JOIN product_variant_options pvo
+    ON pvo.product_variant_id = pv.id 
+  JOIN option_descriptions od
+    ON od.option_id = pvo.option_id
+  JOIN options o
+    ON o.id = pvo.option_id
+  JOIN option_groups og
+    ON og.id = o.option_group_id
+  JOIN option_group_descriptions ogd
+    ON ogd.option_group_id = og.id
+  WHERE 
+    ogd.language_id = $language_id!
+  AND pv.product_id = $product_id!
 `;
 
 export class ProductVariants {
@@ -391,7 +473,63 @@ export class ProductVariants {
 
   /**
    * @param {{
-   *   variantId: number;
+   *   slug?: string;
+   *   variantId?: number;
+   *   languageId: number;
+   * }} input
+   */
+  async productVariantView(input) {
+    const productVariant = await productVariantViewQuery
+      .run(
+        {
+          language_id: input.languageId,
+          slug: input.slug,
+          id: input.variantId,
+        },
+        this.pool,
+      )
+      .then((r) => r[0]);
+
+    if (!productVariant) {
+      return null;
+    }
+    const related = await productVariantRelatedVariantsQuery.run(
+      {
+        product_id: productVariant.product_id,
+        language_id: input.languageId,
+      },
+      this.pool,
+    );
+    const options = await productVariantsOptionsListOptionsQuery.run(
+      {
+        language_id: input.languageId,
+        product_variant_ids: [productVariant.id],
+      },
+      this.pool,
+    );
+    const attributes = await productAttributeViewQuery.run(
+      {
+        product_id: productVariant.product_id,
+        language_id: input.languageId,
+      },
+      this.pool,
+    );
+
+    /** @type {string[]} */
+    const images = /** @type {any} */ (productVariant.images);
+    return {
+      ...productVariant,
+      images: images,
+      attributes: attributes,
+      related: related,
+      options,
+    };
+  }
+
+  /**
+   * @param {{
+   *   slug?: string;
+   *   variantId?: number;
    *   languageId: number;
    * }} input
    */
@@ -400,6 +538,7 @@ export class ProductVariants {
       .run(
         {
           id: input.variantId,
+          slug: input.slug,
         },
         this.pool,
       )

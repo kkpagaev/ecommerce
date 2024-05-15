@@ -38,4 +38,18 @@ export default async ({ t, catalog }: FastifyZod) => ({
         data: products,
       };
     }),
+
+  findProduct: t.procedure
+    .input(z.object({
+      slug: z.string(),
+      languageId: z.number(),
+    }))
+    .query(async ({ input }) => {
+      const res = await catalog.productVariants.productVariantView({
+        languageId: input.languageId,
+        slug: input.slug,
+      });
+
+      return res;
+    }),
 });

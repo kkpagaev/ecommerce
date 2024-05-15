@@ -56,7 +56,7 @@ export const getAttributes = sql`
  */
 export const productVariantPaginateQuery = sql`
   SELECT 
-    pv.id, pv.stock_status, pvd.name, pv.price, pv.images, pv.old_price
+    pv.id, pv.stock_status, pvd.name, pv.price, pv.images, pv.old_price, pv.slug
   FROM product_variants pv
   JOIN product_variant_descriptions pvd ON pvd.product_variant_id = pv.id
   WHERE

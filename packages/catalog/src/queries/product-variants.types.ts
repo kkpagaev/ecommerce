@@ -122,6 +122,8 @@ export interface IProductVariantsOptionsListOptionsQueryParams {
 /** 'ProductVariantsOptionsListOptionsQuery' return type */
 export interface IProductVariantsOptionsListOptionsQueryResult {
   name: string;
+  option_group_id: number;
+  option_group_name: string;
   option_id: number;
   product_variant_id: number;
 }
@@ -195,7 +197,8 @@ export interface IProductVariantOptionsUpsertQueryQuery {
 
 /** 'ProductVariantsFindOneQuery' parameters type */
 export interface IProductVariantsFindOneQueryParams {
-  id: number;
+  id?: number | null | void;
+  slug?: string | null | void;
 }
 
 /** 'ProductVariantsFindOneQuery' return type */
@@ -219,6 +222,60 @@ export interface IProductVariantsFindOneQueryResult {
 export interface IProductVariantsFindOneQueryQuery {
   params: IProductVariantsFindOneQueryParams;
   result: IProductVariantsFindOneQueryResult;
+}
+
+/** 'ProductVariantViewQuery' parameters type */
+export interface IProductVariantViewQueryParams {
+  id?: number | null | void;
+  language_id: number;
+  slug?: string | null | void;
+}
+
+/** 'ProductVariantViewQuery' return type */
+export interface IProductVariantViewQueryResult {
+  article: string;
+  description: string | null;
+  discount: number;
+  id: number;
+  images: string | string[] | Record<string, any>;
+  name: string;
+  old_price: number;
+  price: number;
+  product_id: number;
+  short_description: string | null;
+  slug: string;
+  stock_status: product_variant_stock_status;
+  vendor: string;
+}
+
+/** 'ProductVariantViewQuery' query type */
+export interface IProductVariantViewQueryQuery {
+  params: IProductVariantViewQueryParams;
+  result: IProductVariantViewQueryResult;
+}
+
+/** 'ProductVariantRelatedVariantsQuery' parameters type */
+export interface IProductVariantRelatedVariantsQueryParams {
+  language_id: number;
+  product_id: number;
+}
+
+/** 'ProductVariantRelatedVariantsQuery' return type */
+export interface IProductVariantRelatedVariantsQueryResult {
+  option_group_id: number;
+  option_group_name: string;
+  option_id: number;
+  option_name: string;
+  product_id: number;
+  product_variant_id: number;
+  slug: string;
+  stock_status: product_variant_stock_status;
+}
+
+/** 'ProductVariantRelatedVariantsQuery' query type */
+export interface IProductVariantRelatedVariantsQueryQuery {
+  params: IProductVariantRelatedVariantsQueryParams;
+  result: IProductVariantRelatedVariantsQueryResult;
 }
 
 /** 'ProductVariantsListAllQuery' parameters type */

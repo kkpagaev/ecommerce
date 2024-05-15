@@ -21,6 +21,24 @@ export const productListQuery = sql`
 
 /**
  * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductAttributeViewQueryQuery
+ * >}
+ */
+export const productAttributeViewQuery = sql`
+  SELECT a.id, ad.name as name, agd.name as group, a.attribute_group_id
+  FROM attributes a
+  JOIN attribute_descriptions ad ON ad.attribute_id = a.id
+  JOIN attribute_group_descriptions agd ON agd.attribute_group_id = a.attribute_group_id
+  JOIN product_attributes pa ON pa.attribute_id = a.id
+  WHERE
+    ad.language_id = $language_id!
+  AND agd.language_id = $language_id!
+  AND pa.product_id = $product_id!
+  GROUP BY a.id, ad.name, agd.name
+  ORDER BY a.id
+`;
+/**
+ * @type {TaggedQuery<
  *   import("./queries/product.types").IProductAttributeListQueryQuery
  * >}
  */
@@ -175,32 +193,6 @@ export class Products {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
     this.pool = f.pool;
-  }
-
-  /**
-   * @param {{
-   *   languageId: number;
-   *   categoryId?: number;
-   *   attributes: number[];
-   *   options: number[];
-   *   limit?: number;
-   *   offset?: number;
-   * }} input
-   */
-  async paginate(input) {
-    // return [];
-    // const res = await productPaginateQuery.run(
-    //   {
-    //     language_id: input.languageId,
-    //     categoryId: input.categoryId,
-    //     attributes: input.attributes.length > 0 ? input.attributes : undefined,
-    //     options: input.options.length > 0 ? input.options : undefined,
-    //     limit: input.limit,
-    //     offset: input.offset,
-    //   },
-    //   this.pool,
-    // );
-    // return res;
   }
 
   /**

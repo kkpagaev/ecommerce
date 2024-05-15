@@ -19,6 +19,26 @@ export interface ICategoryUpdateQueryQuery {
   result: ICategoryUpdateQueryResult;
 }
 
+/** 'CategoryHierarchyQuery' parameters type */
+export interface ICategoryHierarchyQueryParams {
+  categoryId: number;
+}
+
+/** 'CategoryHierarchyQuery' return type */
+export interface ICategoryHierarchyQueryResult {
+  category_id: number;
+  id: number | null;
+  language_id: number;
+  name: string;
+  parent_id: number | null;
+}
+
+/** 'CategoryHierarchyQuery' query type */
+export interface ICategoryHierarchyQueryQuery {
+  params: ICategoryHierarchyQueryParams;
+  result: ICategoryHierarchyQueryResult;
+}
+
 /** 'CategoryListQuery' parameters type */
 export interface ICategoryListQueryParams {
   language_id: number;

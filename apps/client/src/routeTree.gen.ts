@@ -15,6 +15,7 @@ import { Route as LnIndexImport } from './routes/$ln/index'
 import { Route as LnPostsImport } from './routes/$ln/posts'
 import { Route as LnErrorImport } from './routes/$ln/error'
 import { Route as LnPostsIndexImport } from './routes/$ln/posts/index'
+import { Route as LnProductSlugImport } from './routes/$ln/product.$slug'
 import { Route as LnPostsPostIdImport } from './routes/$ln/posts/$postId'
 import { Route as LnCategorySlugImport } from './routes/$ln/category.$slug'
 
@@ -38,6 +39,11 @@ const LnErrorRoute = LnErrorImport.update({
 const LnPostsIndexRoute = LnPostsIndexImport.update({
   path: '/',
   getParentRoute: () => LnPostsRoute,
+} as any)
+
+const LnProductSlugRoute = LnProductSlugImport.update({
+  path: '/$ln/product/$slug',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const LnPostsPostIdRoute = LnPostsPostIdImport.update({
@@ -74,6 +80,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LnPostsPostIdImport
       parentRoute: typeof LnPostsImport
     }
+    '/$ln/product/$slug': {
+      preLoaderRoute: typeof LnProductSlugImport
+      parentRoute: typeof rootRoute
+    }
     '/$ln/posts/': {
       preLoaderRoute: typeof LnPostsIndexImport
       parentRoute: typeof LnPostsImport
@@ -88,6 +98,7 @@ export const routeTree = rootRoute.addChildren([
   LnPostsRoute.addChildren([LnPostsPostIdRoute, LnPostsIndexRoute]),
   LnIndexRoute,
   LnCategorySlugRoute,
+  LnProductSlugRoute,
 ])
 
 /* prettier-ignore-end */

@@ -156,6 +156,7 @@ export function ProductVariantForm({
     control,
     name: "descriptions",
   });
+  console.log(formValues?.["images"]);
 
   return (
     <form

@@ -61,6 +61,7 @@ export interface IProductVariantPaginateQueryResult {
   name: string;
   old_price: number;
   price: number;
+  slug: string;
   stock_status: product_variant_stock_status;
 }
 
