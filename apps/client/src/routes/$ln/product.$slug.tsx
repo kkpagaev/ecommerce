@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/carousel";
 import { AspectRatio } from "../../components/ui/aspect-ratio";
 import { BadgeCheck, BadgeX, CircleOff } from "lucide-react";
-import { Button } from "../../components/ui/button";
 import { AddToCartButton } from "../../components/add-to-cart-button";
 
 export const Route = createFileRoute("/$ln/product/$slug")({
