@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CaretSortIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
@@ -63,12 +63,14 @@ type Props<T> = {
   columns: ColumnDef<T>[];
   isLoading: boolean;
   visibilityState?: VisibilityState;
+  onSelectChange?: (selected: Array<T>) => void;
 };
 export function DataTable<T>({
   data,
   columns,
   isLoading,
   visibilityState = {},
+  onSelectChange,
 }: Props<T>) {
   const [count, setCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -77,6 +79,18 @@ export function DataTable<T>({
     useState<VisibilityState>(visibilityState);
   const [rowSelection, setRowSelection] = useState({});
   const dataMemo = useMemo(() => data?.data ?? [], [data]);
+  const callback = useCallback(
+    (selected: Array<T>) => {
+      onSelectChange && onSelectChange(selected);
+    },
+    [onSelectChange],
+  );
+
+  useEffect(() => {
+    callback(
+      Object.keys(rowSelection).map((key) => dataMemo[+key]) as Array<T>,
+    );
+  }, [dataMemo, rowSelection, callback]);
 
   useEffect(() => {
     if (data) setCount(data.count);

@@ -50,6 +50,45 @@ export const getAttributes = sql`
   GROUP BY a.id, ad.name, agd.name
 `;
 
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product-filtering.types").IProductVariantPaginateQueryQuery
+ * >}
+ */
+export const productVariantPaginateQuery = sql`
+  SELECT 
+    pv.id, pv.stock_status, pvd.name, pv.price, pv.images, pv.old_price
+  FROM product_variants pv
+  JOIN product_variant_descriptions pvd ON pvd.product_variant_id = pv.id
+  WHERE
+    pvd.language_id = COALESCE($languageId, pvd.language_id)
+  AND 
+    pv.id IN (
+      SELECT
+      pv.id
+      FROM product_variants pv
+      JOIN products p ON p.id = pv.product_id
+      LEFT JOIN product_variant_options pvo ON pvo.product_variant_id = pv.id
+      LEFT JOIN product_attributes pa ON pa.product_id = p.id
+      where
+        CASE
+          WHEN $attributes::integer[] is not null THEN pa.attribute_id = ANY($attributes::integer[])
+          ELSE TRUE
+        END
+      AND 
+        CASE
+          WHEN $options::integer[] is not null THEN pvo.option_id = any($options::integer[])
+          ELSE TRUE
+        END
+      AND 
+        p.category_id = COALESCE($categoryId, p.category_id)
+      group by pv.id, pa.attribute_id, pvo.option_id 
+    )
+  LIMIT COALESCE($limit, 10)
+  OFFSET COALESCE($offset, 0)
+
+`;
+
 export class ProductFiltering {
   /** @param {{ pool: Pool }} f */
   constructor(f) {
@@ -85,5 +124,39 @@ export class ProductFiltering {
       options: groupBy(options, (o) => o.option_group_name),
       attributes: groupBy(attributes, (a) => a.group_name),
     };
+  }
+
+  /**
+   * @param {{
+   *   limit?: number;
+   *   offset?: number;
+   *   categoryId?: number;
+   *   languageId?: number;
+   *   options: number[];
+   *   attributes: number[];
+   * }} input
+   * @returns
+   */
+  async paginateVariants(input) {
+    const res = await productVariantPaginateQuery.run(
+      {
+        limit: input.limit,
+        offset: input.offset,
+        categoryId: input.categoryId,
+        languageId: input.languageId,
+        options: input.options,
+        attributes: input.attributes,
+      },
+      this.pool,
+    );
+    return res.map((row) => {
+      /** @type {string[]} */
+      const images = /** @type {any} */ (row.images);
+
+      return {
+        ...row,
+        images: images,
+      };
+    });
   }
 }

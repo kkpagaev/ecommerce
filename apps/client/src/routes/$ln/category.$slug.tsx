@@ -1,7 +1,6 @@
 import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { trpcClient } from "@/utils/trpc";
-import { groupBy } from "lodash";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "../../lib/utils";
@@ -47,8 +46,8 @@ export const Route = createFileRoute("/$ln/category/$slug")({
     console.log(data);
 
     return {
-      attributes: groupBy(filters.attributes, (a) => a.group_name),
-      options: groupBy(filters.options, (a) => a.group_name),
+      attributes: filters.attributes,
+      options: filters.options,
       products: data,
       category: context.category,
       selected: {
@@ -64,15 +63,21 @@ type FiltersProps = {
   attributes: Record<
     string,
     Array<{
-      attribute_id: number;
-      attribute_name: string;
+      id: number;
+      name: string;
     }>
   >;
+  // (property) options: Record<string | number, {
+  //     id: number;
+  //     name: string;
+  //     option_group_id: number;
+  //     option_group_name: string;
+  // }[]>
   options: Record<
-    string,
+    string | number,
     Array<{
-      option_id: number;
-      option_name: string;
+      id: number;
+      name: string;
     }>
   >;
   selected: {
@@ -90,12 +95,12 @@ function Filters({ attributes, options, selected }: FiltersProps) {
         return (
           <div key={key}>
             <h2>{key}</h2>
-            {attributes.map((a) => {
-              const isSelected = selected.attributes.includes(a.attribute_id);
+            {attributes.map((a, i) => {
+              const isSelected = selected.attributes.includes(a.id);
 
               return (
                 <div
-                  key={a.attribute_id}
+                  key={i}
                   style={{
                     paddingLeft: "1em",
                     backgroundColor: isSelected ? "red" : "",
@@ -105,31 +110,29 @@ function Filters({ attributes, options, selected }: FiltersProps) {
                       search: (prev) => ({
                         ...prev,
                         attributes: isSelected
-                          ? prev.attributes?.filter(
-                              (id) => id !== a.attribute_id,
-                            )
-                          : [...(prev.attributes || []), a.attribute_id],
+                          ? prev.attributes?.filter((id) => id !== a.id)
+                          : [...(prev.attributes || []), a.id],
                       }),
                     });
                   }}
                 >
-                  {a.attribute_name}
+                  {a.name}
                 </div>
               );
             })}
           </div>
         );
       })}
-      {Object.entries(options).map(([group, options]) => {
+      {Object.entries(options).map(([group, options], i) => {
         return (
-          <div key={group}>
+          <div key={i}>
             <h2>{group}</h2>
             {options.map((o) => {
-              const isSelected = selected.options.includes(o.option_id);
+              const isSelected = selected.options.includes(o.id);
 
               return (
                 <div
-                  key={o.option_id}
+                  key={o.id}
                   style={{
                     paddingLeft: "1em",
                     backgroundColor: isSelected ? "red" : "",
@@ -139,13 +142,13 @@ function Filters({ attributes, options, selected }: FiltersProps) {
                       search: (prev) => ({
                         ...prev,
                         options: isSelected
-                          ? prev.options?.filter((id) => id !== o.option_id)
-                          : [...(prev.options || []), o.option_id],
+                          ? prev.options?.filter((id) => id !== o.id)
+                          : [...(prev.options || []), o.id],
                       }),
                     });
                   }}
                 >
-                  {o.option_name}
+                  {o.name}
                 </div>
               );
             })}
@@ -196,7 +199,7 @@ function Home() {
                           }
                           className={cn(
                             "object-cover w-full h-full",
-                            p.in_stock ? "" : "grayscale",
+                            p.stock_status === "in_stock" ? "" : "grayscale",
                           )}
                         />
                       </AspectRatio>
@@ -204,7 +207,7 @@ function Home() {
                     <div>
                       <h3 className="text-xl text-center">{p.name}</h3>
                     </div>
-                    {p.in_stock ? (
+                    {p.stock_status === "in_stock" ? (
                       <>
                         <div className="text-center text-md text-bold">
                           <div className="text-green-500">In stock</div>

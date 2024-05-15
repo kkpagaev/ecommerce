@@ -15,10 +15,8 @@ export default async ({ t, catalog }: FastifyZod) => ({
           id: input.categoryId,
         },
         languageId: input.languageId,
-        options: input.options || [],
-        attributes: input.attributes || [],
       });
-      const products = await catalog.products.paginate({
+      const products = await catalog.productFiltering.paginateVariants({
         categoryId: input.categoryId,
         options: input.options || [],
         attributes: input.attributes || [],

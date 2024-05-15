@@ -8,6 +8,7 @@ import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
 import { SearchFilters } from "@/components/search-filters";
 import { AspectRatio } from "../../components/ui/aspect-ratio";
+import { useState } from "react";
 
 type Variant = Exclude<
   AdminOutputs["catalog"]["productVariant"]["listAll"][0],
@@ -215,6 +216,7 @@ function Index() {
         <div></div>
       </div>
       <DataTable
+        onSelectChange={(s) => {}}
         data={
           productVariants
             ? { data: productVariants, count: productVariants.length }

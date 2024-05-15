@@ -17,7 +17,7 @@ export const Route = createFileRoute("/$ln/")({
     attributes: search.attributes || [],
     options: search.options || [],
   }),
-  loader: async ({ deps, context, params }) => {
+  loader: async ({ deps, context }) => {
     const { filters, data } = await trpcClient.web.catalog.product.filter.query(
       {
         languageId: context.locale.id,
@@ -44,53 +44,61 @@ function Home() {
 
   return (
     <>
-      {data.attributes.map((a) => {
-        const isSelected = data.selected.attributes.includes(a.attribute_id);
+      {Object.entries(data.attributes).map(([a, attributes]) => {
+        return attributes.map((attribute) => {
+          const isSelected = data.selected.attributes.includes(attribute.id);
 
-        return (
-          <div
-            key={a.attribute_id}
-            style={{
-              paddingLeft: "1em",
-              backgroundColor: isSelected ? "red" : "",
-            }}
-            onClick={() => {
-              navigate({
-                search: (prev) => ({
-                  ...prev,
-                  attributes: isSelected
-                    ? prev.attributes?.filter((id) => id !== a.attribute_id)
-                    : [...(prev.attributes || []), a.attribute_id],
-                }),
-              });
-            }}
-          >
-            {a.attribute_name} - ({a.product_count})
-          </div>
-        );
+          return (
+            <div
+              key={attribute.id}
+              style={{
+                paddingLeft: "1em",
+                backgroundColor: isSelected ? "red" : "",
+              }}
+              onClick={() => {
+                navigate({
+                  search: (prev) => ({
+                    ...prev,
+                    attributes: isSelected
+                      ? prev.attributes?.filter((id) => id !== attribute.id)
+                      : [...(prev.attributes || []), attribute.id],
+                  }),
+                });
+              }}
+            >
+              {attribute.name}
+            </div>
+          );
+        });
       })}
-      {data.options.map((o) => {
-        const isSelected = data.selected.options.includes(o.option_id);
-
+      {Object.entries(data.options).map(([og, options], i) => {
         return (
-          <div
-            key={o.option_id}
-            style={{
-              paddingLeft: "1em",
-              backgroundColor: isSelected ? "red" : "",
-            }}
-            onClick={() => {
-              navigate({
-                search: (prev) => ({
-                  ...prev,
-                  options: isSelected
-                    ? prev.options?.filter((id) => id !== o.option_id)
-                    : [...(prev.options || []), o.option_id],
-                }),
-              });
-            }}
-          >
-            {o.option_name} - ({o.product_count})
+          <div key={i}>
+            {options.map((o) => {
+              const isSelected = data.selected.options.includes(o.id);
+
+              return (
+                <div
+                  key={i}
+                  style={{
+                    paddingLeft: "1em",
+                    backgroundColor: isSelected ? "red" : "",
+                  }}
+                  onClick={() => {
+                    navigate({
+                      search: (prev) => ({
+                        ...prev,
+                        options: isSelected
+                          ? prev.options?.filter((id) => id !== o.id)
+                          : [...(prev.options || []), o.id],
+                      }),
+                    });
+                  }}
+                >
+                  {o.name}
+                </div>
+              );
+            })}
           </div>
         );
       })}

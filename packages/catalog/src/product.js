@@ -158,30 +158,6 @@ export const productDescriptionUpsertQuery = sql`
       description = EXCLUDED.description;
 `;
 
-// export const productPaginateQuery = sql`
-//   SELECT
-//     p.id,
-//     pd.name as name,
-//     pr.price,
-//     p.in_stock
-//   FROM products p
-//   JOIN product_descriptions pd ON p.id = pd.product_id
-//   JOIN product_attributes pa ON p.id = pa.product_id
-//   JOIN prices pr ON p.id = pr.product_id
-//   WHERE pd.language_id = $language_id!
-//     AND
-//       CASE
-//         WHEN $attributes::integer[] is not null THEN pa.attribute_id = ANY($attributes::integer[])
-//         ELSE TRUE
-//     END
-//   AND
-//     p.category_id = COALESCE($categoryId, p.category_id)
-//   GROUP BY p.id, pd.name, pr.price
-//   ORDER BY in_stock DESC, pd.name
-//   LIMIT COALESCE($limit, 10)
-//   OFFSET COALESCE($offset, 0)
-// `;
-
 /**
  * @type {TaggedQuery<
  *   import("./queries/product.types").IProductCreateQueryQuery
@@ -212,7 +188,7 @@ export class Products {
    * }} input
    */
   async paginate(input) {
-    return [];
+    // return [];
     // const res = await productPaginateQuery.run(
     //   {
     //     language_id: input.languageId,
@@ -224,7 +200,6 @@ export class Products {
     //   },
     //   this.pool,
     // );
-
     // return res;
   }
 

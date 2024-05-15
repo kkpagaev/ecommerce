@@ -85,14 +85,14 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function Breadcrumbs() {
   const matches = useMatches();
   console.log(matches);
-  const router = useRouter();
-  const breadcrumbs = router.state.matches.map((match) => {
-    console.log(match.routeContextatch);
-    // return {
-    //   title: routeContext.getTitle?.(),
-    //   path: match.pathname,
-    // };
-  });
+  // const router = useRouter();
+  // const breadcrumbs = router.state.matches.map((match) => {
+  //   console.log(match.routeContextatch);
+  //   // return {
+  //   //   title: routeContext.getTitle?.(),
+  //   //   path: match.pathname,
+  //   // };
+  // });
 
   return null;
 }
@@ -106,7 +106,7 @@ function RootComponent() {
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
           rel="stylesheet"
@@ -132,7 +132,7 @@ function RootComponent() {
         <Header
           locale={locale.name}
           locales={locales}
-          categories={categories.data}
+          categories={categories}
         />
         <div className="container mx-auto">
           <Breadcrumbs />
