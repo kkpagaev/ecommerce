@@ -123,6 +123,28 @@ function Home() {
                         </div>
                       </>
                     )}
+                    <div>
+                      {p.price < p.old_price ? (
+                        <>
+                          <div className="text-center text-md text-bold">
+                            <div className="text-green-500">
+                              ${p.price.toFixed(2)}
+                            </div>
+                            <div className="text-gray-500 line-through">
+                              ${p.old_price.toFixed(2)}
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="text-center text-md text-bold">
+                            <div className="text-green-500">
+                              ${p.price.toFixed(2)}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </Card>
               );
