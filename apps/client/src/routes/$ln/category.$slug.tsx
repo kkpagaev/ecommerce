@@ -1,10 +1,11 @@
-import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { z } from "zod";
 import { trpcClient } from "@/utils/trpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "../../lib/utils";
 import { Filters } from "../../components/filters";
+import { RoutePagination } from "../../components/route-pagination";
 
 export const Route = createFileRoute("/$ln/category/$slug")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -12,6 +13,8 @@ export const Route = createFileRoute("/$ln/category/$slug")({
       .object({
         attributes: z.array(z.number()),
         options: z.array(z.number()),
+        vendors: z.array(z.number()),
+        page: z.number().optional(),
       })
       .partial()
       .parse(search);
@@ -19,6 +22,8 @@ export const Route = createFileRoute("/$ln/category/$slug")({
   loaderDeps: ({ search }) => ({
     attributes: search.attributes || [],
     options: search.options || [],
+    vendors: search.vendors || [],
+    page: search.page || 1,
   }),
   beforeLoad: async ({ params, context }) => {
     const category = await trpcClient.web.catalog.category.findCategory.query({
@@ -36,24 +41,27 @@ export const Route = createFileRoute("/$ln/category/$slug")({
     };
   },
   loader: async ({ deps, context }) => {
-    const { filters, data } = await trpcClient.web.catalog.product.filter.query(
-      {
+    const { filters, data, vendors } =
+      await trpcClient.web.catalog.product.filter.query({
         categoryId: context.category.id,
         languageId: context.locale.id,
         options: deps.options,
+        page: deps.page,
         attributes: deps.attributes,
-      },
-    );
-    console.log(data);
+        vendors: deps.vendors,
+      });
 
     return {
       attributes: filters.attributes,
       options: filters.options,
       products: data,
       category: context.category,
+      vendors: vendors,
+      page: deps.page,
       selected: {
         attributes: deps.attributes,
         options: deps.options,
+        vendors: deps.vendors,
       },
     };
   },
@@ -62,7 +70,6 @@ export const Route = createFileRoute("/$ln/category/$slug")({
 
 function Home() {
   const data = Route.useLoaderData();
-  console.log(data.products);
 
   return (
     <div className="container mx-auto">
@@ -76,6 +83,7 @@ function Home() {
             <CardContent>
               <Filters
                 path={Route.fullPath}
+                vendors={data.vendors}
                 options={data.options}
                 attributes={data.attributes}
                 selected={data.selected}
@@ -86,7 +94,7 @@ function Home() {
 
         <div className="w-full grow col-span-9">
           <div className="grid-cols-3 grid grid-flow-row">
-            {data.products.map((p) => {
+            {data.products.data.map((p) => {
               return (
                 <Card
                   key={p.id}
@@ -150,6 +158,11 @@ function Home() {
               );
             })}
           </div>
+          <RoutePagination
+            from={Route.fullPath}
+            currentPage={data.page}
+            totalPages={Math.ceil(+data.products.count / 20)}
+          />
         </div>
       </div>
     </div>

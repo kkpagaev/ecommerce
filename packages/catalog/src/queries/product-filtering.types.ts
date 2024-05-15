@@ -51,6 +51,7 @@ export interface IProductVariantPaginateQueryParams {
   limit?: number | null | void;
   offset?: number | null | void;
   options?: numberArray | null | void;
+  vendors?: numberArray | null | void;
 }
 
 /** 'ProductVariantPaginateQuery' return type */
@@ -67,5 +68,24 @@ export interface IProductVariantPaginateQueryResult {
 export interface IProductVariantPaginateQueryQuery {
   params: IProductVariantPaginateQueryParams;
   result: IProductVariantPaginateQueryResult;
+}
+
+/** 'ProductVariantPaginateCountQuery' parameters type */
+export interface IProductVariantPaginateCountQueryParams {
+  attributes?: numberArray | null | void;
+  categoryId?: number | null | void;
+  options?: numberArray | null | void;
+  vendors?: numberArray | null | void;
+}
+
+/** 'ProductVariantPaginateCountQuery' return type */
+export interface IProductVariantPaginateCountQueryResult {
+  count: string | null;
+}
+
+/** 'ProductVariantPaginateCountQuery' query type */
+export interface IProductVariantPaginateCountQueryQuery {
+  params: IProductVariantPaginateCountQueryParams;
+  result: IProductVariantPaginateCountQueryResult;
 }
 

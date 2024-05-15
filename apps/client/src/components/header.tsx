@@ -81,7 +81,6 @@ function Breadcrumbs() {
   const router = useRouter();
   const breadcrumbs = router.state.matches.map((match) => {
     const { routeContext } = match;
-    console.log(match);
     return {
       title: routeContext.getTitle?.(),
       path: match.pathname,

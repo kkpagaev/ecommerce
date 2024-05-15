@@ -23,7 +23,6 @@ export const Route = createFileRoute("/$ln/posts")({
 function PostsComponent() {
   const posts = Route.useLoaderData();
   const params = Route.useParams();
-  console.log({ params });
 
   return (
     <div className="p-2 flex gap-2">
