@@ -1,14 +1,12 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { DataTable } from "@/components/data-table";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
-import { SearchFilters } from "@/components/search-filters";
-import { AspectRatio } from "../../components/ui/aspect-ratio";
-import { useState } from "react";
+import { AspectRatio } from "../components/ui/aspect-ratio";
+import { OutletDialog } from "../components/ui/dialog-outlet";
 
 type Variant = Exclude<
   AdminOutputs["catalog"]["productVariant"]["listAll"][0],
@@ -155,12 +153,12 @@ const columns: ColumnDef<Variant>[] = [
   // },
 ];
 
-export const Route = createFileRoute("/exports/")({
+export const Route = createFileRoute("/exports")({
   component: Index,
   beforeLoad: async ({ context }) => {
     return {
       ...context,
-      getTitle: () => "Attribute Groups",
+      getTitle: () => "Export",
     };
   },
   validateSearch: (search: Record<string, unknown>) => {
@@ -168,12 +166,14 @@ export const Route = createFileRoute("/exports/")({
       .object({
         languageId: z.number().optional(),
         name: z.string().optional(),
+        selected: z.array(z.number()).optional(),
       })
       .parse(search);
   },
   loaderDeps: ({ search }) => ({
     languageId: search.languageId || 1,
     name: search.name,
+    selected: search.selected || [],
   }),
   loader: async ({ context, deps }) => {
     const productVariants =
@@ -182,49 +182,37 @@ export const Route = createFileRoute("/exports/")({
       });
 
     console.log(productVariants[0]);
-    return { productVariants };
+    return { productVariants, selected: deps.selected };
   },
 });
 
 function Index() {
   const { productVariants } = Route.useLoaderData();
-  const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
 
   return (
     <div>
-      <div className="w-full flex flex-row gap-10">
-        <SearchFilters
-          search={search}
-          fullPath={Route.fullPath}
-          filters={[
-            {
-              name: "name",
-              type: "string",
-              label: "Name",
-            },
-            {
-              name: "languageId",
-              type: "languageId",
-            },
-          ]}
-        />
-        <div>
-          <Link to={"/products/new"}>
-            <Button variant="default">New</Button>
-          </Link>
-        </div>
-        <div></div>
-      </div>
+      <div className="w-full flex flex-row gap-10"></div>
       <DataTable
-        onSelectChange={(s) => {}}
         data={
           productVariants
             ? { data: productVariants, count: productVariants.length }
             : undefined
         }
+        onSelectSubmit={(m) => {
+          navigate({
+            to: "/exports/new",
+            search: (prev) => ({
+              ...prev,
+              productVariantIds: m.map((m) => m.id),
+            }),
+          });
+          console.log(m);
+        }}
         columns={columns}
         isLoading={false}
       />
+      <OutletDialog path={Route.fullPath} />
     </div>
   );
 }

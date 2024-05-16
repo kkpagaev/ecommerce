@@ -63,14 +63,14 @@ type Props<T> = {
   columns: ColumnDef<T>[];
   isLoading: boolean;
   visibilityState?: VisibilityState;
-  onSelectChange?: (selected: Array<T>) => void;
+  onSelectSubmit?: (selected: T[]) => void;
 };
-export function DataTable<T>({
+export function DataTable<T extends Record<string, any>>({
   data,
   columns,
   isLoading,
   visibilityState = {},
-  onSelectChange,
+  onSelectSubmit,
 }: Props<T>) {
   const [count, setCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -79,18 +79,6 @@ export function DataTable<T>({
     useState<VisibilityState>(visibilityState);
   const [rowSelection, setRowSelection] = useState({});
   const dataMemo = useMemo(() => data?.data ?? [], [data]);
-  const callback = useCallback(
-    (selected: Array<T>) => {
-      onSelectChange && onSelectChange(selected);
-    },
-    [onSelectChange],
-  );
-
-  useEffect(() => {
-    callback(
-      Object.keys(rowSelection).map((key) => dataMemo[+key]) as Array<T>,
-    );
-  }, [dataMemo, rowSelection, callback]);
 
   useEffect(() => {
     if (data) setCount(data.count);
@@ -183,32 +171,49 @@ export function DataTable<T>({
             ))}
           </SelectContent>
         </Select>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
+        <div>
+          {onSelectSubmit && (
+            <Button
+              variant="default"
+              className="ml-auto"
+              onClick={() => {
+                onSelectSubmit(
+                  Object.keys(rowSelection)
+                    .map(Number)
+                    .map((i) => dataMemo[i]),
                 );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              }}
+            >
+              Select
+            </Button>
+          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

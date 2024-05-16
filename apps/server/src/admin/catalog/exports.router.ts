@@ -9,7 +9,7 @@ export default ({ t, catalog, exports }: FastifyZod) => ({
     firmName: z.string(),
     marketPlace: z.enum(["prom", "hotline"]),
   }))
-    .use(isAuthed)
+    // .use(isAuthed)
     .mutation(async ({ input }) => {
       if (input.marketPlace === "hotline") {
         // type Product = {

@@ -5,19 +5,20 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as VendorsImport } from './routes/vendors'
 import { Route as LanguagesImport } from './routes/languages'
+import { Route as ExportsImport } from './routes/exports'
 import { Route as CategoriesImport } from './routes/categories'
 import { Route as AdminsImport } from './routes/admins'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
 import { Route as OptionGroupsIndexImport } from './routes/option-groups/index'
-import { Route as ExportsIndexImport } from './routes/exports/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
 import { Route as VendorsNewImport } from './routes/vendors/new'
 import { Route as ProductsNewImport } from './routes/products/new'
 import { Route as OptionGroupsNewImport } from './routes/option-groups/new'
 import { Route as OptionGroupsOptionGroupIdImport } from './routes/option-groups/$optionGroupId'
 import { Route as LanguagesNewImport } from './routes/languages/new'
+import { Route as ExportsNewImport } from './routes/exports/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
@@ -51,6 +52,11 @@ const LanguagesRoute = LanguagesImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ExportsRoute = ExportsImport.update({
+  path: '/exports',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CategoriesRoute = CategoriesImport.update({
   path: '/categories',
   getParentRoute: () => rootRoute,
@@ -78,11 +84,6 @@ const ProductsIndexRoute = ProductsIndexImport.update({
 
 const OptionGroupsIndexRoute = OptionGroupsIndexImport.update({
   path: '/option-groups/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ExportsIndexRoute = ExportsIndexImport.update({
-  path: '/exports/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -114,6 +115,11 @@ const OptionGroupsOptionGroupIdRoute = OptionGroupsOptionGroupIdImport.update({
 const LanguagesNewRoute = LanguagesNewImport.update({
   path: '/new',
   getParentRoute: () => LanguagesRoute,
+} as any)
+
+const ExportsNewRoute = ExportsNewImport.update({
+  path: '/new',
+  getParentRoute: () => ExportsRoute,
 } as any)
 
 const CategoriesNewRoute = CategoriesNewImport.update({
@@ -246,6 +252,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesImport
       parentRoute: typeof rootRoute
     }
+    '/exports': {
+      preLoaderRoute: typeof ExportsImport
+      parentRoute: typeof rootRoute
+    }
     '/languages': {
       preLoaderRoute: typeof LanguagesImport
       parentRoute: typeof rootRoute
@@ -270,6 +280,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesNewImport
       parentRoute: typeof CategoriesImport
     }
+    '/exports/new': {
+      preLoaderRoute: typeof ExportsNewImport
+      parentRoute: typeof ExportsImport
+    }
     '/languages/new': {
       preLoaderRoute: typeof LanguagesNewImport
       parentRoute: typeof LanguagesImport
@@ -292,10 +306,6 @@ declare module '@tanstack/react-router' {
     }
     '/attribute-groups/': {
       preLoaderRoute: typeof AttributeGroupsIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/exports/': {
-      preLoaderRoute: typeof ExportsIndexImport
       parentRoute: typeof rootRoute
     }
     '/option-groups/': {
@@ -383,6 +393,7 @@ export const routeTree = rootRoute.addChildren([
     CategoriesNewRoute,
     CategoriesCategoryIdEditRoute,
   ]),
+  ExportsRoute.addChildren([ExportsNewRoute]),
   LanguagesRoute.addChildren([LanguagesNewRoute, LanguagesLanguageIdEditRoute]),
   VendorsRoute.addChildren([VendorsNewRoute, VendorsVendorIdEditRoute]),
   AttributeGroupsAttributeGroupIdRoute.addChildren([
@@ -399,7 +410,6 @@ export const routeTree = rootRoute.addChildren([
   OptionGroupsNewRoute,
   ProductsNewRoute,
   AttributeGroupsIndexRoute,
-  ExportsIndexRoute,
   OptionGroupsIndexRoute,
   ProductsIndexRoute,
   ProductsProductIdEditRoute,
