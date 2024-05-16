@@ -7,7 +7,6 @@ import {
 import { z } from "zod";
 import { trpcClient } from "@/utils/trpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "../../lib/utils";
 import { Filters } from "../../components/filters";
 import { RoutePagination } from "../../components/route-pagination";
@@ -19,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
+import { ProductImage } from "../../components/product-image";
 
 export const Route = createFileRoute("/$ln/category/$slug")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -144,26 +144,18 @@ function Home() {
                 >
                   <div className="h-full flex flex-col gap-4 justify-between">
                     <div className="rounded-sm overflow-hidden">
-                      <AspectRatio ratio={7 / 8}>
-                        <Link
-                          to="/$ln/product/$slug"
-                          params={(current: any) => ({
-                            ln: current.ln,
-                            slug: p.slug,
-                          })}
-                        >
-                          <img
-                            src={
-                              "http://localhost:3000/file-upload?imageId=" +
-                              p.images[0]
-                            }
-                            className={cn(
-                              "object-cover w-full h-full",
-                              p.stock_status === "in_stock" ? "" : "grayscale",
-                            )}
-                          />
-                        </Link>
-                      </AspectRatio>
+                      <Link
+                        to="/$ln/product/$slug"
+                        className={cn(
+                          p.stock_status === "in_stock" ? "" : "grayscale",
+                        )}
+                        params={(current: any) => ({
+                          ln: current.ln,
+                          slug: p.slug,
+                        })}
+                      >
+                        <ProductImage id={p.images[0]} />
+                      </Link>
                     </div>
                     <div>
                       <Link
@@ -217,6 +209,7 @@ function Home() {
                         product={{
                           id: p.id,
                           name: p.name,
+                          price: p.price,
                           image: p.images[0],
                         }}
                       />

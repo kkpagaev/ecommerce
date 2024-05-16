@@ -13,6 +13,7 @@ import { AddToCartButton } from "../../components/add-to-cart-button";
 import { groupBy } from "lodash";
 import { Button } from "../../components/ui/button";
 import { useState } from "react";
+import { ProductImage } from "../../components/product-image";
 
 export const Route = createFileRoute("/$ln/product/$slug")({
   component: ProductComponent,
@@ -168,17 +169,7 @@ function ProductComponent() {
                 product.images.map((image: string, i) => {
                   return (
                     <CarouselItem key={i}>
-                      <AspectRatio
-                        ratio={1 / 1}
-                        className="rounded-md overflow-hidden"
-                      >
-                        <img
-                          src={
-                            "http://localhost:3000/file-upload?imageId=" + image
-                          }
-                          className={"object-cover w-full h-full"}
-                        />
-                      </AspectRatio>
+                      <ProductImage id={image} />
                     </CarouselItem>
                   );
                 })
@@ -243,6 +234,7 @@ function ProductComponent() {
                   id: product.id,
                   name: product.name,
                   image: product.images[0],
+                  price: product.price,
                 }}
               />
             </div>

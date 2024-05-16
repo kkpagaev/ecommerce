@@ -30,6 +30,7 @@ export function AddToCartButton({
     id: number;
     name: string;
     image: string;
+    price: number;
   };
 }) {
   const cartStore = useCartStore((state) => ({
@@ -53,6 +54,7 @@ export function AddToCartButton({
       id: product.id,
       image: product.image,
       name: product.name,
+      price: product.price,
       quantity,
     });
     toast.success("Added to cart");
