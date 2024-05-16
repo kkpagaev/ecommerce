@@ -1,4 +1,9 @@
-import { Link, createFileRoute, notFound } from "@tanstack/react-router";
+import {
+  Link,
+  createFileRoute,
+  notFound,
+  useNavigate,
+} from "@tanstack/react-router";
 import { z } from "zod";
 import { trpcClient } from "@/utils/trpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +12,13 @@ import { cn } from "../../lib/utils";
 import { Filters } from "../../components/filters";
 import { RoutePagination } from "../../components/route-pagination";
 import { AddToCartButton } from "../../components/add-to-cart-button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
 
 export const Route = createFileRoute("/$ln/category/$slug")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -16,6 +28,8 @@ export const Route = createFileRoute("/$ln/category/$slug")({
         options: z.array(z.number()),
         vendors: z.array(z.number()),
         page: z.number().optional(),
+        orderDirection: z.enum(["asc", "desc"]).optional(),
+        orderBy: z.enum(["price", "popularity"]).optional(),
       })
       .partial()
       .parse(search);
@@ -25,6 +39,8 @@ export const Route = createFileRoute("/$ln/category/$slug")({
     options: search.options || [],
     vendors: search.vendors || [],
     page: search.page || 1,
+    orderDirection: search.orderDirection || "desc",
+    orderBy: search.orderBy || "popularity",
   }),
   beforeLoad: async ({ params, context }) => {
     const category = await trpcClient.web.catalog.category.findCategory.query({
@@ -45,6 +61,8 @@ export const Route = createFileRoute("/$ln/category/$slug")({
     const { filters, data, vendors } =
       await trpcClient.web.catalog.product.filter.query({
         categoryId: context.category.id,
+        asc: deps.orderDirection === "asc",
+        sort: deps.orderBy,
         languageId: context.locale.id,
         options: deps.options,
         page: deps.page,
@@ -71,6 +89,7 @@ export const Route = createFileRoute("/$ln/category/$slug")({
 
 function Home() {
   const data = Route.useLoaderData();
+  const navigate = useNavigate({ from: Route.fullPath });
 
   return (
     <div className="container mx-auto">
@@ -93,7 +112,29 @@ function Home() {
           </Card>
         </div>
 
-        <div className="w-full grow col-span-9">
+        <div className="w-full grow col-span-9 grid gap-4">
+          <div className="flex gap-2 w-full justify-end">
+            <Select
+              onValueChange={(v) =>
+                navigate({
+                  search: (prev) => ({
+                    ...prev,
+                    orderBy: v === "popularity" ? "popularity" : "price",
+                    orderDirection: v === "priceAsc" ? "asc" : "desc",
+                  }),
+                })
+              }
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="priceAsc">Price Low</SelectItem>
+                <SelectItem value="priceDesc">Price High</SelectItem>
+                <SelectItem value="popularity">Popularity</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="grid-cols-3 grid grid-flow-row">
             {data.products.data.map((p) => {
               return (
@@ -177,7 +218,6 @@ function Home() {
                           id: p.id,
                           name: p.name,
                           image: p.images[0],
-                          quantity: 1,
                         }}
                       />
                     </div>

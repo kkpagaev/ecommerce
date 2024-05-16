@@ -88,7 +88,20 @@ export const productVariantPaginateQuery = sql`
         p.category_id = COALESCE($categoryId, p.category_id)
       group by pv.id, pa.attribute_id, pvo.option_id 
     )
-  ORDER BY pv.stock_status, (CASE WHEN $asc = true THEN $order_column END) ASC, $order_column DESC
+  ORDER BY
+  pv.stock_status = 'in_stock' DESC,
+  (CASE WHEN $asc THEN 
+    CASE
+      WHEN $order_column = 'popularity' THEN pv.popularity
+      WHEN $order_column = 'price' THEN pv.price
+    END
+    END
+  ) ASC,
+  CASE
+    WHEN $order_column = 'popularity' THEN pv.popularity
+    WHEN $order_column = 'price' THEN pv.price
+  END
+  DESC
   LIMIT COALESCE($limit, 10)
   OFFSET COALESCE($offset, 0)
 `;
@@ -182,7 +195,7 @@ export class ProductFiltering {
   async paginateVariants(input) {
     const res = await productVariantPaginateQuery.run(
       {
-        order_column: input.order || "popularity",
+        order_column: input.order === "price" ? "price" : "popularity",
         asc: input.asc || false,
         limit: input.limit,
         offset: input.offset,
