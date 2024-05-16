@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@pgtyped/cli": "^2.3.0",
+    "@repo/catalog": "*",
     "@repo/eslint-config": "*",
     "@repo/pool": "*",
     "@repo/typescript-config": "*",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "@pgtyped/runtime": "^2.3.0",
+    "dayjs": "^1.11.11",
     "pg": "^8.11.3",
     "typescript": "^5.3.3",
     "xmlbuilder2": "^3.1.1"
