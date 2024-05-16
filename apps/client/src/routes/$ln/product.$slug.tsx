@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 import { trpcClient } from "../../utils/trpc";
 import {
   Carousel,
@@ -10,6 +10,9 @@ import {
 import { AspectRatio } from "../../components/ui/aspect-ratio";
 import { BadgeCheck, BadgeX, CircleOff } from "lucide-react";
 import { AddToCartButton } from "../../components/add-to-cart-button";
+import { groupBy } from "lodash";
+import { Button } from "../../components/ui/button";
+import { useState } from "react";
 
 export const Route = createFileRoute("/$ln/product/$slug")({
   component: ProductComponent,
@@ -31,20 +34,140 @@ export const Route = createFileRoute("/$ln/product/$slug")({
   },
 });
 
+type OptionPickerProps = {
+  productId: number;
+  current: Array<{
+    optionId: number;
+    groupId: number;
+  }>;
+  options: Array<{
+    optionGroupId: number;
+    optionGroupName: string;
+    optionId: number;
+    optionName: string;
+    productVariantId: number;
+    slug: string;
+    // stockStatus: "in_stock" | "out_of_stock" | "preorder";
+  }>;
+};
+function OptionPickerForm({ productId, current, options }: OptionPickerProps) {
+  const groups = groupBy(options, "optionGroupName");
+  const [selected, setSelected] = useState(current.map((c) => ({ ...c })));
+
+  // useEffect(() => {}, [selected]);
+  const onClick = (optionId: number, groupId: number) => {
+    setSelected((prev) => {
+      if (prev.some((s) => s.groupId === groupId)) {
+        return prev
+          .filter((s) => s.groupId !== groupId)
+          .concat({ optionId, groupId });
+      } else {
+        return prev.concat({ optionId, groupId });
+      }
+    });
+  };
+
+  return (
+    <div className="w-full">
+      {
+        //product options
+        Object.entries(groups).map(([name, related]) => {
+          const options = groupBy(related, "optionId");
+          // const otherGroups = Object.keys(groups).filter((n) => n !== name);
+
+          return (
+            <div className="flex gap-2 justify-between">
+              <div>{name}</div>
+              <div className="flex gap-2">
+                {
+                  // option values
+                  Object.keys(options).map((name) => {
+                    const optionValue = options[name][0];
+                    const isSelected = selected.some(
+                      (s) => s.optionId === optionValue.optionId,
+                    );
+
+                    return (
+                      <div>
+                        <Button
+                          key={name}
+                          variant={isSelected ? "default" : "outline"}
+                          onClick={() =>
+                            onClick(
+                              optionValue.optionId,
+                              optionValue.optionGroupId,
+                            )
+                          }
+                        >
+                          {optionValue.optionName}
+                        </Button>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  );
+}
+function OptionPicker({ productId, current, options }: OptionPickerProps) {
+  const groups = groupBy(options, "optionGroupName");
+
+  if (Object.keys(groups).length === 1) {
+    const related = groups[Object.keys(groups)[0]];
+
+    return (
+      <div className="flex gap-2">
+        {related.map((o) => {
+          return (
+            <Button
+              asChild
+              key={o.optionId}
+              variant={productId === o.productVariantId ? "default" : "outline"}
+            >
+              <Link
+                to={`/$ln/product/$slug`}
+                params={(prev: any) => ({
+                  ...prev,
+                  slug: o.slug,
+                })}
+                key={o.optionId}
+              >
+                {o.optionName}
+              </Link>
+            </Button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <OptionPickerForm
+      productId={productId}
+      current={current}
+      options={options}
+    />
+  );
+}
+
 function ProductComponent() {
   const { product } = Route.useLoaderData();
   console.log(product);
 
   return (
     <div className="container p-2">
-      <div className="grid grid-cols-12 gap-16">
-        <div className="col-span-6">
+      <div className="md:grid grid-cols-12 gap-16">
+        <div className="md:col-span-6">
           <Carousel className="p-6 border-gray-100 border-2 rounded-md">
             <CarouselContent>
               {product.images.length > 0 ? (
-                product.images.map((image: string) => {
+                product.images.map((image: string, i) => {
                   return (
-                    <CarouselItem>
+                    <CarouselItem key={i}>
                       <AspectRatio
                         ratio={1 / 1}
                         className="rounded-md overflow-hidden"
@@ -76,7 +199,7 @@ function ProductComponent() {
             <CarouselNext />
           </Carousel>
         </div>
-        <div className="col-span-6">
+        <div className="md:col-span-6">
           <h1 className="text-4xl font-bold mb-8">{product.name}</h1>
           <div className="text-2xl font-bold mb-8">
             <div className="flex gap-2">
@@ -124,6 +247,26 @@ function ProductComponent() {
               />
             </div>
           </div>
+          <div className="text-2xl font-bold mb-8">
+            <div className="flex gap-2">
+              <OptionPicker
+                current={product.options.map((o) => ({
+                  optionId: o.option_id,
+                  groupId: o.option_group_id,
+                }))}
+                options={product.related.map((o) => ({
+                  optionGroupName: o.option_group_name,
+                  optionId: o.option_id,
+                  optionGroupId: o.option_group_id,
+                  optionName: o.option_name,
+                  productVariantId: o.product_variant_id,
+                  slug: o.slug,
+                  groupId: o.option_group_id,
+                }))}
+                productId={product.id}
+              />
+            </div>
+          </div>
           <div className="text-xl mb-8">
             <p>{product.description}</p>
           </div>
@@ -151,6 +294,10 @@ function ProductComponent() {
                 </div>
               );
             })}
+          </div>
+          <div className="">
+            <h4 className="font-bold">Vendor</h4>
+            <p>{product.vendor}</p>
           </div>
         </div>
       </div>
