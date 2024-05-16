@@ -1,5 +1,4 @@
 /** Types generated for queries found in "src/product.js" */
-export type NumberOrString = number | string;
 
 /** 'ProductListQuery' parameters type */
 export interface IProductListQueryParams {
@@ -8,18 +7,37 @@ export interface IProductListQueryParams {
 
 /** 'ProductListQuery' return type */
 export interface IProductListQueryResult {
+  category: string;
   category_id: number;
   description: string | null;
   id: number;
-  images: string | string[] | Record<string, any> | null;
   name: string;
-  slug: string;
 }
 
 /** 'ProductListQuery' query type */
 export interface IProductListQueryQuery {
   params: IProductListQueryParams;
   result: IProductListQueryResult;
+}
+
+/** 'ProductAttributeViewQuery' parameters type */
+export interface IProductAttributeViewQueryParams {
+  language_id: number;
+  product_id: number;
+}
+
+/** 'ProductAttributeViewQuery' return type */
+export interface IProductAttributeViewQueryResult {
+  attribute_group_id: number;
+  group: string;
+  id: number;
+  name: string;
+}
+
+/** 'ProductAttributeViewQuery' query type */
+export interface IProductAttributeViewQueryQuery {
+  params: IProductAttributeViewQueryParams;
+  result: IProductAttributeViewQueryResult;
 }
 
 /** 'ProductAttributeListQuery' parameters type */
@@ -68,28 +86,11 @@ export interface IProductOptionGroupsListQueryQuery {
   result: IProductOptionGroupsListQueryResult;
 }
 
-/** 'ProductOptionsListQuery' parameters type */
-export interface IProductOptionsListQueryParams {
-  product_id: number;
-}
-
-/** 'ProductOptionsListQuery' return type */
-export interface IProductOptionsListQueryResult {
-  id: number;
-}
-
-/** 'ProductOptionsListQuery' query type */
-export interface IProductOptionsListQueryQuery {
-  params: IProductOptionsListQueryParams;
-  result: IProductOptionsListQueryResult;
-}
-
 /** 'ProductUpdateQuery' parameters type */
 export interface IProductUpdateQueryParams {
   categoryId?: number | null | void;
   id: number;
-  images?: string | string[] | Record<string, any> | null | void;
-  slug?: string | null | void;
+  vendorId?: number | null | void;
 }
 
 /** 'ProductUpdateQuery' return type */
@@ -127,10 +128,8 @@ export interface IProductFindOneQueryResult {
   category_id: number;
   created_at: Date;
   id: number;
-  images: string | string[] | Record<string, any> | null;
-  price: string | null;
-  slug: string;
   updated_at: Date;
+  vendor_id: number;
 }
 
 /** 'ProductFindOneQuery' query type */
@@ -150,6 +149,7 @@ export interface IProductDescriptionFindQueryResult {
   language_id: number;
   name: string;
   product_id: number;
+  short_description: string | null;
 }
 
 /** 'ProductDescriptionFindQuery' query type */
@@ -220,62 +220,14 @@ export interface IProductAttributesUpsertQueryQuery {
   result: IProductAttributesUpsertQueryResult;
 }
 
-/** 'ProductOptionsDeleteQuery' parameters type */
-export interface IProductOptionsDeleteQueryParams {
-  product_id: number;
-}
-
-/** 'ProductOptionsDeleteQuery' return type */
-export type IProductOptionsDeleteQueryResult = void;
-
-/** 'ProductOptionsDeleteQuery' query type */
-export interface IProductOptionsDeleteQueryQuery {
-  params: IProductOptionsDeleteQueryParams;
-  result: IProductOptionsDeleteQueryResult;
-}
-
-/** 'ProductOptionsUpsertQuery' parameters type */
-export interface IProductOptionsUpsertQueryParams {
-  values: readonly ({
-    product_id: number,
-    option_id: number
-  })[];
-}
-
-/** 'ProductOptionsUpsertQuery' return type */
-export type IProductOptionsUpsertQueryResult = void;
-
-/** 'ProductOptionsUpsertQuery' query type */
-export interface IProductOptionsUpsertQueryQuery {
-  params: IProductOptionsUpsertQueryParams;
-  result: IProductOptionsUpsertQueryResult;
-}
-
-/** 'PriceUpsertQuery' parameters type */
-export interface IPriceUpsertQueryParams {
-  values: readonly ({
-    product_id: NumberOrString,
-    price: NumberOrString,
-    type: string | null | void
-  })[];
-}
-
-/** 'PriceUpsertQuery' return type */
-export type IPriceUpsertQueryResult = void;
-
-/** 'PriceUpsertQuery' query type */
-export interface IPriceUpsertQueryQuery {
-  params: IPriceUpsertQueryParams;
-  result: IPriceUpsertQueryResult;
-}
-
 /** 'ProductDescriptionUpsertQuery' parameters type */
 export interface IProductDescriptionUpsertQueryParams {
   values: readonly ({
     product_id: number,
     language_id: number,
     name: string,
-    description: string | null | void
+    description: string | null | void,
+    short_description: string | null | void
   })[];
 }
 
@@ -291,8 +243,7 @@ export interface IProductDescriptionUpsertQueryQuery {
 /** 'ProductCreateQuery' parameters type */
 export interface IProductCreateQueryParams {
   categoryId: number;
-  images: string | string[] | Record<string, any>;
-  slug: string;
+  vendorId: number;
 }
 
 /** 'ProductCreateQuery' return type */

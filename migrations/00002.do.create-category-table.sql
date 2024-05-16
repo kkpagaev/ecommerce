@@ -1,6 +1,7 @@
 CREATE TABLE categories (
   id SERIAL PRIMARY KEY,
   slug VARCHAR(255) NOT NULL,
+  parent_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

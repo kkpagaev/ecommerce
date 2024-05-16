@@ -3,9 +3,3 @@ CREATE TABLE product_option_groups (
   option_group_id INTEGER NOT NULL REFERENCES option_groups(id) ON DELETE CASCADE,
   PRIMARY KEY (product_id, option_group_id)
 );
-
-CREATE TABLE product_options (
-  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-  option_id INTEGER NOT NULL REFERENCES options(id) ON DELETE CASCADE,
-  PRIMARY KEY (product_id, option_id)
-)

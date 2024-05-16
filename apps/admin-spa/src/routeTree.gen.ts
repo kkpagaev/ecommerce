@@ -3,9 +3,9 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as StocksImport } from './routes/stocks'
-import { Route as LocationsImport } from './routes/locations'
+import { Route as VendorsImport } from './routes/vendors'
 import { Route as LanguagesImport } from './routes/languages'
+import { Route as ExportsImport } from './routes/exports'
 import { Route as CategoriesImport } from './routes/categories'
 import { Route as AdminsImport } from './routes/admins'
 import { Route as AboutImport } from './routes/about'
@@ -13,45 +13,47 @@ import { Route as IndexImport } from './routes/index'
 import { Route as ProductsIndexImport } from './routes/products/index'
 import { Route as OptionGroupsIndexImport } from './routes/option-groups/index'
 import { Route as AttributeGroupsIndexImport } from './routes/attribute-groups/index'
+import { Route as VendorsNewImport } from './routes/vendors/new'
 import { Route as ProductsNewImport } from './routes/products/new'
 import { Route as OptionGroupsNewImport } from './routes/option-groups/new'
 import { Route as OptionGroupsOptionGroupIdImport } from './routes/option-groups/$optionGroupId'
-import { Route as LocationsNewImport } from './routes/locations/new'
 import { Route as LanguagesNewImport } from './routes/languages/new'
+import { Route as ExportsNewImport } from './routes/exports/new'
 import { Route as CategoriesNewImport } from './routes/categories/new'
 import { Route as AttributeGroupsNewImport } from './routes/attribute-groups/new'
 import { Route as AttributeGroupsAttributeGroupIdImport } from './routes/attribute-groups/$attributeGroupId'
 import { Route as AdminsNewImport } from './routes/admins/new'
-import { Route as StocksProductIdEditImport } from './routes/stocks/$productId.edit'
-import { Route as ProductsProductIdVariantsImport } from './routes/products/$productId.variants'
-import { Route as ProductsProductIdEditImport } from './routes/products/$productId.edit'
+import { Route as ProductsProductIdIndexImport } from './routes/products/$productId/index'
+import { Route as VendorsVendorIdEditImport } from './routes/vendors/$vendorId.edit'
+import { Route as ProductsProductIdVariantsImport } from './routes/products/$productId/variants'
+import { Route as ProductsProductIdEditImport } from './routes/products/$productId/edit'
 import { Route as OptionGroupsOptionGroupIdEditImport } from './routes/option-groups/$optionGroupId.edit'
-import { Route as LocationsLocationIdEditImport } from './routes/locations/$locationId.edit'
 import { Route as LanguagesLanguageIdEditImport } from './routes/languages/$languageId.edit'
 import { Route as CategoriesCategoryIdEditImport } from './routes/categories/$categoryId.edit'
 import { Route as AttributeGroupsAttributeGroupIdEditImport } from './routes/attribute-groups/$attributeGroupId.edit'
 import { Route as AdminsAdminIdEditImport } from './routes/admins/$adminId.edit'
-import { Route as ProductsProductIdVariantsNewImport } from './routes/products/$productId.variants.new'
+import { Route as ProductsProductIdVariantsIndexImport } from './routes/products/$productId/variants.index'
+import { Route as ProductsProductIdVariantsNewImport } from './routes/products/$productId/variants.new'
 import { Route as OptionGroupsOptionGroupIdOptionNewImport } from './routes/option-groups/$optionGroupId.option.new'
 import { Route as AttributeGroupsAttributeGroupIdAttributeNewImport } from './routes/attribute-groups/$attributeGroupId.attribute.new'
-import { Route as ProductsProductIdVariantsProductVariantIdEditImport } from './routes/products/$productId.variants.$productVariantId.edit'
+import { Route as ProductsProductIdVariantsProductVariantIdEditImport } from './routes/products/$productId/variants.$productVariantId.edit'
 import { Route as OptionGroupsOptionGroupIdOptionOptionIdEditImport } from './routes/option-groups/$optionGroupId.option.$optionId.edit'
 import { Route as AttributeGroupsAttributeGroupIdAttributeAttributeIdEditImport } from './routes/attribute-groups/$attributeGroupId.attribute.$attributeId.edit'
 
 // Create/Update Routes
 
-const StocksRoute = StocksImport.update({
-  path: '/stocks',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LocationsRoute = LocationsImport.update({
-  path: '/locations',
+const VendorsRoute = VendorsImport.update({
+  path: '/vendors',
   getParentRoute: () => rootRoute,
 } as any)
 
 const LanguagesRoute = LanguagesImport.update({
   path: '/languages',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ExportsRoute = ExportsImport.update({
+  path: '/exports',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -90,6 +92,11 @@ const AttributeGroupsIndexRoute = AttributeGroupsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const VendorsNewRoute = VendorsNewImport.update({
+  path: '/new',
+  getParentRoute: () => VendorsRoute,
+} as any)
+
 const ProductsNewRoute = ProductsNewImport.update({
   path: '/products/new',
   getParentRoute: () => rootRoute,
@@ -105,14 +112,14 @@ const OptionGroupsOptionGroupIdRoute = OptionGroupsOptionGroupIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LocationsNewRoute = LocationsNewImport.update({
-  path: '/new',
-  getParentRoute: () => LocationsRoute,
-} as any)
-
 const LanguagesNewRoute = LanguagesNewImport.update({
   path: '/new',
   getParentRoute: () => LanguagesRoute,
+} as any)
+
+const ExportsNewRoute = ExportsNewImport.update({
+  path: '/new',
+  getParentRoute: () => ExportsRoute,
 } as any)
 
 const CategoriesNewRoute = CategoriesNewImport.update({
@@ -136,9 +143,14 @@ const AdminsNewRoute = AdminsNewImport.update({
   getParentRoute: () => AdminsRoute,
 } as any)
 
-const StocksProductIdEditRoute = StocksProductIdEditImport.update({
-  path: '/$productId/edit',
-  getParentRoute: () => StocksRoute,
+const ProductsProductIdIndexRoute = ProductsProductIdIndexImport.update({
+  path: '/products/$productId/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const VendorsVendorIdEditRoute = VendorsVendorIdEditImport.update({
+  path: '/$vendorId/edit',
+  getParentRoute: () => VendorsRoute,
 } as any)
 
 const ProductsProductIdVariantsRoute = ProductsProductIdVariantsImport.update({
@@ -156,11 +168,6 @@ const OptionGroupsOptionGroupIdEditRoute =
     path: '/edit',
     getParentRoute: () => OptionGroupsOptionGroupIdRoute,
   } as any)
-
-const LocationsLocationIdEditRoute = LocationsLocationIdEditImport.update({
-  path: '/$locationId/edit',
-  getParentRoute: () => LocationsRoute,
-} as any)
 
 const LanguagesLanguageIdEditRoute = LanguagesLanguageIdEditImport.update({
   path: '/$languageId/edit',
@@ -182,6 +189,12 @@ const AdminsAdminIdEditRoute = AdminsAdminIdEditImport.update({
   path: '/$adminId/edit',
   getParentRoute: () => AdminsRoute,
 } as any)
+
+const ProductsProductIdVariantsIndexRoute =
+  ProductsProductIdVariantsIndexImport.update({
+    path: '/',
+    getParentRoute: () => ProductsProductIdVariantsRoute,
+  } as any)
 
 const ProductsProductIdVariantsNewRoute =
   ProductsProductIdVariantsNewImport.update({
@@ -239,16 +252,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesImport
       parentRoute: typeof rootRoute
     }
+    '/exports': {
+      preLoaderRoute: typeof ExportsImport
+      parentRoute: typeof rootRoute
+    }
     '/languages': {
       preLoaderRoute: typeof LanguagesImport
       parentRoute: typeof rootRoute
     }
-    '/locations': {
-      preLoaderRoute: typeof LocationsImport
-      parentRoute: typeof rootRoute
-    }
-    '/stocks': {
-      preLoaderRoute: typeof StocksImport
+    '/vendors': {
+      preLoaderRoute: typeof VendorsImport
       parentRoute: typeof rootRoute
     }
     '/admins/new': {
@@ -267,13 +280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesNewImport
       parentRoute: typeof CategoriesImport
     }
+    '/exports/new': {
+      preLoaderRoute: typeof ExportsNewImport
+      parentRoute: typeof ExportsImport
+    }
     '/languages/new': {
       preLoaderRoute: typeof LanguagesNewImport
       parentRoute: typeof LanguagesImport
-    }
-    '/locations/new': {
-      preLoaderRoute: typeof LocationsNewImport
-      parentRoute: typeof LocationsImport
     }
     '/option-groups/$optionGroupId': {
       preLoaderRoute: typeof OptionGroupsOptionGroupIdImport
@@ -286,6 +299,10 @@ declare module '@tanstack/react-router' {
     '/products/new': {
       preLoaderRoute: typeof ProductsNewImport
       parentRoute: typeof rootRoute
+    }
+    '/vendors/new': {
+      preLoaderRoute: typeof VendorsNewImport
+      parentRoute: typeof VendorsImport
     }
     '/attribute-groups/': {
       preLoaderRoute: typeof AttributeGroupsIndexImport
@@ -315,10 +332,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LanguagesLanguageIdEditImport
       parentRoute: typeof LanguagesImport
     }
-    '/locations/$locationId/edit': {
-      preLoaderRoute: typeof LocationsLocationIdEditImport
-      parentRoute: typeof LocationsImport
-    }
     '/option-groups/$optionGroupId/edit': {
       preLoaderRoute: typeof OptionGroupsOptionGroupIdEditImport
       parentRoute: typeof OptionGroupsOptionGroupIdImport
@@ -331,9 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsProductIdVariantsImport
       parentRoute: typeof rootRoute
     }
-    '/stocks/$productId/edit': {
-      preLoaderRoute: typeof StocksProductIdEditImport
-      parentRoute: typeof StocksImport
+    '/vendors/$vendorId/edit': {
+      preLoaderRoute: typeof VendorsVendorIdEditImport
+      parentRoute: typeof VendorsImport
+    }
+    '/products/$productId/': {
+      preLoaderRoute: typeof ProductsProductIdIndexImport
+      parentRoute: typeof rootRoute
     }
     '/attribute-groups/$attributeGroupId/attribute/new': {
       preLoaderRoute: typeof AttributeGroupsAttributeGroupIdAttributeNewImport
@@ -345,6 +362,10 @@ declare module '@tanstack/react-router' {
     }
     '/products/$productId/variants/new': {
       preLoaderRoute: typeof ProductsProductIdVariantsNewImport
+      parentRoute: typeof ProductsProductIdVariantsImport
+    }
+    '/products/$productId/variants/': {
+      preLoaderRoute: typeof ProductsProductIdVariantsIndexImport
       parentRoute: typeof ProductsProductIdVariantsImport
     }
     '/attribute-groups/$attributeGroupId/attribute/$attributeId/edit': {
@@ -372,9 +393,9 @@ export const routeTree = rootRoute.addChildren([
     CategoriesNewRoute,
     CategoriesCategoryIdEditRoute,
   ]),
+  ExportsRoute.addChildren([ExportsNewRoute]),
   LanguagesRoute.addChildren([LanguagesNewRoute, LanguagesLanguageIdEditRoute]),
-  LocationsRoute.addChildren([LocationsNewRoute, LocationsLocationIdEditRoute]),
-  StocksRoute.addChildren([StocksProductIdEditRoute]),
+  VendorsRoute.addChildren([VendorsNewRoute, VendorsVendorIdEditRoute]),
   AttributeGroupsAttributeGroupIdRoute.addChildren([
     AttributeGroupsAttributeGroupIdEditRoute,
     AttributeGroupsAttributeGroupIdAttributeNewRoute,
@@ -394,6 +415,8 @@ export const routeTree = rootRoute.addChildren([
   ProductsProductIdEditRoute,
   ProductsProductIdVariantsRoute.addChildren([
     ProductsProductIdVariantsNewRoute,
+    ProductsProductIdVariantsIndexRoute,
     ProductsProductIdVariantsProductVariantIdEditRoute,
   ]),
+  ProductsProductIdIndexRoute,
 ])

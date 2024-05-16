@@ -30,7 +30,7 @@ const rootElement = document.getElementById("root")!;
 function Auth({ children }: { children: ReactNode }) {
   const { isLoaded } = useAuth();
   if (isLoaded === false) {
-    return <div className="container mx-auto py-10">...loading</div>;
+    return <div>...loading</div>;
   }
   return <>{children}</>;
 }

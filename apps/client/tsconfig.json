@@ -1,0 +1,16 @@
+{
+  "extends": "@repo/typescript-config/react.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": ["src"],
+  "references": []
+}

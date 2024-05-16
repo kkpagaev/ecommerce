@@ -19,29 +19,24 @@ export default async ({ t, catalog }: FastifyZod) => ({
     }),
   createProduct: t.procedure
     .input(z.object({
-      price: z.number().positive()
-        .multipleOf(0.01),
       categoryId: z.number(),
+      vendorId: z.number(),
       attributes: z.array(z.number()).optional(),
-      images: z.array(z.string()),
-      optionGroups: z.array(z.number()),
-      options: z.array(z.number()).optional(),
+      optionGroups: z.array(z.number()).optional(),
       descriptions: z.array(z.object({
         name: z.string(),
         description: z.string(),
+        shortDescription: z.string(),
         languageId: z.number(),
       })),
     }))
-    // .use(isAuthed)
+    .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await catalog.products.createProduct({
-        options: input.options,
         attributes: input.attributes || [],
-        images: input.images,
-        optionGroups: input.optionGroups,
-        price: input.price,
         categoryId: input.categoryId,
         descriptions: input.descriptions,
+        vendorId: input.vendorId,
       });
 
       return res;
@@ -53,15 +48,13 @@ export default async ({ t, catalog }: FastifyZod) => ({
       })
         .and(
           z.object({
-            price: z.number().positive()
-              .multipleOf(0.01),
-            images: z.array(z.string()),
             categoryId: z.number(),
             attributes: z.array(z.number()).optional(),
-            options: z.array(z.number()).optional(),
+            vendorId: z.number().optional(),
             optionGroups: z.array(z.number()).optional(),
             descriptions: z.array(z.object({
               name: z.string(),
+              shortDescription: z.string(),
               description: z.string(),
               languageId: z.number(),
             })),
@@ -72,11 +65,9 @@ export default async ({ t, catalog }: FastifyZod) => ({
       const res = await catalog.products.updateProduct(input.id, {
         categoryId: input.categoryId,
         attributes: input.attributes,
-        images: input.images,
         optionGroups: input.optionGroups,
-        options: input.options,
         descriptions: input.descriptions,
-        price: input.price,
+        vendorId: input.vendorId,
       });
 
       return res;

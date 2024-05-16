@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<price>
+ <date>2024-05-16 06:41</date>
+ <firmName>shop323890.horoshop.ua - DemoStore — демонстрационный интернет-магазин </firmName>
+ <categories>
+  <category>
+   <id>1072</id>
+   <name>iPhone 13</name>
+  </category>
+  <category>
+   <id>1059</id>
+   <name>Жіночий одяг</name>
+  </category>
+  <category>
+   <id>1066</id>
+   <name>Крем для рук</name>
+  </category>
+  <category>
+   <id>1071</id>
+   <name>Лак для волосся</name>
+  </category>
+  <category>
+   <id>1064</id>
+   <name>Молочко для обличчя</name>
+  </category>
+  <category>
+   <id>1067</id>
+   <name>Молочко для тіла</name>
+  </category>
+  <category>
+   <id>1056</id>
+   <name>Одяг та взуття</name>
+  </category>
+  <category>
+   <id>1068</id>
+   <name>Сіль для ванної</name>
+  </category>
+  <category>
+   <id>1062</id>
+   <name>Тональний крем</name>
+  </category>
+  <category>
+   <id>1060</id>
+   <name>Чоловічий одяг</name>
+  </category>
+  <category>
+   <id>1070</id>
+   <name>Шампунь</name>
+  </category>
+ </categories>
+ <items>
+  <item>
+   <id>439</id>
+   <categoryId>1072</categoryId>
+   <code>ELE-23-0557</code>
+   <vendor>Apple</vendor>
+   <name><![CDATA[Apple iPhone 13 Pro Max 512GB Silver]]></name>
+   <description><![CDATA[Зустрічайте! Найвища якість камери, екрану та звуку – все це можливо лише з Apple.  ]]></description>
+   <url>http://shop323890.horoshop.ua/apple-iphone-13-pro-max-512gb-silver/</url>
+   <image>http://shop323890.horoshop.ua/content/images/40/37326929987569_+04e8b4059e.jpeg</image>
+   <priceRUAH>52500</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>467</id>
+   <categoryId>1060</categoryId>
+   <code>CLO-12-0051</code>
+   <vendor>Apparel</vendor>
+   <name><![CDATA[Men Denim Dungaree]]></name>
+   <description><![CDATA[Men Denim Dungaree]]></description>
+   <url>http://shop323890.horoshop.ua/men-denim-dungaree/</url>
+   <image>http://shop323890.horoshop.ua/content/images/18/men-denim-dungaree-94748353644992_+ac4fb2d3f3.jpg</image>
+   <priceRUAH>2899</priceRUAH>
+   <oldprice>3299</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>459</id>
+   <categoryId>1059</categoryId>
+   <code>CLO-14-0111</code>
+   <vendor>Clothes</vendor>
+   <name><![CDATA[Women ZigZag Sweatshirt]]></name>
+   <description><![CDATA[Women ZigZag Sweatshirt]]></description>
+   <url>http://shop323890.horoshop.ua/women-zigzag-sweatshirt/</url>
+   <image>http://shop323890.horoshop.ua/content/images/10/55076625445964_+5ec72d7613.jpg</image>
+   <priceRUAH>1599</priceRUAH>
+   <oldprice>1999</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>460</id>
+   <categoryId>1059</categoryId>
+   <code>CLO-14-0211</code>
+   <vendor>Clothes</vendor>
+   <name><![CDATA[Women Striped Pants]]></name>
+   <description><![CDATA[Women Striped Pants]]></description>
+   <url>http://shop323890.horoshop.ua/women-striped-pants/</url>
+   <image>http://shop323890.horoshop.ua/content/images/11/32072710982384_+dcb84a4a7e.jpg</image>
+   <priceRUAH>1499</priceRUAH>
+   <oldprice>1899</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>461</id>
+   <categoryId>1059</categoryId>
+   <code>CLO-23-0211</code>
+   <vendor>Clothes</vendor>
+   <name><![CDATA[Women Bucket Hat]]></name>
+   <description><![CDATA[Women Bucket Hat]]></description>
+   <url>http://shop323890.horoshop.ua/women-bucket-hat/</url>
+   <image>http://shop323890.horoshop.ua/content/images/12/women-hat-35226591564012_+30e4aeaa06.jpg</image>
+   <priceRUAH>1499</priceRUAH>
+   <oldprice>1899</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>462</id>
+   <categoryId>1056</categoryId>
+   <code>CLO-65-0011</code>
+   <vendor>Clothes</vendor>
+   <name><![CDATA[Hip Bag]]></name>
+   <description><![CDATA[Hip Bag]]></description>
+   <url>http://shop323890.horoshop.ua/hip-bag/</url>
+   <image>http://shop323890.horoshop.ua/content/images/13/hip-bag-39552710114556_+0ec1a11190.jpg</image>
+   <priceRUAH>1299</priceRUAH>
+   <oldprice>1899</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>452</id>
+   <categoryId>1059</categoryId>
+   <code>CLO-14-0011</code>
+   <vendor>Clothes</vendor>
+   <name><![CDATA[Women Long Shirt]]></name>
+   <description><![CDATA[Women Long Shirt]]></description>
+   <url>http://shop323890.horoshop.ua/women-long-shirt/</url>
+   <image>http://shop323890.horoshop.ua/content/images/3/women-long-shirt-66027834538605_+b9d19d065d.jpg</image>
+   <priceRUAH>899</priceRUAH>
+   <oldprice>1299</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>454</id>
+   <categoryId>1059</categoryId>
+   <code>CLO-14-0021</code>
+   <vendor>Clothes</vendor>
+   <name><![CDATA[Women T-Shirt Burgundy]]></name>
+   <description><![CDATA[Women T-Shirt]]></description>
+   <url>http://shop323890.horoshop.ua/women-t-shirt/</url>
+   <image>http://shop323890.horoshop.ua/content/images/5/71179566892984_+5f1b421892.jpg</image>
+   <priceRUAH>899</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>463</id>
+   <categoryId>1060</categoryId>
+   <code>CLO-76-0011</code>
+   <vendor>Apparel</vendor>
+   <name><![CDATA[Men T-Shirt Navy]]></name>
+   <description><![CDATA[Men T-Shirt]]></description>
+   <url>http://shop323890.horoshop.ua/men-t-shirt-navy/</url>
+   <image>http://shop323890.horoshop.ua/content/images/14/men-t-shirt-navy-39220531781505_+00a8d1f2e4.jpg</image>
+   <priceRUAH>899</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>284</id>
+   <categoryId>1070</categoryId>
+   <code>COS-82-0118</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Shampoo Gentle Hair Cleanser 500ml №5]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/shampoo-gentle-hair-cleanser-500ml-5/</url>
+   <image>http://shop323890.horoshop.ua/content/images/35/85771787566107_+66f2d68598.png</image>
+   <priceRUAH>750</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>287</id>
+   <categoryId>1070</categoryId>
+   <code>COS-82-0201</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Shampoo Gentle Hair Cleanser 250ml №7]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/shampoo-gentle-hair-cleanser-250ml-7/</url>
+   <image>http://shop323890.horoshop.ua/content/images/38/85871043408775_+70f3bf02a4.png</image>
+   <priceRUAH>400</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>288</id>
+   <categoryId>1070</categoryId>
+   <code>COS-82-0210</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Shampoo Gentle Hair Cleanser 250ml №9]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/shampoo-gentle-hair-cleanser-250ml-9/</url>
+   <image>http://shop323890.horoshop.ua/content/images/39/85811261658910_+0b6dae1001.png</image>
+   <priceRUAH>400</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>279</id>
+   <categoryId>1064</categoryId>
+   <code>COS-82-0113</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Perfect Face Milk Sun Block Lotion №5]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/perfect-face-milk-sun-block-lotion-5/279/</url>
+   <image>http://shop323890.horoshop.ua/content/images/30/83766950996184_+1b0d355f39.png</image>
+   <priceRUAH>250</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>280</id>
+   <categoryId>1064</categoryId>
+   <code>COS-82-0114</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Perfect Face Milk Sun Block Lotion №7]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/perfect-face-milk-sun-block-lotion-7/</url>
+   <image>http://shop323890.horoshop.ua/content/images/31/59614709716286_+10c9fbbeb6.png</image>
+   <priceRUAH>250</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>281</id>
+   <categoryId>1064</categoryId>
+   <code>COS-82-0115</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Perfect Face Milk Sun Block Lotion №9]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/perfect-face-milk-sun-block-lotion-9/</url>
+   <image>http://shop323890.horoshop.ua/content/images/32/68358428445900_+6284780594.png</image>
+   <priceRUAH>250</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>276</id>
+   <categoryId>1066</categoryId>
+   <code>COS-82-0110</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Organic Sakura Honey Hand And Nail Cream 300 ml №5]]></name>
+   <description><![CDATA[Якщо ви давно мріяли позбавитися темних кіл під очима і зробити погляд сяючим, то крем Gentle Skin Cleanser стане для вас прекрасним помічником. Він швидко вбирається і не залишає слідів, а ще неодмінно подарує вашій шкірі комфорт та гарний зовнішній вигляд. Нанесіть необхідну кількість крему на попередньо очищену шкіру контуру очей і рівномірно розподіліть м'якими масажними рухами.  ]]></description>
+   <url>http://shop323890.horoshop.ua/organic-sakura-honey-hand-and-nail-cream-300-ml-5/</url>
+   <image>http://shop323890.horoshop.ua/content/images/27/98927746005870_+80f331e080.png</image>
+   <priceRUAH>230</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>274</id>
+   <categoryId>1067</categoryId>
+   <code>COS-82-0108</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Gentle skin cleanser №5]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/gentle-skin-cleanser-5/</url>
+   <image>http://shop323890.horoshop.ua/content/images/25/76565458307152_+96a6529663.png</image>
+   <priceRUAH>200</priceRUAH>
+   <oldprice>210</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>272</id>
+   <categoryId>1067</categoryId>
+   <code>COS-82-0106</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Gentle skin cleanser]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/gentle-skin-cleanser/</url>
+   <image>http://shop323890.horoshop.ua/content/images/23/80035179264694_+720bbb3045.png</image>
+   <priceRUAH>199</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>273</id>
+   <categoryId>1067</categoryId>
+   <code>COS-82-0107</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Gentle skin cleanser №7]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/gentle-skin-cleanser-7/</url>
+   <image>http://shop323890.horoshop.ua/content/images/24/95305724681020_+0551989026.png</image>
+   <priceRUAH>199</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>275</id>
+   <categoryId>1066</categoryId>
+   <code>COS-82-0109</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Organic Sakura Honey Hand And Nail Cream 300 ml]]></name>
+   <description><![CDATA[Якщо ви давно мріяли позбавитися темних кіл під очима і зробити погляд сяючим, то крем Gentle Skin Cleanser стане для вас прекрасним помічником. Він швидко вбирається і не залишає слідів, а ще неодмінно подарує вашій шкірі комфорт та гарний зовнішній вигляд. Нанесіть необхідну кількість крему на попередньо очищену шкіру контуру очей і рівномірно розподіліть м'якими масажними рухами.  ]]></description>
+   <url>http://shop323890.horoshop.ua/organic-sakura-honey-hand-and-nail-cream-300-ml/</url>
+   <image>http://shop323890.horoshop.ua/content/images/26/28608491140735_+763d877a64.png</image>
+   <priceRUAH>199</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>277</id>
+   <categoryId>1066</categoryId>
+   <code>COS-82-0111</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Organic Sakura Honey Hand And Nail Cream 300 ml №7]]></name>
+   <description><![CDATA[Якщо ви давно мріяли позбавитися темних кіл під очима і зробити погляд сяючим, то крем Gentle Skin Cleanser стане для вас прекрасним помічником. Він швидко вбирається і не залишає слідів, а ще неодмінно подарує вашій шкірі комфорт та гарний зовнішній вигляд. Нанесіть необхідну кількість крему на попередньо очищену шкіру контуру очей і рівномірно розподіліть м'якими масажними рухами.  ]]></description>
+   <url>http://shop323890.horoshop.ua/organic-sakura-honey-hand-and-nail-cream-300-ml-7/</url>
+   <image>http://shop323890.horoshop.ua/content/images/28/87484055439521_+00ea496ddb.png</image>
+   <priceRUAH>180</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>267</id>
+   <categoryId>1062</categoryId>
+   <code>COS-82-0101</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[CC Cream Natural Care №7]]></name>
+   <description><![CDATA[Якщо ви давно мріяли позбавитися темних кіл під очима і зробити погляд сяючим, то крем Gentle Skin Cleanser стане для вас прекрасним помічником. Він швидко вбирається і не залишає слідів, а ще неодмінно подарує вашій шкірі комфорт та гарний зовнішній вигляд. Нанесіть необхідну кількість крему на попередньо очищену шкіру контуру очей і рівномірно розподіліть м'якими масажними рухами.  ]]></description>
+   <url>http://shop323890.horoshop.ua/cc-cream-natural-care-7/</url>
+   <image>http://shop323890.horoshop.ua/content/images/18/93787095315343_+b82d57b529.png</image>
+   <priceRUAH>116</priceRUAH>
+   <oldprice>129</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>269</id>
+   <categoryId>1068</categoryId>
+   <code>COS-82-0103</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Canaan Minerals & Herbs Bath Salts]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/canaan-minerals-herbs-bath-salts/</url>
+   <image>http://shop323890.horoshop.ua/content/images/20/39871414191252_+20fc85c203.png</image>
+   <priceRUAH>103</priceRUAH>
+   <oldprice>129</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>270</id>
+   <categoryId>1068</categoryId>
+   <code>COS-82-0104</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Canaan Minerals & Herbs Bath Salts №5]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/canaan-minerals-herbs-bath-salts-5/</url>
+   <image>http://shop323890.horoshop.ua/content/images/21/87183209529575_+36779e9c27.png</image>
+   <priceRUAH>129</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>271</id>
+   <categoryId>1068</categoryId>
+   <code>COS-82-0105</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Canaan Minerals & Herbs Bath Salts №7]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/canaan-minerals-herbs-bath-salts-7/</url>
+   <image>http://shop323890.horoshop.ua/content/images/22/80261082087928_+165dbdb8a3.png</image>
+   <priceRUAH>103</priceRUAH>
+   <oldprice>129</oldprice>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>282</id>
+   <categoryId>1071</categoryId>
+   <code>COS-82-0116</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Professional hair sprays for all types of hair styling applications №5]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/professional-hair-sprays-for-all-types-of-hair-styling-applications-5/</url>
+   <image>http://shop323890.horoshop.ua/content/images/33/32004335589784_+e39c0b28bb.png</image>
+   <priceRUAH>120</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>283</id>
+   <categoryId>1071</categoryId>
+   <code>COS-82-0117</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[Professional hair sprays for all types of hair styling applications №9]]></name>
+   <description><![CDATA[]]></description>
+   <url>http://shop323890.horoshop.ua/professional-hair-sprays-for-all-types-of-hair-styling-applications-9/</url>
+   <image>http://shop323890.horoshop.ua/content/images/34/58804153445474_+a62b16da05.png</image>
+   <priceRUAH>120</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>268</id>
+   <categoryId>1062</categoryId>
+   <code>COS-82-0102</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[CC Cream Natural Care №5]]></name>
+   <description><![CDATA[Якщо ви давно мріяли позбавитися темних кіл під очима і зробити погляд сяючим, то крем Gentle Skin Cleanser стане для вас прекрасним помічником. Він швидко вбирається і не залишає слідів, а ще неодмінно подарує вашій шкірі комфорт та гарний зовнішній вигляд. Нанесіть необхідну кількість крему на попередньо очищену шкіру контуру очей і рівномірно розподіліть м'якими масажними рухами.  ]]></description>
+   <url>http://shop323890.horoshop.ua/cc-cream-natural-care-5/</url>
+   <image>http://shop323890.horoshop.ua/content/images/19/71739019122775_+0b81f7c11f.png</image>
+   <priceRUAH>119</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+  <item>
+   <id>266</id>
+   <categoryId>1062</categoryId>
+   <code>COS-82-0100</code>
+   <vendor>Skusu</vendor>
+   <name><![CDATA[CC Cream Natural Care]]></name>
+   <description><![CDATA[Якщо ви давно мріяли позбавитися темних кіл під очима і зробити погляд сяючим, то крем Gentle Skin Cleanser стане для вас прекрасним помічником. Він швидко вбирається і не залишає слідів, а ще неодмінно подарує вашій шкірі комфорт та гарний зовнішній вигляд. Нанесіть необхідну кількість крему на попередньо очищену шкіру контуру очей і рівномірно розподіліть м'якими масажними рухами.  ]]></description>
+   <url>http://shop323890.horoshop.ua/cc-cream-natural-care/</url>
+   <image>http://shop323890.horoshop.ua/content/images/17/88786088758944_+0dd5470ca9.png</image>
+   <priceRUAH>99</priceRUAH>
+   <stock>В наличии</stock>
+  </item>
+ </items>
+</price>

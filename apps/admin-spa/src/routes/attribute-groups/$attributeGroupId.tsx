@@ -56,7 +56,7 @@ function CategoryComponent() {
   const params = Route.useParams();
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <div className="flex justify-between">
         <h2>
           {

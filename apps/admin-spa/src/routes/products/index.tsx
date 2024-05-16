@@ -1,14 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { DataTable } from "@/components/data-table";
 
-import { Pencil1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AdminOutputs } from "@/utils/trpc";
 import { z } from "zod";
 import { SearchFilters } from "@/components/search-filters";
-import { TooltipLink } from "@/components/ui/tooltip-link";
 import { AspectRatio } from "../../components/ui/aspect-ratio";
 
 type Product = Exclude<
@@ -52,40 +50,54 @@ const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "images",
-    enableSorting: false,
+    accessorKey: "category",
+    enableSorting: true,
     cell: ({ row }) => {
-      const ids = row.getValue<string[]>("images");
-      if (!ids) {
-        return null;
-      }
-      return (
-        <AspectRatio
-          ratio={4 / 4}
-          className={"w-fullrounded-md border-slate-200 border-2"}
-        >
-          <img
-            src={"http://localhost:3000/file-upload?imageId=" + ids[0]}
-            className="w-full h-full object-cover rounded-md"
-          />
-        </AspectRatio>
-      );
+      return <div className="capitalize">{row.getValue("category")}</div>;
     },
   },
+  // {
+  //   accessorKey: "images",
+  //   enableSorting: false,
+  //   cell: ({ row }) => {
+  //     const ids = row.getValue<string[]>("images");
+  //     if (!ids) {
+  //       return null;
+  //     }
+  //     return (
+  //       <AspectRatio
+  //         ratio={4 / 4}
+  //         className={"w-fullrounded-md border-slate-200 border-2"}
+  //       >
+  //         <img
+  //           src={"http://localhost:3000/file-upload?imageId=" + ids[0]}
+  //           className="w-full h-full object-cover rounded-md"
+  //         />
+  //       </AspectRatio>
+  //     );
+  //   },
+  // },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       return (
-        <TooltipLink
-          to="/products/$productId/edit"
-          params={{ productId: "" + row.getValue("id") }}
-          text="Edit"
-        >
-          <Button variant="default">
-            <Pencil1Icon />
-          </Button>
-        </TooltipLink>
+        <div className="flex flex-col gap-2">
+          <Link
+            to="/products/$productId/edit"
+            params={{ productId: "" + row.getValue("id") }}
+          >
+            <Button variant="default">Edit</Button>
+          </Link>
+          <Link
+            to={"/products/$productId/variants"}
+            params={{
+              productId: "" + row.getValue("id"),
+            }}
+          >
+            <Button variant="default">Variants</Button>
+          </Link>
+        </div>
       );
     },
   },
@@ -123,7 +135,7 @@ function Index() {
   const search = Route.useSearch();
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <div className="w-full flex flex-row gap-10">
         <SearchFilters
           search={search}
@@ -145,6 +157,7 @@ function Index() {
             <Button variant="default">New</Button>
           </Link>
         </div>
+        <div></div>
       </div>
       <DataTable
         data={data ? { data: data.data, count: data.count } : undefined}

@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { useApiForm } from "../../utils/useApiForm";
+import { Combobox } from "../combobox";
 
 type CategoryCreateInputs =
   AdminInputs["catalog"]["category"]["createCategory"];
@@ -25,6 +26,7 @@ type CategoryModel = Exclude<
 type CategoryFormProps = {
   errorMessage?: string;
   languages: LanguageModel[];
+  categories: AdminOutputs["catalog"]["category"]["listCategories"];
   values?: CategoryModel;
 } & (
   | {
@@ -42,25 +44,31 @@ export function CategoryForm({
   onSubmit,
   errorMessage,
   values,
+  categories,
 }: CategoryFormProps) {
+  const formValues: CategoryCreateInputs | undefined = values && {
+    imageId: values.image_id,
+    parentId: values.parent_id || undefined,
+    descriptions: languages.map((lang) => {
+      const old = values.descriptions.find((d) => d.language_id === lang.id);
+      return {
+        languageId: lang.id,
+        name: old?.name || "",
+      };
+    }),
+  };
+
   const {
     control,
     handleSubmit,
     clearErrors,
     register,
+    setValue,
     formState: { errors },
+    watch,
   } = useApiForm({
     errorMessage,
-    values: values && {
-      imageId: values.image_id,
-      descriptions: languages.map((lang) => {
-        const old = values.descriptions.find((d) => d.language_id === lang.id);
-        return {
-          languageId: lang.id,
-          name: old?.name || "",
-        };
-      }),
-    },
+    values: formValues,
     defaultValues: {
       imageId: undefined,
       descriptions: languages.map((lang) => {
@@ -72,6 +80,8 @@ export function CategoryForm({
     },
   });
 
+  const watchParentId = watch("parentId");
+
   const { fields } = useFieldArray({
     control,
     name: "descriptions",
@@ -81,6 +91,7 @@ export function CategoryForm({
     <form
       onSubmit={handleSubmit((data) => {
         clearErrors();
+
         onSubmit(data);
       })}
       className="flex flex-col gap-16"
@@ -110,6 +121,22 @@ export function CategoryForm({
       </Card>
 
       <div>
+        <Label htmlFor="categoryId">Category</Label>
+        <Combobox
+          label="Select Category"
+          values={categories
+            .filter((c) => c.id !== values?.id)
+            ?.map((c) => ({
+              value: "" + c.id,
+              label: c.name,
+            }))}
+          withReset
+          defaultValue={watchParentId ? "" + watchParentId : null}
+          onSelect={(v) => {
+            clearErrors("parentId");
+            setValue("parentId", v ? +v : 0);
+          }}
+        />
         <ImageManager
           preview
           enableSelect

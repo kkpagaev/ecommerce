@@ -31,7 +31,7 @@ function CategoryNewComponent() {
     });
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <AttributeGroupForm
         languages={languages}
         onSubmit={async (data) => {

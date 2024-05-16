@@ -9,6 +9,9 @@ export const Route = createFileRoute("/admins/$adminId/edit")({
     const admin = await context.trpc.admin.admin.findOneAdmin.fetch({
       id: Number(params.adminId),
     });
+    if (!admin) {
+      throw new Error("Admin not found");
+    }
 
     return { admin };
   },

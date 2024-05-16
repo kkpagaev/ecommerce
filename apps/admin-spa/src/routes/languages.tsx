@@ -82,7 +82,7 @@ function Index() {
   const data = Route.useLoaderData();
 
   return (
-    <div className="container mx-auto py-10">
+    <div>
       <div>
         <Link to={"/languages/new"}>
           <Button variant="default">New</Button>

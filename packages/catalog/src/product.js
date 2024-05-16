@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 import { Pool } from "pg";
-import slugify from "slugify";
 import { tx } from "@repo/pool";
 // eslint-disable-next-line no-unused-vars
 import { TaggedQuery, sql } from "@pgtyped/runtime";
@@ -11,12 +10,33 @@ import { TaggedQuery, sql } from "@pgtyped/runtime";
  * >} *
  */
 export const productListQuery = sql`
-  SELECT p.id, p.category_id, p.images, p.slug, pd.name, pd.description FROM products p
+  SELECT p.id, p.category_id, pd.name, pd.description, cd.name as category FROM products p
   JOIN product_descriptions pd ON p.id = pd.product_id
+  JOIN categories c ON p.category_id = c.id
+  JOIN category_descriptions cd ON c.id = cd.category_id
   WHERE pd.language_id = $language_id!
+  AND   cd.language_id = $language_id!
   ORDER BY p.id;
 `;
 
+/**
+ * @type {TaggedQuery<
+ *   import("./queries/product.types").IProductAttributeViewQueryQuery
+ * >}
+ */
+export const productAttributeViewQuery = sql`
+  SELECT a.id, ad.name as name, agd.name as group, a.attribute_group_id
+  FROM attributes a
+  JOIN attribute_descriptions ad ON ad.attribute_id = a.id
+  JOIN attribute_group_descriptions agd ON agd.attribute_group_id = a.attribute_group_id
+  JOIN product_attributes pa ON pa.attribute_id = a.id
+  WHERE
+    ad.language_id = $language_id!
+  AND agd.language_id = $language_id!
+  AND pa.product_id = $product_id!
+  GROUP BY a.id, ad.name, agd.name
+  ORDER BY a.id
+`;
 /**
  * @type {TaggedQuery<
  *   import("./queries/product.types").IProductAttributeListQueryQuery
@@ -45,15 +65,6 @@ export const productOptionGroupsListQuery = sql`
   SELECT option_group_id as id FROM product_option_groups
   WHERE product_id = $product_id!
 `;
-/**
- * @type {TaggedQuery<
- *   import("./queries/product.types").IProductOptionsListQueryQuery
- * >}
- */
-export const productOptionsListQuery = sql`
-  SELECT option_id as id FROM product_options
-  WHERE product_id = $product_id!
-`;
 
 /**
  * @type {TaggedQuery<
@@ -63,9 +74,8 @@ export const productOptionsListQuery = sql`
 export const productUpdateQuery = sql`
   UPDATE products
   SET
-    slug = COALESCE($slug, slug),
     category_id = COALESCE($categoryId, category_id),
-    images = COALESCE($images, images)
+    vendor_id = COALESCE($vendorId, vendor_id)
   WHERE
     id = $id!;
 `;
@@ -86,8 +96,7 @@ export const productDeleteQuery = sql`
  * >} *
  */
 export const productFindOneQuery = sql`
-  SELECT p.*, pr.price FROM products p
-  LEFT JOIN prices pr ON p.id = pr.product_id
+  SELECT p.* FROM products p
   WHERE p.id = COALESCE($id, p.id)
   LIMIT 1;
 `;
@@ -150,52 +159,20 @@ export const productAttributesUpsertQuery = sql`
 
 /**
  * @type {TaggedQuery<
- *   import("./queries/product.types").IProductOptionsDeleteQueryQuery
- * >}
- */
-export const productOptionsDeleteQuery = sql`
-  DELETE FROM product_options
-  WHERE product_id = $product_id!
-`;
-/**
- * @type {TaggedQuery<
- *   import("./queries/product.types").IProductOptionsUpsertQueryQuery
- * >}
- */
-export const productOptionsUpsertQuery = sql`
-  INSERT INTO product_options
-    (product_id, option_id)
-  VALUES
-    $$values(product_id!, option_id!)
-  ON CONFLICT DO NOTHING;
-`;
-/**
- * @type {TaggedQuery<
- *   import("./queries/product.types").IPriceUpsertQueryQuery
- * >} *
- */
-export const priceUpsertQuery = sql`
-  INSERT INTO prices (product_id, price, type)
-  VALUES $$values(product_id!, price!, type)
-  ON CONFLICT (product_id, type)
-  DO UPDATE SET price = EXCLUDED.price;
-`;
-
-/**
- * @type {TaggedQuery<
  *   import("./queries/product.types").IProductDescriptionUpsertQueryQuery
  * >} *
  */
 export const productDescriptionUpsertQuery = sql`
   INSERT INTO product_descriptions
-    (product_id, language_id, name, description)
+    (product_id, language_id, name, description, short_description)
   VALUES
-    $$values(product_id!, language_id!, name!, description)
+    $$values(product_id!, language_id!, name!, description, short_description)
   ON CONFLICT
     (product_id, language_id)
   DO UPDATE
     SET
       name = EXCLUDED.name,
+      short_description = EXCLUDED.short_description,
       description = EXCLUDED.description;
 `;
 
@@ -206,9 +183,9 @@ export const productDescriptionUpsertQuery = sql`
  */
 export const productCreateQuery = sql`
   INSERT INTO products
-  (category_id, slug, images)
+  (category_id, vendor_id)
   VALUES
-  ($categoryId!, $slug!, $images!)
+  ($categoryId!, $vendorId!)
   RETURNING id
 `;
 
@@ -221,15 +198,14 @@ export class Products {
   /**
    * @typedef {{
    *   categoryId: number;
-   *   price: number;
    *   attributes: number[];
-   *   images: string[];
    *   optionGroups?: number[];
-   *   options?: number[];
+   *   vendorId: number;
    *   descriptions: {
    *     languageId: number;
    *     name: string;
    *     description?: string;
+   *     shortDescription?: string;
    *   }[];
    * }} CreateProductProps
    */
@@ -239,16 +215,11 @@ export class Products {
    * @throws Error
    */
   async createProduct(input) {
-    const slug =
-      (input.descriptions[0]?.name && slugify(input.descriptions[0].name)) ||
-      "";
-
     return tx(this.pool, async (client) => {
       const product = await productCreateQuery
         .run(
           {
-            images: JSON.stringify(input.images),
-            slug: slug,
+            vendorId: input.vendorId,
             categoryId: input.categoryId,
           },
           client,
@@ -270,33 +241,10 @@ export class Products {
         );
       }
 
-      if (input.options) {
-        await productOptionsUpsertQuery.run(
-          {
-            values: input.options.map((o) => ({
-              product_id: product.id,
-              option_id: o,
-            })),
-          },
-          client,
-        );
-      }
-
-      const price = await priceUpsertQuery.run(
-        {
-          values: [
-            {
-              price: input.price,
-              type: "default",
-              product_id: product.id,
-            },
-          ],
-        },
-        client,
-      );
       const descriptions = await productDescriptionUpsertQuery.run(
         {
           values: input.descriptions.map((d) => ({
+            short_description: d.shortDescription,
             description: d.description,
             product_id: product.id,
             name: d.name,
@@ -318,7 +266,6 @@ export class Products {
 
       return {
         ...product,
-        price,
         descriptions,
       };
     });
@@ -365,24 +312,10 @@ export class Products {
         this.pool,
       )
       .then((r) => r.map((option) => option.id));
-    const optionIds = await productOptionsListQuery
-      .run(
-        {
-          product_id: product.id,
-        },
-        this.pool,
-      )
-      .then((r) => r.map((option) => option.id));
-
-    /** @type {string[]} */
-    const images = /** @type {any} */ (product.images);
 
     return {
       ...product,
-      images,
-      price: Number(product.price),
       attributes: attributeIds,
-      options: optionIds,
       optionGroups: optionGroupsIds,
       descriptions,
     };
@@ -406,15 +339,7 @@ export class Products {
     //   .then((res) => +(res[0]?.count ?? 0));
 
     return {
-      data: products.map((p) => {
-        /** @type {string[]} */
-        const images = /** @type {any} */ (p.images);
-
-        return {
-          ...p,
-          images: images,
-        };
-      }),
+      data: products,
       count: products.length,
     };
   }
@@ -443,25 +368,14 @@ export class Products {
    */
   async updateProduct(id, input) {
     return tx(this.pool, async (client) => {
-      const name = input.descriptions && input.descriptions[0]?.name;
-      const slug = name && slugify(name);
+      // const name = input.descriptions && input.descriptions[0]?.name;
       await productUpdateQuery.run(
         {
           id: id,
-          slug: slug,
-          images: JSON.stringify(input.images),
           categoryId: input.categoryId,
         },
         client,
       );
-      if (input.price) {
-        await priceUpsertQuery.run(
-          {
-            values: [{ price: input.price, type: "default", product_id: id }],
-          },
-          client,
-        );
-      }
 
       if (input.optionGroups) {
         await productOptionGroupsDeleteQuery.run(
@@ -484,29 +398,11 @@ export class Products {
         }
       }
 
-      if (input.options) {
-        await productOptionsDeleteQuery.run(
-          {
-            product_id: id,
-          },
-          client,
-        );
-        if (input.options.length > 0) {
-          await productOptionsUpsertQuery.run(
-            {
-              values: input.options.map((o) => ({
-                product_id: id,
-                option_id: o,
-              })),
-            },
-            client,
-          );
-        }
-      }
       if (input.descriptions) {
         await productDescriptionUpsertQuery.run(
           {
             values: input.descriptions.map((d) => ({
+              short_description: d.shortDescription,
               description: d.description,
               product_id: id,
               name: d.name,

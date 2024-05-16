@@ -2,7 +2,7 @@ import { FastifyZod } from "fastify";
 import { z } from "zod";
 import { isAuthed } from "../../core/trpc";
 
-export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
+export default ({ t, catalog: { productVariants }, exports }: FastifyZod) => ({
   listProductVariantsOptions: t.procedure
     .input(
       z.object({
@@ -19,6 +19,21 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
 
       return res;
     }),
+  listAll:
+    t.procedure
+      .input(
+        z.object({
+          languageId: z.number(),
+        })
+      )
+      // .use(isAuthed)
+      .query(async ({ input }) => {
+        const res = await productVariants.listAll({
+          languageId: input.languageId,
+        });
+
+        return res;
+      }),
   listProductVariants: t.procedure
     .input(
       z.object({
@@ -54,13 +69,41 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
     }),
   createProductVariant: t.procedure
     .input(z.object({
+      price: z.number().positive()
+        .multipleOf(0.01),
+      oldPrice: z.number().positive()
+        .multipleOf(0.01),
+      article: z.string(),
+      discount: z.number(),
+      popularity: z.number(),
+      images: z.array(z.string()),
+      barcode: z.string(),
+      isActive: z.boolean(),
+      slug: z.string(),
       productId: z.number(),
       options: z.array(z.number()),
+      stockStatus: z.enum(["in_stock", "out_of_stock", "preorder"]),
+      descriptions: z.array(z.object({
+        languageId: z.number(),
+        name: z.string(),
+        shortDescription: z.string(),
+      })),
     }))
-    .use(isAuthed)
+    // .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await productVariants.createProductVariant({
+        stockStatus: input.stockStatus,
+        price: input.price,
+        oldPrice: input.oldPrice,
+        article: input.article,
+        discount: input.discount,
+        popularity: input.popularity,
+        images: input.images,
+        barcode: input.barcode,
+        isActive: input.isActive,
+        slug: input.slug,
         productId: input.productId,
+        descriptions: input.descriptions,
         options: input.options,
       });
 
@@ -72,12 +115,41 @@ export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
       z.object({
         id: z.number(),
       }).and(z.object({
+        price: z.number().positive()
+          .multipleOf(0.01),
+        oldPrice: z.number().positive()
+          .multipleOf(0.01),
+        article: z.string(),
+        discount: z.number(),
+        popularity: z.number(),
+        images: z.array(z.string()),
+        barcode: z.string(),
+        isActive: z.boolean(),
+        slug: z.string(),
+        productId: z.number(),
         options: z.array(z.number()),
+        stockStatus: z.enum(["in_stock", "out_of_stock", "preorder"]),
+        descriptions: z.array(z.object({
+          languageId: z.number(),
+          name: z.string(),
+          shortDescription: z.string(),
+        })),
       }).partial())
     )
     .use(isAuthed)
     .mutation(async ({ input }) => {
       const res = await productVariants.updateProductVariant(input.id, {
+        price: input.price,
+        oldPrice: input.oldPrice,
+        article: input.article,
+        discount: input.discount,
+        popularity: input.popularity,
+        stockStatus: input.stockStatus,
+        images: input.images,
+        barcode: input.barcode,
+        isActive: input.isActive,
+        slug: input.slug,
+        descriptions: input.descriptions,
         options: input.options,
       });
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CaretSortIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
@@ -62,12 +62,21 @@ type Props<T> = {
   data: { data: Array<T>; count: number } | undefined;
   columns: ColumnDef<T>[];
   isLoading: boolean;
+  visibilityState?: VisibilityState;
+  onSelectSubmit?: (selected: T[]) => void;
 };
-export function DataTable<T>({ data, columns, isLoading }: Props<T>) {
+export function DataTable<T extends Record<string, any>>({
+  data,
+  columns,
+  isLoading,
+  visibilityState = {},
+  onSelectSubmit,
+}: Props<T>) {
   const [count, setCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(visibilityState);
   const [rowSelection, setRowSelection] = useState({});
   const dataMemo = useMemo(() => data?.data ?? [], [data]);
 
@@ -136,7 +145,7 @@ export function DataTable<T>({ data, columns, isLoading }: Props<T>) {
 
     return (
       <TableRow>
-        <TableCell colSpan={columns.length} className="h-24 text-center">
+        <TableCell colSpan={columns.length} className="text-center">
           No results.
         </TableCell>
       </TableRow>
@@ -144,7 +153,7 @@ export function DataTable<T>({ data, columns, isLoading }: Props<T>) {
   }
 
   return (
-    <div className="w-full">
+    <div className="">
       <div className="flex items-center py-4">
         <Select
           onValueChange={(value) => {
@@ -162,32 +171,49 @@ export function DataTable<T>({ data, columns, isLoading }: Props<T>) {
             ))}
           </SelectContent>
         </Select>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
+        <div>
+          {onSelectSubmit && (
+            <Button
+              variant="default"
+              className="ml-auto"
+              onClick={() => {
+                onSelectSubmit(
+                  Object.keys(rowSelection)
+                    .map(Number)
+                    .map((i) => dataMemo[i]),
                 );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              }}
+            >
+              Select
+            </Button>
+          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
