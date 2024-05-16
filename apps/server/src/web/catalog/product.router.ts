@@ -11,6 +11,8 @@ export default async ({ t, catalog }: FastifyZod) => ({
       limit: z.number().optional(),
       categoryId: z.number().optional(),
       languageId: z.number(),
+      asc: z.boolean().optional(),
+      sort: z.enum(["price", "popularity"]).optional(),
     }))
     .query(async ({ input }) => {
       const filters = await catalog.productFiltering.getFilters({
@@ -23,6 +25,8 @@ export default async ({ t, catalog }: FastifyZod) => ({
       const limit = input.limit || 20;
 
       const products = await catalog.productFiltering.paginateVariants({
+        order: input.sort || "popularity",
+        asc: input.asc || false,
         limit: limit,
         offset: (limit * (input.page || 1)) - limit,
         categoryId: input.categoryId,

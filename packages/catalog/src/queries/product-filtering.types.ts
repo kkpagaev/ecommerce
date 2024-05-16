@@ -45,12 +45,14 @@ export interface IGetAttributesQuery {
 
 /** 'ProductVariantPaginateQuery' parameters type */
 export interface IProductVariantPaginateQueryParams {
+  asc?: boolean | null | void;
   attributes?: numberArray | null | void;
   categoryId?: number | null | void;
   languageId?: number | null | void;
   limit?: number | null | void;
   offset?: number | null | void;
   options?: numberArray | null | void;
+  order_column?: string | null | void;
   vendors?: numberArray | null | void;
 }
 
