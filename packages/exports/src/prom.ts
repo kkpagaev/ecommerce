@@ -23,10 +23,10 @@ type Offer = {
   url: string;
   price: number;
   oldprice?: number;
-  currencyId: string;
+  currencyId?: string;
   categoryId: number;
   picture: string;
-  vendorCode: string;
+  vendorCode?: string;
   vendor: string;
   name: string;
   description: string;

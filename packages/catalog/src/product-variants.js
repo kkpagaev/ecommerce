@@ -582,8 +582,11 @@ export class ProductVariants {
  * >}
  */
 export const productVariantsListAllQuery = sql`
-  SELECT pv.*, pd.name, cd.name as category, v.name 
-    AS vendor FROM product_variants pv
+  SELECT pv.*, 
+    pd.name, cd.name as category, 
+    cd.category_id, v.name,
+    pd.description as description,
+    v.name AS vendor FROM product_variants pv
   JOIN product_descriptions pd
     ON pv.product_id = pd.product_id
   JOIN products p

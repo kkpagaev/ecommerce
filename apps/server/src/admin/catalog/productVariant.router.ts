@@ -2,7 +2,7 @@ import { FastifyZod } from "fastify";
 import { z } from "zod";
 import { isAuthed } from "../../core/trpc";
 
-export default ({ t, catalog: { productVariants } }: FastifyZod) => ({
+export default ({ t, catalog: { productVariants }, exports }: FastifyZod) => ({
   listProductVariantsOptions: t.procedure
     .input(
       z.object({

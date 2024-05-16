@@ -6,7 +6,7 @@
       "src/*": ["./*"]
     },
     "outDir": "dist",
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

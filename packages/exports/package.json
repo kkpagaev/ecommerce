@@ -2,7 +2,7 @@
   "name": "@repo/exports",
   "version": "1.0.0",
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "NODE_ENV=production tsx watch --ignore src/foo.ts src/index.ts | pino-pretty",
