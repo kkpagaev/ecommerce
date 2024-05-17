@@ -39,6 +39,20 @@ export class Files {
     public pool: Pool,
   ) {}
 
+  async upload(str: string, ext: string, mime: string) {
+    const id = randomUUID();
+    const file = await this.fileUpload.upload(str, ext, mime);
+
+    const res: UploadedFile = {
+      id: id,
+      filename: file.filename,
+      mimetype: mime,
+      url: file.url,
+    };
+
+    return res;
+  }
+
   async uploadFile(file: Buffer) {
     const meta = await this.fileUpload.uploadFile(file);
 
@@ -88,6 +102,7 @@ export class Files {
 
 export interface FileUploadProvider {
   uploadFile(file: Buffer): Promise<UploadedFile>;
+  upload(str: string, ext: string, mime: string): Promise<UploadedFile>;
 }
 
 export class LocalStorageProvider implements FileUploadProvider {
@@ -96,6 +111,25 @@ export class LocalStorageProvider implements FileUploadProvider {
     public url: string,
   ) {}
 
+  async upload(str: string, ext: string, mime: string) {
+    const fileId = randomUUID();
+    const filename = `file_${fileId}.${ext}`;
+
+    const filePath = path.join(this.path, filename);
+
+    await fs.promises.writeFile(filePath, str);
+
+    const url = `${this.url}/${filename}`;
+
+    const res: UploadedFile = {
+      id: fileId,
+      filename: filename,
+      mimetype: mime,
+      url: url,
+    };
+
+    return res;
+  }
   async uploadFile(file: Buffer) {
     const fileTypeResult = await fileTypeFromBuffer(file);
 

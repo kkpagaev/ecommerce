@@ -1,5 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { z } from "zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
+import { Button } from "../../components/ui/button";
+import { trpc } from "../../utils/trpc";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/exports/new")({
   beforeLoad: ({ context }) => ({
@@ -19,11 +30,55 @@ export const Route = createFileRoute("/exports/new")({
   loader: async ({ context, params, deps }) => {
     const languages = await context.trpc.admin.language.list.fetch();
 
-    return { languages, productVariantIds: deps.productVariantIds };
+    return {
+      languages,
+      productVariantIds: deps.productVariantIds,
+    };
   },
   component: CreateExportComponent,
 });
 
 function CreateExportComponent() {
-  return <div>test</div>;
+  const { productVariantIds } = Route.useLoaderData();
+  const [type, setType] = useState<"hotline" | "prom" | null>(null);
+  const mutation = trpc.admin.catalog.exports.export.useMutation({
+    onSuccess(data) {
+      console.log(data);
+      toast.success("Export created");
+    },
+  });
+  return (
+    <div>
+      <Select
+        onValueChange={(v) => {
+          setType(v as any);
+        }}
+        value={type ? type : undefined}
+      >
+        <SelectTrigger className="w-[80px]">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={"hotline"}>Hotline</SelectItem>
+          <SelectItem value={"prom"}>Prom</SelectItem>
+        </SelectContent>
+      </Select>
+      <Button
+        variant="default"
+        onClick={() => {
+          if (!type) {
+            return;
+          }
+          mutation.mutate({
+            marketPlace: type,
+            languageId: 1,
+            firmName: "Ecommerce",
+            variantIds: productVariantIds || [],
+          });
+        }}
+      >
+        Create
+      </Button>
+    </div>
+  );
 }

@@ -1,8 +1,8 @@
 import { FastifyZod } from "fastify";
 import { z } from "zod";
-import { isAuthed } from "../../core/trpc";
+import * as fs from "fs";
 
-export default ({ t, catalog, exports }: FastifyZod) => ({
+export default ({ t, catalog, exports, fileUpload }: FastifyZod) => ({
   export: t.procedure.input(z.object({
     variantIds: z.array(z.number()),
     languageId: z.number(),
@@ -11,26 +11,8 @@ export default ({ t, catalog, exports }: FastifyZod) => ({
   }))
     // .use(isAuthed)
     .mutation(async ({ input }) => {
+      let resultFile;
       if (input.marketPlace === "hotline") {
-        // type Product = {
-        //   id: number;
-        //   categoryId: number;
-        //   code?: string;
-        //   barcode?: string;
-        //   vendor: string;
-        //   name: string;
-        //   description?: string;
-        //   url: string;
-        //   image?: string;
-        //   priceRUAH: number;
-        //   priceRUSD?: number;
-        //   stock: "В наявності" | "Під замовлення" | "Немає";
-        //   region?: string;
-        //   params?: {
-        //     name: string;
-        //     value: string;
-        //   }[];
-        //   condition?: 0 | 1 | 2 | 3;
         const productVariants = await catalog.productVariants.listAll({
           languageId: input.languageId,
         });
@@ -57,7 +39,7 @@ export default ({ t, catalog, exports }: FastifyZod) => ({
             })[p.stock_status] ?? "В наявності",
           })),
         });
-        return res;
+        resultFile = res.toString();
       }
       if (input.marketPlace === "prom") {
         const categories = await catalog.categories.listCategories({
@@ -94,12 +76,14 @@ export default ({ t, catalog, exports }: FastifyZod) => ({
 
           },
         });
-        return file;
+        resultFile = file.toString();
       }
-      // const res = await exports.prom.generate({
-      //   date: new Date(),
-      //   shop;
-      // });
-      return null;
+
+      if (!resultFile) {
+        return null;
+      }
+      const buffer = Buffer.from(resultFile, "utf8");
+
+      return fileUpload.uploadFile(buffer);
     }),
 });

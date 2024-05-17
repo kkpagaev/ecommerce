@@ -4,6 +4,13 @@ import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { useApiForm } from "../../utils/useApiForm";
+import { AppRouter } from "@repo/server";
+import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+
+type RouterInputs = inferRouterInputs<AppRouter>;
+type RouterOutputs = inferRouterOutputs<AppRouter>;
+type AdminOutputs = RouterOutputs["admin"];
+type AdminInputs = RouterInputs["admin"];
 
 type LanguageCreateInputs = AdminInputs["language"]["create"];
 
@@ -15,15 +22,15 @@ type LanguageFormProps = {
   errorMessage?: string;
   values?: LanguageModel;
 } & (
-  | {
+    | {
       edit?: false | undefined;
       onSubmit: (data: LanguageCreateInputs) => void;
     }
-  | {
+    | {
       edit: true;
       onSubmit: (data: LanguageUpdateInputs) => void;
     }
-);
+  );
 
 export function LanguageForm({
   onSubmit,

@@ -11,7 +11,6 @@ import {
   MonitorIcon,
   Package2Icon,
   PanelsTopLeftIcon,
-  UsersIcon,
 } from "lucide-react";
 import { Link, useMatches, useRouter } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -37,9 +36,9 @@ function NavBar() {
             icon: <PanelsTopLeftIcon className="h-4 w-4" />,
           },
           {
-            to: "/about",
-            name: "About",
-            icon: <UsersIcon className="h-4 w-4" />,
+            to: "/exports",
+            name: "Exports",
+            icon: <Package2Icon className="h-4 w-4" />,
           },
           {
             to: "/admins",

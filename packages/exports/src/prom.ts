@@ -73,45 +73,22 @@ export class PromGenerator {
       available: offer.root.available === true ? "true" : "false",
     });
     const p: ProductCallbacks = {
-      currencyId: (v) => {
-        return create().ele("currencyId").txt(v).up();
-      },
-      vendorCode: (v) => {
-        return create().ele("vendorCode").txt(v).up();
-      },
-      categoryId: (v) => {
-        return create()
+      currencyId: (v) => create().ele("currencyId").txt(v).up(),
+      vendorCode: (v) => create().ele("vendorCode").txt(v).up(),
+      categoryId: (v) =>
+        create()
           .ele("categoryId")
           .txt("" + v)
-          .up();
-      },
-      picture: (v) => {
-        return create().ele("picture").txt(v).up();
-      },
-      name(value) {
-        return create().ele("name").txt(value).up();
-      },
-      description(value) {
-        return create().ele("description").txt(value).up();
-      },
-      url: (v) => {
-        return create().ele("url").txt(v).up();
-      },
-      price: (v) => {
-        return create().ele("price").txt(v.toFixed(2)).up();
-      },
-      oldprice: (v) => {
-        return create().ele("oldprice").txt(v.toFixed(2)).up();
-      },
-      name_ua: (v) => {
-        return create().ele("name_ua").txt(v).up();
-      },
-      description_ua: (v) => {
-        return create().ele("description_ua").txt(v).up();
-      },
-      vendor: (v) => {
-        return create().ele("vendor").txt(v).up();
-      },
+          .up(),
+      picture: (v) => create().ele("picture").txt(v).up(),
+      name: (value) => create().ele("name").txt(value).up(),
+      description: (value) => create().ele("description").txt(value).up(),
+      url: (v) => create().ele("url").txt(v).up(),
+      price: (v) => create().ele("price").txt(v.toFixed(2)).up(),
+      oldprice: (v) => create().ele("oldprice").txt(v.toFixed(2)).up(),
+      name_ua: (v) => create().ele("name_ua").txt(v).up(),
+      description_ua: (v) => create().ele("description_ua").txt(v).up(),
+      vendor: (v) => create().ele("vendor").txt(v).up(),
     };
 
     for (const [key, value] of Object.entries(offer)) {
@@ -155,7 +132,7 @@ export class PromGenerator {
   }
 
   generate(catalog: YmlCatalog) {
-    let root = create({}).ele("yml_catalog", {
+    let root = create({ version: "1.0" }).ele("yml_catalog", {
       date: dayjs(catalog.date).format("YYYY-MM-DD HH:mm"),
     });
 
@@ -166,55 +143,3 @@ export class PromGenerator {
     return root.up();
   }
 }
-
-// function build() {
-//   const gen = new Prom();
-//   const res = gen.generate({
-//     date: new Date(),
-//     shop: {
-//       categories: [
-//         {
-//           id: 1,
-//           name: "test",
-//         },
-//         {
-//           id: 2,
-//           parentId: 1,
-//           name: "test",
-//         },
-//         {
-//           id: 3,
-//           name: "test",
-//         },
-//       ],
-//       offers: {
-//         offer: [
-//           {
-//             vendorCode: "test",
-//             currencyId: "UAH",
-//             categoryId: 1,
-//             name: "test",
-//             root: {
-//               id: 1,
-//               group_id: 1,
-//               available: true,
-//             },
-//             url: "http://test.com",
-//             price: "100",
-//             picture: "http://test.com",
-//             vendor: "test",
-//             description: "test",
-//             name_ua: "test",
-//             description_ua: "test",
-//             oldprice: "100",
-//           },
-//         ],
-//       },
-//     },
-//   });
-//   return res;
-// }
-//
-// const root = build();
-// const xml = root.end({ prettyPrint: true });
-// console.log(xml);

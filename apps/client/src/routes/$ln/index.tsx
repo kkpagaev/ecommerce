@@ -102,7 +102,7 @@ function Home() {
           </div>
         );
       })}
-      {data.products.map((p) => {
+      {data.products.data.map((p) => {
         return (
           <div key={p.id}>
             {p.slug} {p.id}
