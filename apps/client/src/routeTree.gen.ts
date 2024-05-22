@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LnIndexImport } from './routes/$ln/index'
 import { Route as LnPostsImport } from './routes/$ln/posts'
 import { Route as LnErrorImport } from './routes/$ln/error'
+import { Route as LnCheckoutImport } from './routes/$ln/checkout'
 import { Route as LnPostsIndexImport } from './routes/$ln/posts/index'
 import { Route as LnProductSlugImport } from './routes/$ln/product.$slug'
 import { Route as LnPostsPostIdImport } from './routes/$ln/posts/$postId'
@@ -33,6 +34,11 @@ const LnPostsRoute = LnPostsImport.update({
 
 const LnErrorRoute = LnErrorImport.update({
   path: '/$ln/error',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LnCheckoutRoute = LnCheckoutImport.update({
+  path: '/$ln/checkout',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,6 +66,10 @@ const LnCategorySlugRoute = LnCategorySlugImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/$ln/checkout': {
+      preLoaderRoute: typeof LnCheckoutImport
+      parentRoute: typeof rootRoute
+    }
     '/$ln/error': {
       preLoaderRoute: typeof LnErrorImport
       parentRoute: typeof rootRoute
@@ -94,6 +104,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
+  LnCheckoutRoute,
   LnErrorRoute,
   LnPostsRoute.addChildren([LnPostsPostIdRoute, LnPostsIndexRoute]),
   LnIndexRoute,

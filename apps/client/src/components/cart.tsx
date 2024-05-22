@@ -12,6 +12,7 @@ import {
   SheetDescription,
   SheetFooter,
 } from "./ui/sheet";
+import { Link } from "@tanstack/react-router";
 
 export function Cart() {
   const cartStore = useCartStore();
@@ -60,6 +61,13 @@ export function Cart() {
                   </div>
                 </div>
               ))}
+              <Link
+                to="/$ln/checkout"
+                className="w-full"
+                params={(prev: any) => ({ ...prev })}
+              >
+                <Button className="w-full">Checkout</Button>
+              </Link>
             </SheetDescription>
           </SheetHeader>
         </SheetContent>
