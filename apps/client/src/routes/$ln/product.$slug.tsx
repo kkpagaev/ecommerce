@@ -163,7 +163,7 @@ function ProductComponent() {
     <div className="container p-2">
       <div className="md:grid grid-cols-12 gap-16">
         <div className="md:col-span-6">
-          <Carousel className="p-6 border-gray-100 border-2 rounded-md">
+          <Carousel className="p-6 border-slate-900 border-2 rounded-md">
             <CarouselContent>
               {product.images.length > 0 ? (
                 product.images.map((image: string, i) => {

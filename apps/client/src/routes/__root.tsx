@@ -127,7 +127,7 @@ function RootComponent() {
         <script type="module" src="/@vite/client" />
         <script type="module" src="/src/entry-client.tsx" />
       </head>
-      <body>
+      <body className="dark">
         <div>
           <Header
             locale={locale.name}
