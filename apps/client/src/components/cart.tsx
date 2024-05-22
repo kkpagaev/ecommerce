@@ -1,6 +1,5 @@
 import { ShoppingCart, Trash2 } from "lucide-react";
 import useCartStore from "../storages/cart";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { ProductImage } from "./product-image";
 import {
@@ -10,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-  SheetFooter,
+  SheetClose,
 } from "./ui/sheet";
 import { Link } from "@tanstack/react-router";
 
@@ -43,7 +42,7 @@ export function Cart() {
                     <div className="text-xl text-bold text-start">
                       {item.name}
                     </div>
-                    <div className="text-sm text-blue-600 text-end flex justify-between">
+                    <div className="text-sm text-end flex justify-between">
                       <div>
                         {item.quantity} x {item.price} ₴ ={" "}
                         {item.price * item.quantity} ₴
@@ -61,13 +60,15 @@ export function Cart() {
                   </div>
                 </div>
               ))}
-              <Link
-                to="/$ln/checkout"
-                className="w-full"
-                params={(prev: any) => ({ ...prev })}
-              >
-                <Button className="w-full">Checkout</Button>
-              </Link>
+              <SheetClose asChild>
+                <Link
+                  to="/$ln/checkout"
+                  className="w-full"
+                  params={(prev: any) => ({ ...prev })}
+                >
+                  <Button className="w-full">Checkout</Button>
+                </Link>
+              </SheetClose>
             </SheetDescription>
           </SheetHeader>
         </SheetContent>

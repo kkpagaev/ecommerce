@@ -1,14 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { CircleUser, Menu, Package2 } from "lucide-react";
+import { Menu, Package2 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { Cart } from "./cart";
 import {

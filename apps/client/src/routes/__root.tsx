@@ -1,4 +1,5 @@
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
 import {
   Outlet,
   createRootRouteWithContext,
@@ -96,53 +97,60 @@ function Breadcrumbs() {
   return null;
 }
 
+const queryClient = new QueryClient();
+
 function RootComponent() {
   const { locale, locales, categories } = Route.useLoaderData();
 
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-          rel="stylesheet"
-        />
-        <title>Vite App</title>
-        <script
-          type="module"
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: `
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        <head>
+          <meta charSet="UTF-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            rel="stylesheet"
+          />
+          <title>Vite App</title>
+          <script
+            type="module"
+            suppressHydrationWarning
+            dangerouslySetInnerHTML={{
+              __html: `
               import RefreshRuntime from "/@react-refresh"
               RefreshRuntime.injectIntoGlobalHook(window)
               window.$RefreshReg$ = () => {}
               window.$RefreshSig$ = () => (type) => type
               window.__vite_plugin_react_preamble_installed__ = true
             `,
-          }}
-        />
-        <script type="module" src="/@vite/client" />
-        <script type="module" src="/src/entry-client.tsx" />
-      </head>
-      <body className="dark">
-        <div>
-          <Header
-            locale={locale.name}
-            locales={locales}
-            categories={categories}
+            }}
           />
-        </div>
-        <div className="container mx-auto pt-4">
-          <Breadcrumbs />
-          <Outlet />
-        </div>
-        <TanStackRouterDevtools position="bottom-right" />
-        <DehydrateRouter />
-        <Toaster />
-      </body>
-    </html>
+          <script type="module" src="/@vite/client" />
+          <script type="module" src="/src/entry-client.tsx" />
+        </head>
+        <body className="dark">
+          <div>
+            <Header
+              locale={locale.name}
+              locales={locales}
+              categories={categories}
+            />
+          </div>
+          <div className="container mx-auto pt-4">
+            <Breadcrumbs />
+            <Outlet />
+          </div>
+          <TanStackRouterDevtools position="bottom-right" />
+          <DehydrateRouter />
+          <Toaster />
+        </body>
+      </html>
+    </QueryClientProvider>
   );
 }
