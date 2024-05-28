@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export default async ({ t, admins }: FastifyZod) => ({
   listAdmins: t.procedure
-    // .use(isAuthed)
+    .use(isAuthed)
     .input(z.object({
       name: z.string().optional(),
       email: z.string().optional(),

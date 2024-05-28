@@ -1,6 +1,7 @@
 import { getCities, getWarehouses } from "../api/np";
 import { ComboboxDemo } from "./ui/combobox";
 import { useEffect, useState } from "react";
+import { Label } from "./ui/label";
 
 type Model = { Ref: string; Description: string };
 type Props = {
@@ -51,46 +52,52 @@ export function NpSelect({
   }, [selectedCity, selectedArea]);
 
   return (
-    <div>
-      <p>Select area:</p>
-      <ComboboxDemo
-        data={areas.map(({ Ref, Description }) => ({
-          value: Ref,
-          label: Description,
-        }))}
-        onChange={(value) => {
-          const area = areas.find((a) => a.Ref === value);
-          setSelectedArea(area);
-          onAreaChange?.(area);
-        }}
-      />
-      <p>Select city:</p>
-      <ComboboxDemo
-        data={cities.map(({ Ref, Description }) => ({
-          value: Ref,
-          label: Description,
-        }))}
-        onChange={(value) => {
-          const city = cities.find((a) => a.Ref === value);
-          setSelectedCity(city);
-          onCityChange?.(city);
-        }}
-      />
-      <p>Select warehouse:</p>
-      <ComboboxDemo
-        data={warehouses.map(({ Ref, Description }) => ({
-          value: Ref,
-          label: Description,
-        }))}
-        onChange={(value) => {
-          const warehouse = warehouses.find((a) => a.Ref === value);
-          setSelectedWarehouse(warehouse);
-          onWarehouseChange?.(warehouse);
-        }}
-      />
-      <p>Selected area: {selectedArea?.Description}</p>
-      <p>Selected city: {selectedCity?.Description}</p>
-      <p>Selected warehouse: {selectedWarehouse?.Description}</p>
-    </div>
+    <>
+      <div>
+        <Label>Select area:</Label>
+        <ComboboxDemo
+          data={areas.map(({ Ref, Description }) => ({
+            value: Ref,
+            label: Description,
+          }))}
+          onChange={(value) => {
+            const area = areas.find((a) => a.Ref === value);
+            setSelectedArea(area);
+            onAreaChange?.(area);
+          }}
+        />
+      </div>
+      <div>
+        <Label>Select city:</Label>
+        <ComboboxDemo
+          data={cities.map(({ Ref, Description }) => ({
+            value: Ref,
+            label: Description,
+          }))}
+          onChange={(value) => {
+            const city = cities.find((a) => a.Ref === value);
+            setSelectedCity(city);
+            onCityChange?.(city);
+          }}
+        />
+      </div>
+      <div>
+        <Label>Select warehouse:</Label>
+        <ComboboxDemo
+          data={warehouses.map(({ Ref, Description }) => ({
+            value: Ref,
+            label: Description,
+          }))}
+          onChange={(value) => {
+            const warehouse = warehouses.find((a) => a.Ref === value);
+            setSelectedWarehouse(warehouse);
+            onWarehouseChange?.(warehouse);
+          }}
+        />
+      </div>
+    </>
   );
 }
+// <p>Selected area: {selectedArea?.Description}</p>
+// <p>Selected city: {selectedCity?.Description}</p>
+// <p>Selected warehouse: {selectedWarehouse?.Description}</p>

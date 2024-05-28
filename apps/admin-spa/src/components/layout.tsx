@@ -11,6 +11,7 @@ import {
   MonitorIcon,
   Package2Icon,
   PanelsTopLeftIcon,
+  PackageIcon,
 } from "lucide-react";
 import { Link, useMatches, useRouter } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -59,6 +60,11 @@ function NavBar() {
             to: "/products",
             name: "Products",
             icon: <MonitorIcon className="h-4 w-4" />,
+          },
+          {
+            to: "/orders",
+            name: "Orders",
+            icon: <PackageIcon className="h-4 w-4" />,
           },
           {
             to: "/vendors",

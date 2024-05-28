@@ -1,8 +1,3 @@
-
-
-
-
-
 CREATE TYPE order_status as ENUM ('created', 'processing', 'shipped', 'cancelled');
 
 CREATE TABLE IF NOT EXISTS orders (

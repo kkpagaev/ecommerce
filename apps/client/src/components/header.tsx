@@ -23,43 +23,6 @@ function Nav({
 }) {
   return (
     <nav className="p-2 flex gap-2 text-lg">
-      <Link
-        to="/$ln"
-        activeProps={{
-          className: "font-bold",
-        }}
-        className="text-muted-foreground transition-colors hover:text-foreground"
-        params={{
-          ln: locale,
-        }}
-      >
-        <Package2 className="h-6 w-6" />
-        <span className="sr-only">Acme Inc</span>
-      </Link>
-      <Link
-        to="/$ln/posts"
-        params={{
-          ln: locale,
-        }}
-        className="text-muted-foreground transition-colors hover:text-foreground"
-        activeProps={{
-          className: "font-bold",
-        }}
-      >
-        Posts
-      </Link>
-      <Link
-        to="/$ln/error"
-        params={{
-          ln: locale,
-        }}
-        className="text-muted-foreground transition-colors hover:text-foreground"
-        activeProps={{
-          className: "font-bold",
-        }}
-      >
-        Error
-      </Link>
       {categories.map((category) => (
         <Link
           key={category.id}

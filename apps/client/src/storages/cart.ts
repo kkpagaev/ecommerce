@@ -12,6 +12,7 @@ interface CartItem {
 
 interface Cart {
   items: CartItem[];
+  getTotal: () => number;
   addItem: (item: CartItem) => void;
   removeItem: (itemId: number) => void;
   updateItemQuantity: (itemId: number, quantity: number) => void;
@@ -21,8 +22,9 @@ interface Cart {
 const useCartStore = create<Cart>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         items: [],
+        getTotal: () => get().items.reduce((acc, item) => acc + item.price, 0),
         addItem: (item) =>
           set((state) => {
             if (state.items.some((i) => i.id === item.id)) {
@@ -44,6 +46,7 @@ const useCartStore = create<Cart>()(
       }),
       {
         name: "cart-storage",
+        partialize: (state) => ({ items: state.items }),
       },
     ),
   ),

@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LnIndexImport } from './routes/$ln/index'
+import { Route as LnThankyouImport } from './routes/$ln/thankyou'
 import { Route as LnPostsImport } from './routes/$ln/posts'
 import { Route as LnErrorImport } from './routes/$ln/error'
 import { Route as LnCheckoutImport } from './routes/$ln/checkout'
@@ -24,6 +25,11 @@ import { Route as LnCategorySlugImport } from './routes/$ln/category.$slug'
 
 const LnIndexRoute = LnIndexImport.update({
   path: '/$ln/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LnThankyouRoute = LnThankyouImport.update({
+  path: '/$ln/thankyou',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -78,6 +84,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LnPostsImport
       parentRoute: typeof rootRoute
     }
+    '/$ln/thankyou': {
+      preLoaderRoute: typeof LnThankyouImport
+      parentRoute: typeof rootRoute
+    }
     '/$ln/': {
       preLoaderRoute: typeof LnIndexImport
       parentRoute: typeof rootRoute
@@ -107,6 +117,7 @@ export const routeTree = rootRoute.addChildren([
   LnCheckoutRoute,
   LnErrorRoute,
   LnPostsRoute.addChildren([LnPostsPostIdRoute, LnPostsIndexRoute]),
+  LnThankyouRoute,
   LnIndexRoute,
   LnCategorySlugRoute,
   LnProductSlugRoute,

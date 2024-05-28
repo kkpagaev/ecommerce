@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
-import { fileTypeFromBuffer } from "file-type";
+import { FileTypeResult, fileTypeFromBuffer } from "file-type";
 import { Pool } from "pg";
 import { sql } from "@pgtyped/runtime";
 import {
@@ -131,7 +131,14 @@ export class LocalStorageProvider implements FileUploadProvider {
     return res;
   }
   async uploadFile(file: Buffer) {
-    const fileTypeResult = await fileTypeFromBuffer(file);
+    const fileTypeResult: FileTypeResult | undefined =
+      (await fileTypeFromBuffer(file).catch(() => ({
+        ext: "xml",
+        mime: "application/xml",
+      }))) || {
+        ext: "xml",
+        mime: "application/xml",
+      };
 
     if (!fileTypeResult) {
       throw new Error("Could not determine file type");

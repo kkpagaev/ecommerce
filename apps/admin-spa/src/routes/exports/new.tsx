@@ -47,6 +47,7 @@ function CreateExportComponent() {
       toast.success("Export created");
     },
   });
+  const [exportsUrls, setExportsUrls] = useState<string[]>([]);
   return (
     <div>
       <Select
@@ -63,18 +64,31 @@ function CreateExportComponent() {
           <SelectItem value={"prom"}>Prom</SelectItem>
         </SelectContent>
       </Select>
+      <div>
+        {exportsUrls.map((url) => (
+          <a href={url} target="_blank" rel="noreferrer">
+            {url}
+          </a>
+        ))}
+      </div>
       <Button
         variant="default"
         onClick={() => {
           if (!type) {
             return;
           }
-          mutation.mutate({
-            marketPlace: type,
-            languageId: 1,
-            firmName: "Ecommerce",
-            variantIds: productVariantIds || [],
-          });
+          mutation
+            .mutateAsync({
+              marketPlace: type,
+              languageId: 1,
+              firmName: "Ecommerce",
+              variantIds: productVariantIds || [],
+            })
+            .then((data) => {
+              if (data) {
+                setExportsUrls([...exportsUrls, data.url]);
+              }
+            });
         }}
       >
         Create
